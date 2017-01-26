@@ -33,6 +33,7 @@ OMNIORB_CONFIG=	${OMNIORB_ETCDIR}/omniORB.cfg
 CONFIGURE_ARGS+=	--with-omniORB-config=${OMNIORB_CONFIG:Q}
 #CONFIGURE_ARGS+=	--with-omniNames-logdir=
 #CONFIGURE_ARGS+=	--with-openssl
+CONFIGURE_ARGS+=        --with-openssl=${BUILDLINK_PREFIX.openssl}
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.omniORB
 PKG_SUPPORTED_OPTIONS=	inet6
@@ -63,6 +64,7 @@ post-install:
 	${INSTALL_MAN} ${WRKSRC}/man/man1/* \
 		${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/
 
+.include "../../security/openssl/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
 .include "../../mk/pthread.buildlink3.mk"

@@ -164,7 +164,11 @@ include/omniORB4/poa_poa.h
 include/omniORB4/proxyFactory.h
 include/omniORB4/seqTemplatedecls.h
 include/omniORB4/seqTemplatedefns.h
+include/omniORB4/sslAddress.h
+include/omniORB4/sslConnection.h
 include/omniORB4/sslContext.h
+include/omniORB4/sslEndpoint.h
+include/omniORB4/sslTransportImpl.h
 include/omniORB4/streamOperators.h
 include/omniORB4/stringtypes.h
 include/omniORB4/tcpAddress.h
@@ -216,6 +220,10 @@ lib/libomniORB4.a
 lib/libomniORB4.so
 lib/libomniORB4.so.1
 lib/libomniORB4.so.1.7
+lib/libomnisslTP4.a
+lib/libomnisslTP4.so
+lib/libomnisslTP4.so.1
+lib/libomnisslTP4.so.1.7
 lib/libomnithread.a
 lib/libomnithread.so
 lib/libomnithread.so.3
