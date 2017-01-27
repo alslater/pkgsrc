@@ -98,6 +98,7 @@ MAKE_ENV.NetBSD+=	ac_cv_func_gethostbyname_r=no
 MAKE_ENV.NetBSD+=	ac_cv_func_freelocale=no
 MAKE_ENV.NetBSD+=	ac_cv_func_newlocale=no
 MAKE_ENV.NetBSD+=	ac_cv_func_uselocale=no
+MAKE_ENV.SunOS+=	ac_cv_func_mkostemp=no
 
 CONFIGURE_ARGS.DragonFly+=	--disable-bootstrap
 
