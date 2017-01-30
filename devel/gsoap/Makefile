@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.14 2016/03/05 11:28:21 jperkin Exp $
 
-DISTNAME=		gsoap_2.8.33
+DISTNAME=		gsoap_2.8.42
 PKGNAME=		${DISTNAME:S/_/-/}
 PKGREVISION=		1
 CATEGORIES=		devel
