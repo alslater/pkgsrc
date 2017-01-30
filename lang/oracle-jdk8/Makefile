@@ -22,9 +22,9 @@ MAKE_JOBS_SAFE=	no
 
 .include "../../lang/oracle-jre8/Makefile.common"
 
-.if !empty(MACHINE_PLATFORM:MLinux-*-x86_64)
+#.if !empty(MACHINE_PLATFORM:MLinux-*-x86_64)
 CHECK_SHLIBS_SUPPORTED=	no
-.endif
+#.endif
 
 PLIST_SRC=	PLIST.${DIST_OS}-${EMUL_ARCH}
 PLIST_SUBST+=	JAVA_ARCH="${JAVA_ARCH}"
