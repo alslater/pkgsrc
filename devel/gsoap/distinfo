@@ -7,3 +7,5 @@ Size (gsoap_2.7.17.zip) = 10224444 bytes
 SHA1 (patch-aa) = 096b71371dee851940e906c5c9b58ad29a4fe4f1
 SHA1 (patch-ab) = e8e5353420a5bd7e804441013865348b7bf2e3b4
 SHA1 (patch-ac) = 13a03522d0f5166cc24b87510216297174c17ff0
+SHA1 (patch-scl-a) = 7c136082c099e114b72391433aa17cefe4fb1c9b
+SHA1 (patch-scl-b) = a1f52aa68913633e499a09eda2a8e4b11199e13f
