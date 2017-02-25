@@ -1,7 +1,8 @@
-# $NetBSD: Makefile,v 1.61.2.1 2017/01/13 20:21:02 bsiegert Exp $
+# $NetBSD: Makefile,v 1.61.2.2 2017/02/12 21:59:29 spz Exp $
 
 DISTNAME=	bind-${BIND_VERSION}
 PKGNAME=	${DISTNAME:S/-P/pl/}
+PKGREVISION=	1
 CATEGORIES=	net
 MASTER_SITES=	ftp://ftp.isc.org/isc/bind9/${BIND_VERSION}/
 
@@ -13,7 +14,7 @@ CONFLICTS+=	host-[0-9]*
 
 MAKE_JOBS_SAFE=	no
 
-BIND_VERSION=	9.9.9-P5
+BIND_VERSION=	9.9.9-P6
 
 USE_MULTIARCH=		lib
 
