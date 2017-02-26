@@ -108,8 +108,8 @@ PKG_TOOLS_BIN?=		${LOCALBASE}/sbin
 .if ${MACHINE_ARCH} == "x86_64"
 LIBABISUFFIX=		/amd64
 .endif
-_OPSYS_SYSTEM_RPATH?=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}
-_OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX}
+_OPSYS_SYSTEM_RPATH?=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}:/lib/64
+_OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX} /lib/64
 _OPSYS_INCLUDE_DIRS?=	/usr/include
 
 # Sun Studio support is untested at this time, but would be strongly desired.
