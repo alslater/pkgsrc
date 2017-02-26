@@ -35,6 +35,7 @@ CHECK_SHLIBS=	no
 
 LIBGCC_SUBPREFIX=	${GCC_PKGNAME}
 LIBGCC_PREFIX=		${LOCALBASE}/${LIBGCC_SUBPREFIX}
+ALIBGCC_PREFIX=		${LOCALBASE}/${LIBGCC_SUBPREFIX}
 GCC_TARGET_MACHINE?=	${MACHINE_GNU_PLATFORM}
 BUILD_DEFS+=		GCC_TARGET_MACHINE
 
@@ -56,23 +57,23 @@ GENERATE_PLIST+= ${GREP} -q 'lib/' ${LIBRARY_FILES} || \
 
 ${LIBRARY_FILES}:
 	${PKG_INFO} -qL '${GCC_PKGNAME}-${GCC49_DIST_VERSION}*' |		\
-	${SED} -n -e's,^${LIBGCC_PREFIX}/,,' -e'/libexec\//d'		\
+	${SED} -n -e's,^${ALIBGCC_PREFIX}/,,' -e'/libexec\//d'		\
 		-e'/libgij/d;/libgcj/d;/libjvm/d'			\
 		-e'/lib.*\.${SHLIB_EXT}/p' 		>${LIBRARY_FILES}
 
 ${OBJECT_FILES}:
 	${PKG_INFO} -qL '${GCC_PKGNAME}-${GCC49_DIST_VERSION}*' | \
-	${SED} -n -e 's,^${LIBGCC_PREFIX}/,,' \
+	${SED} -n -e 's,^${ALIBGCC_PREFIX}/,,' \
 		-e '/\.o/p' -e '/libgcc\.a/p' -e '/libssp_nonshared\.a/p' >${OBJECT_FILES}
 
 do-install: ${LIBRARY_FILES} ${OBJECT_FILES}
-	${TEST} -d ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/lib ||	\
+	${TEST} -d ${DESTDIR}${ALIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/lib ||	\
 		${MKDIR} ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/lib
-	cd ${LIBGCC_PREFIX} && 						\
-	  ${PAX} -rw ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${LIBRARY_FILES}
-	cd ${LIBGCC_PREFIX} &&                                          \
+	cd ${ALIBGCC_PREFIX} && 						\
+	  ${PAX} -rw ${DESTDIR}${ALIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${LIBRARY_FILES}
+	cd ${ALIBGCC_PREFIX} &&                                          \
 	  ${PAX} -r -s ',gcc/${MACHINE_GNU_PLATFORM}/${GCC49_DIST_VERSION}/,,' \
-		-w ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${OBJECT_FILES}
+		-w ${DESTDIR}${ALIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${OBJECT_FILES}
 
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
