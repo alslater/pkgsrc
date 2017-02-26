@@ -150,35 +150,40 @@ MAKE_ENV+=		lt_cv_path_SED=${TOOLS_SED}
 
 .if !empty(MACHINE_PLATFORM:MSunOS-5.1[123456789]-*)
 # Causes multilib build problems with specific compiler combinations
-MAKE_ENV+=		gcc_cv_ld_as_needed=no
+#MAKE_ENV+=		gcc_cv_ld_as_needed=no
 # Determine whether to use binutils
-.  if exists(/usr/sfw/bin/gobjdump)
-CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
-.  endif
-.  if exists(/usr/bin/ld)
-CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/bin/ld
-.  else
-CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/ccs/bin/ld
-.  endif
-.  if exists(/usr/sfw/bin/gas)
-CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/sfw/bin/gas
-.  elif exists(/usr/ccs/bin/as)
-CONFIGURE_ARGS+=	--without-gnu-as --with-as=/usr/ccs/bin/as
-.  else
-BUILDLINK_DEPMETHOD.binutils=	full
-.    include "../../devel/binutils/buildlink3.mk"
-CONFIGURE_ARGS+=	--with-gnu-as --with-as=${PREFIX}/bin/gas
-.  endif
-.elif !empty(MACHINE_PLATFORM:MSunOS-5.10-*)
-.  if exists(/usr/sfw/bin/gobjdump)
-CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
-.  endif
+#.  if exists(/usr/bin/gobjdump)
+#CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
+#.  endif
+#.  if exists(/usr/bin/gld)
+#CONFIGURE_ARGS+=	--with-gnu-ld --with-ld=/usr/bin/gld
+#.  elif exists(/usr/bin/ld)
+#CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/bin/ld
+#.  else
+#CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/ccs/bin/ld
+#.  endif
+#.  if exists(/usr/bin/gas)
+#CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/bin/gas
+#.  elif exists(/usr/sfw/bin/gas)
+#CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/sfw/bin/gas
+#.  elif exists(/usr/ccs/bin/as)
+#CONFIGURE_ARGS+=	--without-gnu-as --with-as=/usr/ccs/bin/as
+#.  else
+#BUILDLINK_DEPMETHOD.binutils=	full
+#.    include "../../devel/binutils/buildlink3.mk"
+#CONFIGURE_ARGS+=	--with-gnu-as --with-as=${PREFIX}/bin/gas
+#.  endif
+#.elif !empty(MACHINE_PLATFORM:MSunOS-5.10-*)
+#.  if exists(/usr/sfw/bin/gobjdump)
+#CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
+#.  endif
 BUILDLINK_API_DEPENDS.binutils+=	binutils>=2.23
 BUILDLINK_DEPMETHOD.binutils=	full
 .  include "../../devel/binutils/buildlink3.mk"
 CONFIGURE_ENV+=		OBJCOPY=${PREFIX}/bin/gobjcopy
 CONFIGURE_ARGS+=	--with-gnu-as --with-as=${PREFIX}/bin/gas
 CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/ccs/bin/ld
+#CONFIGURE_ARGS+=	--with-gnu-ld --with-ld=$(PREFIX)/bin/gld
 .endif
 
 pre-configure:
