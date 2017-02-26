@@ -31,4 +31,5 @@ post-install:
 .include "../../graphics/gdk-pixbuf2/buildlink3.mk"
 .include "../../graphics/gdk-pixbuf2-xlib/buildlink3.mk"
 .include "../../x11/xscreensaver/buildlink3.mk"
+.include "../../x11/xf86miscproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
