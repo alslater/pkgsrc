@@ -1,4 +1,4 @@
-$NetBSD: CHANGES-pkgsrc-2016Q4,v 1.1.2.14 2017/02/17 19:19:01 bsiegert Exp $
+$NetBSD: CHANGES-pkgsrc-2016Q4,v 1.1.2.17 2017/02/27 11:22:50 spz Exp $
 
 Changes to packages and infrastructure on the pkgsrc-$BRANCH branch:
 
@@ -117,3 +117,14 @@ comms/conserver8: bugfix
 Pullup ticket #5214 - requested by maya
 devel/memcached: security fix
 
+Pullup ticket #5216 - requested by leot
+print/mupdf: security fix
+
+Pullup ticket #5217 - requested by sevan
+editors/ed: security fix
+
+Pullup ticket #5213 - requested by he
+www/lighttpd: bugfix
+
+Pullup ticket #5206 take 2 - requested by bsiegert
+sysutils/wbm-passwd: remove broken package
