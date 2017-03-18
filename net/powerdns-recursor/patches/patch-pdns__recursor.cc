@@ -3,11 +3,11 @@ $NetBSD: patch-pdns__recursor.cc,v 1.4 2015/06/10 14:22:29 fhajny Exp $
 Straighten Boost namespace.
 Cast to int so we use the correct overload.
 
---- pdns_recursor.cc.orig	2015-04-21 13:02:57.000000000 +0000
+--- pdns_recursor.cc.orig	2017-01-13 11:03:03.000000000 +0000
 +++ pdns_recursor.cc
-@@ -80,12 +80,12 @@ uint64_t g_latencyStatSize;
- bool g_logCommonErrors;
+@@ -81,12 +81,12 @@ bool g_logCommonErrors;
  bool g_anyToTcp;
+ bool g_lowercaseOutgoing;
  uint16_t g_udpTruncationThreshold;
 -__thread shared_ptr<RecursorLua>* t_pdl;
 +__thread boost::shared_ptr<RecursorLua>* t_pdl;
@@ -20,7 +20,7 @@ Cast to int so we use the correct overload.
  
  RecursorControlChannel s_rcc; // only active in thread 0
  
-@@ -169,7 +169,7 @@ struct DNSComboWriter {
+@@ -170,7 +170,7 @@ struct DNSComboWriter {
    ComboAddress d_remote, d_local;
    bool d_tcp;
    int d_socket;
@@ -29,7 +29,7 @@ Cast to int so we use the correct overload.
  };
  
  
-@@ -661,7 +661,7 @@ void startDoResolve(void *p)
+@@ -666,7 +666,7 @@ void startDoResolve(void *p)
              IpToU32(i->content, &ip);
              pw.xfr32BitInt(htonl(ip));
            } else {
@@ -38,7 +38,7 @@ Cast to int so we use the correct overload.
              drc->toPacket(pw);
            }
            if(pw.size() > maxanswersize) {
-@@ -814,7 +814,7 @@ void makeControlChannelSocket(int proces
+@@ -819,7 +819,7 @@ void makeControlChannelSocket(int proces
  
  void handleRunningTCPQuestion(int fd, FDMultiplexer::funcparam_t& var)
  {
@@ -47,7 +47,7 @@ Cast to int so we use the correct overload.
  
    if(conn->state==TCPConnection::BYTE0) {
      int bytes=recv(conn->getFD(), conn->data, 2, 0);
-@@ -919,7 +919,7 @@ void handleNewTCPQuestion(int fd, FDMult
+@@ -924,7 +924,7 @@ void handleNewTCPQuestion(int fd, FDMult
      }
      
      Utility::setNonBlocking(newsock);
@@ -56,7 +56,7 @@ Cast to int so we use the correct overload.
      tc->state=TCPConnection::BYTE0;
      
      t_fdm->addReadFD(tc->getFD(), handleRunningTCPQuestion, tc);
-@@ -1081,7 +1081,7 @@ void handleNewUDPQuestion(int fd, FDMult
+@@ -1086,7 +1086,7 @@ void handleNewUDPQuestion(int fd, FDMult
  }
  
  
@@ -65,7 +65,7 @@ Cast to int so we use the correct overload.
  deferredAdd_t deferredAdd;
  
  void makeTCPServerSockets()
-@@ -1273,7 +1273,7 @@ void doStats(void)
+@@ -1280,7 +1280,7 @@ void doStats(void)
      
      time_t now = time(0);
      if(lastOutputTime && lastQueryCount && now != lastOutputTime) {
@@ -74,7 +74,7 @@ Cast to int so we use the correct overload.
      }
      lastOutputTime = now;
      lastQueryCount = SyncRes::s_queries;
-@@ -1734,7 +1734,7 @@ string* doReloadLuaScript()
+@@ -1741,7 +1741,7 @@ string* doReloadLuaScript()
        return new string("unloaded\n");
      }
      else {
@@ -83,7 +83,7 @@ Cast to int so we use the correct overload.
      }
    }
    catch(std::exception& e) {
-@@ -1762,7 +1762,7 @@ try
+@@ -1769,7 +1769,7 @@ try
      return new string("unset\n");
    }
    else {
@@ -92,7 +92,7 @@ Cast to int so we use the correct overload.
      return new string("ok\n");
    }
  }
-@@ -2096,11 +2096,11 @@ try
+@@ -2106,11 +2106,11 @@ try
    
    L<<Logger::Warning<<"Done priming cache with root hints"<<endl;
      
@@ -106,7 +106,7 @@ Cast to int so we use the correct overload.
        L<<Logger::Warning<<"Loaded 'lua' script from '"<<::arg()["lua-dns-script"]<<"'"<<endl;
      }
    }
-@@ -2109,7 +2109,7 @@ try
+@@ -2119,7 +2119,7 @@ try
      _exit(99);
    }
    
@@ -115,7 +115,7 @@ Cast to int so we use the correct overload.
    unsigned int ringsize=::arg().asNum("stats-ringbuffer-entries") / g_numWorkerThreads;
    if(ringsize) {
      t_remotes = new addrringbuf_t();
-@@ -2176,7 +2176,7 @@ try
+@@ -2186,7 +2186,7 @@ try
        expired_t expired=t_fdm->getTimeouts(g_now);
          
        for(expired_t::iterator i=expired.begin() ; i != expired.end(); ++i) {

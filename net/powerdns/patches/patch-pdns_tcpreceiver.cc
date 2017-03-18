@@ -1,7 +1,7 @@
 $NetBSD: patch-pdns_tcpreceiver.cc,v 1.4 2015/06/10 16:24:44 fhajny Exp $
 
 Resolve boost symbol ambiguity.
---- pdns/tcpreceiver.cc.orig	2015-04-23 08:10:09.000000000 +0000
+--- pdns/tcpreceiver.cc.orig	2017-01-13 08:13:16.000000000 +0000
 +++ pdns/tcpreceiver.cc
 @@ -173,7 +173,7 @@ void connectWithTimeout(int fd, struct s
    ;
@@ -34,8 +34,8 @@ Resolve boost symbol ambiguity.
        getQuestion(fd, mesg.get(), pktlen, remote);
        S.inc("tcp-queries");      
  
--      packet=shared_ptr<DNSPacket>(new DNSPacket);
-+      packet=boost::shared_ptr<DNSPacket>(new DNSPacket);
+-      packet=shared_ptr<DNSPacket>(new DNSPacket(true));
++      packet=boost::shared_ptr<DNSPacket>(new DNSPacket(true));
        packet->setRemote(&remote);
        packet->d_tcp=true;
        packet->setSocket(fd);
@@ -44,9 +44,9 @@ Resolve boost symbol ambiguity.
        }
  
 -      shared_ptr<DNSPacket> reply; 
--      shared_ptr<DNSPacket> cached= shared_ptr<DNSPacket>(new DNSPacket);
+-      shared_ptr<DNSPacket> cached= shared_ptr<DNSPacket>(new DNSPacket(false));
 +      boost::shared_ptr<DNSPacket> reply; 
-+      boost::shared_ptr<DNSPacket> cached= boost::shared_ptr<DNSPacket>(new DNSPacket);
++      boost::shared_ptr<DNSPacket> cached= boost::shared_ptr<DNSPacket>(new DNSPacket(false));
        if(logDNSQueries)  {
          string remote;
          if(packet->hasEDNSSubnet()) 
@@ -92,7 +92,7 @@ Resolve boost symbol ambiguity.
    if(q->d_dnssecOk)
      outpacket->d_dnssecOk=true; // RFC 5936, 2.2.5 'SHOULD'
  
-@@ -935,9 +935,9 @@ int TCPNameserver::doAXFR(const string &
+@@ -936,9 +936,9 @@ int TCPNameserver::doAXFR(const string &
    return 1;
  }
  

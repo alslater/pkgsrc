@@ -3,7 +3,6 @@
 .include "Makefile.common"
 
 PKGNAME=		${DISTNAME:S/pdns/powerdns/}
-PKGREVISION=		3
 COMMENT=		Modern, advanced and high performance nameserver
 
 .include "options.mk"

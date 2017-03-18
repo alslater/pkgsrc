@@ -4,7 +4,7 @@ Limit inclusion of boost headers to only those necessary to avoid conflicting
 types errors on Solaris.
 Resolve boost symbol ambiguity.
 
---- pdns/resolver.cc.orig	2015-03-02 13:17:12.000000000 +0000
+--- pdns/resolver.cc.orig	2017-01-13 08:13:16.000000000 +0000
 +++ pdns/resolver.cc
 @@ -33,7 +33,7 @@
  #include <cstring>
@@ -30,7 +30,7 @@ Resolve boost symbol ambiguity.
        if(rrc->d_type == QType::SOA) {
          *theirInception= std::max(*theirInception, rrc->d_siginception);
          *theirExpire = std::max(*theirExpire, rrc->d_sigexpire);
-@@ -396,7 +396,7 @@ AXFRRetriever::AXFRRetriever(const Combo
+@@ -397,7 +397,7 @@ AXFRRetriever::AXFRRetriever(const Combo
    d_sock = -1;
    try {
      d_sock = makeQuerySocket(local, false); // make a TCP socket
@@ -39,7 +39,7 @@ Resolve boost symbol ambiguity.
      d_remote = remote; // mostly for error reporting
      this->connect();
      d_soacount = 0;
-@@ -490,7 +490,7 @@ int AXFRRetriever::getChunk(Resolver::re
+@@ -497,7 +497,7 @@ int AXFRRetriever::getChunk(Resolver::re
          checkTSIG = true;
        
        if(answer.first.d_type == QType::TSIG) {
@@ -47,4 +47,4 @@ Resolve boost symbol ambiguity.
 +        boost::shared_ptr<TSIGRecordContent> trc = boost::dynamic_pointer_cast<TSIGRecordContent>(answer.first.d_content);
          theirMac = trc->d_mac;
          d_trc.d_time = trc->d_time;
-         checkTSIG = true;
+         d_trc.d_fudge = trc->d_fudge;
