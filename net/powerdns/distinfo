@@ -7,5 +7,5 @@ Size (pdns-4.0.3.tar.bz2) = 1312299 bytes
 SHA1 (patch-configure) = 675ce8b372819a746ec9d4fbff6bea30ecd86734
 SHA1 (patch-pdns_dns.hh) = 626eb4e29b7fcd82fbe056036c157c1e85fa49ca
 SHA1 (patch-pdns_dnsscope.cc) = b289b750686b25041c3e291fb0d3d562beb36eaf
-SHA1 (patch-pdns_iputils.hh) = 48df687a1e5116238aa4f04ff89cbdc2b4b4dfc3
+SHA1 (patch-pdns_iputils.hh) = 7507f6b080c9aa5e71068b3e9e92e71de6fc2b15
 SHA1 (patch-pdns_qtype.hh) = 0f8bca4c0cafea9a5257a08077fa42b4c52127f5
