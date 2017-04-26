@@ -6,7 +6,7 @@ COMMENT=		Statistics collection daemon - network plugin
 
 .include "../../sysutils/collectd/Makefile.common"
 
-CONFIGURE_ARGS+=	--with-libgcrypt=${BUILDLINK_PREFIX.libgcrypt}
+CONFIGURE_ARGS+=	--with-libgcrypt=${BUILDLINK_PREFIX.libgcrypt}/bin/libgcrypt-config
 
 .include "../../security/libgcrypt/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
