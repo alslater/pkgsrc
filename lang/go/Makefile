@@ -1,9 +1,10 @@
-# $NetBSD: Makefile,v 1.48 2016/10/27 18:58:00 bsiegert Exp $
+# $NetBSD: Makefile,v 1.51 2017/05/02 17:15:31 fhajny Exp $
 
 .include "version.mk"
 
 DISTNAME=	go${GO_VERSION}.src
 PKGNAME=	go-${GO_VERSION}
+PKGREVISION=	2
 CATEGORIES=	lang
 MASTER_SITES=	https://storage.googleapis.com/golang/
 
@@ -32,8 +33,10 @@ REPLACE_BASH+=	misc/arm/a
 REPLACE_BASH+=	misc/benchcmp
 REPLACE_BASH+=	misc/cgo/errors/test.bash
 REPLACE_BASH+=	misc/cgo/fortran/test.bash
+REPLACE_BASH+=	misc/cgo/testcarchive/test.bash
 REPLACE_BASH+=	misc/cgo/testcshared/test.bash
 REPLACE_BASH+=	misc/cgo/testgodefs/test.bash
+REPLACE_BASH+=	misc/cgo/testplugin/test.bash
 REPLACE_BASH+=	misc/cgo/testsanitizers/test.bash
 REPLACE_BASH+=	misc/nacl/go_nacl_386_exec
 REPLACE_BASH+=	misc/nacl/go_nacl_amd64p32_exec
@@ -46,6 +49,7 @@ REPLACE_BASH+=	src/clean.bash
 REPLACE_BASH+=	src/cmd/compile/internal/big/vendor.bash
 REPLACE_BASH+=	src/cmd/dist/mkdeps.bash
 REPLACE_BASH+=	src/cmd/go/mkalldocs.sh
+REPLACE_BASH+=	src/internal/trace/mkcanned.bash
 REPLACE_BASH+=	src/iostest.bash
 REPLACE_BASH+=	src/make.bash
 REPLACE_BASH+=	src/naclmake.bash
@@ -79,12 +83,6 @@ PLIST_VARS+=	route
 .if ${OPSYS} != "Linux" && ${OPSYS} != "SunOS"
 PLIST.route=	yes
 .endif
-
-pre-build:
-	cd ${WRKSRC}/src/syscall && \
-		env GOOS=${LOWER_OPSYS:Q} GOARCH=${GOARCH:Q} \
-		${PERL5} mksyscall_solaris.pl \
-		syscall_solaris.go syscall_solaris_amd64.go > zsyscall_solaris_amd64.go
 
 do-build:
 	cd ${WRKSRC}/src && env GOROOT_BOOTSTRAP=${GOROOT_BOOTSTRAP:Q} GOROOT_FINAL=${GOROOT_FINAL:Q} ${BASH} ./make.bash
