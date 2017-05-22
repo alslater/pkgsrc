@@ -1,0 +1,166 @@
+#	@(#)Makefile	5.11 (Berkeley) 5/11/90
+# make SOCKSified client
+OSVER = `uname -s`_`uname -v`.`uname -r`
+
+
+CC=@CC@
+CXX=@CXX@
+LD=@CXX@
+CFLAGS=@CFLAGS@
+CXXFLAGS=@CXXFLAGS@
+INSTALL=@INSTALL@
+
+srcdir=     @srcdir@
+
+prefix=     @prefix@
+exec_prefix=    @exec_prefix@
+sbindir=    @sbindir@
+libdir=     @libdir@
+mandir=     @mandir@
+datarootdir=    @datarootdir@
+incdir=  ${prefix}/include
+
+# SOLARIS should use
+#CC=/opt/scl64/bin/gcc
+#RESOLV_LIB=-lresolv -lnsl -lsocket
+#OTHER_CFLAGS= -I../solaris-x64-gcc4/include -DSOLARIS -DUSE_DIRENT  $(GETCWD) $(FASCIST) -DCOMPAT $(SHORTENED_RBIND) -DSSL
+
+# LINUX should use
+#CC=gcc
+#RESOLV_LIB=
+#OTHER_CFLAGS=-traditional -DLINUX  $(GETCWD) $(FASCIST) -DCOMPAT $(SHORTENED_RBIND) 
+
+# UnixWare should use
+#RESOLV_LIB=-lresolv -lnsl -lsocket
+#OTHER_CFLAGS= -DSOLARIS -Dindex=strchr -Drindex=strrchr -DUSE_DIRENT $(GETCWD) $(FASCIST) -DCOMPAT $(SHORTENED_RBIND) 
+#INSTALL=bsdinstall
+
+# >>>---------------- Others:
+
+# Define RESOLV_LIB if your system (e.g., SunOS before 4.1.1)
+# doesn't search resolver library automatically.
+# Leave it undefined otherwise.
+# If your compiler or loader complains about _res_init being
+# an undefined symbol, then you must define RESOLV_LIB.
+#RESOLV_LIB= -lresolv
+
+# <<<----------------
+
+# Directory into which sftp's man page file will be installed:
+MAN_DEST_DIR=/usr/local/man
+
+OPTIMIZE=
+CFLAGS = 
+
+# The 'install' command is assumed to be the BSD variety (using -m to
+# set the file mode). If the default 'install' on your system doesn't
+# do that, you have to either specify an alternative one in the line below
+# (e.g., /usr/ucb/install) or modify the install instructions.
+INSTALL= install
+
+#==============================================================================
+.SUFFIXES :
+.SUFFIXES : .o .C .cpp .c
+
+.cpp.o :
+	$(CXX) -g $(INCLUDE) ${CCFLAGS} -c $<
+
+.C.o :
+	$(CXX) -g $(INCLUDE) ${CCFLAGS} -c $<
+
+.c.o	:
+	$(CC) -g $(INCLUDE) ${CFLAGS} -c $<
+	
+INCLUDE= -I./include
+NETLIB= -lsocket -lnsl -lm
+
+# for static objects
+ELIBS= ${NETLIB} ${STDCLIB} ${GCCLIB}
+
+# for shared objects
+DLIBS= -ldl ${NETLIB} ${STDCLIB} ${GCCLIB}
+
+LIBS= ${ELIBS} ${DLIBS}
+
+CCFLAGS=-DSVR4 -DSUNOS5 -pthreads -D_REENTRANT -fPIC -Wno-write-strings $(CXXFLAGS)
+CFLAGS+=-DSVR4 -DSUNOS5 -pthreads -D_REENTRANT -fPIC 
+LDFLAGS=
+
+CFILES= CharUtility.cpp \
+	ClassFactory.cpp \
+	DefaultManager.cpp \
+	FieldMapArrayData.cpp \
+	FieldMapElement.cpp \
+	FieldValidation.cpp \
+	GetOpt.cpp \
+	ISO1100.cpp \
+	ISO1100Val.cpp \
+	ISO1100SV.cpp \
+	ISO1100SVVal.cpp \
+	ISO1110.cpp \
+	ISO1220.cpp \
+	ISO1220Val.cpp \
+	ISO1220SV.cpp \
+	ISO1220SVVal.cpp \
+	ISO1230.cpp \
+	ISO1420.cpp \
+	ISO1420Val.cpp \
+	ISO1420SV.cpp \
+	ISO1420SVVal.cpp \
+	ISO1430.cpp \
+	ISO1804.cpp \
+	ISO1804Val.cpp \
+	ISO1814.cpp \
+	ISORequest.cpp \
+	ISOResponse.cpp \
+	ISO8583Bitmap.cpp \
+	ISO8583Connection.cpp \
+	ISOMsgHandler.cpp \
+	ISO8583Implementation.cpp \
+	ISO8583Message.cpp \
+	ISOField.cpp \
+	ISOStatus.cpp \
+	MessageFactory.cpp \
+	MsgManager.cpp \
+	Property.cpp \
+	ValidateMessage.cpp \
+	base64_encoding.c \
+	hex_dump.c \
+	isocountryhash.c \
+	isocurrencyhash.c \
+	isomerchanttypehash.c \
+	salib.cpp 
+#	ISOMessageAPI.cpp
+	
+OBJS1=${CFILES:.cpp=.o}
+OBJS=${OBJS1:.c=.o}
+
+LIBSALIBSO=libsalib.so
+
+all : ${OBJS} ${LIBSALIBSO}
+
+objs : ${OBJS}
+
+libsalib.so : ${OBJS}
+	rm -f ${LIBSALIBSO}
+	$(LD) -shared ${OBJS} ${LIBS} -o ${LIBSALIBSO}
+
+check :
+	echo check
+	echo objs IS ${OBJS}
+#	echo path is ${PATH}
+
+clean :
+	rm -f ${OBJS} ${LIBSALIBSO}
+
+echocwd:
+	@pwd
+
+install:
+	$(INSTALL) -m 755 -d ${DESTDIR}$(libdir)
+	$(INSTALL) -m 755 ${LIBSALIBSO} ${DESTDIR}$(libdir)/${LIBSALIBSO}
+	$(INSTALL) -m 755 -d ${DESTDIR}$(incdir)/stu
+	$(INSTALL) -m 755 include/* ${DESTDIR}$(incdir)/stu
+	
+	
+# DO NOT DELETE THIS LINE -- make depend depends on it.

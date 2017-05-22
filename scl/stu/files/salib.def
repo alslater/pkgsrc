@@ -1,0 +1,43 @@
+LIBRARY
+
+SECTIONS
+
+EXPORTS
+	ISO8583APISetTrace						@100
+	ISO8583APISetDebug                      @110
+		
+    ISO8583APIGetVersion                    @150
+    ISO8583APIGetBuildInfo                  @160
+
+	ISO8583MessageCreate					@200
+	ISO8583MessageSetField					@210
+	ISO8583MessageGetField					@220
+	ISO8583MessageReleaseFieldData			@230
+	ISO8583MessageGetFieldLength			@240
+	ISO8583MessageGetMessageType			@250
+	ISO8583MessageGetMapSize				@260
+	ISO8583MessageGetResponseType			@270
+	ISO8583MessageGetRequestType			@280
+	ISO8583MessageGetClassName			    @290
+	ISO8583MessageSerialize					@300
+	ISO8583MessageReleaseSerializeData		@310
+	ISO8583MessageDeSerialize				@320
+	ISO8583MessageValidate					@330
+	ISO8583MessageDestroy					@340
+
+	ISO8583ConnectionCreate					@400
+	ISO8583ConnectionDestroy				@410
+	ISO8583ConnectionAddMsgMapping          @411
+	ISO8583ConnectionOpen					@420
+	ISO8583ConnectionClose					@430
+	ISO8583ConnectionProcessMessage			@440
+	ISO8583ConnectionAwaitRequest           @441
+	ISO8583ConnectionSendResponse           @442
+	ISO8583ConnectionIsConnected			@450
+
+	ISOStatusCreate							@500
+	ISOStatusGetStatus						@510
+	ISOStatusGetResultCode					@520
+	ISOStatusGetResultDesc					@530
+	ISOStatusDestroy						@540
+	
