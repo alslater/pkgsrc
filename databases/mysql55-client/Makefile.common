@@ -1,9 +1,9 @@
-# $NetBSD: Makefile.common,v 1.56 2016/12/12 19:22:57 adam Exp $
+# $NetBSD: Makefile.common,v 1.59 2017/05/05 16:22:29 jperkin Exp $
 #
 # used by databases/mysql55-client/Makefile
 # used by databases/mysql55-server/Makefile
 
-DISTNAME=	mysql-5.5.54
+DISTNAME=	mysql-5.5.56
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_MYSQL:=MySQL-5.5/}
 
@@ -62,6 +62,7 @@ CMAKE_ARGS+=		-DINSTALL_SCRIPTDIR="bin${BINARCHSUFFIX}"
 CMAKE_ARGS+=		-DINSTALL_SQLBENCHDIR="share/mysql/sql-bench"
 CMAKE_ARGS+=		-DINSTALL_SUPPORTFILESDIR="share/mysql"
 CMAKE_ARGS+=		-DMYSQL_DATADIR=${MYSQL_DATADIR}
+CMAKE_ARGS+=            -DWITH_SSL=system
 
 # always use our own readline, not MySQL bundled one
 CMAKE_ARGS+=		-DWITH_LIBEDIT=OFF
@@ -140,4 +141,8 @@ CMAKE_ARGS+=	-DREADLINE_FOUND=system
 .endif
 CMAKE_ARGS+=	-DREADLINE_INCLUDE_DIR=${BUILDLINK_PREFIX.editlinereadline}/include/readline
 
+.include "../../mk/curses.buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
+.include "../../security/openssl/buildlink3.mk"
+
+PKG_SUPPORTED_OPTIONS+=	dtrace embedded-server ndb-cluster sphinx
