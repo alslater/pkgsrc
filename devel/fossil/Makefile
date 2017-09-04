@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.39 2016/12/03 19:40:05 wiedi Exp $
+# $NetBSD: Makefile,v 1.41 2017/04/19 12:23:34 joerg Exp $
 
-DISTNAME=	fossil-src-1.36
+DISTNAME=	fossil-src-2.2
 PKGNAME=	${DISTNAME:S/-src//}
 WRKSRC=		${WRKDIR}/${PKGNAME}
 CATEGORIES=	devel scm
@@ -17,6 +17,9 @@ CONFIGURE_ARGS+=	--with-openssl=${BUILDLINK_PREFIX.openssl:Q}
 CONFIGURE_ARGS+=	--with-zlib=${BUILDLINK_PREFIX.zlib:Q}
 
 INSTALLATION_DIRS+=	bin${BINARCHSUFFIX} ${PKGMANDIR}/man1 share/doc/${PKGBASE}
+
+pre-configure:
+	${MKDIR} ${WRKSRC}/bld
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/fossil ${DESTDIR}${PREFIX}/bin${BINARCHSUFFIX}
