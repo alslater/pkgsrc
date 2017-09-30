@@ -1,16 +1,17 @@
-# $NetBSD: Makefile,v 1.51 2016/12/20 21:06:34 taca Exp $
+# $NetBSD: Makefile,v 1.61 2017/09/18 13:24:05 wiz Exp $
 #
 # When updating this package, make sure that no strings like
 # "PR 12345" are in the commit message. Upstream likes
 # to reference their own PRs this way, but this ends up
 # in NetBSD GNATS.
 
-DISTNAME=	httpd-2.4.25
+DISTNAME=	httpd-2.4.27
 PKGNAME=	${DISTNAME:S/httpd/apache/}
+PKGREVISION=	2
 CATEGORIES=	www
-MASTER_SITES=	${MASTER_SITE_APACHE:=httpd/} \
-		http://archive.apache.org/dist/httpd/ \
-		http://archive.eu.apache.org/dist/httpd/
+MASTER_SITES=	${MASTER_SITE_APACHE:=httpd/}
+MASTER_SITES+=	http://archive.apache.org/dist/httpd/
+MASTER_SITES+=	http://archive.eu.apache.org/dist/httpd/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	ryoon@NetBSD.org
@@ -33,9 +34,15 @@ CONFIGURE_ARGS+=	--with-port=80
 CONFIGURE_ENV+=		perlbin=${PERL5:Q}
 CONFIGURE_ENV+=		ac_cv_path_RSYNC=/nonexistent
 
-CFLAGS.SunOS+=	-D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED=1 -D__EXTENSIONS__
+.include "../../mk/compiler.mk"
 
-.include "../../mk/bsd.prefs.mk"
+CFLAGS.SunOS+=	-D__EXTENSIONS__
+.if !empty(CC_VERSION:Mgcc-[7-9]*)
+CFLAGS.SunOS+=	-D_XOPEN_SOURCE=600
+.else
+CFLAGS.SunOS+=	-D_XOPEN_SOURCE -D_XOPEN_SOURCE_EXTENDED=1
+.endif
+
 BUILDLINK_API_DEPENDS.apr+=	apr>=1.5.0
 .include "../../devel/apr/buildlink3.mk"
 BUILDLINK_API_DEPENDS.apr-util+=	apr-util>=1.5.3
@@ -134,8 +141,6 @@ SUBST_FILES.confs+=	docs/conf/extra/httpd-ssl.conf
 SUBST_SED.confs=	-e "s|${EGDIR}|${PKG_SYSCONFDIR}|g"
 SUBST_SED.confs+=	-e "s|${PREFIX}/htdocs|${PREFIX}/share/httpd/htdocs|g"
 SUBST_SED.confs+=	-e "s|${PREFIX}/conf|${PKG_SYSCONFDIR}|g"
-SUBST_SED.confs+=	-e "s|logs/|${VARBASE}/log/httpd/|g"
-SUBST_SED.confs+=	-e 's|/var/log/httpd/foo\.log|logs/foo.log/|g'
 SUBST_SED.confs+=	-e 's|^\(User[	 ]\).*|\1${APACHE_USER}|g'
 SUBST_SED.confs+=	-e 's|^\(Group[	 ]\).*|\1${APACHE_GROUP}|g'
 SUBST_SED.confs+=	-e 's|^Listen \(.*\)|Listen 0.0.0.0:\1|g'

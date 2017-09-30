@@ -532,6 +532,7 @@ SUBDIR+=	libhfs
 SUBDIR+=	libhid
 SUBDIR+=	libiberty
 SUBDIR+=	libidn
+SUBDIR+=	libidn2
 SUBDIR+=	libindicator
 SUBDIR+=	libindicator-tools
 SUBDIR+=	libindicator3

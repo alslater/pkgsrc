@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.167.4.1 2017/01/19 19:55:17 bsiegert Exp $
+# $NetBSD: Makefile,v 1.176 2017/09/06 13:41:26 wiz Exp $
 
-DISTNAME=	gnutls-3.5.8
+DISTNAME=	gnutls-3.6.0
 CATEGORIES=	security devel
-MASTER_SITES=	ftp://ftp.gnutls.org/gcrypt/gnutls/v3.5/
+MASTER_SITES=	ftp://ftp.gnutls.org/gcrypt/gnutls/v3.6/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -23,6 +23,10 @@ CONFIGURE_ARGS+=	--disable-guile
 CONFIGURE_ARGS+=	--disable-libdane
 CONFIGURE_ARGS+=	--without-tpm
 CONFIGURE_ARGS+=	--disable-valgrind-tests
+CONFIGURE_ARGS+=	--with-libintl-prefix=${BUILDLINK_PREFIX.gettext}
+# Assembler support is broken for SunOS in 3.2.9.
+CONFIGURE_ARGS.SunOS+=	--disable-hardware-acceleration
+CONFIGURE_ARGS.FreeBSD+=ac_cv_type_max_align_t=yes
 
 # as of 3.5.8, 0 test failures
 TEST_TARGET=		check
@@ -34,7 +38,6 @@ TEST_TARGET=		check
 
 INFO_FILES=		yes
 
-REPLACE_BASH+=		tests/cert-tests/openpgp-certs
 REPLACE_BASH+=		tests/danetool.sh
 REPLACE_BASH+=		tests/ocsp-tests/ocsp-must-staple-connection
 REPLACE_BASH+=		tests/ocsp-tests/ocsp-tls-connection
@@ -54,12 +57,7 @@ MAKE_ENV+=		TZ=UTC
 
 EGDIR=		${PREFIX}/share/examples/gnutls
 
-# Assembler support is broken for SunOS in 3.2.9.
-CONFIGURE_ARGS.SunOS+=	--disable-hardware-acceleration
-
-CONFIGURE_ARGS.FreeBSD+=	ac_cv_type_max_align_t=yes
-
-INSTALLATION_DIRS=	${DOCDIR} ${EGDIR} include/gnutls
+INSTALLATION_DIRS=	${EGDIR} include/gnutls
 
 post-install:
 	cd ${WRKSRC}/doc/examples && ${INSTALL_DATA} *.c ${DESTDIR}${EGDIR}
@@ -67,19 +65,19 @@ post-install:
 .include "../../archivers/lzo/buildlink3.mk"
 .include "../../converters/libiconv/buildlink3.mk"
 .include "../../devel/autogen/buildlink3.mk"
-.include "../../mk/readline.buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
+.include "../../devel/gmp/buildlink3.mk"
 .include "../../devel/libcfg+/buildlink3.mk"
 # Avoid creating a fake zlib.pc, because if it does
 # gnutls will add a Requires.private for it in its .pc file
 CHECK_BUILTIN.zlib:=yes
 .include "../../devel/zlib/buildlink3.mk"
-.include "../../devel/gmp/buildlink3.mk"
+# guile is useful for selftests, but bindings should be separate pkgs
+#.include "../../lang/guile20/buildlink3.mk"
 BUILDLINK_API_DEPENDS.libtasn1+=	libtasn1>=4.9
 .include "../../security/libtasn1/buildlink3.mk"
 BUILDLINK_API_DEPENDS.nettle+=		nettle>=3.1
 .include "../../security/nettle/buildlink3.mk"
 .include "../../textproc/libunistring/buildlink3.mk"
-# guile is useful for selftests, but bindings should be separate pkgs
-#.include "../../lang/guile20/buildlink3.mk"
+.include "../../mk/readline.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

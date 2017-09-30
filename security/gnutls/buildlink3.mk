@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.31.4.1 2017/01/19 19:56:48 bsiegert Exp $
+# $NetBSD: buildlink3.mk,v 1.32 2017/01/11 17:06:52 wiz Exp $
 
 BUILDLINK_TREE+=	gnutls
 
