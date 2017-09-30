@@ -1,14 +1,13 @@
-@comment $NetBSD: PLIST,v 1.61 2016/12/21 10:07:37 wiz Exp $
+@comment $NetBSD: PLIST,v 1.65 2017/08/15 05:35:57 adam Exp $
 bin/curl
 bin/curl-config
 include/curl/curl.h
-include/curl${INCARCHSUFFIX}/curlbuild.h
-include/curl/curlrules.h
 include/curl/curlver.h
 include/curl/easy.h
 include/curl/mprintf.h
 include/curl/multi.h
 include/curl/stdcheaders.h
+include/curl/system.h
 include/curl/typecheck-gcc.h
 lib/libcurl.la
 lib/pkgconfig/libcurl.pc
@@ -20,7 +19,9 @@ man/man3/CURLINFO_CERTINFO.3
 man/man3/CURLINFO_CONDITION_UNMET.3
 man/man3/CURLINFO_CONNECT_TIME.3
 man/man3/CURLINFO_CONTENT_LENGTH_DOWNLOAD.3
+man/man3/CURLINFO_CONTENT_LENGTH_DOWNLOAD_T.3
 man/man3/CURLINFO_CONTENT_LENGTH_UPLOAD.3
+man/man3/CURLINFO_CONTENT_LENGTH_UPLOAD_T.3
 man/man3/CURLINFO_CONTENT_TYPE.3
 man/man3/CURLINFO_COOKIELIST.3
 man/man3/CURLINFO_EFFECTIVE_URL.3
@@ -54,9 +55,13 @@ man/man3/CURLINFO_RTSP_SERVER_CSEQ.3
 man/man3/CURLINFO_RTSP_SESSION_ID.3
 man/man3/CURLINFO_SCHEME.3
 man/man3/CURLINFO_SIZE_DOWNLOAD.3
+man/man3/CURLINFO_SIZE_DOWNLOAD_T.3
 man/man3/CURLINFO_SIZE_UPLOAD.3
+man/man3/CURLINFO_SIZE_UPLOAD_T.3
 man/man3/CURLINFO_SPEED_DOWNLOAD.3
+man/man3/CURLINFO_SPEED_DOWNLOAD_T.3
 man/man3/CURLINFO_SPEED_UPLOAD.3
+man/man3/CURLINFO_SPEED_UPLOAD_T.3
 man/man3/CURLINFO_SSL_ENGINES.3
 man/man3/CURLINFO_SSL_VERIFYRESULT.3
 man/man3/CURLINFO_STARTTRANSFER_TIME.3
@@ -78,6 +83,7 @@ man/man3/CURLMOPT_SOCKETDATA.3
 man/man3/CURLMOPT_SOCKETFUNCTION.3
 man/man3/CURLMOPT_TIMERDATA.3
 man/man3/CURLMOPT_TIMERFUNCTION.3
+man/man3/CURLOPT_ABSTRACT_UNIX_SOCKET.3
 man/man3/CURLOPT_ACCEPTTIMEOUT_MS.3
 man/man3/CURLOPT_ACCEPT_ENCODING.3
 man/man3/CURLOPT_ADDRESS_SCOPE.3
@@ -243,6 +249,7 @@ man/man3/CURLOPT_READDATA.3
 man/man3/CURLOPT_READFUNCTION.3
 man/man3/CURLOPT_REDIR_PROTOCOLS.3
 man/man3/CURLOPT_REFERER.3
+man/man3/CURLOPT_REQUEST_TARGET.3
 man/man3/CURLOPT_RESOLVE.3
 man/man3/CURLOPT_RESUME_FROM.3
 man/man3/CURLOPT_RESUME_FROM_LARGE.3
@@ -259,6 +266,7 @@ man/man3/CURLOPT_SERVICE_NAME.3
 man/man3/CURLOPT_SHARE.3
 man/man3/CURLOPT_SOCKOPTDATA.3
 man/man3/CURLOPT_SOCKOPTFUNCTION.3
+man/man3/CURLOPT_SOCKS5_AUTH.3
 man/man3/CURLOPT_SOCKS5_GSSAPI_NEC.3
 man/man3/CURLOPT_SOCKS5_GSSAPI_SERVICE.3
 man/man3/CURLOPT_SSH_AUTH_TYPES.3
@@ -290,6 +298,7 @@ man/man3/CURLOPT_STDERR.3
 man/man3/CURLOPT_STREAM_DEPENDS.3
 man/man3/CURLOPT_STREAM_DEPENDS_E.3
 man/man3/CURLOPT_STREAM_WEIGHT.3
+man/man3/CURLOPT_SUPPRESS_CONNECT_HEADERS.3
 man/man3/CURLOPT_TCP_FASTOPEN.3
 man/man3/CURLOPT_TCP_KEEPALIVE.3
 man/man3/CURLOPT_TCP_KEEPIDLE.3
@@ -368,6 +377,7 @@ man/man3/curl_share_strerror.3
 man/man3/curl_slist_append.3
 man/man3/curl_slist_free_all.3
 man/man3/curl_strequal.3
+man/man3/curl_strnequal.3
 man/man3/curl_unescape.3
 man/man3/curl_version.3
 man/man3/curl_version_info.3

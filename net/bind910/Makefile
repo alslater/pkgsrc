@@ -1,8 +1,7 @@
-# $NetBSD: Makefile,v 1.27.2.2 2017/02/12 21:59:21 spz Exp $
+# $NetBSD: Makefile,v 1.37 2017/07/31 13:37:53 taca Exp $
 
 DISTNAME=	bind-${BIND_VERSION}
 PKGNAME=	${DISTNAME:S/-P/pl/}
-PKGREVISION=	1
 CATEGORIES=	net
 MASTER_SITES=	ftp://ftp.isc.org/isc/bind9/${BIND_VERSION}/
 
@@ -14,7 +13,7 @@ CONFLICTS+=	host-[0-9]*
 
 MAKE_JOBS_SAFE=	no
 
-BIND_VERSION=	9.10.4-P6
+BIND_VERSION=	9.10.6
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -50,27 +49,31 @@ PKG_USERS=		${BIND_USER}:${BIND_GROUP}
 PKG_GECOS.${BIND_USER}=	Named pseudo-user
 PKG_HOME.${BIND_USER}=	${BIND_DIR}
 
-DOCS=			CHANGES FAQ README
+DOCS=			CHANGES FAQ.xml README
 
 FILES_SUBST+=		BIND_GROUP=${BIND_GROUP} \
 			BIND_USER=${BIND_USER} PAX=${PAX:Q} \
 			SSLBASE=${SSLBASE}
 MESSAGE_SUBST+=		BIND_DIR=${BIND_DIR} BIND_USER=${BIND_USER}
-DOCDIR=			${DESTDIR}${PREFIX}/share/doc/bind9
+
+DOCDIR=			share/doc/bind9
 
 RCD_SCRIPTS=		lwresd named9
 SMF_METHODS=		named
 
-INSTALLATION_DIRS+=	${DOCDIR} share/doc/bind9/arm
-INSTALLATION_DIRS+=	share/examples/bind9
-
+INSTALL_MAKE_FLAGS+=	sysconfdir=${PREFIX}/share/examples/bind9
 CONF_FILES+=		share/examples/bind9/named.conf ${PKG_SYSCONFDIR}/named.conf
+CONF_FILES+=		share/examples/bind9/bind.keys \
+			${PKG_SYSCONFDIR}/bind.keys
+
+INSTALLATION_DIRS+=	${DOCDIR} ${DOCDIR}/arm
+INSTALLATION_DIRS+=	share/examples/bind9
 
 post-install:
 .for f in ${DOCS}
-	${INSTALL_DATA} ${WRKSRC}/${f} ${DOCDIR}
+	${INSTALL_DATA} ${WRKSRC}/${f} ${DESTDIR}${PREFIX}/${DOCDIR}
 .endfor
-	${INSTALL_DATA} ${WRKSRC}/doc/arm/*.html ${DOCDIR}/arm
+	${INSTALL_DATA} ${WRKSRC}/doc/arm/*.html ${DESTDIR}${PREFIX}/${DOCDIR}/arm
 	${INSTALL_DATA} ${FILESDIR}/named.conf ${DESTDIR}${PREFIX}/share/examples/bind9
 	${RM} -f ${DESTDIR}${PKG_SYSCONFDIR}/bind.keys
 

@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.20 2016/10/09 21:42:02 wiz Exp $
+# $NetBSD: Makefile,v 1.21 2017/03/09 13:44:50 fhajny Exp $
 
 .include "../../net/powerdns/Makefile.backend"
 
