@@ -54,6 +54,7 @@ SUBDIR+=	apache-tomcat55
 SUBDIR+=	apache-tomcat6
 SUBDIR+=	apache-tomcat7
 SUBDIR+=	apache-tomcat8
+SUBDIR+=	apache-tomcat85
 SUBDIR+=	apache22
 SUBDIR+=	apache24
 SUBDIR+=	apachetop

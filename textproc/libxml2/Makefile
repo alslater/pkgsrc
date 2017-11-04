@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.142 2016/05/27 23:51:10 pgoyette Exp $
+# $NetBSD: Makefile,v 1.146 2017/09/10 20:49:20 wiz Exp $
 
 .include "../../textproc/libxml2/Makefile.common"
 
