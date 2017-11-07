@@ -146,6 +146,7 @@ SUBDIR+=	nim
 SUBDIR+=	nodejs
 SUBDIR+=	nodejs4
 SUBDIR+=	nodejs6
+SUBDIR+=	nodejs8
 SUBDIR+=	nqp
 SUBDIR+=	nuitka
 SUBDIR+=	objc

@@ -2,6 +2,7 @@
 # used by lang/nodejs/Makefile
 # used by lang/nodejs4/Makefile
 # used by lang/nodejs6/Makefile
+# used by lang/nodejs8/Makefile
 
 CATEGORIES=	devel
 MASTER_SITES=	http://nodejs.org/dist/${DISTNAME:S/node-//}/
