@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.91 2016/11/28 15:07:11 wiz Exp $
+@comment $NetBSD: PLIST,v 1.98 2017/10/10 19:47:50 tez Exp $
 bin/Magick++-config
 bin/MagickCore-config
 bin/MagickWand-config
@@ -149,7 +149,7 @@ include/ImageMagick-7/MagickWand/pixel-wand.h
 include/ImageMagick-7/MagickWand/stream.h
 include/ImageMagick-7/MagickWand/wand-view.h
 include/ImageMagick-7/MagickWand/wandcli.h
-lib/ImageMagick-7.0.3/config-Q16HDRI/configure.xml
+lib/ImageMagick-7.0.7/config-Q16HDRI/configure.xml
 lib/libMagick++-7.Q16HDRI.la
 lib/libMagickCore-7.Q16HDRI.la
 lib/libMagickWand-7.Q16HDRI.la
@@ -1188,6 +1188,7 @@ share/doc/ImageMagick-7/www/contact.html
 share/doc/ImageMagick-7/www/convert.html
 share/doc/ImageMagick-7/www/css/README.txt
 share/doc/ImageMagick-7/www/css/magick.css
+share/doc/ImageMagick-7/www/develop.html
 share/doc/ImageMagick-7/www/display.html
 share/doc/ImageMagick-7/www/distribute-pixel-cache.html
 share/doc/ImageMagick-7/www/download.html
@@ -1217,6 +1218,7 @@ share/doc/ImageMagick-7/www/magick-vector-graphics.html
 share/doc/ImageMagick-7/www/magick-wand.html
 share/doc/ImageMagick-7/www/magick.html
 share/doc/ImageMagick-7/www/miff.html
+share/doc/ImageMagick-7/www/mirror.html
 share/doc/ImageMagick-7/www/mogrify.html
 share/doc/ImageMagick-7/www/montage.html
 share/doc/ImageMagick-7/www/motion-picture.html
@@ -1270,5 +1272,6 @@ share/examples/ImageMagick/thresholds.xml
 share/examples/ImageMagick/type-apple.xml
 share/examples/ImageMagick/type-dejavu.xml
 share/examples/ImageMagick/type-ghostscript.xml
+share/examples/ImageMagick/type-urw-base35.xml
 share/examples/ImageMagick/type-windows.xml
 share/examples/ImageMagick/type.xml

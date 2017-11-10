@@ -41,6 +41,11 @@ REPLACE_PYTHON+=	configure
 REPLACE_PYTHON+=	tools/genv8constants.py
 REPLACE_PYTHON+=	tools/gyp/pylib/gyp/flock_tool.py
 
+REPLACE_INTERPRETER+=	node
+REPLACE.node.old=	.*node
+REPLACE.node.new=	${PREFIX}/bin/node
+REPLACE_FILES.node=	deps/npm/bin/npx-cli.js
+
 CHECK_INTERPRETER_SKIP+=	lib/node_modules/npm/*
 
 .if ${OPSYS} == "NetBSD"
