@@ -1,4 +1,4 @@
-$NetBSD: patch-logger.h,v 1.1.2.2 2017/02/17 19:11:36 bsiegert Exp $
+$NetBSD: patch-logger.h,v 1.1 2017/02/16 11:10:53 adam Exp $
 
 time_t changes
 

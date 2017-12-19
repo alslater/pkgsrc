@@ -1,4 +1,4 @@
-$NetBSD: patch-openbsd-compat_bsd-openpty.c,v 1.3.8.1 2017/01/08 11:05:07 bsiegert Exp $
+$NetBSD: patch-openbsd-compat_bsd-openpty.c,v 1.4 2016/12/30 04:43:16 taca Exp $
 
 Interix support
 

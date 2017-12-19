@@ -1,4 +1,4 @@
-$NetBSD: patch-session.c,v 1.7.4.1 2017/01/08 11:05:07 bsiegert Exp $
+$NetBSD: patch-session.c,v 1.8 2016/12/30 04:43:16 taca Exp $
 
 * Interix support.
 

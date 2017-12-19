@@ -1,10 +1,14 @@
-# $NetBSD: options.mk,v 1.33.4.1 2017/01/08 11:05:07 bsiegert Exp $
+# $NetBSD: options.mk,v 1.35 2017/07/24 16:33:22 he Exp $
 
 .include "../../mk/bsd.prefs.mk"
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.openssh
 PKG_SUPPORTED_OPTIONS=	kerberos openssl pam
 PKG_SUGGESTED_OPTIONS=	openssl
+
+.if ${OPSYS} == "NetBSD"
+PKG_SUGGESTED_OPTIONS+=	pam
+.endif
 
 .include "../../mk/bsd.options.mk"
 
