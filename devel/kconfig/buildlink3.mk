@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kconfig
 KCONFIG_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kconfig+=	kconfig>=5.18.0
-BUILDLINK_ABI_DEPENDS.kconfig?=	kconfig>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kconfig?=	kconfig>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kconfig?=	../../devel/kconfig
 
 .include "../../x11/qt5-qtbase/buildlink3.mk"

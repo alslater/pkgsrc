@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	webkit24-gtk
 WEBKIT24_GTK_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.webkit24-gtk+=	webkit24-gtk>=2.0
-BUILDLINK_ABI_DEPENDS.webkit24-gtk?=	webkit24-gtk>=2.4.11nb5
+BUILDLINK_ABI_DEPENDS.webkit24-gtk?=	webkit24-gtk>=2.4.11nb6
 BUILDLINK_PKGSRCDIR.webkit24-gtk?=	../../www/webkit24-gtk
 
 # Linking with this library may require newer libstdc++ features than are

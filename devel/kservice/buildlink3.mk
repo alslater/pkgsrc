@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kservice
 KSERVICE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kservice+=	kservice>=5.18.0
-BUILDLINK_ABI_DEPENDS.kservice?=	kservice>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kservice?=	kservice>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kservice?=	../../devel/kservice
 
 .include "../../devel/kconfig/buildlink3.mk"

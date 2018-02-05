@@ -1,28 +1,30 @@
-# $NetBSD: Makefile,v 1.50 2016/03/05 11:27:45 jperkin Exp $
+# $NetBSD: Makefile,v 1.53 2017/09/26 17:57:36 gson Exp $
 
-PKGREVISION= 1
 .include "../../devel/libevent/Makefile.common"
 
-PKGNAME=	libevent-${LIBEVENT_VERSION}
-CATEGORIES=	devel
+PKGREVISION=	1
 
-MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://libevent.org/
+PKGNAME=	${DISTNAME:S/-stable//}
 COMMENT=	Asynchronous event notification library
-LICENSE=	modified-bsd
 
 CONFLICTS+=	libev<3.9nb1
 
 USE_LIBTOOL=		yes
 USE_MULTIARCH=		lib
 GNU_CONFIGURE=		yes
+PKGCONFIG_OVERRIDE+=	libevent_core.pc.in
+PKGCONFIG_OVERRIDE+=	libevent_extra.pc.in
 PKGCONFIG_OVERRIDE+=	libevent_openssl.pc.in
 PKGCONFIG_OVERRIDE+=	libevent_pthreads.pc.in
 PKGCONFIG_OVERRIDE+=	libevent.pc.in
 TEST_TARGET=		verify
 
-LIBS.SunOS+=	-lnsl -lresolv
+LIBS.SunOS+=		-lnsl -lresolv
 CPPFLAGS.SunOS+=	-D__EXTENSIONS__
+CPPFLAGS.QNX+=		-D__EXT_POSIX2
+
+CFLAGS+=-g -O0
+INSTALL_UNSTRIPPED=yes
 
 # XXX helps build, but needs more testing
 #CFLAGS.Interix+=	-Dsockaddr_storage=sockaddr_in -DNI_MAXSERV=32

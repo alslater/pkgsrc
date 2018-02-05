@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdeclarative
 KDECLARATIVE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdeclarative+=	kdeclarative>=5.21.0
-BUILDLINK_ABI_DEPENDS.kdeclarative?=	kdeclarative>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kdeclarative?=	kdeclarative>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kdeclarative?=	../../devel/kdeclarative
 
 .include "../../graphics/libepoxy/buildlink3.mk"

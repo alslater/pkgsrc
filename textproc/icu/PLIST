@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.39 2016/12/04 09:01:20 adam Exp $
+@comment $NetBSD: PLIST,v 1.41 2017/11/30 16:03:18 adam Exp $
 bin/derb
 bin/genbrk
 bin/gencfu
@@ -19,6 +19,8 @@ include/unicode/bytestrie.h
 include/unicode/bytestriebuilder.h
 include/unicode/calendar.h
 include/unicode/caniter.h
+include/unicode/casemap.h
+include/unicode/char16ptr.h
 include/unicode/chariter.h
 include/unicode/choicfmt.h
 include/unicode/coleitr.h
@@ -38,6 +40,7 @@ include/unicode/dtitvfmt.h
 include/unicode/dtitvinf.h
 include/unicode/dtptngen.h
 include/unicode/dtrule.h
+include/unicode/edits.h
 include/unicode/enumset.h
 include/unicode/errorcode.h
 include/unicode/fieldpos.h
@@ -61,6 +64,8 @@ include/unicode/messagepattern.h
 include/unicode/msgfmt.h
 include/unicode/normalizer2.h
 include/unicode/normlzr.h
+include/unicode/nounit.h
+include/unicode/numberformatter.h
 include/unicode/numfmt.h
 include/unicode/numsys.h
 include/unicode/parseerr.h
@@ -88,6 +93,7 @@ include/unicode/smpdtfmt.h
 include/unicode/sortkey.h
 include/unicode/std_string.h
 include/unicode/strenum.h
+include/unicode/stringoptions.h
 include/unicode/stringpiece.h
 include/unicode/stringtriebuilder.h
 include/unicode/stsearch.h
@@ -189,28 +195,28 @@ lib/icu/current
 lib/icu/pkgdata.inc
 lib/libicudata.a
 lib/libicudata.so
-lib/libicudata.so.58
 lib/libicudata.so.${PKGVERSION}
+lib/libicudata.so.60
 lib/libicui18n.a
 lib/libicui18n.so
-lib/libicui18n.so.58
 lib/libicui18n.so.${PKGVERSION}
+lib/libicui18n.so.60
 lib/libicuio.a
 lib/libicuio.so
-lib/libicuio.so.58
 lib/libicuio.so.${PKGVERSION}
+lib/libicuio.so.60
 lib/libicutest.a
 lib/libicutest.so
-lib/libicutest.so.58
 lib/libicutest.so.${PKGVERSION}
+lib/libicutest.so.60
 lib/libicutu.a
 lib/libicutu.so
-lib/libicutu.so.58
 lib/libicutu.so.${PKGVERSION}
+lib/libicutu.so.60
 lib/libicuuc.a
 lib/libicuuc.so
-lib/libicuuc.so.58
 lib/libicuuc.so.${PKGVERSION}
+lib/libicuuc.so.60
 lib/pkgconfig/icu-i18n.pc
 lib/pkgconfig/icu-io.pc
 lib/pkgconfig/icu-uc.pc
@@ -228,6 +234,7 @@ man/man8/genccode.8
 man/man8/gencmn.8
 man/man8/gensprep.8
 man/man8/icupkg.8
+sbin/escapesrc
 sbin/genccode
 sbin/gencmn
 sbin/gennorm2

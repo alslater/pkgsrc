@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.42 2017/08/07 17:56:14 adam Exp $
+# $NetBSD: Makefile,v 1.46 2017/09/27 06:37:47 adam Exp $
 
 .include "../../devel/git/Makefile.common"
 
@@ -108,6 +108,7 @@ post-install:
 .include "options.mk"
 
 .include "../../converters/libiconv/buildlink3.mk"
+.include "../../devel/gettext-lib/buildlink3.mk"
 .include "../../devel/pcre2/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/perl5/module.mk"

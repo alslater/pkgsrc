@@ -2,7 +2,7 @@
 
 DISTNAME=	qtscript-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtscript-${QTVERSION}
-PKGREVISION=	6
+PKGREVISION=	7
 COMMENT=	Qt5 module for script
 
 BUILD_TARGET=		sub-src

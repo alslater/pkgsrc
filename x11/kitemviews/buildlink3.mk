@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kitemviews
 KITEMVIEWS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kitemviews+=	kitemviews>=5.18.0
-BUILDLINK_ABI_DEPENDS.kitemviews?=	kitemviews>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kitemviews?=	kitemviews>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kitemviews?=	../../x11/kitemviews
 
 .include "../../x11/qt5-qtbase/buildlink3.mk"

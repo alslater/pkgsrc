@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kauth
 KAUTH_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kauth+=	kauth>=5.19.0
-BUILDLINK_ABI_DEPENDS.kauth?=	kauth>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kauth?=	kauth>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kauth?=	../../security/kauth
 
 .include "../../devel/kcoreaddons/buildlink3.mk"

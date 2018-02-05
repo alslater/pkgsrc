@@ -8,7 +8,7 @@ PARROT_BUILDLINK3_MK:=
 .include "../../lang/parrot/version.mk"
 
 BUILDLINK_API_DEPENDS.parrot+=		parrot>=0.4.0
-BUILDLINK_ABI_DEPENDS.parrot+=		parrot>=5.7.0nb11
+BUILDLINK_ABI_DEPENDS.parrot+=		parrot>=5.7.0nb12
 BUILDLINK_PKGSRCDIR.parrot?=		../../lang/parrot
 
 .include "../../textproc/icu/buildlink3.mk"

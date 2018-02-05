@@ -7,6 +7,7 @@ GCC_REQD+=	4.9.4
 
 CONFIGURE_ARGS+=	--with-intl=system-icu
 
+PKGREVISION= 1
 .include "../../lang/nodejs/Makefile.common"
 .include "../../textproc/icu/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

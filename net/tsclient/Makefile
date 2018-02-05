@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		tsclient-0.132
-PKGREVISION=		77
+PKGREVISION=		78
 CATEGORIES=		net
 MASTER_SITES=		http://www.gnomepro.com/tsclient/
 

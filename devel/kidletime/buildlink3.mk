@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kidletime
 KIDLETIME_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kidletime+=	kidletime>=5.18.0
-BUILDLINK_ABI_DEPENDS.kidletime?=	kidletime>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kidletime?=	kidletime>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kidletime?=	../../devel/kidletime
 
 .include "../../x11/libXScrnSaver/buildlink3.mk"

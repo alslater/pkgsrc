@@ -2,7 +2,7 @@
 
 DISTNAME=	xsp-3.8
 PKGNAME=	mono-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	www
 MASTER_SITES=	http://download.mono-project.com/sources/xsp/
 

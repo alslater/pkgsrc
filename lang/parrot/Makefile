@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		parrot-${PARROT_VERSION}
-PKGREVISION=		11
+PKGREVISION=		12
 CATEGORIES=		lang
 MASTER_SITES=		ftp://ftp.parrot.org/pub/parrot/releases/${PARROT_RTYPE}/${PARROT_VERSION}/
 

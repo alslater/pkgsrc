@@ -3,6 +3,7 @@
 MODNAME=		intl
 CATEGORIES+=		textproc
 COMMENT=		PHP extension for i18n
+PKGREVISION=		1
 LICENSE=		php
 
 USE_LANGUAGES=		c c++

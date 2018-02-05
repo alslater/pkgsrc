@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kunitconversion
 KUNITCONVERSION_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kunitconversion+=	kunitconversion>=5.19.0
-BUILDLINK_ABI_DEPENDS.kunitconversion?=	kunitconversion>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kunitconversion?=	kunitconversion>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kunitconversion?=	../../misc/kunitconversion
 
 .include "../../devel/ki18n/buildlink3.mk"

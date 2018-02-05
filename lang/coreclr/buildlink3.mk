@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	coreclr
 CORECLR_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.coreclr+=	coreclr>=1.0.0
-BUILDLINK_ABI_DEPENDS.coreclr?=	coreclr>=1.0.0nb1
+BUILDLINK_ABI_DEPENDS.coreclr?=	coreclr>=1.0.0nb2
 BUILDLINK_PKGSRCDIR.coreclr?=	../../lang/coreclr
 
 BUILDLINK_INCDIRS.coreclr+=	CoreCLR/inc

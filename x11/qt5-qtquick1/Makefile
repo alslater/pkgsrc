@@ -2,7 +2,7 @@
 
 DISTNAME=	qtquick1-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtquick1-${QTVERSION}
-PKGREVISION=	6
+PKGREVISION=	7
 COMMENT=	Qt5 module for Quick1
 
 BUILD_TARGET=		sub-tools

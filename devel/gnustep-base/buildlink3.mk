@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	gnustep-base
 GNUSTEP_BASE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.gnustep-base+=	gnustep-base>=1.24.0
-BUILDLINK_ABI_DEPENDS.gnustep-base+=	gnustep-base>=1.24.0nb14
+BUILDLINK_ABI_DEPENDS.gnustep-base+=	gnustep-base>=1.24.0nb15
 BUILDLINK_PKGSRCDIR.gnustep-base?=	../../devel/gnustep-base
 
 .include "../../devel/gnustep-make/buildlink3.mk"

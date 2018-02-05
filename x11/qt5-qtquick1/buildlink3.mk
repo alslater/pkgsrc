@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	qt5-qtquick1
 QT5_QTQUICK1_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.qt5-qtquick1+=	qt5-qtquick1>=5.5.1
-BUILDLINK_ABI_DEPENDS.qt5-qtquick1+=	qt5-qtquick1>=5.5.1nb6
+BUILDLINK_ABI_DEPENDS.qt5-qtquick1+=	qt5-qtquick1>=5.5.1nb7
 BUILDLINK_PKGSRCDIR.qt5-qtquick1?=	../../x11/qt5-qtquick1
 
 BUILDLINK_INCDIRS.qt5-qtquick1+=	qt5/include

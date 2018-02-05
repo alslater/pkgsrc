@@ -2,7 +2,7 @@
 
 DISTNAME=	qtsvg-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtsvg-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for SVG
 
 BUILD_TARGET=		sub-src

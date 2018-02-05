@@ -7,7 +7,7 @@ BUILDLINK_TREE+=	pyzy
 PYZY_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.pyzy+=	pyzy>=0.1.0
-BUILDLINK_ABI_DEPENDS.pyzy?=	pyzy>=0.1.0nb6
+BUILDLINK_ABI_DEPENDS.pyzy?=	pyzy>=0.1.0nb7
 BUILDLINK_PKGSRCDIR.pyzy?=	../../converters/pyzy
 
 .include "../../mk/bsd.fast.prefs.mk"

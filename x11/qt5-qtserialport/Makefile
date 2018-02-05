@@ -2,7 +2,7 @@
 
 DISTNAME=	qtserialport-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtserialport-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for Serial Port
 
 BUILD_TARGET=		sub-src

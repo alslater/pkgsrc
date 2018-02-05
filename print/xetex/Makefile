@@ -2,7 +2,7 @@
 
 DISTNAME=	texlive-20160523-source
 PKGNAME=	xetex-0.99996
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	print
 MASTER_SITES=	ftp://tug.org/historic/systems/texlive/2016/
 EXTRACT_SUFX=	.tar.xz

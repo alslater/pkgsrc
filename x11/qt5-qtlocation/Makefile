@@ -2,7 +2,7 @@
 
 DISTNAME=	qtlocation-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtlocation-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for qtlocation
 
 BUILD_TARGET=		sub-src

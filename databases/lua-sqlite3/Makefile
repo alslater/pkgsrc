@@ -2,7 +2,7 @@
 
 DISTNAME=	lua-sqlite3-0.4.1
 PKGNAME=	${LUA_PKGPREFIX}-sqlite3-0.4.1
-PKGREVISION=	9
+PKGREVISION=	10
 CATEGORIES=	databases
 MASTER_SITES=	http://www.mroth.net/lua-sqlite3/
 EXTRACT_SUFX=	.tar.bz2

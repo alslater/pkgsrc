@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kcodecs
 KCODECS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kcodecs+=	kcodecs>=5.18.0
-BUILDLINK_ABI_DEPENDS.kcodecs?=	kcodecs>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kcodecs?=	kcodecs>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kcodecs?=	../../textproc/kcodecs
 
 .include "../../x11/qt5-qtbase/buildlink3.mk"

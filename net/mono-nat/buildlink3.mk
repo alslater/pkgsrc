@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mono-nat
 MONO_NAT_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mono-nat+=	mono-nat>=1.0.2
-BUILDLINK_ABI_DEPENDS.mono-nat+=	mono-nat>=1.0.2nb15
+BUILDLINK_ABI_DEPENDS.mono-nat+=	mono-nat>=1.0.2nb16
 BUILDLINK_PKGSRCDIR.mono-nat?=	../../net/mono-nat
 
 .include "../../lang/mono/buildlink3.mk"

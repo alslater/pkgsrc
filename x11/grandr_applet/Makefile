@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	grandr_applet-0.4
-PKGREVISION=	50
+PKGREVISION=	51
 CATEGORIES=	x11
 MASTER_SITES=	http://dekorte.homeip.net/download/grandr-applet/
 

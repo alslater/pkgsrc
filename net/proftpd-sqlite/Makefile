@@ -1,5 +1,6 @@
 # $NetBSD: Makefile,v 1.5 2016/12/04 05:17:38 ryoon Exp $
 
+PKGREVISION= 1
 .include "../../net/proftpd/Makefile.module"
 
 PROFTPD_MOD=	sqlite

@@ -1,5 +1,6 @@
 # $NetBSD: Makefile,v 1.5 2016/12/18 02:18:39 wen Exp $
 
+PKGREVISION=	1
 CATEGORIES=	textproc
 MASTER_SITES=	${MASTER_SITE_R_CRAN:=contrib/}
 

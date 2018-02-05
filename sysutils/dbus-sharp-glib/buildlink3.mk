@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	dbus-sharp-glib
 DBUS_SHARP_GLIB_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.dbus-sharp-glib+=	dbus-sharp-glib>=0.5.0
-BUILDLINK_ABI_DEPENDS.dbus-sharp-glib?=	dbus-sharp-glib>=0.5.0nb8
+BUILDLINK_ABI_DEPENDS.dbus-sharp-glib?=	dbus-sharp-glib>=0.5.0nb9
 BUILDLINK_PKGSRCDIR.dbus-sharp-glib?=	../../sysutils/dbus-sharp-glib
 
 .include "../../sysutils/dbus-sharp/buildlink3.mk"

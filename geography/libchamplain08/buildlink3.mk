@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libchamplain08
 LIBCHAMPLAIN08_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libchamplain08+=	libchamplain08>=0.8.3
-BUILDLINK_ABI_DEPENDS.libchamplain08+=	libchamplain08>=0.8.3nb34
+BUILDLINK_ABI_DEPENDS.libchamplain08+=	libchamplain08>=0.8.3nb35
 BUILDLINK_PKGSRCDIR.libchamplain08?=	../../geography/libchamplain08
 
 .include "../../devel/glib2/buildlink3.mk"

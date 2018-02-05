@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		sound-juicer-2.32.0
-PKGREVISION=		6
+PKGREVISION=		7
 CATEGORIES=		audio
 MASTER_SITES=		http://www.burtonini.com/computing/ \
 			${MASTER_SITE_GNOME:=sources/sound-juicer/2.32/}

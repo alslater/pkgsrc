@@ -2,7 +2,7 @@
 
 DISTNAME=	apsw-3.8.4.2-r1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/-r/pl/}
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	databases
 MASTER_SITES=	https://github.com/rogerbinns/apsw/releases/download/${DISTNAME:C/^[^-]*-//1}/
 EXTRACT_SUFX=	.zip

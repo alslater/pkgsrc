@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gworkspace-0.9.1
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	sysutils gnustep
 MASTER_SITES=	http://www.gnustep.it/enrico/gworkspace/
 

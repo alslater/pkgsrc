@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libopensync-plugin-evolution2-0.22
-PKGREVISION=	24
+PKGREVISION=	25
 CATEGORIES=	comms
 MASTER_SITES=	http://www.opensync.org/download/releases/0.22/
 EXTRACT_SUFX=	.tar.bz2

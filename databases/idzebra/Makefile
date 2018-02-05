@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	idzebra-2.0.62
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	databases
 MASTER_SITES=	http://ftp.indexdata.dk/pub/zebra/
 

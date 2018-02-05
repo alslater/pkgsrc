@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.7 2016/12/04 05:17:42 ryoon Exp $
 
-PKGREVISION= 6
+PKGREVISION= 7
 .include "../../meta-pkgs/xfce4/Makefile.common"
 
 DISTNAME=	thunar-vcs-plugin-0.1.4

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	evolution-webcal-2.32.0
-PKGREVISION=	36
+PKGREVISION=	37
 CATEGORIES=	time gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/evolution-webcal/2.32/}
 EXTRACT_SUFX=	.tar.bz2

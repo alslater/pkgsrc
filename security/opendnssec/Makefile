@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	opendnssec-1.4.12
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	security net
 MASTER_SITES=	http://www.opendnssec.org/files/source/
 

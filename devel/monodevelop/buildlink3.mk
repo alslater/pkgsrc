@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	monodevelop
 MONODEVELOP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.monodevelop+=	monodevelop>=5.0
-BUILDLINK_ABI_DEPENDS.monodevelop+=	monodevelop>=5.0.1nb7
+BUILDLINK_ABI_DEPENDS.monodevelop+=	monodevelop>=5.0.1nb8
 BUILDLINK_PKGSRCDIR.monodevelop?=	../../devel/monodevelop
 BUILDLINK_CONTENTS_FILTER.monodevelop=	${EGREP} '^lib/'
 

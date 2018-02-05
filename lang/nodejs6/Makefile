@@ -2,5 +2,6 @@
 
 DISTNAME=	node-v6.12.2
 
+PKGREVISION= 1
 .include "../../lang/nodejs/Makefile.common"
 .include "../../mk/bsd.pkg.mk"

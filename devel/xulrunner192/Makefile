@@ -2,7 +2,7 @@
 
 .include "dist.mk"
 PKGNAME=	xulrunner192-${MOZ_BRANCH}${MOZ_BRANCH_MINOR}
-PKGREVISION=	34
+PKGREVISION=	35
 CATEGORIES=	devel www
 
 MAINTAINER=	pkgsrc-users@NetBSD.org

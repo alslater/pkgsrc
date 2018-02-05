@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kpackage
 KPACKAGE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kpackage+=	kpackage>=5.19.0
-BUILDLINK_ABI_DEPENDS.kpackage?=	kpackage>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kpackage?=	kpackage>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kpackage?=	../../devel/kpackage
 
 .include "../../archivers/karchive/buildlink3.mk"

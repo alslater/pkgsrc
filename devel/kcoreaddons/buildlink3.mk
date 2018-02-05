@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kcoreaddons
 KCOREADDONS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kcoreaddons+=	kcoreaddons>=5.18.0
-BUILDLINK_ABI_DEPENDS.kcoreaddons?=	kcoreaddons>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kcoreaddons?=	kcoreaddons>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kcoreaddons?=	../../devel/kcoreaddons
 
 .include "../../x11/qt5-qtbase/buildlink3.mk"

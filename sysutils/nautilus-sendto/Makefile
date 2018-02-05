@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		nautilus-sendto-2.32.0
-PKGREVISION=		41
+PKGREVISION=		42
 CATEGORIES=		sysutils gnome
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/nautilus-sendto/2.32/}
 EXTRACT_SUFX=		.tar.bz2

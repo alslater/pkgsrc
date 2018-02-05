@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.24 2016/12/04 05:17:13 ryoon Exp $
 
 DISTNAME=	librest-0.6
-PKGREVISION=	20
+PKGREVISION=	21
 CATEGORIES=	www
 MASTER_SITES=	${MASTER_SITE_GITHUB:=GNOME/librest/archive/}
 

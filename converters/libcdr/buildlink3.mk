@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libcdr
 LIBCDR_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libcdr+=	libcdr>=0.0.6
-BUILDLINK_ABI_DEPENDS.libcdr+=	libcdr>=0.1.3nb2
+BUILDLINK_ABI_DEPENDS.libcdr+=	libcdr>=0.1.3nb3
 BUILDLINK_PKGSRCDIR.libcdr?=	../../converters/libcdr
 
 .include "../../converters/libwpd/buildlink3.mk"

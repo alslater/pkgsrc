@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	tellico-1.3.6
-PKGREVISION=	69
+PKGREVISION=	70
 CATEGORIES=	misc
 MASTER_SITES=	http://www.periapsis.org/tellico/download/
 

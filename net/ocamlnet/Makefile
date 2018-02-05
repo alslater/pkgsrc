@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		ocamlnet-4.1.1
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=		net
 MASTER_SITES=		http://download.camlcity.org/download/
 

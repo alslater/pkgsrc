@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gnome-sharp-2.24.2
-PKGREVISION=	41
+PKGREVISION=	42
 CATEGORIES=	x11
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-sharp/2.24/}
 

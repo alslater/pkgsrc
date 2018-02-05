@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	gnustep-gui
 GNUSTEP_GUI_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.gnustep-gui+=	gnustep-gui>=0.16.0
-BUILDLINK_ABI_DEPENDS.gnustep-gui+=	gnustep-gui>=0.22.0nb13
+BUILDLINK_ABI_DEPENDS.gnustep-gui+=	gnustep-gui>=0.22.0nb14
 BUILDLINK_PKGSRCDIR.gnustep-gui?=	../../x11/gnustep-gui
 
 .include "../../devel/gnustep-base/buildlink3.mk"

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	sublib
 SUBLIB_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.sublib+=	sublib>=0.9
-BUILDLINK_ABI_DEPENDS.sublib+=	sublib>=0.9nb15
+BUILDLINK_ABI_DEPENDS.sublib+=	sublib>=0.9nb16
 BUILDLINK_PKGSRCDIR.sublib?=	../../textproc/sublib
 
 .include "../../lang/mono2/buildlink3.mk"

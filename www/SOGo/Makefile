@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	SOGo-2.3.14
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	www
 MASTER_SITES=	http://www.sogo.nu/files/downloads/SOGo/Sources/
 

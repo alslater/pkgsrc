@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	knotifications
 KNOTIFICATIONS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.knotifications+=	knotifications>=5.19.0
-BUILDLINK_ABI_DEPENDS.knotifications?=	knotifications>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.knotifications?=	knotifications>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.knotifications?=	../../devel/knotifications
 
 .include "../../devel/kconfig/buildlink3.mk"
