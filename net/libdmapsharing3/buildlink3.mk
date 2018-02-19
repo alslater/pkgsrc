@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libdmapsharing3
 LIBDMAPSHARING3_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libdmapsharing3+=	libdmapsharing3>=2.9.15
-BUILDLINK_ABI_DEPENDS.libdmapsharing3?=	libdmapsharing3>=2.9.15nb25
+BUILDLINK_ABI_DEPENDS.libdmapsharing3?=	libdmapsharing3>=2.9.15nb26
 BUILDLINK_PKGSRCDIR.libdmapsharing3?=	../../net/libdmapsharing3
 
 .include "../../net/libsoup/buildlink3.mk"

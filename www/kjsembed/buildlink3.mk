@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kjsembed
 KJSEMBED_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kjsembed+=	kjsembed>=5.21.0
-BUILDLINK_ABI_DEPENDS.kjsembed?=	kjsembed>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kjsembed?=	kjsembed>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kjsembed?=	../../www/kjsembed
 
 .include "../../devel/ki18n/buildlink3.mk"

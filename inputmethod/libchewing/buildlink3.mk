@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libchewing
 LIBCHEWING_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libchewing+=		libchewing>=0.3.2
-BUILDLINK_ABI_DEPENDS.libchewing+=	libchewing>=0.4.0nb5
+BUILDLINK_ABI_DEPENDS.libchewing+=	libchewing>=0.4.0nb6
 BUILDLINK_PKGSRCDIR.libchewing?=	../../inputmethod/libchewing
 
 .include "../../databases/sqlite3/buildlink3.mk"

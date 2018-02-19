@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	mousetweaks-2.32.1
-PKGREVISION=	8
+PKGREVISION=	9
 CATEGORIES=	misc
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/mousetweaks/2.32/}
 

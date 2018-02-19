@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kxmlgui
 KXMLGUI_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kxmlgui+=	kxmlgui>=5.19.0
-BUILDLINK_ABI_DEPENDS.kxmlgui?=	kxmlgui>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kxmlgui?=	kxmlgui>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kxmlgui?=	../../x11/kxmlgui
 
 .include "../../misc/attica-qt5/buildlink3.mk"

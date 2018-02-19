@@ -2,7 +2,7 @@
 
 .include "Makefile.common"
 
-PKGREVISION=	37
+PKGREVISION=	38
 
 DEPENDS+=	gst-plugins0.10-soup-[0-9]*:../../net/gst-plugins0.10-soup
 

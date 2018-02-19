@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mono-xsp
 MONO_XSP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mono-xsp+=	mono-xsp>=2.0
-BUILDLINK_ABI_DEPENDS.mono-xsp+=	mono-xsp>=3.8nb3
+BUILDLINK_ABI_DEPENDS.mono-xsp+=	mono-xsp>=3.8nb4
 BUILDLINK_PKGSRCDIR.mono-xsp?=	../../www/mono-xsp
 
 .include "../../databases/sqlite3/buildlink3.mk"

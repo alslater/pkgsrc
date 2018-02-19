@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	librest
 LIBREST_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.librest+=	librest>=0.6
-BUILDLINK_ABI_DEPENDS.librest+=	librest>=0.6nb20
+BUILDLINK_ABI_DEPENDS.librest+=	librest>=0.6nb21
 BUILDLINK_PKGSRCDIR.librest?=	../../www/librest
 
 .include "../../devel/glib2/buildlink3.mk"

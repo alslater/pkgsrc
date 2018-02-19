@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	knewstuff
 KNEWSTUFF_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.knewstuff+=	knewstuff>=5.21.0
-BUILDLINK_ABI_DEPENDS.knewstuff?=	knewstuff>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.knewstuff?=	knewstuff>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.knewstuff?=	../../net/knewstuff
 
 .include "../../devel/kio/buildlink3.mk"

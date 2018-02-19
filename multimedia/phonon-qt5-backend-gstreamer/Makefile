@@ -2,7 +2,7 @@
 
 DISTNAME=	phonon-backend-gstreamer-4.9.0
 PKGNAME=	${DISTNAME:S/-/-qt5-/}
-PKGREVISION=	1
+PKGREVISION=	2
 
 COMMENT=	Multimedia API for KF5 - GStreamer backend
 

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	logjam-4.5.3
-PKGREVISION=	56
+PKGREVISION=	57
 CATEGORIES=	net
 MASTER_SITES=	http://logjam.danga.com/download/
 EXTRACT_SUFX=	.tar.bz2

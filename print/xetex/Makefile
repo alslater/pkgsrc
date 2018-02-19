@@ -2,7 +2,7 @@
 
 DISTNAME=	texlive-20160523-source
 PKGNAME=	xetex-0.99996
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	print
 MASTER_SITES=	ftp://tug.org/historic/systems/texlive/2016/
 EXTRACT_SUFX=	.tar.xz
@@ -22,6 +22,7 @@ EXTRACT_ELEMENTS=	${DISTNAME}/build-aux \
 
 GNU_CONFIGURE=	yes
 USE_LANGUAGES=	c c++
+CXXFLAGS+=	-std=c++11
 USE_LIBTOOL=	yes
 USE_TOOLS+=	gmake lex perl pkg-config yacc
 CONFIGURE_ARGS+=	--disable-aleph --disable-etex --disable-pdftex \

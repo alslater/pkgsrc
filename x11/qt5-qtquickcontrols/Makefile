@@ -2,7 +2,7 @@
 
 DISTNAME=	qtquickcontrols-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtquickcontrols-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for QuickControls
 
 BUILD_TARGET=		sub-src

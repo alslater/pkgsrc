@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	svnfs-0.4
-PKGREVISION=	30
+PKGREVISION=	31
 CATEGORIES=	filesystems
 MASTER_SITES=	http://www.jmadden.eu/wp-content/uploads/svnfs/
 EXTRACT_SUFX=	.tgz

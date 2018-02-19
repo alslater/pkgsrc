@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kcompletion
 KCOMPLETION_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kcompletion+=	kcompletion>=5.18.0
-BUILDLINK_ABI_DEPENDS.kcompletion?=	kcompletion>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kcompletion?=	kcompletion>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kcompletion?=	../../textproc/kcompletion
 
 .include "../../devel/kconfig/buildlink3.mk"

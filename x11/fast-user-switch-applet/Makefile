@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	fast-user-switch-applet-2.24.0
-PKGREVISION=	48
+PKGREVISION=	49
 CATEGORIES=	misc gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/fast-user-switch-applet/2.24/}
 EXTRACT_SUFX=	.tar.bz2

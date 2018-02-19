@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kemoticons
 KEMOTICONS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kemoticons+=	kemoticons>=5.19.0
-BUILDLINK_ABI_DEPENDS.kemoticons?=	kemoticons>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kemoticons?=	kemoticons>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kemoticons?=	../../misc/kemoticons
 
 .include "../../archivers/karchive/buildlink3.mk"

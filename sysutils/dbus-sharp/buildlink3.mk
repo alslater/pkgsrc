@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	dbus-sharp
 DBUS_SHARP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.dbus-sharp+=	dbus-sharp>=0.7.0
-BUILDLINK_ABI_DEPENDS.dbus-sharp?=	dbus-sharp>=0.7.0nb10
+BUILDLINK_ABI_DEPENDS.dbus-sharp?=	dbus-sharp>=0.7.0nb11
 BUILDLINK_PKGSRCDIR.dbus-sharp?=	../../sysutils/dbus-sharp
 
 .include "../../lang/mono/buildlink3.mk"

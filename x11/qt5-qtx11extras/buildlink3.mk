@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	qt5-qtx11extras
 QT5_QTX11EXTRAS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.qt5-qtx11extras+=	qt5-qtx11extras>=5.5.1
-BUILDLINK_ABI_DEPENDS.qt5-qtx11extras+=	qt5-qtx11extras>=5.5.1nb4
+BUILDLINK_ABI_DEPENDS.qt5-qtx11extras+=	qt5-qtx11extras>=5.5.1nb5
 BUILDLINK_PKGSRCDIR.qt5-qtx11extras?=	../../x11/qt5-qtx11extras
 
 BUILDLINK_INCDIRS.qt5-qtx11extras+=	qt5/include

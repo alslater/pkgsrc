@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		Addresses-0.4.8
-PKGREVISION=		9
+PKGREVISION=		10
 CATEGORIES=		misc gnustep
 MASTER_SITES=		http://savannah.nongnu.org/download/gap/
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kconfigwidgets
 KCONFIGWIDGETS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kconfigwidgets+=	kconfigwidgets>=5.19.0
-BUILDLINK_ABI_DEPENDS.kconfigwidgets?=	kconfigwidgets>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kconfigwidgets?=	kconfigwidgets>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kconfigwidgets?=	../../x11/kconfigwidgets
 
 .include "../../devel/kconfig/buildlink3.mk"

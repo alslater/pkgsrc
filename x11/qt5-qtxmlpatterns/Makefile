@@ -2,7 +2,7 @@
 
 DISTNAME=	qtxmlpatterns-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtxmlpatterns-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for XML Patterns
 
 #NO_CONFIGURE=		yes

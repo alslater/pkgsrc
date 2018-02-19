@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		imhangul_status_applet-0.3
-PKGREVISION=		62
+PKGREVISION=		63
 CATEGORIES=		korean inputmethod
 MASTER_SITES=		http://download.kldp.net/imhangul/imhangul_status_applet/0.3/
 

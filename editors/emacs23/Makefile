@@ -3,7 +3,7 @@
 CONFLICTS+=	emacs23-nox11-[0-9]*
 
 .include "../../editors/emacs23/Makefile.common"
-PKGREVISION=	39
+PKGREVISION=	40
 
 .include "options.mk"
 

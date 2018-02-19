@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdewebkit
 KDEWEBKIT_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdewebkit+=	kdewebkit>=5.21.0
-BUILDLINK_ABI_DEPENDS.kdewebkit?=	kdewebkit>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kdewebkit?=	kdewebkit>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kdewebkit?=	../../www/kdewebkit
 
 .include "../../devel/kparts/buildlink3.mk"

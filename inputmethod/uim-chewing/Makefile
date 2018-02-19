@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	uim-chewing-0.1.0
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	inputmethod chinese
 MASTER_SITES=	http://uim.googlecode.com/files/
 

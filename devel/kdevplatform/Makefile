@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	kdevplatform-1.7.0
-PKGREVISION=	11
+PKGREVISION=	12
 CATEGORIES=	devel kde
 MASTER_SITES=	${MASTER_SITE_KDE:=kdevelop/4.7.0/src/}
 EXTRACT_SUFX=	.tar.xz

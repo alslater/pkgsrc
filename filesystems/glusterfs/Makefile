@@ -2,7 +2,7 @@
 
 DISTNAME=	glusterfs-3.8.5
 #PKGREVISION=	1
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	filesystems
 MASTER_SITES=	http://bits.gluster.org/pub/gluster/glusterfs/src/
 

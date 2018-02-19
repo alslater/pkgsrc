@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kpty
 KPTY_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kpty+=	kpty>=5.19.0
-BUILDLINK_ABI_DEPENDS.kpty?=	kpty>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kpty?=	kpty>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kpty?=	../../devel/kpty
 
 .include "../../devel/kcoreaddons/buildlink3.mk"

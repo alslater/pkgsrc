@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.14 2016/12/04 05:17:10 ryoon Exp $
 
 DISTNAME=	kdnssd-${KF5VER}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	net
 
 HOMEPAGE=	https://community.kde.org/Frameworks

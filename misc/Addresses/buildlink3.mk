@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	Addresses
 ADDRESSES_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.Addresses+=	Addresses>=0.4.8
-BUILDLINK_ABI_DEPENDS.Addresses+=	Addresses>=0.4.8nb9
+BUILDLINK_ABI_DEPENDS.Addresses+=	Addresses>=0.4.8nb10
 BUILDLINK_PKGSRCDIR.Addresses?=	../../misc/Addresses
 
 .include "../../devel/gnustep-make/gnustep.mk"

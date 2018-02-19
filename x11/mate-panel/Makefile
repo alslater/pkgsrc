@@ -4,7 +4,7 @@ PYTHON_VERSIONS_ACCEPTED=	27
 .include "../../meta-pkgs/mate/Makefile.common"
 
 DISTNAME=	mate-panel-1.14.1
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	x11
 
 COMMENT=	MATE panel application

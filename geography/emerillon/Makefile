@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	emerillon-0.1.2
-PKGREVISION=	38
+PKGREVISION=	39
 CATEGORIES=	geography
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/emerillon/0.1/}
 EXTRACT_SUFX=	.tar.bz2

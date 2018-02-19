@@ -2,7 +2,7 @@
 
 DISTNAME=	qtgraphicaleffects-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtgraphicaleffects-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for Graphics effects
 
 BUILD_TARGET=		sub-src

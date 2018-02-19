@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	Pantomime
 PANTOMIME_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.Pantomime+=	Pantomime>1.1.9
-BUILDLINK_ABI_DEPENDS.Pantomime+=	Pantomime>=1.2.0nb9
+BUILDLINK_ABI_DEPENDS.Pantomime+=	Pantomime>=1.2.0nb10
 BUILDLINK_PKGSRCDIR.Pantomime?=	../../mail/Pantomime
 
 .include "../../devel/gnustep-make/gnustep.mk"

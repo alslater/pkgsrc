@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	SOPE-2.3.14
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	devel
 MASTER_SITES=	http://www.sogo.nu/files/downloads/SOGo/Sources/
 

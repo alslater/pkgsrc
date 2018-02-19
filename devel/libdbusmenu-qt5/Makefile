@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.4 2016/12/04 05:17:06 ryoon Exp $
 
-PKGREVISION= 3
+PKGREVISION= 4
 .include "../../devel/libdbusmenu-qt/Makefile.common"
 
 DISTNAME=       libdbusmenu-qt_${_VER}

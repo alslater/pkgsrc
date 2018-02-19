@@ -2,7 +2,7 @@
 
 DISTNAME=	qtx11extras-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtx11extras-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Qt5 module for X11 extras
 
 BUILD_TARGET=		sub-src

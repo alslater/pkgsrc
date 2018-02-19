@@ -1,10 +1,12 @@
-# $NetBSD: Makefile,v 1.25 2016/12/10 07:11:39 taca Exp $
+# $NetBSD: Makefile,v 1.28 2017/04/30 22:49:54 maya Exp $
 
 MODNAME=		intl
 CATEGORIES+=		textproc
 COMMENT=		PHP extension for i18n
+PKGREVISION=		1
 LICENSE=		php
 
+CXXFLAGS+=		-std=c++11
 USE_LANGUAGES=		c c++
 CONFIGURE_ARGS+=	--enable-${MODNAME}=shared,${BUILDLINK_DIR}
 

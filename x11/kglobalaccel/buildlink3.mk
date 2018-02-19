@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kglobalaccel
 KGLOBALACCEL_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kglobalaccel+=	kglobalaccel>=5.18.0
-BUILDLINK_ABI_DEPENDS.kglobalaccel?=	kglobalaccel>=5.25.0nb1
+BUILDLINK_ABI_DEPENDS.kglobalaccel?=	kglobalaccel>=5.25.0nb2
 BUILDLINK_PKGSRCDIR.kglobalaccel?=	../../x11/kglobalaccel
 
 .include "../../devel/kconfig/buildlink3.mk"

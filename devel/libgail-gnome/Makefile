@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libgail-gnome-1.20.4
-PKGREVISION=	26
+PKGREVISION=	27
 CATEGORIES=	devel gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libgail-gnome/1.20/}
 EXTRACT_SUFX=	.tar.bz2

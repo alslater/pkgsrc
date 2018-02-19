@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	sword-1.7.4
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	misc
 MASTER_SITES=	http://www.crosswire.org/ftpmirror/pub/sword/source/v1.7/
 
