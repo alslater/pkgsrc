@@ -2,7 +2,7 @@
 
 .include "../../devel/xulrunner192/dist.mk"
 PKGNAME=	firefox36-${FIREFOX_VER}
-PKGREVISION=	27
+PKGREVISION=	28
 CATEGORIES=	www
 
 MAINTAINER=	pkgsrc-users@NetBSD.org

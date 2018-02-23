@@ -8,6 +8,6 @@ pre-configure:
 CONFIGURE_ARGS+=	--disable-mac
 CONFIGURE_ARGS+=	--without-gtk
 
-PKGREVISION= 1
+PKGREVISION= 2
 .include "../../net/transmission/Makefile.common"
 .include "../../mk/bsd.pkg.mk"

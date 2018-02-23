@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.20 2016/12/04 05:17:38 ryoon Exp $
 
 PKGNAME=	transmission-qt-${VERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 
 USE_LANGUAGES=		c c++
 MAKE_ENV+=		QTDIR=${QTDIR}

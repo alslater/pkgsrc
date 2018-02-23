@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	honeyd-1.5b
-PKGREVISION=	37
+PKGREVISION=	38
 CATEGORIES=	security net
 MASTER_SITES=	http://www.citi.umich.edu/u/provos/honeyd/
 

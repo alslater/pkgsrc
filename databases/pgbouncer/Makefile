@@ -2,6 +2,7 @@
 #
 
 DISTNAME=	pgbouncer-1.7.2
+PKGREVISION=	1
 CATEGORIES=	databases
 MASTER_SITES=	http://pgbouncer.github.io/downloads/files/${PKGVERSION_NOREV}/
 

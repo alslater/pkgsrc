@@ -2,7 +2,7 @@
 
 .include "../../devel/xulrunner17/dist.mk"
 PKGNAME=	firefox17-${MOZ_BRANCH}
-PKGREVISION=	16
+PKGREVISION=	17
 CATEGORIES=	www
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
