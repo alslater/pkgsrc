@@ -2,7 +2,7 @@
 
 .include "../../devel/libevent/Makefile.common"
 
-PKGREVISION=	1
+PKGREVISION=	2
 
 PKGNAME=	${DISTNAME:S/-stable//}
 COMMENT=	Asynchronous event notification library

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libthrift
 LIBTHRIFT_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libthrift+=	libthrift>=0.2.0
-BUILDLINK_ABI_DEPENDS.libthrift+=	libthrift>=0.7.0nb31
+BUILDLINK_ABI_DEPENDS.libthrift+=	libthrift>=0.7.0nb38
 BUILDLINK_PKGSRCDIR.libthrift?=		../../devel/libthrift
 
 .include "../../security/openssl/buildlink3.mk"
