@@ -22,6 +22,7 @@ SHA1 (patch-deps_v8_src_types.h) = 250ab540fa28caeea034ed02b84182bc770cdf35
 SHA1 (patch-deps_v8_tools_run-llprof.sh) = 39aa3faf77492ef8dd35b411b7b0e4605b469af3
 SHA1 (patch-src_cares__wrap.cc) = d9510afd0cd4b0156a604d9197d9f97d6e3b291f
 SHA1 (patch-src_node.cc) = 7004baf140e252861494b4fb003beeaa8581be78
+SHA1 (patch-src_node__i18n.cc) = fce3f969d726a1579db98a4bbcf12e1fbe6aaace
 SHA1 (patch-tools_gyp_pylib_gyp_common.py) = 132008f362ea696e43a4d19bf9d8a0ac754ef55c
 SHA1 (patch-tools_gyp_pylib_gyp_generator_make.py) = be3cc1aaa85c3d59b6f2758df813cb5ad8d8f74e
 SHA1 (patch-tools_install.py) = 5755e67dce5261b84e43acee281c7e8810708bb4
