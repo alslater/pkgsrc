@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.1 2015/12/06 15:21:49 taca Exp $
 
 DISTNAME=	${PHP_PKG_PREFIX}-extensions-${PHP_VERSION}
+PKGREVISION=	1
 CATEGORIES=	meta-pkgs www
 MASTER_SITES=	# empty
 DISTFILES=	# empty
@@ -46,6 +47,7 @@ DEPENDS+=	${PHP_PKG_PREFIX}-pdo_sqlite>=${PHP_VERSION}<${NEXT_VERS}:../../databa
 DEPENDS+=	${PHP_PKG_PREFIX}-pgsql>=${PHP_VERSION}<${NEXT_VERS}:../../databases/php-pgsql
 DEPENDS+=	${PHP_PKG_PREFIX}-posix>=${PHP_VERSION}<${NEXT_VERS}:../../devel/php-posix
 DEPENDS+=	${PHP_PKG_PREFIX}-pspell>=${PHP_VERSION}<${NEXT_VERS}:../../textproc/php-pspell
+DEPENDS+=	${PHP_PKG_PREFIX}-shmop>=${PHP_VERSION}<${NEXT_VERS}:../../databases/php-redis3
 DEPENDS+=	${PHP_PKG_PREFIX}-shmop>=${PHP_VERSION}<${NEXT_VERS}:../../devel/php-shmop
 DEPENDS+=	${PHP_PKG_PREFIX}-snmp>=${PHP_VERSION}<${NEXT_VERS}:../../net/php-snmp
 DEPENDS+=	${PHP_PKG_PREFIX}-soap>=${PHP_VERSION}<${NEXT_VERS}:../../net/php-soap
