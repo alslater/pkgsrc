@@ -2,6 +2,7 @@
 #
 
 DISTNAME=		beats-5.1.1
+PKGREVISION=		1
 CATEGORIES=		sysutils
 MASTER_SITES=		${MASTER_SITE_GITHUB:=elastic/}
 GITHUB_PROJECT=		beats

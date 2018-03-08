@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.6 2016/12/04 16:30:00 bsiegert Exp $
 
 DISTNAME=	go-crypto-0.0.20151215
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	security
 MASTER_SITES=	${MASTER_SITE_GITHUB:=golang/}
 GITHUB_PROJECT=	crypto
