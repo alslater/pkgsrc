@@ -144,13 +144,15 @@ java/oracle-8/lib/psfontj2d.properties.default
 java/oracle-8/lib/resources.jar
 java/oracle-8/lib/rt.jar
 java/oracle-8/lib/sdp/sdp.conf.template
-java/oracle-8/lib/security/US_export_policy.jar
 java/oracle-8/lib/security/blacklist
 java/oracle-8/lib/security/blacklisted.certs
 java/oracle-8/lib/security/cacerts
 java/oracle-8/lib/security/java.policy
 java/oracle-8/lib/security/java.security.default
-java/oracle-8/lib/security/local_policy.jar
+java/oracle-8/lib/security/policy/limited/US_export_policy.jar
+java/oracle-8/lib/security/policy/limited/local_policy.jar
+java/oracle-8/lib/security/policy/unlimited/US_export_policy.jar
+java/oracle-8/lib/security/policy/unlimited/local_policy.jar
 java/oracle-8/lib/security/sunpkcs11-solaris.cfg.default
 java/oracle-8/lib/security/trusted.libraries
 java/oracle-8/lib/security/ucrypto-solaris.cfg.default

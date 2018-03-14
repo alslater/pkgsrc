@@ -66,16 +66,5 @@ pre-install:
 	${RM} -f ${WRKSRC}/register.html
 	${RM} -f ${WRKSRC}/register_ja.html
 	${RM} -f ${WRKSRC}/register_zh_CN.html
-	${CHMOD} -x \
-		${WRKSRC}/db/bin/NetworkServerControl.bat \
-		${WRKSRC}/db/bin/dblook.bat \
-		${WRKSRC}/db/bin/derby_common.bat \
-		${WRKSRC}/db/bin/ij.bat \
-		${WRKSRC}/db/bin/setEmbeddedCP.bat \
-		${WRKSRC}/db/bin/setNetworkClientCP.bat \
-		${WRKSRC}/db/bin/setNetworkServerCP.bat \
-		${WRKSRC}/db/bin/startNetworkServer.bat \
-		${WRKSRC}/db/bin/stopNetworkServer.bat \
-		${WRKSRC}/db/bin/sysinfo.bat
 
 .include "../../mk/bsd.pkg.mk"
