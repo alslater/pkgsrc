@@ -1,0 +1,9 @@
+$NetBSD: distinfo,v 1.10 2016/12/24 10:16:50 joerg Exp $
+
+SHA1 (modsecurity-2.9.2.tar.gz) = 9f0aacc15990db6df3e32641332ae650c013adc3
+RMD160 (modsecurity-2.9.2.tar.gz) = 87c8d4f4b4c180a0e85267f18f162a01bcc99358
+SHA512 (modsecurity-2.9.2.tar.gz) = 69c87ef6f7b6411f4803eb25af32969a1da59722121257c2edf345a3f5a4ab9ae8a49c886cbbfc722c5bda91c6d6ea55232f968c0a0407d7d7b3af53dc862c21
+Size (modsecurity-2.9.2.tar.gz) = 4298993 bytes
+SHA1 (patch-apache2_msc__crypt.c) = 01bdb8291c83a8abbd1e990d96a768d9bec0ef89
+SHA1 (patch-apache2_msc__crypt.h) = dc83f494f81823deddf00dd005a632d085039664
+SHA1 (patch-configure) = 292370ad4359f98c01a55deafae485cb07f69bf3
