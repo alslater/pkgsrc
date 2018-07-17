@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.85 2017/07/06 06:27:42 adam Exp $
 
-DISTNAME=	pcre-8.41
+DISTNAME=	pcre-8.42
 CATEGORIES=	devel
 MASTER_SITES=	ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
 MASTER_SITES+=	${MASTER_SITE_SOURCEFORGE:=pcre/}
@@ -18,6 +18,7 @@ GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-pcre16
 CONFIGURE_ARGS+=	--enable-unicode-properties
 CONFIGURE_ARGS+=	--enable-utf8
+CONFIGURE_ARGS+=	--enable-jit
 
 SUBST_CLASSES+=		lns
 SUBST_STAGE.lns=	post-patch
