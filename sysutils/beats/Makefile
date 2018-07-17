@@ -1,8 +1,8 @@
 # $NetBSD: Makefile,v 1.1 2017/01/05 16:43:09 fhajny Exp $
 #
 
-DISTNAME=		beats-5.1.1
-PKGREVISION=		1
+DISTNAME=		beats-6.3.0
+#PKGREVISION=		1
 CATEGORIES=		sysutils
 MASTER_SITES=		${MASTER_SITE_GITHUB:=elastic/}
 GITHUB_PROJECT=		beats
@@ -27,10 +27,6 @@ BEATS=			filebeat heartbeat metricbeat packetbeat
 .for beat in ${BEATS}
 CONF_FILES+=		share/examples/beats/${beat}.yml			\
 				${PKG_SYSCONFDIR}/${beat}.yml
-CONF_FILES+=		share/examples/beats/${beat}.template.json		\
-				${PKG_SYSCONFDIR}/${beat}.template.json
-CONF_FILES+=		share/examples/beats/${beat}.template-es2x.json		\
-				${PKG_SYSCONFDIR}/${beat}.template-es2x.json
 .endfor
 
 BEATS_DIR?=		${VARBASE}/db/beats
@@ -58,11 +54,7 @@ post-extract:
 do-install:
 .for beat in ${BEATS}
 	${INSTALL_PROGRAM} ${WRKSRC}/${beat}/${beat} ${DESTDIR}${PREFIX}/bin
-	${INSTALL_DATA} ${WRKSRC}/${beat}/${beat}.full.yml			\
-		${DESTDIR}${PREFIX}/share/examples/beats
-	${INSTALL_DATA} ${WRKSRC}/${beat}/${beat}.template-es2x.json		\
-		${DESTDIR}${PREFIX}/share/examples/beats
-	${INSTALL_DATA} ${WRKSRC}/${beat}/${beat}.template.json			\
+	${INSTALL_DATA} ${WRKSRC}/${beat}/${beat}.reference.yml			\
 		${DESTDIR}${PREFIX}/share/examples/beats
 	${INSTALL_DATA} ${WRKSRC}/${beat}/${beat}.yml				\
 		${DESTDIR}${PREFIX}/share/examples/beats
