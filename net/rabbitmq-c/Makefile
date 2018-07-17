@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.11 2016/04/12 08:50:43 fhajny Exp $
 
-DISTNAME=	rabbitmq-c-0.8.0
+DISTNAME=	rabbitmq-c-0.9.0
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GITHUB:=alanxz/}
 
@@ -16,6 +16,8 @@ BUILD_DEPENDS+=		xmlto-[0-9]*:../../textproc/xmlto
 USE_CMAKE=		yes
 USE_LANGUAGES=		c c99
 USE_TOOLS+=		pkg-config
+
+CFLAGS+=	-pthreads
 
 SUBST_CLASSES+=		man
 SUBST_STAGE.man=	pre-build
