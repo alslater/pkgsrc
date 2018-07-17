@@ -2,7 +2,7 @@
 
 DISTNAME=	modsecurity-2.9.2
 PKGNAME=	${APACHE_PKG_PREFIX}-${DISTNAME:S/apache_//}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	www security
 MASTER_SITES=	https://www.modsecurity.org/tarball/${PKGVERSION_NOREV}/
 
@@ -32,6 +32,7 @@ CONFIGURE_ARGS+=	--with-lua=${BUILDLINK_PREFIX.lua}
 CONFIGURE_ARGS+=	--with-apr=${BUILDLINK_PREFIX.apr}
 CONFIGURE_ARGS+=	--with-apu=${BUILDLINK_PREFIX.apr-util}
 CONFIGURE_ARGS+=	--with-yajl=${BUILDLINK_PREFIX.yajl}
+CONFIGURE_ARGS+=	--enable-pcre-jit
 
 INSTALLATION_DIRS+=	lib/httpd
 
