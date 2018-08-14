@@ -3,7 +3,7 @@
 
 DISTNAME=	Umph-Prompt-0.1.0
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	5
+PKGREVISION= 6
 CATEGORIES=	net
 MASTER_SITES=	http://umph.googlecode.com/files/
 

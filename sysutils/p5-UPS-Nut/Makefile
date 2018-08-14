@@ -4,7 +4,7 @@
 
 PKGNAME=		${DISTNAME:S/nut/p5-UPS-Nut/}
 COMMENT=		Network UPS Tools perl binding
-PKGREVISION=		6
+PKGREVISION= 7
 CATEGORIES=		sysutils perl5
 PATCHDIR=		${.CURDIR}/patches
 

@@ -3,7 +3,7 @@
 
 DISTNAME=	CGI-Application-Plugin-Session-1.05
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	www perl5
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/F/FR/FREW/
 

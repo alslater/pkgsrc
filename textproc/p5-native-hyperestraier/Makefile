@@ -4,7 +4,7 @@
 .include "../../textproc/hyperestraier/Makefile.common"
 
 PKGNAME=	p5-native-hyperestraier-1.0.0.${HYPERESTRAIER_VERSION}
-PKGREVISION=	8
+PKGREVISION= 9
 CATEGORIES=	databases perl5
 
 COMMENT=	Perl native interface of Hyper Estraier

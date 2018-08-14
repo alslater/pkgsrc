@@ -2,7 +2,7 @@
 
 DISTNAME=	Catalyst-Authentication-Credential-HTTP-1.016
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES=	www perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Catalyst/}
 

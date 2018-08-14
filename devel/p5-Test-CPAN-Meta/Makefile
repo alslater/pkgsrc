@@ -2,7 +2,7 @@
 
 DISTNAME=	Test-CPAN-Meta-0.25
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	devel perl5
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/B/BA/BARBIE/
 

@@ -2,7 +2,7 @@
 
 DISTNAME=		HTML-FixEntities-1.03
 PKGNAME=		p5-${DISTNAME}
-PKGREVISION=		10
+PKGREVISION= 11
 CATEGORIES=		www perl5
 MASTER_SITES=		http://www.mono.org/abs/tools/HTML-FixEntities/
 

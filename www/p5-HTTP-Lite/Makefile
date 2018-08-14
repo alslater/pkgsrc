@@ -3,7 +3,7 @@
 DISTNAME=		HTTP-Lite-2.44
 # Preparing if next release is 2.5 (rather than 2.50, use 2.4.3)
 PKGNAME=		p5-${DISTNAME:C/([0-9])\.([0-9])([0-9]*)/\1.\2.\3/}
-PKGREVISION=		1
+PKGREVISION= 2
 CATEGORIES=		www perl5
 MASTER_SITES=		${MASTER_SITE_PERL_CPAN:=HTTP/}
 

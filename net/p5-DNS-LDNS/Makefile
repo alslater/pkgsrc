@@ -2,7 +2,7 @@
 
 DISTNAME=	ldns-1.6.17
 PKGNAME=	p5-DNS-LDNS-0.06
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES=	net
 MASTER_SITES=	http://www.nlnetlabs.nl/downloads/ldns/
 

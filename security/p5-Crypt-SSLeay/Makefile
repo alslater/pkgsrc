@@ -2,7 +2,7 @@
 
 DISTNAME=	Crypt-SSLeay-0.72
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES=	security perl5 www
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Crypt/}
 
@@ -13,6 +13,7 @@ LICENSE=	${PERL5_LICENSE}
 
 DEPENDS+=	p5-Path-Class>=0.26:../../devel/p5-Path-Class
 DEPENDS+=	p5-Try-Tiny>=0.19:../../devel/p5-Try-Tiny
+
 
 USE_LANGUAGES=		c
 

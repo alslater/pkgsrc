@@ -2,7 +2,7 @@
 
 DISTNAME=	PostScript-MailLabels-2.32
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	print perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=PostScript/} \
 		http://oplnk.net/~ajackson/software/

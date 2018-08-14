@@ -2,7 +2,7 @@
 
 DISTNAME=	OOTools-2.3
 PKGNAME=	p5-${DISTNAME}0
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	devel perl5
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/S/SK/SKNPP/
 

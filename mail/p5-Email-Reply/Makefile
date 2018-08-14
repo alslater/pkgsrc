@@ -3,7 +3,7 @@
 
 DISTNAME=	Email-Reply-1.204
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	mail
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/R/RJ/RJBS/
 

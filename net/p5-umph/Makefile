@@ -3,7 +3,7 @@
 
 DISTNAME=	umph-0.2.5
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	4
+PKGREVISION= 5
 CATEGORIES=	net
 MASTER_SITES=	http://umph.googlecode.com/files/
 

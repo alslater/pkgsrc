@@ -3,7 +3,7 @@
 
 DISTNAME=	iCal-Parser-1.20
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=    2
+PKGREVISION= 3
 CATEGORIES=	textproc perl5
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/R/RF/RFRANKEL/
 

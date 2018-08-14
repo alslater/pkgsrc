@@ -3,7 +3,7 @@
 
 DISTNAME=	Test-Email-0.07
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	4
+PKGREVISION= 5
 CATEGORIES=	mail
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/J/JA/JAMES/
 

@@ -2,7 +2,7 @@
 
 DISTNAME=	AnyEvent-RabbitMQ-1.18
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	devel
 MASTER_SITES=	http://cpan.metacpan.org/CPAN/authors/id/B/BO/BOBTFISH/
 MASTER_SITES+=	http://cpan.metacpan.org/authors/id/B/BO/BOBTFISH/

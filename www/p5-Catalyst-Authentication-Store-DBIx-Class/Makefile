@@ -2,7 +2,7 @@
 
 DISTNAME=	Catalyst-Authentication-Store-DBIx-Class-0.1506
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	www perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Catalyst/}
 

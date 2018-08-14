@@ -2,7 +2,7 @@
 
 DISTNAME=	Algorithm-CheckDigits-v1.3.2
 PKGNAME=	p5-${DISTNAME:S/-v/-/}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	devel perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Algorithm/}
 

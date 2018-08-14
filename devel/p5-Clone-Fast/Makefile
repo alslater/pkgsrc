@@ -2,7 +2,7 @@
 
 DISTNAME=	Clone-Fast-0.96
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	5
+PKGREVISION= 6
 CATEGORIES=	devel perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Clone/}
 # as of 2015-01-30, above doesn't make it

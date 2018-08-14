@@ -2,7 +2,7 @@
 
 DISTNAME=	libwww-perl-6.15
 PKGNAME=	p5-${DISTNAME:S/-perl-/-/}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	www perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=../../authors/id/E/ET/ETHER/}
 

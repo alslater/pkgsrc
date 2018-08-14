@@ -2,7 +2,7 @@
 
 DISTNAME=	Plack-Middleware-MethodOverride-0.15
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	www perl5
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/D/DW/DWHEELER/
 

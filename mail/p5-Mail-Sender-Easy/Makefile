@@ -3,7 +3,7 @@
 
 DISTNAME=	Mail-Sender-Easy-v0.0.5
 PKGNAME=	p5-${DISTNAME:S:-v:-:}
-PKGREVISION=	9
+PKGREVISION= 10
 CATEGORIES=	mail perl5
 MASTER_SITES=   ${MASTER_SITE_PERL_CPAN:=../../authors/id/D/DM/DMUEY/}
 

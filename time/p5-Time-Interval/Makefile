@@ -3,7 +3,7 @@
 
 DISTNAME=	Time-Interval-1.233
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	time
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/A/AH/AHICOX/
 

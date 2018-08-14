@@ -3,7 +3,7 @@
 
 DISTNAME=	Crypt-PasswdMD5-1.40
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES=	security perl5
 MASTER_SITES=	ftp://ftp.cpan.org/pub/CPAN/modules/by-module/Crypt/
 EXTRACT_SUFX=	.tgz

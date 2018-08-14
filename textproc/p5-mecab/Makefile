@@ -4,7 +4,7 @@
 
 DISTNAME=		mecab-perl-${MECAB_VERSION}
 PKGNAME=		p5-mecab-${MECAB_VERSION}
-PKGREVISION=		5
+PKGREVISION= 6
 CATEGORIES+=		perl5
 
 COMMENT=		MeCab perl module

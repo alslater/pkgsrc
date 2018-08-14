@@ -2,7 +2,7 @@
 
 DISTNAME=	Module-Install-AuthorRequires-0.02
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	devel
 MASTER_SITES=	https://cpan.metacpan.org/authors/id/F/FL/FLORA/
 

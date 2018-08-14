@@ -3,7 +3,7 @@
 .include "../../textproc/marisa/Makefile.common"
 
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES+=	perl5
 
 COMMENT=	MARISA perl module

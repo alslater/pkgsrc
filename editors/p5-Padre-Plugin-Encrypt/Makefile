@@ -3,7 +3,7 @@
 
 DISTNAME=	Padre-Plugin-Encrypt-0.06
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	7
+PKGREVISION= 8
 CATEGORIES=	editors perl5 security
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Padre/}
 

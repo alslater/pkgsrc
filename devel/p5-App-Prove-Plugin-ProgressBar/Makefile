@@ -4,7 +4,7 @@ GIT_COMMIT=	dd51ac5
 
 DISTNAME=	${GIT_COMMIT}
 PKGNAME=	p5-App-Prove-Plugin-ProgressBar-0.01
-PKGREVISION=	4
+PKGREVISION= 5
 CATEGORIES=	devel perl5
 MASTER_SITES=	-http://nodeload.github.com/Ovid/App-Prove-Plugin-ProgressBar/tar.gz/${GIT_COMMIT}
 

@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.18 2016/06/08 19:22:31 wiz Exp $
 #
 
-PKGREVISION= 2
+PKGREVISION= 3
 .include "../../databases/qdbm/Makefile.common"
 
 PKGNAME=	p5-qdbm-1.0.0.${QDBM_VERSION}

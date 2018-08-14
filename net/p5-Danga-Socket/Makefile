@@ -3,7 +3,7 @@
 
 DISTNAME=	Danga-Socket-1.61
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	6
+PKGREVISION= 7
 CATEGORIES=	net
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/B/BR/BRADFITZ/
 

@@ -3,7 +3,7 @@
 
 DISTNAME=	Term-Animation-2.6
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	5
+PKGREVISION= 6
 CATEGORIES=	devel
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/K/KB/KBAUCOM/
 

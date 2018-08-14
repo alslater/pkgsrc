@@ -3,7 +3,7 @@
 
 DISTNAME=	MooseX-Meta-TypeConstraint-ForceCoercion-0.01
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	8
+PKGREVISION= 9
 CATEGORIES=	devel perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=MooseX/}
 

@@ -4,7 +4,7 @@ DISTNAME=	CatalystX-CRUD-Model-RDBO-0.302
 # separate the last digit by '.', like  0.31 > 0.30.2
 #   (if 0.310 will be used for 0.31, no trick is necessary)
 PKGNAME=	p5-${DISTNAME:C/0.([0-9][0-9])([0-9])/0.\1.\2/}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	databases perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=CatalystX/}
 

@@ -4,7 +4,7 @@
 .include "../../textproc/yamcha/Makefile.common"
 
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	7
+PKGREVISION= 8
 
 COMMENT=	YamCha perl module
 

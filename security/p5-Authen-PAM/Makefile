@@ -3,7 +3,7 @@
 
 DISTNAME=	Authen-PAM-0.16
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	8
+PKGREVISION= 9
 CATEGORIES=	security
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/N/NI/NIKIP/
 

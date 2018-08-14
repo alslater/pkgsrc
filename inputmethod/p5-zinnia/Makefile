@@ -4,7 +4,7 @@
 .include "../../inputmethod/zinnia/Makefile.common"
 
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	7
+PKGREVISION= 8
 
 COMMENT=	Zinnia perl module
 

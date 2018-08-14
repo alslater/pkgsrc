@@ -3,7 +3,7 @@
 
 DISTNAME=		Net-DNS-SEC-Maint-Key-0.013
 PKGNAME=		p5-${DISTNAME}
-PKGREVISION=		9
+PKGREVISION= 10
 CATEGORIES=		security net perl5
 MASTER_SITES=		http://www.ripe.net/disi/dnssec_maint_tool/
 

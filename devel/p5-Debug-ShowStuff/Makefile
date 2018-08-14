@@ -2,7 +2,7 @@
 
 DISTNAME=	Debug-ShowStuff-1.16
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	devel perl5
 MASTER_SITES=	https://cpan.metacpan.org/authors/id/M/MI/MIKO/
 

@@ -4,7 +4,7 @@
 .include "../../converters/nkf/Makefile.common"
 
 PKGNAME=	p5-nkf-2.13
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES=	japanese converters perl5
 
 MAINTAINER=	tech-pkg-ja@jp.NetBSD.org

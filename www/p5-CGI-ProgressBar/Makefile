@@ -3,7 +3,7 @@
 
 DISTNAME=	CGI-ProgressBar-0.05
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	6
+PKGREVISION= 7
 CATEGORIES=	www
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/L/LG/LGODDARD/
 

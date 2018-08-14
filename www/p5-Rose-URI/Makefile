@@ -2,7 +2,7 @@
 
 DISTNAME=	Rose-URI-1.02
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	devel perl5
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/J/JS/JSIRACUSA/
 

@@ -4,7 +4,7 @@
 .include "../../comms/pilot-link/Makefile.common"
 
 PKGNAME=		p5-${DISTNAME}
-PKGREVISION=		11
+PKGREVISION= 12
 
 COMMENT=		Perl bindings for pilot-link
 

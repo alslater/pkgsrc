@@ -3,7 +3,7 @@
 
 DISTNAME=	BSD-arc4random-1.50
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	5
+PKGREVISION= 6
 CATEGORIES=	security
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/S/SJ/SJSZ/
 

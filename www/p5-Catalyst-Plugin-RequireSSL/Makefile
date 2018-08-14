@@ -2,7 +2,7 @@
 
 DISTNAME=	Catalyst-Plugin-RequireSSL-0.07
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION= 4
 CATEGORIES=	www perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=../by-module/Catalyst/}
 

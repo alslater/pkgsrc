@@ -3,7 +3,7 @@
 VER=		2.4
 DISTNAME=	biblatex-biber
 PKGNAME=	p5-biblatex-biber-${VER}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	print
 MASTER_SITES=	http://sourceforge.net/projects/biblatex-biber/files/biblatex-biber/${VER}/
 

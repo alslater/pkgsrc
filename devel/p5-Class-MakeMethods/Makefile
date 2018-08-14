@@ -2,7 +2,7 @@
 
 DISTNAME=	Class-MakeMethods-1.01
 PKGNAME=	p5-${DISTNAME}0 # developer uses three-digit versions
-PKGREVISION=	9
+PKGREVISION= 10
 CATEGORIES=	devel perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Class/}
 

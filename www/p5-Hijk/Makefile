@@ -2,7 +2,7 @@
 
 DISTNAME=	Hijk-0.26
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION= 2
 CATEGORIES=	www
 MASTER_SITES=	http://search.cpan.org/CPAN/authors/id/A/AV/AVAR/
 

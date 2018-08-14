@@ -3,7 +3,7 @@
 
 DISTNAME=		Lingua-EN-Numbers-Ordinate-1.04
 PKGNAME=		p5-${DISTNAME}
-PKGREVISION=		1
+PKGREVISION= 2
 CATEGORIES=		textproc perl5
 MASTER_SITES=		${MASTER_SITE_PERL_CPAN:=Lingua/}
 

@@ -2,7 +2,7 @@
 
 DISTNAME=	Net-ICQ2000-0.2.1
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	10
+PKGREVISION= 11
 CATEGORIES=	chat perl5
 MASTER_SITES=	http://gonzo.kiev.ua/projects/vicq.old/
 #		${MASTER_SITE_SOURCEFORGE:=neticq2k/}

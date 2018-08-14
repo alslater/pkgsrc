@@ -3,7 +3,7 @@
 VERSION=	0.17
 DISTNAME=	${VERSION}
 PKGNAME=	p5-Mojo-IOLoop-ForkCall-${VERSION}
-PKGREVISION=	2
+PKGREVISION= 3
 CATEGORIES=	devel
 MASTER_SITES=	https://github.com/jberger/Mojo-IOLoop-ForkCall/archive/
 

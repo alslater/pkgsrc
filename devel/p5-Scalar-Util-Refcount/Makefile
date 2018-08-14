@@ -3,7 +3,7 @@
 
 DISTNAME=		Scalar-Util-Refcount-1.0.2
 PKGNAME=		p5-${DISTNAME}
-PKGREVISION=		7
+PKGREVISION= 8
 CATEGORIES=		misc perl5
 MASTER_SITES=		http://cpan.metacpan.org/authors/id/J/JN/JNIXON/
 

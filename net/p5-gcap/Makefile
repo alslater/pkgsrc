@@ -3,7 +3,7 @@
 
 DISTNAME=	gcap-0.1.1
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	6
+PKGREVISION= 7
 CATEGORIES=	net
 MASTER_SITES=	http://gcap.googlecode.com/files/
 

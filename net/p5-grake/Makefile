@@ -3,7 +3,7 @@
 
 DISTNAME=	grake-0.1.0
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	6
+PKGREVISION= 7
 CATEGORIES=	net www
 MASTER_SITES=	http://grake.googlecode.com/files/
 

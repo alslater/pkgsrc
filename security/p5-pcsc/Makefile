@@ -2,7 +2,7 @@
 
 DISTNAME=	pcsc-perl-1.4.13
 PKGNAME=	p5-${DISTNAME:S/-perl//}
-PKGREVISION=	4
+PKGREVISION= 5
 CATEGORIES=	security
 MASTER_SITES=	http://ludovic.rousseau.free.fr/softwares/pcsc-perl/
 EXTRACT_SUFX=	.tar.bz2

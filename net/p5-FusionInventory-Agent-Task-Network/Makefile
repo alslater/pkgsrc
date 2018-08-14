@@ -3,7 +3,7 @@
 
 DISTNAME=	FusionInventory-Agent-Task-Network-1.0.2
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	4
+PKGREVISION= 5
 CATEGORIES=	net perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=../../authors/id/G/GR/GROUSSE/}
 

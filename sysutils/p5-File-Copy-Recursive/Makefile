@@ -2,7 +2,7 @@
 
 DISTNAME=	File-Copy-Recursive-0.38
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	7
+PKGREVISION= 8
 CATEGORIES=	sysutils devel perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=../by-module/File/}
 

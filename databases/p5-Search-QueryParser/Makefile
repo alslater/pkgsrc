@@ -2,7 +2,7 @@
 
 DISTNAME=	Search-QueryParser-0.94
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION=	7
+PKGREVISION= 8
 CATEGORIES=	databases perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=../../authors/id/D/DA/DAMI/}
 

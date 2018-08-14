@@ -2,7 +2,7 @@
 
 DISTNAME=	pgsql_perl5-1.9.0
 PKGNAME=	p5-postgresql-1.9.0
-PKGREVISION=	19
+PKGREVISION= 20
 CATEGORIES=	databases devel perl5
 MASTER_SITES=	${MASTER_SITE_PERL_CPAN:=Pg/}
 
