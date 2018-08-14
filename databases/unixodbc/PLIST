@@ -19,6 +19,9 @@ include/uodbc_stats.h
 lib/libodbc.la
 lib/libodbccr.la
 lib/libodbcinst.la
+lib/pkgconfig/odbc.pc
+lib/pkgconfig/odbccr.pc
+lib/pkgconfig/odbcinst.pc
 ${UNIXODBC_DRIVERS_DIR}/libesoobS.la
 ${UNIXODBC_DRIVERS_DIR}/libmimerS.la
 ${UNIXODBC_DRIVERS_DIR}/libnn.la
