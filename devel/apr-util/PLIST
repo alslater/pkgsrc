@@ -19,10 +19,12 @@ include/apr-1/apr_memcache.h
 include/apr-1/apr_optional.h
 include/apr-1/apr_optional_hooks.h
 include/apr-1/apr_queue.h
+include/apr-1/apr_redis.h
 include/apr-1/apr_reslist.h
 include/apr-1/apr_rmm.h
 include/apr-1/apr_sdbm.h
 include/apr-1/apr_sha1.h
+include/apr-1/apr_siphash.h
 include/apr-1/apr_strmatch.h
 include/apr-1/apr_thread_pool.h
 include/apr-1/apr_uri.h
