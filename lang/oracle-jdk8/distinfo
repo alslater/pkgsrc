@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.8 2016/09/19 06:57:49 ryoon Exp $
 
-SHA1 (jdk-8u161-solaris-x64.tar.gz) = 5e162b3a69b596890a3b10bd4d2604ca825d9350
-RMD160 (jdk-8u161-solaris-x64.tar.gz) = b6b5bee5bc69593b4d8645ccb9e35b89b227a294
-SHA512 (jdk-8u161-solaris-x64.tar.gz) = ac2ee88985643ed01b058c7cf75ad7b93b1f423c92b347e01b2aa76b45248b53894c66510ab57a69f619174ea1877fae469fae7429b94398f249c07eeac9f7a3
-Size (jdk-8u161-solaris-x64.tar.gz) = 101729962 bytes
+SHA1 (jdk-8u181-solaris-x64.tar.gz) = a836bad0c35f31f3b3be369bfcc644558e6df844
+RMD160 (jdk-8u181-solaris-x64.tar.gz) = f4c73e98d2d8113e711188eafe1dec050cbae76c
+SHA512 (jdk-8u181-solaris-x64.tar.gz) = ecbd9c3fb5d757504186dcad0a9606f2aec6549f2fb3424527dd621618b9726152a7c3168c32eec8f28731e547feab96fa190fc4eacc713f608fe851658d10e0
+Size (jdk-8u181-solaris-x64.tar.gz) = 96580362 bytes
