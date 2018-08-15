@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.10 2017/09/07 13:47:21 wiz Exp $
 
-DISTNAME=	pcre2-10.30
+DISTNAME=	pcre2-10.31
 PKGREVISION=	1
 CATEGORIES=	devel
 MASTER_SITES=	ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
