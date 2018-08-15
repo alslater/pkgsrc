@@ -643,6 +643,7 @@ ${RUBY_LIB}/rubygems/resolver/specification.rb
 ${RUBY_LIB}/rubygems/resolver/stats.rb
 ${RUBY_LIB}/rubygems/resolver/vendor_set.rb
 ${RUBY_LIB}/rubygems/resolver/vendor_specification.rb
+${RUBY_LIB}/rubygems/safe_yaml.rb
 ${RUBY_LIB}/rubygems/security.rb
 ${RUBY_LIB}/rubygems/security/policies.rb
 ${RUBY_LIB}/rubygems/security/policy.rb
@@ -1233,8 +1234,8 @@ ${GEM_HOME}/gems/test-unit-3.1.5/test/util/test_observable.rb
 ${GEM_HOME}/gems/test-unit-3.1.5/test/util/test_procwrapper.rb
 ${GEM_HOME}/specifications/default/bigdecimal-1.2.8.gemspec
 ${GEM_HOME}/specifications/default/io-console-0.4.5.gemspec
-${GEM_HOME}/specifications/default/json-1.8.3.gemspec
-${GEM_HOME}/specifications/default/psych-2.1.0.gemspec
+${GEM_HOME}/specifications/default/json-1.8.3.1.gemspec
+${GEM_HOME}/specifications/default/psych-2.1.0.1.gemspec
 ${GEM_HOME}/specifications/default/rdoc-4.2.1.gemspec
 ${GEM_HOME}/specifications/did_you_mean-1.0.0.gemspec
 ${GEM_HOME}/specifications/minitest-5.8.5.gemspec
