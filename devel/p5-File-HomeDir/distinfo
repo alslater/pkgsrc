@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.14 2015/11/03 03:28:15 agc Exp $
 
-SHA1 (File-HomeDir-1.00.tar.gz) = c89743d57e15fba79238728f0456f80160aff024
-RMD160 (File-HomeDir-1.00.tar.gz) = 15eda1b22614e36a38fe851febb74e187cb0e1ae
-SHA512 (File-HomeDir-1.00.tar.gz) = e033b9a60583a76e7b270b99bc113b5dfd616853e7a9e05c34e03bff3cabfa15f8e50a84a932dfb6ed7c2df0aceba3d0c16cd99e08d82a02c9fbe3747af7e994
-Size (File-HomeDir-1.00.tar.gz) = 51349 bytes
+SHA1 (File-HomeDir-1.004.tar.gz) = 7d2ceddfd2f331cc1ac0dc160b0d4a91302ee418
+RMD160 (File-HomeDir-1.004.tar.gz) = e03880af305115ac9edf542ba6d3eb251ecd434c
+SHA512 (File-HomeDir-1.004.tar.gz) = 21671f6badb23fc7e89ef7507266a0b85b9bbf38897b24651f6a84795b5174dd4bfa43251231cbdb1566183e12b253e2504f1fe0f8e195c35d9b5e3d639aa334
+Size (File-HomeDir-1.004.tar.gz) = 35400 bytes
