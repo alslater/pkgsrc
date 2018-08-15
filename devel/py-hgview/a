@@ -1,5 +1,8 @@
 @comment $NetBSD$
 bin/hgview${PYVERSSUFFIX}
+${PYSITELIB}/hgext3rd/__init__.py
+${PYSITELIB}/hgext3rd/__init__.pyc
+${PYSITELIB}/hgext3rd/__init__.pyo
 ${PYSITELIB}/hgext3rd/hgview/__init__.py
 ${PYSITELIB}/hgext3rd/hgview/__init__.pyc
 ${PYSITELIB}/hgext3rd/hgview/__init__.pyo
