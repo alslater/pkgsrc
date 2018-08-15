@@ -1437,8 +1437,8 @@ lib/python${PY_VER_SUFFIX}/ensurepip/__init__.pyo
 lib/python${PY_VER_SUFFIX}/ensurepip/__main__.py
 lib/python${PY_VER_SUFFIX}/ensurepip/__main__.pyc
 lib/python${PY_VER_SUFFIX}/ensurepip/__main__.pyo
-lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/pip-8.1.1-py2.py3-none-any.whl
-lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/setuptools-20.10.1-py2.py3-none-any.whl
+lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/pip-9.0.3-py2.py3-none-any.whl
+lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/setuptools-39.0.1-py2.py3-none-any.whl
 lib/python${PY_VER_SUFFIX}/ensurepip/_uninstall.py
 lib/python${PY_VER_SUFFIX}/ensurepip/_uninstall.pyc
 lib/python${PY_VER_SUFFIX}/ensurepip/_uninstall.pyo
@@ -2090,9 +2090,6 @@ lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_basestring.pyo
 lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_buffer.py
 lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_buffer.pyc
 lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_buffer.pyo
-lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_callable.py
-lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_callable.pyc
-lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_callable.pyo
 lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_dict.py
 lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_dict.pyc
 lib/python${PY_VER_SUFFIX}/lib2to3/fixes/fix_dict.pyo
@@ -2685,9 +2682,13 @@ lib/python${PY_VER_SUFFIX}/test/Sine-1000Hz-300ms.aif
 lib/python${PY_VER_SUFFIX}/test/__init__.py
 lib/python${PY_VER_SUFFIX}/test/__init__.pyc
 lib/python${PY_VER_SUFFIX}/test/__init__.pyo
+lib/python${PY_VER_SUFFIX}/test/__main__.py
+lib/python${PY_VER_SUFFIX}/test/__main__.pyc
+lib/python${PY_VER_SUFFIX}/test/__main__.pyo
 lib/python${PY_VER_SUFFIX}/test/_mock_backport.py
 lib/python${PY_VER_SUFFIX}/test/_mock_backport.pyc
 lib/python${PY_VER_SUFFIX}/test/_mock_backport.pyo
+lib/python${PY_VER_SUFFIX}/test/allsans.pem
 lib/python${PY_VER_SUFFIX}/test/audiodata/pluck-pcm16.aiff
 lib/python${PY_VER_SUFFIX}/test/audiodata/pluck-pcm16.au
 lib/python${PY_VER_SUFFIX}/test/audiodata/pluck-pcm16.wav
@@ -2721,6 +2722,9 @@ lib/python${PY_VER_SUFFIX}/test/badsyntax_future7.py
 lib/python${PY_VER_SUFFIX}/test/badsyntax_future8.py
 lib/python${PY_VER_SUFFIX}/test/badsyntax_future9.py
 lib/python${PY_VER_SUFFIX}/test/badsyntax_nocaret.py
+lib/python${PY_VER_SUFFIX}/test/bisect.py
+lib/python${PY_VER_SUFFIX}/test/bisect.pyc
+lib/python${PY_VER_SUFFIX}/test/bisect.pyo
 lib/python${PY_VER_SUFFIX}/test/capath/0e4015b9.0
 lib/python${PY_VER_SUFFIX}/test/capath/4e1295a3.0
 lib/python${PY_VER_SUFFIX}/test/capath/5ed36f99.0
@@ -2728,7 +2732,6 @@ lib/python${PY_VER_SUFFIX}/test/capath/6e88d7b8.0
 lib/python${PY_VER_SUFFIX}/test/capath/99d0fa06.0
 lib/python${PY_VER_SUFFIX}/test/capath/ce7b8643.0
 lib/python${PY_VER_SUFFIX}/test/cfgparser.1
-lib/python${PY_VER_SUFFIX}/test/check_soundcard.vbs
 lib/python${PY_VER_SUFFIX}/test/cjkencodings/big5-utf8.txt
 lib/python${PY_VER_SUFFIX}/test/cjkencodings/big5.txt
 lib/python${PY_VER_SUFFIX}/test/cjkencodings/big5hkscs-utf8.txt
@@ -2992,6 +2995,9 @@ lib/python${PY_VER_SUFFIX}/test/pydocfodder.pyo
 lib/python${PY_VER_SUFFIX}/test/pystone.py
 lib/python${PY_VER_SUFFIX}/test/pystone.pyc
 lib/python${PY_VER_SUFFIX}/test/pystone.pyo
+lib/python${PY_VER_SUFFIX}/test/pythoninfo.py
+lib/python${PY_VER_SUFFIX}/test/pythoninfo.pyc
+lib/python${PY_VER_SUFFIX}/test/pythoninfo.pyo
 lib/python${PY_VER_SUFFIX}/test/randv2_32.pck
 lib/python${PY_VER_SUFFIX}/test/randv2_64.pck
 lib/python${PY_VER_SUFFIX}/test/randv3.pck
@@ -3025,7 +3031,6 @@ lib/python${PY_VER_SUFFIX}/test/seq_tests.py
 lib/python${PY_VER_SUFFIX}/test/seq_tests.pyc
 lib/python${PY_VER_SUFFIX}/test/seq_tests.pyo
 lib/python${PY_VER_SUFFIX}/test/sgml_input.html
-lib/python${PY_VER_SUFFIX}/test/sha256.pem
 lib/python${PY_VER_SUFFIX}/test/sortperf.py
 lib/python${PY_VER_SUFFIX}/test/sortperf.pyc
 lib/python${PY_VER_SUFFIX}/test/sortperf.pyo
@@ -3035,6 +3040,9 @@ lib/python${PY_VER_SUFFIX}/test/ssl_key.pem
 lib/python${PY_VER_SUFFIX}/test/ssl_servers.py
 lib/python${PY_VER_SUFFIX}/test/ssl_servers.pyc
 lib/python${PY_VER_SUFFIX}/test/ssl_servers.pyo
+lib/python${PY_VER_SUFFIX}/test/ssltests.py
+lib/python${PY_VER_SUFFIX}/test/ssltests.pyc
+lib/python${PY_VER_SUFFIX}/test/ssltests.pyo
 lib/python${PY_VER_SUFFIX}/test/string_tests.py
 lib/python${PY_VER_SUFFIX}/test/string_tests.pyc
 lib/python${PY_VER_SUFFIX}/test/string_tests.pyo
@@ -3044,6 +3052,12 @@ lib/python${PY_VER_SUFFIX}/test/subprocessdata/sigchild_ignore.pyo
 lib/python${PY_VER_SUFFIX}/test/symlink_support.py
 lib/python${PY_VER_SUFFIX}/test/symlink_support.pyc
 lib/python${PY_VER_SUFFIX}/test/symlink_support.pyo
+lib/python${PY_VER_SUFFIX}/test/support/__init__.py
+lib/python${PY_VER_SUFFIX}/test/support/__init__.pyc
+lib/python${PY_VER_SUFFIX}/test/support/__init__.pyo
+lib/python${PY_VER_SUFFIX}/test/support/script_helper.py
+lib/python${PY_VER_SUFFIX}/test/support/script_helper.pyc
+lib/python${PY_VER_SUFFIX}/test/support/script_helper.pyo
 lib/python${PY_VER_SUFFIX}/test/test_MimeWriter.py
 lib/python${PY_VER_SUFFIX}/test/test_MimeWriter.pyc
 lib/python${PY_VER_SUFFIX}/test/test_MimeWriter.pyo
@@ -3586,6 +3600,9 @@ lib/python${PY_VER_SUFFIX}/test/test_imp.pyo
 lib/python${PY_VER_SUFFIX}/test/test_import.py
 lib/python${PY_VER_SUFFIX}/test/test_import.pyc
 lib/python${PY_VER_SUFFIX}/test/test_import.pyo
+lib/python${PY_VER_SUFFIX}/test/test_import_magic.py
+lib/python${PY_VER_SUFFIX}/test/test_import_magic.pyc
+lib/python${PY_VER_SUFFIX}/test/test_import_magic.pyo
 lib/python${PY_VER_SUFFIX}/test/test_importhooks.py
 lib/python${PY_VER_SUFFIX}/test/test_importhooks.pyc
 lib/python${PY_VER_SUFFIX}/test/test_importhooks.pyo
@@ -3715,9 +3732,9 @@ lib/python${PY_VER_SUFFIX}/test/test_msilib.pyo
 lib/python${PY_VER_SUFFIX}/test/test_multibytecodec.py
 lib/python${PY_VER_SUFFIX}/test/test_multibytecodec.pyc
 lib/python${PY_VER_SUFFIX}/test/test_multibytecodec.pyo
-lib/python${PY_VER_SUFFIX}/test/test_multibytecodec_support.py
-lib/python${PY_VER_SUFFIX}/test/test_multibytecodec_support.pyc
-lib/python${PY_VER_SUFFIX}/test/test_multibytecodec_support.pyo
+lib/python${PY_VER_SUFFIX}/test/multibytecodec_support.py
+lib/python${PY_VER_SUFFIX}/test/multibytecodec_support.pyc
+lib/python${PY_VER_SUFFIX}/test/multibytecodec_support.pyo
 lib/python${PY_VER_SUFFIX}/test/test_multifile.py
 lib/python${PY_VER_SUFFIX}/test/test_multifile.pyc
 lib/python${PY_VER_SUFFIX}/test/test_multifile.pyo
@@ -3886,6 +3903,9 @@ lib/python${PY_VER_SUFFIX}/test/test_re.pyo
 lib/python${PY_VER_SUFFIX}/test/test_readline.py
 lib/python${PY_VER_SUFFIX}/test/test_readline.pyc
 lib/python${PY_VER_SUFFIX}/test/test_readline.pyo
+lib/python${PY_VER_SUFFIX}/test/test_regrtest.py
+lib/python${PY_VER_SUFFIX}/test/test_regrtest.pyc
+lib/python${PY_VER_SUFFIX}/test/test_regrtest.pyo
 lib/python${PY_VER_SUFFIX}/test/test_repr.py
 lib/python${PY_VER_SUFFIX}/test/test_repr.pyc
 lib/python${PY_VER_SUFFIX}/test/test_repr.pyo
@@ -4063,6 +4083,9 @@ lib/python${PY_VER_SUFFIX}/test/test_telnetlib.pyo
 lib/python${PY_VER_SUFFIX}/test/test_tempfile.py
 lib/python${PY_VER_SUFFIX}/test/test_tempfile.pyc
 lib/python${PY_VER_SUFFIX}/test/test_tempfile.pyo
+lib/python${PY_VER_SUFFIX}/test/test_test_support.py
+lib/python${PY_VER_SUFFIX}/test/test_test_support.pyc
+lib/python${PY_VER_SUFFIX}/test/test_test_support.pyo
 lib/python${PY_VER_SUFFIX}/test/test_textwrap.py
 lib/python${PY_VER_SUFFIX}/test/test_textwrap.pyc
 lib/python${PY_VER_SUFFIX}/test/test_textwrap.pyo
@@ -4294,6 +4317,7 @@ lib/python${PY_VER_SUFFIX}/test/win_console_handler.py
 lib/python${PY_VER_SUFFIX}/test/win_console_handler.pyc
 lib/python${PY_VER_SUFFIX}/test/win_console_handler.pyo
 lib/python${PY_VER_SUFFIX}/test/wrongcert.pem
+lib/python${PY_VER_SUFFIX}/test/xmltestdata/expat224_utf8_bug.xml
 lib/python${PY_VER_SUFFIX}/test/xmltestdata/simple-ns.xml
 lib/python${PY_VER_SUFFIX}/test/xmltestdata/simple.xml
 lib/python${PY_VER_SUFFIX}/test/xmltestdata/test.xml
