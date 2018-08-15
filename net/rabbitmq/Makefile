@@ -1,9 +1,10 @@
 # $NetBSD: Makefile,v 1.27 2016/12/02 11:00:39 fhajny Exp $
 
-DISTNAME=		rabbitmq-server-3.6.6
+DISTNAME=		rabbitmq-server-3.7.7
 PKGNAME=		${DISTNAME:S/-server//}
+PKGREVISION=		1
 CATEGORIES=		net
-MASTER_SITES=		http://www.rabbitmq.com/releases/rabbitmq-server/v${PKGVERSION_NOREV}/
+MASTER_SITES=		https://github.com/rabbitmq/rabbitmq-server/releases/download/v${PKGVERSION_NOREV}/
 EXTRACT_SUFX=		.tar.xz
 
 MAINTAINER=		filip@joyent.com
@@ -13,6 +14,7 @@ LICENSE=		mpl-1.1
 
 USE_TOOLS+=		bash:run gmake unzip zip
 
+BUILD_DEPENDS+= 	elixir-[0-9]*:../../lang/elixir
 BUILD_DEPENDS+=		libxslt-[0-9]*:../../textproc/libxslt
 BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 BUILD_DEPENDS+=		rsync-[0-9]*:../../net/rsync
@@ -22,6 +24,9 @@ DEPENDS+=		${PYPKGPREFIX}-simplejson>=2:../../converters/py-simplejson
 BUILD_DEFS+=		VARBASE
 
 .include		"../../mk/bsd.prefs.mk"
+
+# mix[2]: Mix.start: not found [No such file or directory]
+MAKE_JOBS_SAFE= no
 
 RMQ_USER?=		rabbitmq
 RMQ_GROUP?=		${RMQ_USER}
@@ -48,7 +53,8 @@ FILES_SUBST+=		RMQ_USER=${RMQ_USER}
 FILES_SUBST+=		RMQ_GROUP=${RMQ_GROUP}
 FILES_SUBST+=		RMQ_DIR=${RMQ_DIR}
 
-RABBITMQ_HOME=		${PREFIX}/lib/erlang/lib/rabbitmq_server-${PKGVERSION_NOREV}
+#RABBITMQ_HOME=		${PREFIX}/lib/erlang/lib/rabbitmq_server-${PKGVERSION_NOREV}
+RABBITMQ_HOME= lib/erlang/lib/rabbitmq_server-${PKGVERSION_NOREV}
 
 INSTALLATION_DIRS+=	share/examples/rabbitmq
 
@@ -64,13 +70,20 @@ SUBST_SED.paths=	-e 's|/etc/rabbitmq|${PKG_SYSCONFDIR}|g'
 SUBST_SED.paths+=	-e 's|/var/lib|${VARBASE}/db|g'
 SUBST_SED.paths+=	-e 's|/var/log|${VARBASE}/log|g'
 SUBST_SED.paths+=	-e 's|erl|${PREFIX}/bin/erl|g'
-SUBST_VARS.paths=	RABBITMQ_HOME
+SUBST_SED.paths+=       -e 's|@RABBITMQ_HOME@|${PREFIX}/${RABBITMQ_HOME}|g'
 
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmqctl
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-defaults
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-env
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-plugins
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-server
+
+
+# Too much effort to replace the shebang on generated files
+CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-diagnostics
+CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-plugins
+CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmqctl
+CHECK_INTERPRETER_SKIP+= 	${RABBITMQ_HOME}/sbin/cuttlefish
 
 MAKE_ENV+=		MANDIR="${PREFIX}/${PKGMANDIR}"
 MAKE_ENV+=		RMQ_BINDIR="${PREFIX}/sbin"
@@ -89,3 +102,8 @@ post-install:
 .include "../../lang/erlang/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"
+
+MAKE_ENV+=              LC_CTYPE="en_US.UTF-8"
+MAKE_ENV+=              LC_LANG="en_US.UTF-8"
+MAKE_ENV+=              LC_ALL=""
+
