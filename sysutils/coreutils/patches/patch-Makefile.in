@@ -2,9 +2,18 @@ $NetBSD: patch-Makefile.in,v 1.2 2014/02/04 15:07:46 wiz Exp $
 
 Target for misc/gnuls package.
 
---- Makefile.in.orig	2013-12-13 15:20:00.000000000 +0000
+--- Makefile.in.orig	2018-07-02 01:27:55.000000000 +0000
 +++ Makefile.in
-@@ -4395,6 +4395,9 @@ pr_data = \
+@@ -3981,7 +3981,7 @@ install_sh = @install_sh@
+ libdir = @libdir@
+ libexecdir = @libexecdir@
+ lispdir = @lispdir@
+-localedir = @localedir@
++localedir = /opt/scl64/lib/locale
+ localstatedir = @localstatedir@
+ man1_MANS = @man1_MANS@
+ mandir = @mandir@
+@@ -5997,6 +5997,9 @@ pr_data = \
  all: $(BUILT_SOURCES)
  	$(MAKE) $(AM_MAKEFLAGS) all-recursive
  
@@ -12,5 +21,5 @@ Target for misc/gnuls package.
 +	$(MAKE) $(AM_MAKEFLAGS) src/dircolors src/ls man/dircolors.1 man/ls.1
 +
  .SUFFIXES:
- .SUFFIXES: .1 .c .dvi .log .o .obj .pl .pl$(EXEEXT) .ps .sed .sh .sh$(EXEEXT) .sin .trs .x .xpl .xpl$(EXEEXT) .y
+ .SUFFIXES: .1 .c .dvi .log .o .obj .pl .pl$(EXEEXT) .ps .sh .sh$(EXEEXT) .trs .x .xpl .xpl$(EXEEXT) .y
  am--refresh: Makefile
