@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.2 2016/07/09 06:38:33 wiz Exp $
 
 DISTNAME=	pari-2.3.5
-PKGREVISION=	20
+PKGREVISION=	21
 CATEGORIES=	math
 MASTER_SITES=	http://pari.math.u-bordeaux.fr/pub/pari/unix/
 
