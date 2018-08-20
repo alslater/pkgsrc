@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.55 2016/11/08 10:51:30 wiz Exp $
 
-DISTNAME=	texlive-20160523-source
+DISTNAME=	texlive-20160523b-source
+ADISTNAME=	texlive-20160523-source
 PKGNAME=	web2c-2016
 PKGREVISION=	2
 CATEGORIES=	print
@@ -17,18 +18,18 @@ CONFLICTS+=	texlive-tetex<2010
 DEPENDS+=	kpathsea>=6.2.1:../../print/kpathsea
 DEPENDS+=	ptexenc>=1.3.4:../../print/ptexenc
 
-EXTRACT_ELEMENTS=	${DISTNAME}/build-aux \
-			${DISTNAME}/texk/web2c
+EXTRACT_ELEMENTS=	${ADISTNAME}/build-aux \
+			${ADISTNAME}/texk/web2c
 
 GNU_CONFIGURE=	yes
 INFO_FILES=	yes
 USE_LANGUAGES=	c c++
 USE_LIBTOOL=	yes
 USE_TOOLS+=	gmake lex yacc pkg-config
-WRKSRC=		${WRKDIR}/${DISTNAME}/texk/web2c
+WRKSRC=		${WRKDIR}/${ADISTNAME}/texk/web2c
 
-CONFIG_GUESS_OVERRIDE+=	${WRKDIR}/${DISTNAME}/build-aux/config.guess
-CONFIG_SUB_OVERRIDE+=	${WRKDIR}/${DISTNAME}/build-aux/config.sub
+CONFIG_GUESS_OVERRIDE+=	${WRKDIR}/${ADISTNAME}/build-aux/config.guess
+CONFIG_SUB_OVERRIDE+=	${WRKDIR}/${ADISTNAME}/build-aux/config.sub
 PKGCONFIG_OVERRIDE=	synctexdir/synctex.pc.in
 
 CONFIGURE_ARGS+=	--disable-luatex
@@ -56,8 +57,8 @@ CONFIGURE_ARGS+=	--with-system-zlib \
 			--with-zlib-libdir=${BUILDLINK_PREFIX.zlib}/lib
 LIBTOOL_OVERRIDE=	../*/libtool */libtool
 
-CONFIGURE_DIRS=	${WRKDIR}/${DISTNAME}/texk/web2c
-INSTALL_DIRS=	${WRKDIR}/${DISTNAME}/texk/web2c
+CONFIGURE_DIRS=	${WRKDIR}/${ADISTNAME}/texk/web2c
+INSTALL_DIRS=	${WRKDIR}/${ADISTNAME}/texk/web2c
 
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../graphics/cairo/buildlink3.mk"

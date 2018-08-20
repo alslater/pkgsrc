@@ -1,6 +1,8 @@
 # $NetBSD: Makefile,v 1.26 2016/06/16 04:06:19 markd Exp $
 
-DISTNAME=	texlive-20160523-source
+DISTNAME=	texlive-20160523b-source
+ADISTNAME=      texlive-20160523-source
+
 PKGNAME=	kpathsea-6.2.2
 CATEGORIES=	print
 MASTER_SITES=	ftp://tug.org/historic/systems/texlive/2016/
@@ -15,8 +17,10 @@ CONFLICTS+=	teTeX-bin<=3.0nb46
 CONFLICTS+=	teTeX-texmf<=3.0nb5
 CONFLICTS+=	texlive-tetex<2010
 
-EXTRACT_ELEMENTS=	${DISTNAME}/build-aux \
-			${DISTNAME}/texk/kpathsea
+EXTRACT_ELEMENTS=	${ADISTNAME}/build-aux \
+			${ADISTNAME}/texk/kpathsea
+
+WRKSRC=		${WRKDIR}/${ADISTNAME}
 
 GNU_CONFIGURE=	yes
 INFO_FILES=	yes
@@ -27,8 +31,8 @@ USE_TOOLS+=	gmake
 CONFIGURE_DIRS=	texk/kpathsea
 PATCH_ARGS=	-d ${WRKSRC}/${CONFIGURE_DIRS} --forward --quiet -E ${PATCH_STRIP}
 
-CONFIG_GUESS_OVERRIDE+=	${WRKDIR}/${DISTNAME}/build-aux/config.guess
-CONFIG_SUB_OVERRIDE+=	${WRKDIR}/${DISTNAME}/build-aux/config.sub
+CONFIG_GUESS_OVERRIDE+=	${WRKDIR}/${ADISTNAME}/build-aux/config.guess
+CONFIG_SUB_OVERRIDE+=	${WRKDIR}/${ADISTNAME}/build-aux/config.sub
 PKGCONFIG_OVERRIDE=	kpathsea.pc.in
 
 MAKE_FLAGS+=	LIBTOOL=${LIBTOOL:Q}
