@@ -2,6 +2,7 @@
 
 DISTNAME=	serf-1.3.9
 CATEGORIES=	www
+PKGREVISION=	1
 MASTER_SITES=	https://www.apache.org/dist/serf/
 EXTRACT_SUFX=	.tar.bz2
 
@@ -33,6 +34,9 @@ do-build:
 
 do-install:
 	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ${PREFIX}/bin/scons PREFIX=${PREFIX} ${SCONS_ARGS} install
+
+post-install:
+	${CHMOD} ${SHAREMODE} ${DESTDIR}${PREFIX}/include/serf-1/*.h
 
 .include "../../devel/apr/buildlink3.mk"
 .include "../../devel/apr-util/buildlink3.mk"
