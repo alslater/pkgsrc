@@ -1,7 +1,7 @@
 $NetBSD: distinfo,v 1.31 2017/12/07 11:54:55 fhajny Exp $
 
-SHA1 (haproxy-1.8.1.tar.gz) = 9239e686fe8152cbb03d12f8deac271efd830f4f
-RMD160 (haproxy-1.8.1.tar.gz) = 514e4dd4cb76813e20cb57ddda9f8bb0de8ae2e5
-SHA512 (haproxy-1.8.1.tar.gz) = c59bbd144afae01a3802065bf507dc1ca70f09e7112a9f502474ec6758d3ccab084550372562d2906f1e0b9509464e316ca6f95e3575d7273aba49f350791caa
-Size (haproxy-1.8.1.tar.gz) = 2038215 bytes
+SHA1 (haproxy-1.8.13.tar.gz) = 1c8588d63c7592404d0a3ea59aa41c2dccaaa909
+RMD160 (haproxy-1.8.13.tar.gz) = d47b3d2d0970d8d68259a803d513091d946f0ad0
+SHA512 (haproxy-1.8.13.tar.gz) = 54d4cb0721a3868267d7e085b3d3bb050384e4279eb49e88abb925bb3ea8cc39ef9069bdc99b7b18a23fd22e0d29e24dfcb8a0507ddca9243a845e4418be9cc5
+Size (haproxy-1.8.13.tar.gz) = 2063046 bytes
 SHA1 (patch-Makefile) = f635093d547270603ffea8837a42a8cca2e03bdf

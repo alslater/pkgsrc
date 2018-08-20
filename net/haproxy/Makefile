@@ -1,9 +1,8 @@
 # $NetBSD: Makefile,v 1.37 2017/12/07 11:54:55 fhajny Exp $
 
-DISTNAME=	haproxy-1.8.1
+DISTNAME=	haproxy-1.8.13
 CATEGORIES=	net www
 MASTER_SITES=	http://www.haproxy.org/download/${PKGVERSION_NOREV:R}/src/
-
 MAINTAINER=	morr@NetBSD.org
 HOMEPAGE=	http://haproxy.org/
 COMMENT=	Reliable, high performance TCP/HTTP load balancer
