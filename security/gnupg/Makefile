@@ -1,11 +1,10 @@
 # $NetBSD: Makefile,v 1.135 2016/10/07 18:26:09 adam Exp $
 
-DISTNAME=	gnupg-1.4.21
+DISTNAME=	gnupg-1.4.23
 PKGREVISION=	1
 CATEGORIES=	security
 MASTER_SITES=	ftp://ftp.gnupg.org/gcrypt/gnupg/ \
-		http://gd.tuwien.ac.at/privacy/gnupg/gnupg/ \
-		ftp://ftp.ring.gr.jp/pub/net/gnupg/gnupg/
+		http://gnupg.org/ftp/gcrypt/gnupg/ 
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
