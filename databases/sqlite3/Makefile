@@ -2,7 +2,7 @@
 #
 # used by databases/sqlite3-tcl/Makefile
 
-PKGREVISION= 3
+#PKGREVISION= 0
 .include "Makefile.common"
 
 PKGNAME=	sqlite3-${SQLITE3_VERSION}

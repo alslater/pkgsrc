@@ -5,8 +5,8 @@
 # used by databases/sqlite3-tcl/Makefile
 # used by devel/lemon/Makefile
 
-SQLITE3_DISTVERSION=	3150200
-SQLITE3_VERSION=	3.15.2
+SQLITE3_DISTVERSION=	3240000
+SQLITE3_VERSION=	3.24.0
 
 MASTER_SITES=	http://www.hwaci.com/sw/sqlite/2016/ \
 		http://www.sqlite.org/2016/
