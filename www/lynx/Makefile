@@ -1,15 +1,15 @@
 # $NetBSD: Makefile,v 1.124 2016/12/22 17:30:51 sevan Exp $
 
-DISTNAME=	lynx2.8.8rel.2
+DISTNAME=	lynx2.8.9rel.1
 PKGNAME=	${DISTNAME:S/lynx/lynx-/:S/rel//}
-PKGREVISION=	6
+#PKGREVISION=	0
 CATEGORIES=	www
-MASTER_SITES=	http://lynx.isc.org/${SUBDIR:Q}/ \
-		ftp://ftp.cyf-kr.edu.pl/pub/unix/lynx/${SUBDIR:Q}/
+MASTER_SITES=   https://invisible-mirror.net/archives/lynx/tarballs/
+MASTER_SITES+=  ftp://ftp.cyf-kr.edu.pl/pub/unix/lynx/${SUBDIR:Q}/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://lynx.isc.org/
+HOMEPAGE=	http://lynx.invisible-island.net/
 COMMENT=	Alphanumeric display oriented World-Wide Web Client
 LICENSE=	gnu-gpl-v2
 
@@ -17,7 +17,7 @@ LICENSE=	gnu-gpl-v2
 MAKE_JOBS_SAFE=		no
 
 SUBDIR=			current
-WRKSRC=			${WRKDIR}/lynx2-8-8
+WRKSRC=			${WRKDIR}/lynx2.8.9rel.1
 USE_PKGLOCALEDIR=	yes
 GNU_CONFIGURE=		yes
 BROKEN_GETTEXT_DETECTION= yes
