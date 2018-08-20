@@ -1,14 +1,14 @@
 $NetBSD: patch-aa,v 1.7 2015/04/26 11:37:08 ryoon Exp $
 
---- Makefile.in.orig	2018-03-19 10:18:18.000000000 +0000
+--- Makefile.in.orig	2018-08-10 09:24:09.000000000 +0000
 +++ Makefile.in
-@@ -947,9 +947,6 @@ uninstall-am: uninstall-pkgconfigDATA
+@@ -961,9 +961,6 @@ uninstall-am: uninstall-pkgconfigDATA
  
  
  install-data-am: install-pkgconfigDATA
+-	-mkdir -p $(DESTDIR)${sysconfdir}/ODBCDataSources
 -	-touch $(DESTDIR)${sysconfdir}/odbcinst.ini
 -	-touch $(DESTDIR)${sysconfdir}/odbc.ini
--	-mkdir -p $(DESTDIR)${sysconfdir}/ODBCDataSources
  	cp unixodbc_conf.h $(DESTDIR)${includedir}/unixodbc_conf.h
  
  # Tell versions [3.59,3.63) of GNU make to not export all variables.

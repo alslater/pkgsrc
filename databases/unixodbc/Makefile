@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.37 2016/02/14 10:19:22 jperkin Exp $
 
-DISTNAME=	unixODBC-2.3.6
+DISTNAME=	unixODBC-2.3.7
 PKGNAME=	${DISTNAME:S/ODBC/odbc/}
 CATEGORIES=	databases
 MASTER_SITES=	ftp://ftp.unixodbc.org/pub/unixODBC/
