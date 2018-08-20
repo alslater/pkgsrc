@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.17 2015/02/08 16:13:36 wiz Exp $
 
-DISTNAME=	lzo-2.09
+DISTNAME=	lzo-2.10
 CATEGORIES=	archivers
 MASTER_SITES=	http://www.oberhumer.com/opensource/lzo/download/
 
