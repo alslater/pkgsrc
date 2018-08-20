@@ -2,7 +2,7 @@
 
 .include "../../shells/zsh/Makefile.common"
 
-ZSH_VERSION=	5.3
+ZSH_VERSION=	5.5.1
 ZSH_MAINTAINER=	uebayasi@NetBSD.org
 
 CONFIGURE_ARGS+=	--disable-gdbm
