@@ -9,7 +9,7 @@
 # used by mail/dovecot2-mysql/Makefile
 # used by mail/dovecot2-pgsql/Makefile
 
-DISTNAME=	dovecot-2.2.32
+DISTNAME=	dovecot-2.2.36
 CATEGORIES=	mail
 MASTER_SITES=	https://www.dovecot.org/releases/${PKGVERSION_NOREV:R}/
 
