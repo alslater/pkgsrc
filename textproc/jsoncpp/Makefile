@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.6 2016/11/09 09:44:22 wiz Exp $
 
 DISTNAME=	jsoncpp-1.7.7
+PKGREVISION=	1
 CATEGORIES=	textproc
 MASTER_SITES=	${MASTER_SITE_GITHUB:=open-source-parsers/}
 
@@ -12,6 +13,7 @@ LICENSE=	public-domain OR mit
 USE_CMAKE=	yes
 USE_LANGUAGES=	c c++
 
+CFLAGS+=	-fPIC
 PKGCONFIG_OVERRIDE=	pkg-config/jsoncpp.pc.in
 
 .include "../../mk/bsd.pkg.mk"
