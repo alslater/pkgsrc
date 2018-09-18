@@ -1,0 +1,7 @@
+$NetBSD$
+
+SHA1 (aws-sdk-cpp-1.6.6.tar.gz) = 1b9cda7c50b185f9aafb505c6cad2ef7386d656f
+RMD160 (aws-sdk-cpp-1.6.6.tar.gz) = 4aebdc9f9ac5ace46521079a531f50b376500297
+SHA512 (aws-sdk-cpp-1.6.6.tar.gz) = 1de1e21ef3b8b7cb655a93a88d343a624ed82961c73a0f23033c088dfc23bc6a25679a48cc7c0bb6342b4dbd87f36be283000108450cd11272ce1917ef82ef4c
+Size (aws-sdk-cpp-1.6.6.tar.gz) = 16601398 bytes
+SHA1 (patch-aws-cpp-sdk-core_source_platform_linux-shared_OSVersionInfo.cpp) = f2993250a5feedbf34b82f784a2dce94cf48d7c9
