@@ -1,11 +1,25 @@
 package main
 
+// MkToken represents a contiguous string from a Makefile.
+// It is either a literal string or a variable use.
+//
+// Example (3 tokens): /usr/share/${PKGNAME}/data
 type MkToken struct {
 	Text   string // Used for both literals and varuses.
 	Varuse *MkVarUse
 }
+
+// MkVarUse represents a reference to a Make variable, with optional modifiers.
+//
+// For nested variable expressions, the variable name can contain references
+// to other variables. For example, ${TOOLS.${t}} is a MkVarUse with varname
+// "TOOLS.${t}" and no modifiers.
+//
+// Example: ${PKGNAME}
+//
+// Example: ${PKGNAME:S/from/to/}
 type MkVarUse struct {
-	varname   string
+	varname   string   // E.g. "PKGNAME", or "${BUILD_DEFS}"
 	modifiers []string // E.g. "Q", "S/from/to/"
 }
 

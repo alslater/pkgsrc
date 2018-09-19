@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"netbsd.org/pkglint/regex"
+)
 
+// Example: cd $dir && echo "In $dir"; cd ..; ls -l
 type MkShList struct {
 	AndOrs     []*MkShAndOr
 	Separators []MkShSeparator
@@ -21,9 +25,10 @@ func (list *MkShList) AddSeparator(separator MkShSeparator) *MkShList {
 	return list
 }
 
+// Example: cd $dir && echo "In $dir" || echo "Cannot cd into $dir"
 type MkShAndOr struct {
 	Pipes []*MkShPipeline
-	Ops   []string // Either "&&" or "||"
+	Ops   []string // Each element is either "&&" or "||"
 }
 
 func NewMkShAndOr(pipeline *MkShPipeline) *MkShAndOr {
@@ -36,6 +41,7 @@ func (andor *MkShAndOr) Add(op string, pipeline *MkShPipeline) *MkShAndOr {
 	return andor
 }
 
+// Example: grep word file | sed s,^,---,
 type MkShPipeline struct {
 	Negated bool
 	Cmds    []*MkShCommand
@@ -50,6 +56,9 @@ func (pipe *MkShPipeline) Add(cmd *MkShCommand) *MkShPipeline {
 	return pipe
 }
 
+// Example: LC_ALL=C sort */*.c > sorted
+// Example: dir() { ls -l "$@"; }
+// Example: { echo "first"; echo "second"; }
 type MkShCommand struct {
 	Simple    *MkShSimpleCommand
 	Compound  *MkShCompoundCommand
@@ -57,6 +66,10 @@ type MkShCommand struct {
 	Redirects []*MkShRedirection // For Compound and FuncDef
 }
 
+// Example: { echo "first"; echo "second"; }
+// Example: for f in *.c; do compile "$f"; done
+// Example: if [ -f "$file" ]; then echo "It exists"; fi
+// Example: while sleep 1; do printf .; done
 type MkShCompoundCommand struct {
 	Brace    *MkShList
 	Subshell *MkShList
@@ -66,23 +79,27 @@ type MkShCompoundCommand struct {
 	Loop     *MkShLoopClause
 }
 
+// Example: for f in *.c; do compile "$f"; done
 type MkShForClause struct {
 	Varname string
 	Values  []*ShToken
 	Body    *MkShList
 }
 
+// Example: case $filename in *.c) echo "C source" ;; esac
 type MkShCaseClause struct {
 	Word  *ShToken
 	Cases []*MkShCaseItem
 }
 
+// Example: *.c) echo "C source" ;;
 type MkShCaseItem struct {
 	Patterns  []*ShToken
 	Action    *MkShList
 	Separator MkShSeparator
 }
 
+// Example: if [ -f "$file" ]; then echo "It exists"; fi
 type MkShIfClause struct {
 	Conds   []*MkShList
 	Actions []*MkShList
@@ -94,17 +111,20 @@ func (cl *MkShIfClause) Prepend(cond *MkShList, action *MkShList) {
 	cl.Actions = append([]*MkShList{action}, cl.Actions...)
 }
 
+// Example: while sleep 1; do printf .; done
 type MkShLoopClause struct {
 	Cond   *MkShList
 	Action *MkShList
 	Until  bool
 }
 
+// Example: dir() { ls -l "$@"; }
 type MkShFunctionDefinition struct {
 	Name string
 	Body *MkShCompoundCommand
 }
 
+// Example: LC_ALL=C sort */*.c > sorted
 type MkShSimpleCommand struct {
 	Assignments  []*ShToken
 	Name         *ShToken
@@ -129,6 +149,11 @@ func NewStrCommand(cmd *MkShSimpleCommand) *StrCommand {
 	return strcmd
 }
 
+// Similar to MkShSimpleCommand, but all components are converted
+// to strings to allow for simpler checks, especially for analyzing
+// command line options.
+//
+// Example: LC_ALL=C sort */*.c > sorted
 type StrCommand struct {
 	Assignments []string
 	Name        string
@@ -144,7 +169,7 @@ func (c *StrCommand) HasOption(opt string) bool {
 	return false
 }
 
-func (c *StrCommand) AnyArgMatches(pattern RegexPattern) bool {
+func (c *StrCommand) AnyArgMatches(pattern regex.Pattern) bool {
 	for _, arg := range c.Args {
 		if matches(arg, pattern) {
 			return true
@@ -157,10 +182,12 @@ func (c *StrCommand) String() string {
 	return fmt.Sprintf("%v %v %v", c.Assignments, c.Name, c.Args)
 }
 
+// Example: > sorted
+// Example: 2>&1
 type MkShRedirection struct {
-	Fd     int // Or -1
-	Op     string
-	Target *ShToken
+	Fd     int      // Or -1
+	Op     string   // See io_file in shell.y for possible values
+	Target *ShToken // The file name or &fd
 }
 
 type MkShSeparator uint8

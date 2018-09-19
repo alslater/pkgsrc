@@ -1,33 +1,32 @@
 package main
 
-import (
-	check "gopkg.in/check.v1"
-)
+import "gopkg.in/check.v1"
 
 func (s *Suite) Test_CheckdirToplevel(c *check.C) {
-	s.Init(c)
-	s.CreateTmpFile("Makefile", ""+
-		"# $"+"NetBSD$\n"+
-		"\n"+
-		"SUBDIR+= x11\n"+
-		"SUBDIR+=\tarchivers\n"+
-		"SUBDIR+=\tccc\n"+
-		"SUBDIR+=\tccc\n"+
-		"#SUBDIR+=\tignoreme\n"+
-		"SUBDIR+=\tnonexisting\n"+ // This just doesn’t happen in practice.
-		"SUBDIR+=\tbbb\n")
-	s.CreateTmpFile("archivers/Makefile", "")
-	s.CreateTmpFile("bbb/Makefile", "")
-	s.CreateTmpFile("ccc/Makefile", "")
-	s.CreateTmpFile("x11/Makefile", "")
-	G.globalData.InitVartypes()
+	t := s.Init(c)
 
-	G.CurrentDir = s.tmpdir
+	t.SetupFileLines("Makefile",
+		MkRcsID,
+		"",
+		"SUBDIR+= x11",
+		"SUBDIR+=\tarchivers",
+		"SUBDIR+=\tccc",
+		"SUBDIR+=\tccc",
+		"#SUBDIR+=\tignoreme",
+		"SUBDIR+=\tnonexisting", // This doesn't happen in practice, therefore no warning.
+		"SUBDIR+=\tbbb")
+	t.SetupFileLines("archivers/Makefile")
+	t.SetupFileLines("bbb/Makefile")
+	t.SetupFileLines("ccc/Makefile")
+	t.SetupFileLines("x11/Makefile")
+	t.SetupVartypes()
+
+	G.CurrentDir = t.TmpDir()
 	CheckdirToplevel()
 
-	c.Check(s.Output(), equals, ""+
-		"WARN: ~/Makefile:3: Indentation should be a single tab character.\n"+
-		"ERROR: ~/Makefile:6: Each subdir must only appear once.\n"+
-		"WARN: ~/Makefile:7: \"ignoreme\" commented out without giving a reason.\n"+
-		"WARN: ~/Makefile:9: bbb should come before ccc\n")
+	t.CheckOutputLines(
+		"WARN: ~/Makefile:3: Indentation should be a single tab character.",
+		"ERROR: ~/Makefile:6: Each subdir must only appear once.",
+		"WARN: ~/Makefile:7: \"ignoreme\" commented out without giving a reason.",
+		"WARN: ~/Makefile:9: bbb should come before ccc")
 }

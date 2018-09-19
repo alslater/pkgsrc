@@ -1,6 +1,6 @@
-package main
-
-// Self-written getopt to support multi-argument options.
+// Package getopt provides a parser for command line options,
+// supporting multi-value options such as -Wall,no-extra.
+package getopt
 
 import (
 	"fmt"
@@ -31,6 +31,12 @@ func (o *Options) AddFlagVar(shortName rune, longName string, pflag *bool, defva
 	o.options = append(o.options, opt)
 }
 
+func (o *Options) AddStrList(shortName rune, longName string, plist *[]string, description string) {
+	*plist = []string{}
+	opt := &option{shortName, longName, "", description, plist}
+	o.options = append(o.options, opt)
+}
+
 func (o *Options) Parse(args []string) (remainingArgs []string, err error) {
 	var skip int
 	for i := 1; i < len(args) && err == nil; i++ {
@@ -39,10 +45,10 @@ func (o *Options) Parse(args []string) (remainingArgs []string, err error) {
 		case arg == "--":
 			remainingArgs = append(remainingArgs, args[i+1:]...)
 			return
-		case hasPrefix(arg, "--"):
+		case strings.HasPrefix(arg, "--"):
 			skip, err = o.parseLongOption(args, i, arg[2:])
 			i += skip
-		case hasPrefix(arg, "-"):
+		case strings.HasPrefix(arg, "-"):
 			skip, err = o.parseShortOptions(args, i, arg[1:])
 			i += skip
 		default:
@@ -101,6 +107,16 @@ func (o *Options) handleLongOption(args []string, i int, opt *option, argval *st
 			}
 		}
 		return 0, nil
+	case *[]string:
+		if argval != nil {
+			*data = append(*data, *argval)
+			return 0, nil
+		} else if i+1 < len(args) {
+			*data = append(*data, args[i+1])
+			return 1, nil
+		} else {
+			return 0, optErr("option requires an argument: --" + opt.longName)
+		}
 	case *FlagGroup:
 		if argval == nil {
 			return 1, data.parse("--"+opt.longName+"=", args[i+1])
@@ -120,6 +136,19 @@ optchar:
 				case *bool:
 					*data = true
 					continue optchar
+
+				case *[]string:
+					argarg := optchars[ai+utf8.RuneLen(optchar):]
+					if argarg != "" {
+						*data = append(*data, argarg)
+						return 0, nil
+					} else if i+1 < len(args) {
+						*data = append(*data, args[i+1])
+						return 1, nil
+					} else {
+						return 0, optErr("option requires an argument: -" + string([]rune{optchar}))
+					}
+
 				case *FlagGroup:
 					argarg := optchars[ai+utf8.RuneLen(optchar):]
 					if argarg != "" {
@@ -165,7 +194,11 @@ func (o *Options) Help(out io.Writer, generalUsage string) {
 			io.WriteString(wr, "    all\t all of the following\n")
 			io.WriteString(wr, "    none\t none of the following\n")
 			for _, flag := range flagGroup.flags {
-				fmt.Fprintf(wr, "    %s\t %s (%v)\n", flag.name, flag.help, ifelseStr(*flag.value, "enabled", "disabled"))
+				state := "disabled"
+				if *flag.value {
+					state = "enabled"
+				}
+				fmt.Fprintf(wr, "    %s\t %s (%v)\n", flag.name, flag.help, state)
 			}
 			wr.Flush()
 		}

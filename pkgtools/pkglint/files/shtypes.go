@@ -4,17 +4,17 @@ import (
 	"fmt"
 )
 
-//go:generate go tool yacc -o shellyacc.go -v shellyacc.log -p shyy shell.y
+//go:generate goyacc -o shellyacc.go -v shellyacc.log -p shyy shell.y
 
 type ShAtomType uint8
 
 const (
-	shtSpace  ShAtomType = iota
-	shtVaruse            // ${PREFIX}
-	shtWord              //
-	shtOperator
-	shtComment  // # ...
-	shtSubshell // $$(
+	shtSpace    ShAtomType = iota
+	shtVaruse              // ${PREFIX}
+	shtWord                // while, cat, ENV=value
+	shtOperator            // (, ;, |
+	shtComment             // # ...
+	shtSubshell            // $$(
 )
 
 func (t ShAtomType) String() string {
@@ -36,7 +36,6 @@ func (t ShAtomType) IsWord() bool {
 	return false
 }
 
-// @Beta
 type ShAtom struct {
 	Type    ShAtomType
 	MkText  string
@@ -44,15 +43,23 @@ type ShAtom struct {
 	Data    interface{}
 }
 
-func (token *ShAtom) String() string {
-	if token.Type == shtWord && token.Quoting == shqPlain && token.Data == nil {
-		return fmt.Sprintf("%q", token.MkText)
+func (atom *ShAtom) String() string {
+	if atom.Type == shtWord && atom.Quoting == shqPlain && atom.Data == nil {
+		return fmt.Sprintf("%q", atom.MkText)
 	}
-	if token.Type == shtVaruse {
-		varuse := token.Data.(*MkVarUse)
+	if atom.Type == shtVaruse {
+		varuse := atom.Data.(*MkVarUse)
 		return fmt.Sprintf("varuse(%q)", varuse.varname+varuse.Mod())
 	}
-	return fmt.Sprintf("ShAtom(%v, %q, %s)", token.Type, token.MkText, token.Quoting)
+	return fmt.Sprintf("ShAtom(%v, %q, %s)", atom.Type, atom.MkText, atom.Quoting)
+}
+
+// VarUse returns a read access to a Makefile variable, or nil for plain shell tokens.
+func (atom *ShAtom) VarUse() *MkVarUse {
+	if atom.Type == shtVaruse {
+		return atom.Data.(*MkVarUse)
+	}
+	return nil
 }
 
 // ShQuoting describes the context in which a string appears
@@ -108,12 +115,4 @@ func NewShToken(mkText string, atoms ...*ShAtom) *ShToken {
 
 func (token *ShToken) String() string {
 	return fmt.Sprintf("ShToken(%v)", token.Atoms)
-}
-
-func (token *ShToken) IsAssignment() bool {
-	return matches(token.MkText, `^[A-Za-z_]\w*=`)
-}
-
-func (token *ShToken) IsWord() bool {
-	return token.Atoms[0].Type.IsWord()
 }

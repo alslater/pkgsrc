@@ -1,12 +1,13 @@
 package main
 
 import (
+	"netbsd.org/pkglint/trace"
 	"sort"
 )
 
 func CheckdirCategory() {
-	if G.opts.Debug {
-		defer tracecall1(G.CurrentDir)()
+	if trace.Tracing {
+		defer trace.Call1(G.CurrentDir)()
 	}
 
 	lines := LoadNonemptyLines(G.CurrentDir+"/Makefile", true)
@@ -20,18 +21,18 @@ func CheckdirCategory() {
 	exp := NewExpecter(lines)
 	for exp.AdvanceIfPrefix("#") {
 	}
-	exp.ExpectEmptyLine()
+	exp.ExpectEmptyLine(G.opts.WarnSpace)
 
 	if exp.AdvanceIfMatches(`^COMMENT=\t*(.*)`) {
-		mklines.mklines[exp.index-1].CheckValidCharactersInValue(`[- '(),/0-9A-Za-z]`)
+		MkLineChecker{mklines.mklines[exp.Index()-1]}.CheckValidCharactersInValue(`[- '(),/0-9A-Za-z]`)
 	} else {
 		exp.CurrentLine().Errorf("COMMENT= line expected.")
 	}
-	exp.ExpectEmptyLine()
+	exp.ExpectEmptyLine(G.opts.WarnSpace)
 
 	type subdir struct {
 		name   string
-		line   *Line
+		line   Line
 		active bool
 	}
 
@@ -40,7 +41,7 @@ func CheckdirCategory() {
 	// collect the SUBDIRs in the Makefile and in the file system.
 
 	fSubdirs := getSubdirs(G.CurrentDir)
-	sort.Sort(sort.StringSlice(fSubdirs))
+	sort.Strings(fSubdirs)
 	var mSubdirs []subdir
 
 	prevSubdir := ""
@@ -95,7 +96,7 @@ func CheckdirCategory() {
 
 	var subdirs []string
 
-	var line *Line
+	var line Line
 	mActive := false
 
 	for !(mAtend && fAtend) {
@@ -126,17 +127,19 @@ func CheckdirCategory() {
 
 		if !fAtend && (mAtend || fCurrent < mCurrent) {
 			if !mCheck[fCurrent] {
-				if !line.AutofixInsertBefore("SUBDIR+=\t" + fCurrent) {
-					line.Errorf("%q exists in the file system, but not in the Makefile.", fCurrent)
-				}
+				fix := line.Autofix()
+				fix.Errorf("%q exists in the file system, but not in the Makefile.", fCurrent)
+				fix.InsertBefore("SUBDIR+=\t" + fCurrent)
+				fix.Apply()
 			}
 			fNeednext = true
 
 		} else if !mAtend && (fAtend || mCurrent < fCurrent) {
 			if !fCheck[mCurrent] {
-				if !line.AutofixDelete() {
-					line.Errorf("%q exists in the Makefile, but not in the file system.", mCurrent)
-				}
+				fix := line.Autofix()
+				fix.Errorf("%q exists in the Makefile, but not in the file system.", mCurrent)
+				fix.Delete()
+				fix.Apply()
 			}
 			mNeednext = true
 
@@ -152,10 +155,10 @@ func CheckdirCategory() {
 	// the pkgsrc-wip category Makefile defines its own targets for
 	// generating indexes and READMEs. Just skip them.
 	if G.Wip {
-		exp.index = len(exp.lines) - 2
+		exp.SkipToFooter()
 	}
 
-	exp.ExpectEmptyLine()
+	exp.ExpectEmptyLine(G.opts.WarnSpace)
 	exp.ExpectText(".include \"../mk/misc/category.mk\"")
 	if !exp.EOF() {
 		exp.CurrentLine().Errorf("The file should end here.")

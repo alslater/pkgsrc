@@ -5,13 +5,17 @@ import (
 )
 
 func (s *Suite) Test_MkParser_MkTokens(c *check.C) {
+	t := s.Init(c)
+
 	checkRest := func(input string, expectedTokens []*MkToken, expectedRest string) {
-		p := NewMkParser(dummyLine, input, true)
+		line := t.NewLines("Test_MkParser_MkTokens.mk", input)[0]
+		p := NewMkParser(line, input, true)
 		actualTokens := p.MkTokens()
 		c.Check(actualTokens, deepEquals, expectedTokens)
 		for i, expectedToken := range expectedTokens {
 			if i < len(actualTokens) {
 				c.Check(*actualTokens[i], deepEquals, *expectedToken)
+				c.Check(actualTokens[i].Varuse, deepEquals, expectedToken.Varuse)
 			}
 		}
 		c.Check(p.Rest(), equals, expectedRest)
@@ -79,6 +83,7 @@ func (s *Suite) Test_MkParser_MkTokens(c *check.C) {
 	check("${ALT_GCC_RTS:S%${LOCALBASE}%%:S%/%%}", varuse("ALT_GCC_RTS", "S%${LOCALBASE}%%", "S%/%%"))
 	check("${PREFIX:C;///*;/;g:C;/$;;}", varuse("PREFIX", "C;///*;/;g", "C;/$;;"))
 	check("${GZIP_CMD:[1]:Q}", varuse("GZIP_CMD", "[1]", "Q"))
+	check("${RUBY_RAILS_SUPPORTED:[#]}", varuse("RUBY_RAILS_SUPPORTED", "[#]"))
 	check("${DISTNAME:C/-[0-9]+$$//:C/_/-/}", varuse("DISTNAME", "C/-[0-9]+$$//", "C/_/-/"))
 	check("${DISTNAME:slang%=slang2%}", varuse("DISTNAME", "slang%=slang2%"))
 	check("${OSMAP_SUBSTVARS:@v@-e 's,\\@${v}\\@,${${v}},g' @}", varuse("OSMAP_SUBSTVARS", "@v@-e 's,\\@${v}\\@,${${v}},g' @"))
@@ -106,15 +111,17 @@ func (s *Suite) Test_MkParser_MkTokens(c *check.C) {
 	check("${VAR:ts\\124}", varuse("VAR", "ts\\124"))       // Or even decimal.
 
 	check("$(GNUSTEP_USER_ROOT)", varuseText("$(GNUSTEP_USER_ROOT)", "GNUSTEP_USER_ROOT"))
-	c.Check(s.Output(), equals, "WARN: Please use curly braces {} instead of round parentheses () for GNUSTEP_USER_ROOT.\n")
+	t.CheckOutputLines(
+		"WARN: Test_MkParser_MkTokens.mk:1: Please use curly braces {} instead of round parentheses () for GNUSTEP_USER_ROOT.")
 
 	checkRest("${VAR)", nil, "${VAR)") // Opening brace, closing parenthesis
 	checkRest("$(VAR}", nil, "$(VAR}") // Opening parenthesis, closing brace
-	c.Check(s.Output(), equals, "")    // Warnings are only printed for balanced expressions.
+	t.CheckOutputEmpty()               // Warnings are only printed for balanced expressions.
 
 	check("${PLIST_SUBST_VARS:@var@${var}=${${var}:Q}@}", varuse("PLIST_SUBST_VARS", "@var@${var}=${${var}:Q}@"))
 	check("${PLIST_SUBST_VARS:@var@${var}=${${var}:Q}}", varuse("PLIST_SUBST_VARS", "@var@${var}=${${var}:Q}")) // Missing @ at the end
-	c.Check(s.Output(), equals, "WARN: Modifier ${PLIST_SUBST_VARS:@var@...@} is missing the final \"@\".\n")
+	t.CheckOutputLines(
+		"WARN: Test_MkParser_MkTokens.mk:1: Modifier ${PLIST_SUBST_VARS:@var@...@} is missing the final \"@\".")
 
 	checkRest("hello, ${W:L:tl}orld", []*MkToken{
 		literal("hello, "),
@@ -211,22 +218,22 @@ func (s *Suite) Test_MkParser_MkCond(c *check.C) {
 }
 
 func (s *Suite) Test_MkParser__varuse_parentheses_autofix(c *check.C) {
-	s.Init(c)
-	s.UseCommandLine("--autofix")
-	G.globalData.InitVartypes()
-	filename := s.CreateTmpFile("Makefile", "")
-	mklines := s.NewMkLines(filename,
-		mkrcsid,
+	t := s.Init(c)
+
+	t.SetupCommandLine("--autofix")
+	t.SetupVartypes()
+	lines := t.SetupFileLines("Makefile",
+		MkRcsID,
 		"COMMENT=$(P1) $(P2)) $(P3:Q) ${BRACES}")
+	mklines := NewMkLines(lines)
 
 	mklines.Check()
 
-	c.Check(s.Output(), equals, ""+
-		"AUTOFIX: ~/Makefile:2: Replacing \"$(P1)\" with \"${P1}\".\n"+
-		"AUTOFIX: ~/Makefile:2: Replacing \"$(P2)\" with \"${P2}\".\n"+
-		"AUTOFIX: ~/Makefile:2: Replacing \"$(P3:Q)\" with \"${P3:Q}\".\n"+
-		"AUTOFIX: ~/Makefile: Has been auto-fixed. Please re-run pkglint.\n")
-	c.Check(s.LoadTmpFile("Makefile"), equals, ""+
-		mkrcsid+"\n"+
-		"COMMENT=${P1} ${P2}) ${P3:Q} ${BRACES}\n")
+	t.CheckOutputLines(
+		"AUTOFIX: ~/Makefile:2: Replacing \"$(P1)\" with \"${P1}\".",
+		"AUTOFIX: ~/Makefile:2: Replacing \"$(P2)\" with \"${P2}\".",
+		"AUTOFIX: ~/Makefile:2: Replacing \"$(P3:Q)\" with \"${P3:Q}\".")
+	t.CheckFileLines("Makefile",
+		MkRcsID,
+		"COMMENT=${P1} ${P2}) ${P3:Q} ${BRACES}")
 }

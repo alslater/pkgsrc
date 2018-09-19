@@ -2,85 +2,129 @@ package main
 
 import (
 	"io/ioutil"
-	"path"
+	"netbsd.org/pkglint/regex"
+	"netbsd.org/pkglint/trace"
 	"sort"
 	"strings"
 )
 
-// GlobalData contains data describing pkgsrc as a whole.
-type GlobalData struct {
-	Pkgsrcdir           string              // Relative to the current working directory.
-	MasterSiteURLToVar  map[string]string   // "https://github.com/" => "MASTER_SITE_GITHUB"
-	MasterSiteVarToURL  map[string]string   // "MASTER_SITE_GITHUB" => "https://github.com/"
-	PkgOptions          map[string]string   // "x11" => "Provides X11 support"
-	Tools               ToolRegistry        //
-	SystemBuildDefs     map[string]bool     // The set of user-defined variables that are added to BUILD_DEFS within the bsd.pkg.mk file.
-	suggestedUpdates    []SuggestedUpdate   //
-	suggestedWipUpdates []SuggestedUpdate   //
-	LastChange          map[string]*Change  //
-	UserDefinedVars     map[string]*MkLine  // varname => line
-	Deprecated          map[string]string   //
-	vartypes            map[string]*Vartype // varcanon => type
-	latest              map[string]string   // "lang/php[0-9]*" => "lang/php70"
+// Pkgsrc describes a pkgsrc installation.
+// In each pkglint run, only a single pkgsrc installation is ever loaded.
+// It just doesn't make sense to check multiple pkgsrc installations at once.
+type Pkgsrc struct {
+	// The top directory (PKGSRCDIR), either absolute or relative to
+	// the current working directory.
+	topdir string
+
+	// The set of user-defined variables that are added to BUILD_DEFS
+	// within the bsd.pkg.mk file.
+	buildDefs map[string]bool
+
+	Tools ToolRegistry
+
+	MasterSiteURLToVar map[string]string // "https://github.com/" => "MASTER_SITE_GITHUB"
+	MasterSiteVarToURL map[string]string // "MASTER_SITE_GITHUB" => "https://github.com/"
+
+	PkgOptions map[string]string // "x11" => "Provides X11 support"
+
+	suggestedUpdates    []SuggestedUpdate  //
+	suggestedWipUpdates []SuggestedUpdate  //
+	LastChange          map[string]*Change //
+	latest              map[string]string  // "lang/php[0-9]*" => "lang/php70"
+
+	UserDefinedVars map[string]MkLine   // varname => line; used for checking BUILD_DEFS
+	Deprecated      map[string]string   //
+	vartypes        map[string]*Vartype // varcanon => type
+
+	Hashes       map[string]*Hash // Maps "alg:fname" => hash (inter-package check).
+	UsedLicenses map[string]bool  // Maps "license name" => true (inter-package check).
 }
 
-// Change is a change entry from the `doc/CHANGES-*` files.
-type Change struct {
-	Line    *Line
-	Action  string
-	Pkgpath string
-	Version string
-	Author  string
-	Date    string
+func NewPkgsrc(dir string) *Pkgsrc {
+	src := &Pkgsrc{
+		dir,
+		make(map[string]bool),
+		NewToolRegistry(),
+		make(map[string]string),
+		make(map[string]string),
+		make(map[string]string),
+		nil,
+		nil,
+		make(map[string]*Change),
+		make(map[string]string),
+		make(map[string]MkLine),
+		make(map[string]string),
+		make(map[string]*Vartype),
+		nil, // Only initialized when pkglint is run for a whole pkgsrc installation
+		nil}
+
+	// Some user-defined variables do not influence the binary
+	// package at all and therefore do not have to be added to
+	// BUILD_DEFS; therefore they are marked as "already added".
+	src.AddBuildDef("DISTDIR")
+	src.AddBuildDef("FETCH_CMD")
+	src.AddBuildDef("FETCH_OUTPUT_ARGS")
+
+	// The following variables are not expected to be modified
+	// by the pkgsrc user. They are added here to prevent unnecessary
+	// warnings by pkglint.
+	src.AddBuildDef("GAMES_USER")
+	src.AddBuildDef("GAMES_GROUP")
+	src.AddBuildDef("GAMEDATAMODE")
+	src.AddBuildDef("GAMEDIRMODE")
+	src.AddBuildDef("GAMEMODE")
+	src.AddBuildDef("GAMEOWN")
+	src.AddBuildDef("GAMEGRP")
+
+	return src
 }
 
-// SuggestedUpdate is from the `doc/TODO` file.
-type SuggestedUpdate struct {
-	Line    *Line
-	Pkgname string
-	Version string
-	Comment string
+// Load reads the pkgsrc infrastructure files to
+// extract information like the tools, packages to update,
+// user-defined variables.
+//
+// This work is not done in the constructor to keep the tests
+// simple, since setting up a realistic pkgsrc environment requires
+// a lot of files.
+func (src *Pkgsrc) Load() {
+	src.InitVartypes()
+	src.loadMasterSites()
+	src.loadPkgOptions()
+	src.loadDocChanges()
+	src.loadSuggestedUpdates()
+	src.loadUserDefinedVars()
+	src.loadTools()
+	src.initDeprecatedVars()
 }
 
-func (gd *GlobalData) Initialize() {
-	firstArg := G.Todo[0]
-	if fileExists(firstArg) {
-		firstArg = path.Dir(firstArg)
-	}
-	if relTopdir := findPkgsrcTopdir(firstArg); relTopdir != "" {
-		gd.Pkgsrcdir = firstArg + "/" + relTopdir
-	} else {
-		dummyLine.Fatalf("%q is not inside a pkgsrc tree.", firstArg)
-	}
-
-	gd.vartypes = make(map[string]*Vartype)
-	gd.InitVartypes()
-	gd.loadDistSites()
-	gd.loadPkgOptions()
-	gd.loadDocChanges()
-	gd.loadSuggestedUpdates()
-	gd.loadUserDefinedVars()
-	gd.loadTools()
-	gd.loadDeprecatedVars()
-}
-
-func (gd *GlobalData) Latest(category string, re RegexPattern, repl string) string {
+// Latest returns the latest package matching the given pattern.
+// It searches the `category` for subdirectories matching the given
+// regular expression, and returns the `repl` string, in which the
+// placeholder is filled with the best result.
+//
+// Example:
+//  Latest("lang", `^php[0-9]+$`, "../../lang/$0") => "../../lang/php72"
+func (src *Pkgsrc) Latest(category string, re regex.Pattern, repl string) string {
 	key := category + "/" + string(re) + " => " + repl
-	if latest, found := gd.latest[key]; found {
+	if latest, found := src.latest[key]; found {
 		return latest
 	}
 
-	if gd.latest == nil {
-		gd.latest = make(map[string]string)
+	if src.latest == nil {
+		src.latest = make(map[string]string)
 	}
 
+	categoryDir := src.File(category)
 	error := func() string {
-		dummyLine.Errorf("Cannot find latest version of %q in %q.", re, gd.Pkgsrcdir)
-		gd.latest[key] = ""
+		dummyLine.Errorf("Cannot find latest version of %q in %q.", re, categoryDir)
+		src.latest[key] = ""
 		return ""
 	}
 
-	all, err := ioutil.ReadDir(gd.Pkgsrcdir + "/" + category)
+	all, err := ioutil.ReadDir(categoryDir)
+	sort.SliceStable(all, func(i, j int) bool {
+		return naturalLess(all[i].Name(), all[j].Name())
+	})
 	if err != nil {
 		return error()
 	}
@@ -88,67 +132,23 @@ func (gd *GlobalData) Latest(category string, re RegexPattern, repl string) stri
 	latest := ""
 	for _, fileInfo := range all {
 		if matches(fileInfo.Name(), re) {
-			latest = regcomp(re).ReplaceAllString(fileInfo.Name(), repl)
+			latest = regex.Compile(re).ReplaceAllString(fileInfo.Name(), repl)
 		}
 	}
 	if latest == "" {
 		return error()
 	}
 
-	gd.latest[key] = latest
+	src.latest[key] = latest
 	return latest
 }
 
-func (gd *GlobalData) loadDistSites() {
-	fname := gd.Pkgsrcdir + "/mk/fetch/sites.mk"
-	lines := LoadExistingLines(fname, true)
-
-	name2url := make(map[string]string)
-	url2name := make(map[string]string)
-	for _, line := range lines {
-		if m, varname, _, _, _, urls, _, _ := MatchVarassign(line.Text); m {
-			if hasPrefix(varname, "MASTER_SITE_") && varname != "MASTER_SITE_BACKUP" {
-				for _, url := range splitOnSpace(urls) {
-					if matches(url, `^(?:http://|https://|ftp://)`) {
-						if name2url[varname] == "" {
-							name2url[varname] = url
-						}
-						url2name[url] = varname
-					}
-				}
-			}
-		}
-	}
-
-	// Explicitly allowed, although not defined in mk/fetch/sites.mk.
-	name2url["MASTER_SITE_LOCAL"] = "ftp://ftp.NetBSD.org/pub/pkgsrc/distfiles/LOCAL_PORTS/"
-
-	if G.opts.Debug {
-		traceStep("Loaded %d MASTER_SITE_* URLs.", len(url2name))
-	}
-	gd.MasterSiteURLToVar = url2name
-	gd.MasterSiteVarToURL = name2url
-}
-
-func (gd *GlobalData) loadPkgOptions() {
-	fname := gd.Pkgsrcdir + "/mk/defaults/options.description"
-	lines := LoadExistingLines(fname, false)
-
-	gd.PkgOptions = make(map[string]string)
-	for _, line := range lines {
-		if m, optname, optdescr := match2(line.Text, `^([-0-9a-z_+]+)(?:\s+(.*))?$`); m {
-			gd.PkgOptions[optname] = optdescr
-		} else {
-			line.Fatalf("Unknown line format.")
-		}
-	}
-}
-
-func (gd *GlobalData) loadTools() {
+// loadTools loads the tool definitions from `mk/tools/*`.
+func (src *Pkgsrc) loadTools() {
 	toolFiles := []string{"defaults.mk"}
 	{
-		fname := G.globalData.Pkgsrcdir + "/mk/tools/bsd.tools.mk"
-		lines := LoadExistingLines(fname, true)
+		toc := G.Pkgsrc.File("mk/tools/bsd.tools.mk")
+		lines := LoadExistingLines(toc, true)
 		for _, line := range lines {
 			if m, _, _, includefile := MatchMkInclude(line.Text); m {
 				if !contains(includefile, "/") {
@@ -157,48 +157,46 @@ func (gd *GlobalData) loadTools() {
 			}
 		}
 		if len(toolFiles) <= 1 {
-			NewLineWhole(fname).Fatalf("Too few tool files.")
+			NewLine(toc, 0, "", nil).Fatalf("Too few tool files.")
 		}
 	}
 
-	reg := NewToolRegistry()
-	reg.RegisterTool(&Tool{"echo", "ECHO", true, true, true})
-	reg.RegisterTool(&Tool{"echo -n", "ECHO_N", true, true, true})
-	reg.RegisterTool(&Tool{"false", "FALSE", true /*why?*/, true, false})
-	reg.RegisterTool(&Tool{"test", "TEST", true, true, true})
-	reg.RegisterTool(&Tool{"true", "TRUE", true /*why?*/, true, true})
-
-	systemBuildDefs := make(map[string]bool)
+	reg := src.Tools
+	reg.RegisterTool(&Tool{"echo", "ECHO", true, true, true}, dummyLine)
+	reg.RegisterTool(&Tool{"echo -n", "ECHO_N", true, true, true}, dummyLine)
+	reg.RegisterTool(&Tool{"false", "FALSE", true /*why?*/, true, false}, dummyLine)
+	reg.RegisterTool(&Tool{"test", "TEST", true, true, true}, dummyLine)
+	reg.RegisterTool(&Tool{"true", "TRUE", true /*why?*/, true, true}, dummyLine)
 
 	for _, basename := range toolFiles {
-		fname := G.globalData.Pkgsrcdir + "/mk/tools/" + basename
-		lines := LoadExistingLines(fname, true)
+		lines := G.Pkgsrc.LoadExistingLines("mk/tools/"+basename, true)
 		for _, line := range lines {
 			reg.ParseToolLine(line)
 		}
 	}
 
-	for _, basename := range []string{"bsd.prefs.mk", "bsd.pkg.mk"} {
-		fname := G.globalData.Pkgsrcdir + "/mk/" + basename
+	for _, relativeName := range [...]string{"mk/bsd.prefs.mk", "mk/bsd.pkg.mk"} {
 		condDepth := 0
 
-		lines := LoadExistingLines(fname, true)
+		lines := G.Pkgsrc.LoadExistingLines(relativeName, true)
 		for _, line := range lines {
 			text := line.Text
+			if hasPrefix(text, "#") {
+				continue
+			}
 
-			if m, varname, _, _, _, value, _, _ := MatchVarassign(text); m {
+			if m, _, varname, _, _, _, value, _, _ := MatchVarassign(text); m {
 				if varname == "USE_TOOLS" {
-					if G.opts.Debug {
-						traceStep("[condDepth=%d] %s", condDepth, value)
+					if trace.Tracing {
+						trace.Stepf("[condDepth=%d] %s", condDepth, value)
 					}
-					if condDepth == 0 || condDepth == 1 && basename == "bsd.prefs.mk" {
+					if condDepth == 0 || condDepth == 1 && relativeName == "mk/bsd.prefs.mk" {
 						for _, toolname := range splitOnSpace(value) {
 							if !containsVarRef(toolname) {
-								for _, tool := range []*Tool{reg.Register(toolname), reg.Register("TOOLS_" + toolname)} {
-									tool.Predefined = true
-									if basename == "bsd.prefs.mk" {
-										tool.UsableAtLoadtime = true
-									}
+								tool := reg.Register(toolname, line)
+								tool.Predefined = true
+								if relativeName == "mk/bsd.prefs.mk" {
+									tool.UsableAtLoadtime = true
 								}
 							}
 						}
@@ -206,7 +204,7 @@ func (gd *GlobalData) loadTools() {
 
 				} else if varname == "_BUILD_DEFS" {
 					for _, bdvar := range splitOnSpace(value) {
-						systemBuildDefs[bdvar] = true
+						src.AddBuildDef(bdvar)
 					}
 				}
 
@@ -221,37 +219,17 @@ func (gd *GlobalData) loadTools() {
 		}
 	}
 
-	if G.opts.Debug {
+	if trace.Tracing {
 		reg.Trace()
 	}
-	if G.opts.Debug {
-		traceStep("systemBuildDefs: %v", systemBuildDefs)
-	}
-
-	// Some user-defined variables do not influence the binary
-	// package at all and therefore do not have to be added to
-	// BUILD_DEFS; therefore they are marked as “already added”.
-	systemBuildDefs["DISTDIR"] = true
-	systemBuildDefs["FETCH_CMD"] = true
-	systemBuildDefs["FETCH_OUTPUT_ARGS"] = true
-	systemBuildDefs["GAMES_USER"] = true
-	systemBuildDefs["GAMES_GROUP"] = true
-	systemBuildDefs["GAMEDATAMODE"] = true
-	systemBuildDefs["GAMEDIRMODE"] = true
-	systemBuildDefs["GAMEMODE"] = true
-	systemBuildDefs["GAMEOWN"] = true
-	systemBuildDefs["GAMEGRP"] = true
-
-	gd.Tools = reg
-	gd.SystemBuildDefs = systemBuildDefs
 }
 
-func loadSuggestedUpdates(fname string) []SuggestedUpdate {
+func (src *Pkgsrc) loadSuggestedUpdatesFile(fname string) []SuggestedUpdate {
 	lines := LoadExistingLines(fname, false)
-	return parselinesSuggestedUpdates(lines)
+	return src.parseSuggestedUpdates(lines)
 }
 
-func parselinesSuggestedUpdates(lines []*Line) []SuggestedUpdate {
+func (src *Pkgsrc) parseSuggestedUpdates(lines []Line) []SuggestedUpdate {
 	var updates []SuggestedUpdate
 	state := 0
 	for _, line := range lines {
@@ -282,19 +260,19 @@ func parselinesSuggestedUpdates(lines []*Line) []SuggestedUpdate {
 	return updates
 }
 
-func (gd *GlobalData) loadSuggestedUpdates() {
-	gd.suggestedUpdates = loadSuggestedUpdates(G.globalData.Pkgsrcdir + "/doc/TODO")
-	if wipFilename := G.globalData.Pkgsrcdir + "/wip/TODO"; fileExists(wipFilename) {
-		gd.suggestedWipUpdates = loadSuggestedUpdates(wipFilename)
+func (src *Pkgsrc) loadSuggestedUpdates() {
+	src.suggestedUpdates = src.loadSuggestedUpdatesFile(G.Pkgsrc.File("doc/TODO"))
+	if wipFilename := G.Pkgsrc.File("wip/TODO"); fileExists(wipFilename) {
+		src.suggestedWipUpdates = src.loadSuggestedUpdatesFile(wipFilename)
 	}
 }
 
-func (gd *GlobalData) loadDocChangesFromFile(fname string) []*Change {
+func (src *Pkgsrc) loadDocChangesFromFile(fname string) []*Change {
 	lines := LoadExistingLines(fname, false)
 
-	parseChange := func(line *Line) *Change {
+	parseChange := func(line Line) *Change {
 		text := line.Text
-		if !hasPrefix(line.Text, "\t") {
+		if !hasPrefix(text, "\t") {
 			return nil
 		}
 
@@ -327,24 +305,24 @@ func (gd *GlobalData) loadDocChangesFromFile(fname string) []*Change {
 	for _, line := range lines {
 		if change := parseChange(line); change != nil {
 			changes = append(changes, change)
-		} else if len(line.Text) >= 2 && line.Text[0] == '\t' && 'A' <= line.Text[1] && line.Text[1] <= 'Z' {
-			line.Warnf("Unknown doc/CHANGES line: %q", line.Text)
+		} else if text := line.Text; len(text) >= 2 && text[0] == '\t' && 'A' <= text[1] && text[1] <= 'Z' {
+			line.Warnf("Unknown doc/CHANGES line: %q", text)
 			Explain("See mk/misc/developer.mk for the rules.")
 		}
 	}
 	return changes
 }
 
-func (gd *GlobalData) GetSuggestedPackageUpdates() []SuggestedUpdate {
+func (src *Pkgsrc) GetSuggestedPackageUpdates() []SuggestedUpdate {
 	if G.Wip {
-		return gd.suggestedWipUpdates
+		return src.suggestedWipUpdates
 	} else {
-		return gd.suggestedUpdates
+		return src.suggestedUpdates
 	}
 }
 
-func (gd *GlobalData) loadDocChanges() {
-	docdir := G.globalData.Pkgsrcdir + "/doc"
+func (src *Pkgsrc) loadDocChanges() {
+	docdir := G.Pkgsrc.File("doc")
 	files, err := ioutil.ReadDir(docdir)
 	if err != nil {
 		NewLineWhole(docdir).Fatalf("Cannot be read.")
@@ -359,30 +337,28 @@ func (gd *GlobalData) loadDocChanges() {
 	}
 
 	sort.Strings(fnames)
-	gd.LastChange = make(map[string]*Change)
+	src.LastChange = make(map[string]*Change)
 	for _, fname := range fnames {
-		changes := gd.loadDocChangesFromFile(docdir + "/" + fname)
+		changes := src.loadDocChangesFromFile(docdir + "/" + fname)
 		for _, change := range changes {
-			gd.LastChange[change.Pkgpath] = change
+			src.LastChange[change.Pkgpath] = change
 		}
 	}
 }
 
-func (gd *GlobalData) loadUserDefinedVars() {
-	lines := LoadExistingLines(G.globalData.Pkgsrcdir+"/mk/defaults/mk.conf", true)
+func (src *Pkgsrc) loadUserDefinedVars() {
+	lines := G.Pkgsrc.LoadExistingLines("mk/defaults/mk.conf", true)
 	mklines := NewMkLines(lines)
 
-	gd.UserDefinedVars = make(map[string]*MkLine)
 	for _, mkline := range mklines.mklines {
 		if mkline.IsVarassign() {
-			gd.UserDefinedVars[mkline.Varname()] = mkline
+			src.UserDefinedVars[mkline.Varname()] = mkline
 		}
 	}
 }
 
-func (gd *GlobalData) loadDeprecatedVars() {
-	gd.Deprecated = map[string]string{
-
+func (src *Pkgsrc) initDeprecatedVars() {
+	src.Deprecated = map[string]string{
 		// December 2003
 		"FIX_RPATH": "It has been removed from pkgsrc in 2003.",
 
@@ -542,81 +518,89 @@ func (gd *GlobalData) loadDeprecatedVars() {
 	}
 }
 
-// See `mk/tools/`.
-type Tool struct {
-	Name             string // e.g. "sed", "gzip"
-	Varname          string // e.g. "SED", "GZIP_CMD"
-	MustUseVarForm   bool   // True for `echo`, because of many differing implementations.
-	Predefined       bool   // This tool is used by the pkgsrc infrastructure, therefore the package does not need to add it to `USE_TOOLS` explicitly.
-	UsableAtLoadtime bool   // May be used after including `bsd.prefs.mk`.
+// LoadExistingLines loads the file relative to the pkgsrc top directory.
+func (src *Pkgsrc) LoadExistingLines(fileName string, joinBackslashLines bool) []Line {
+	return LoadExistingLines(src.File(fileName), joinBackslashLines)
 }
 
-type ToolRegistry struct {
-	byName    map[string]*Tool
-	byVarname map[string]*Tool
+// File resolves a file name relative to the pkgsrc top directory.
+//
+// Example:
+//  NewPkgsrc("/usr/pkgsrc").File("distfiles") => "/usr/pkgsrc/distfiles"
+func (src *Pkgsrc) File(relativeName string) string {
+	return src.topdir + "/" + relativeName
 }
 
-func NewToolRegistry() ToolRegistry {
-	return ToolRegistry{make(map[string]*Tool), make(map[string]*Tool)}
+// ToRel returns the path of `fileName`, relative to the pkgsrc top directory.
+//
+// Example:
+//  NewPkgsrc("/usr/pkgsrc").ToRel("/usr/pkgsrc/distfiles") => "distfiles"
+func (src *Pkgsrc) ToRel(fileName string) string {
+	return relpath(src.topdir, fileName)
 }
 
-func (tr *ToolRegistry) Register(toolname string) *Tool {
-	tool := tr.byName[toolname]
-	if tool == nil {
-		tool = &Tool{Name: toolname}
-		tr.byName[toolname] = tool
-	}
-	return tool
+func (src *Pkgsrc) AddBuildDef(varname string) {
+	src.buildDefs[varname] = true
 }
 
-func (tr *ToolRegistry) RegisterVarname(toolname, varname string) *Tool {
-	tool := tr.Register(toolname)
-	tool.Varname = varname
-	tr.byVarname[varname] = tool
-	return tool
+func (src *Pkgsrc) IsBuildDef(varname string) bool {
+	return src.buildDefs[varname]
 }
 
-func (tr *ToolRegistry) RegisterTool(tool *Tool) {
-	if tool.Name != "" && tr.byName[tool.Name] == nil {
-		tr.byName[tool.Name] = tool
-	}
-	if tool.Varname != "" && tr.byVarname[tool.Varname] == nil {
-		tr.byVarname[tool.Varname] = tool
-	}
-}
+func (src *Pkgsrc) loadMasterSites() {
+	lines := src.LoadExistingLines("mk/fetch/sites.mk", true)
 
-func (tr *ToolRegistry) Trace() {
-	if G.opts.Debug {
-		defer tracecall0()()
-	}
-
-	var keys []string
-	for k := range tr.byName {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	for _, toolname := range keys {
-		traceStep("tool %+v", tr.byName[toolname])
-	}
-}
-
-func (tr *ToolRegistry) ParseToolLine(line *Line) {
-	if m, varname, _, _, _, value, _, _ := MatchVarassign(line.Text); m {
-		if varname == "TOOLS_CREATE" && (value == "[" || matches(value, `^?[-\w.]+$`)) {
-			tr.Register(value)
-
-		} else if m, toolname := match1(varname, `^_TOOLS_VARNAME\.([-\w.]+|\[)$`); m {
-			tr.RegisterVarname(toolname, value)
-
-		} else if m, toolname := match1(varname, `^(?:TOOLS_PATH|_TOOLS_DEPMETHOD)\.([-\w.]+|\[)$`); m {
-			tr.Register(toolname)
-
-		} else if m, toolname := match1(varname, `_TOOLS\.(.*)`); m {
-			tr.Register(toolname)
-			for _, tool := range splitOnSpace(value) {
-				tr.Register(tool)
+	nameToUrl := src.MasterSiteVarToURL
+	urlToName := src.MasterSiteURLToVar
+	for _, line := range lines {
+		if m, commented, varname, _, _, _, urls, _, _ := MatchVarassign(line.Text); m {
+			if !commented && hasPrefix(varname, "MASTER_SITE_") && varname != "MASTER_SITE_BACKUP" {
+				for _, url := range splitOnSpace(urls) {
+					if matches(url, `^(?:http://|https://|ftp://)`) {
+						if nameToUrl[varname] == "" {
+							nameToUrl[varname] = url
+						}
+						urlToName[url] = varname
+					}
+				}
 			}
 		}
 	}
+
+	// Explicitly allowed, although not defined in mk/fetch/sites.mk.
+	nameToUrl["MASTER_SITE_LOCAL"] = "ftp://ftp.NetBSD.org/pub/pkgsrc/distfiles/LOCAL_PORTS/"
+
+	if trace.Tracing {
+		trace.Stepf("Loaded %d MASTER_SITE_* URLs.", len(urlToName))
+	}
+}
+
+func (src *Pkgsrc) loadPkgOptions() {
+	lines := src.LoadExistingLines("mk/defaults/options.description", false)
+
+	for _, line := range lines {
+		if m, optname, optdescr := match2(line.Text, `^([-0-9a-z_+]+)(?:\s+(.*))?$`); m {
+			src.PkgOptions[optname] = optdescr
+		} else {
+			line.Fatalf("Unknown line format.")
+		}
+	}
+}
+
+// Change is a change entry from the `doc/CHANGES-*` files.
+type Change struct {
+	Line    Line
+	Action  string
+	Pkgpath string
+	Version string
+	Author  string
+	Date    string
+}
+
+// SuggestedUpdate is from the `doc/TODO` file.
+type SuggestedUpdate struct {
+	Line    Line
+	Pkgname string
+	Version string
+	Comment string
 }

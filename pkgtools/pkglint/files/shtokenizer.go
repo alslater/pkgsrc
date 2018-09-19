@@ -1,11 +1,15 @@
 package main
 
+import (
+	"netbsd.org/pkglint/textproc"
+)
+
 type ShTokenizer struct {
 	parser *Parser
 	mkp    *MkParser
 }
 
-func NewShTokenizer(line *Line, text string, emitWarnings bool) *ShTokenizer {
+func NewShTokenizer(line Line, text string, emitWarnings bool) *ShTokenizer {
 	p := NewParser(line, text, emitWarnings)
 	mkp := &MkParser{p}
 	return &ShTokenizer{p, mkp}
@@ -52,7 +56,11 @@ func (p *ShTokenizer) ShAtom(quoting ShQuoting) *ShAtom {
 
 	if atom == nil {
 		repl.Reset(mark)
-		p.parser.Line.Warnf("Pkglint parse error in ShTokenizer.ShAtom at %q (quoting=%s)", repl.rest, quoting)
+		if hasPrefix(repl.Rest(), "${") {
+			p.parser.Line.Warnf("Unclosed Make variable starting at %q", shorten(repl.Rest(), 20))
+		} else {
+			p.parser.Line.Warnf("Pkglint parse error in ShTokenizer.ShAtom at %q (quoting=%s)", repl.Rest(), quoting)
+		}
 	}
 	return atom
 }
@@ -65,19 +73,19 @@ func (p *ShTokenizer) shAtomPlain() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceHspace():
-		return &ShAtom{shtSpace, repl.s, q, nil}
+		return &ShAtom{shtSpace, repl.Str(), q, nil}
 	case repl.AdvanceStr("\""):
-		return &ShAtom{shtWord, repl.s, shqDquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquot, nil}
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqSquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqSquot, nil}
 	case repl.AdvanceStr("`"):
-		return &ShAtom{shtWord, repl.s, shqBackt, nil}
+		return &ShAtom{shtWord, repl.Str(), shqBackt, nil}
 	case repl.AdvanceRegexp(`^#.*`):
-		return &ShAtom{shtComment, repl.m[0], q, nil}
+		return &ShAtom{shtComment, repl.Group(0), q, nil}
 	case repl.AdvanceStr("$$("):
-		return &ShAtom{shtSubshell, repl.s, q, nil}
+		return &ShAtom{shtSubshell, repl.Str(), q, nil}
 	case repl.AdvanceRegexp(`^(?:[!#%*+,\-./0-9:=?@A-Z\[\]^_a-z{}~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.m[0], q, nil}
+		return &ShAtom{shtWord, repl.Group(0), q, nil}
 	}
 	return nil
 }
@@ -86,11 +94,11 @@ func (p *ShTokenizer) shAtomDquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("\""):
-		return &ShAtom{shtWord, repl.s, shqPlain, nil}
+		return &ShAtom{shtWord, repl.Str(), shqPlain, nil}
 	case repl.AdvanceStr("`"):
-		return &ShAtom{shtWord, repl.s, shqDquotBackt, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquotBackt, nil}
 	case repl.AdvanceRegexp(`^(?:[\t !#%&'()*+,\-./0-9:;<=>?@A-Z\[\]^_a-z{|}~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.m[0], shqDquot, nil} // XXX: unescape?
+		return &ShAtom{shtWord, repl.Group(0), shqDquot, nil} // XXX: unescape?
 	}
 	return nil
 }
@@ -99,9 +107,9 @@ func (p *ShTokenizer) shAtomSquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqPlain, nil}
+		return &ShAtom{shtWord, repl.Str(), shqPlain, nil}
 	case repl.AdvanceRegexp(`^([\t !"#%&()*+,\-./0-9:;<=>?@A-Z\[\\\]^_` + "`" + `a-z{|}~]+|\$\$)+`):
-		return &ShAtom{shtWord, repl.m[0], shqSquot, nil}
+		return &ShAtom{shtWord, repl.Group(0), shqSquot, nil}
 	}
 	return nil
 }
@@ -114,17 +122,17 @@ func (p *ShTokenizer) shAtomBackt() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("\""):
-		return &ShAtom{shtWord, repl.s, shqBacktDquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqBacktDquot, nil}
 	case repl.AdvanceStr("`"):
-		return &ShAtom{shtWord, repl.s, shqPlain, nil}
+		return &ShAtom{shtWord, repl.Str(), shqPlain, nil}
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqBacktSquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqBacktSquot, nil}
 	case repl.AdvanceHspace():
-		return &ShAtom{shtSpace, repl.s, q, nil}
+		return &ShAtom{shtSpace, repl.Str(), q, nil}
 	case repl.AdvanceRegexp("^#[^`]*"):
-		return &ShAtom{shtComment, repl.s, q, nil}
+		return &ShAtom{shtComment, repl.Str(), q, nil}
 	case repl.AdvanceRegexp(`^(?:[!#%*+,\-./0-9:=?@A-Z\[\]_a-z~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.s, q, nil}
+		return &ShAtom{shtWord, repl.Str(), q, nil}
 	}
 	return nil
 }
@@ -143,17 +151,17 @@ func (p *ShTokenizer) shAtomSub() *ShAtom {
 	case repl.AdvanceHspace():
 		return atom(shtSpace)
 	case repl.AdvanceStr("\""):
-		//return &ShAtom{shtWord, repl.s, shqDquot, nil}
+	//return &ShAtom{shtWord, repl.Str(), shqDquot, nil}
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqSubshSquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqSubshSquot, nil}
 	case repl.AdvanceStr("`"):
-		//return &ShAtom{shtWord, repl.s, shqBackt, nil}
+	//return &ShAtom{shtWord, repl.Str(), shqBackt, nil}
 	case repl.AdvanceRegexp(`^#.*`):
-		return &ShAtom{shtComment, repl.m[0], q, nil}
+		return &ShAtom{shtComment, repl.Group(0), q, nil}
 	case repl.AdvanceStr(")"):
-		return &ShAtom{shtWord, repl.s, shqPlain, nil}
+		return &ShAtom{shtWord, repl.Str(), shqPlain, nil}
 	case repl.AdvanceRegexp(`^(?:[!#%*+,\-./0-9:=?@A-Z\[\]^_a-z{}~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.m[0], q, nil}
+		return &ShAtom{shtWord, repl.Group(0), q, nil}
 	}
 	return nil
 }
@@ -166,17 +174,17 @@ func (p *ShTokenizer) shAtomDquotBackt() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("`"):
-		return &ShAtom{shtWord, repl.s, shqDquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquot, nil}
 	case repl.AdvanceStr("\""):
-		return &ShAtom{shtWord, repl.s, shqDquotBacktDquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquotBacktDquot, nil}
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqDquotBacktSquot, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquotBacktSquot, nil}
 	case repl.AdvanceRegexp("^#[^`]*"):
-		return &ShAtom{shtComment, repl.s, q, nil}
+		return &ShAtom{shtComment, repl.Str(), q, nil}
 	case repl.AdvanceRegexp(`^(?:[!#%*+,\-./0-9:=?@A-Z\[\]_a-z~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.s, q, nil}
+		return &ShAtom{shtWord, repl.Str(), q, nil}
 	case repl.AdvanceHspace():
-		return &ShAtom{shtSpace, repl.s, q, nil}
+		return &ShAtom{shtSpace, repl.Str(), q, nil}
 	}
 	return nil
 }
@@ -185,9 +193,9 @@ func (p *ShTokenizer) shAtomBacktDquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("\""):
-		return &ShAtom{shtWord, repl.s, shqBackt, nil}
+		return &ShAtom{shtWord, repl.Str(), shqBackt, nil}
 	case repl.AdvanceRegexp(`^(?:[\t !%&()*+,\-./0-9:;<=>?@A-Z\[\]^_a-z{|}~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.m[0], shqBacktDquot, nil}
+		return &ShAtom{shtWord, repl.Group(0), shqBacktDquot, nil}
 	}
 	return nil
 }
@@ -197,9 +205,9 @@ func (p *ShTokenizer) shAtomBacktSquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqBackt, nil}
+		return &ShAtom{shtWord, repl.Str(), shqBackt, nil}
 	case repl.AdvanceRegexp(`^([\t !"#%&()*+,\-./0-9:;<=>?@A-Z\[\\\]^_` + "`" + `a-z{|}~]+|\$\$)+`):
-		return &ShAtom{shtWord, repl.m[0], q, nil}
+		return &ShAtom{shtWord, repl.Group(0), q, nil}
 	}
 	return nil
 }
@@ -209,9 +217,9 @@ func (p *ShTokenizer) shAtomSubshSquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqSubsh, nil}
+		return &ShAtom{shtWord, repl.Str(), shqSubsh, nil}
 	case repl.AdvanceRegexp(`^([\t !"#%&()*+,\-./0-9:;<=>?@A-Z\[\\\]^_` + "`" + `a-z{|}~]+|\$\$)+`):
-		return &ShAtom{shtWord, repl.m[0], q, nil}
+		return &ShAtom{shtWord, repl.Group(0), q, nil}
 	}
 	return nil
 }
@@ -221,9 +229,9 @@ func (p *ShTokenizer) shAtomDquotBacktDquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("\""):
-		return &ShAtom{shtWord, repl.s, shqDquotBackt, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquotBackt, nil}
 	case repl.AdvanceRegexp(`^(?:[\t !%&()*+,\-./0-9:;<=>?@A-Z\[\]^_a-z{|}~]+|\\[^$]|` + reShDollar + `)+`):
-		return &ShAtom{shtWord, repl.m[0], q, nil}
+		return &ShAtom{shtWord, repl.Group(0), q, nil}
 	}
 	return nil
 }
@@ -232,9 +240,9 @@ func (p *ShTokenizer) shAtomDquotBacktSquot() *ShAtom {
 	repl := p.parser.repl
 	switch {
 	case repl.AdvanceStr("'"):
-		return &ShAtom{shtWord, repl.s, shqDquotBackt, nil}
+		return &ShAtom{shtWord, repl.Str(), shqDquotBackt, nil}
 	case repl.AdvanceRegexp(`^(?:[\t !"#%()*+,\-./0-9:;<=>?@A-Z\[\]^_a-z{|}~]+|\\[^$]|\\\$\$|\$\$)+`):
-		return &ShAtom{shtWord, repl.m[0], shqDquotBacktSquot, nil}
+		return &ShAtom{shtWord, repl.Group(0), shqDquotBacktSquot, nil}
 	}
 	return nil
 }
@@ -251,9 +259,9 @@ func (p *ShTokenizer) shOperator(q ShQuoting) *ShAtom {
 		repl.AdvanceStr(")"),
 		repl.AdvanceStr("|"),
 		repl.AdvanceStr("&"):
-		return &ShAtom{shtOperator, repl.s, q, nil}
+		return &ShAtom{shtOperator, repl.Str(), q, nil}
 	case repl.AdvanceRegexp(`^\d*(?:<<-|<<|<&|<>|>>|>&|>\||<|>)`):
-		return &ShAtom{shtOperator, repl.m[0], q, nil}
+		return &ShAtom{shtOperator, repl.Group(0), q, nil}
 	}
 	return nil
 }
@@ -319,11 +327,11 @@ nextatom:
 	return NewShToken(repl.Since(inimark), atoms...)
 }
 
-func (p *ShTokenizer) Mark() PrefixReplacerMark {
+func (p *ShTokenizer) Mark() textproc.PrefixReplacerMark {
 	return p.parser.repl.Mark()
 }
 
-func (p *ShTokenizer) Reset(mark PrefixReplacerMark) {
+func (p *ShTokenizer) Reset(mark textproc.PrefixReplacerMark) {
 	p.parser.repl.Reset(mark)
 }
 

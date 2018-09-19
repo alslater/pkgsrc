@@ -2,12 +2,15 @@ package main
 
 import (
 	"io/ioutil"
-	"os"
 	"strings"
 )
 
-func LoadNonemptyLines(fname string, joinContinuationLines bool) []*Line {
-	lines, err := readLines(fname, joinContinuationLines)
+// LoadNonemptyLines loads the given file.
+// If the file doesn't exist or is empty, an error is logged.
+//
+// See [LoadExistingLines].
+func LoadNonemptyLines(fname string, joinBackslashLines bool) []Line {
+	lines, err := readLines(fname, joinBackslashLines)
 	if err != nil {
 		NewLineWhole(fname).Errorf("Cannot be read.")
 		return nil
@@ -19,18 +22,15 @@ func LoadNonemptyLines(fname string, joinContinuationLines bool) []*Line {
 	return lines
 }
 
-func LoadExistingLines(fname string, foldBackslashLines bool) []*Line {
-	lines, err := readLines(fname, foldBackslashLines)
+func LoadExistingLines(fname string, joinBackslashLines bool) []Line {
+	lines, err := readLines(fname, joinBackslashLines)
 	if err != nil {
 		NewLineWhole(fname).Fatalf("Cannot be read.")
-	}
-	if lines == nil {
-		NewLineWhole(fname).Fatalf("Must not be empty.")
 	}
 	return lines
 }
 
-func getLogicalLine(fname string, rawLines []*RawLine, pindex *int) *Line {
+func nextLogicalLine(fname string, rawLines []*RawLine, pindex *int) Line {
 	{ // Handle the common case efficiently
 		index := *pindex
 		rawLine := rawLines[index]
@@ -72,26 +72,30 @@ func getLogicalLine(fname string, rawLines []*RawLine, pindex *int) *Line {
 }
 
 func splitRawLine(textnl string) (leadingWhitespace, text, trailingWhitespace, cont string) {
-	i, m := 0, len(textnl)
+	end := len(textnl)
 
-	if m > i && textnl[m-1] == '\n' {
-		m--
+	if end-1 >= 0 && textnl[end-1] == '\n' {
+		end--
 	}
 
-	if m > i && textnl[m-1] == '\\' {
-		m--
-		cont = textnl[m : m+1]
+	backslashes := 0
+	for end-1 >= 0 && textnl[end-1] == '\\' {
+		end--
+		backslashes++
 	}
+	cont = textnl[end : end+backslashes%2]
+	end += backslashes / 2
 
-	trailingEnd := m
-	for m > i && (textnl[m-1] == ' ' || textnl[m-1] == '\t') {
-		m--
+	trailingEnd := end
+	for end-1 >= 0 && (textnl[end-1] == ' ' || textnl[end-1] == '\t') {
+		end--
 	}
-	trailingStart := m
+	trailingStart := end
 	trailingWhitespace = textnl[trailingStart:trailingEnd]
 
+	i := 0
 	leadingStart := i
-	for i < m && (textnl[i] == ' ' || textnl[i] == '\t') {
+	for i < end && (textnl[i] == ' ' || textnl[i] == '\t') {
 		i++
 	}
 	leadingEnd := i
@@ -101,16 +105,16 @@ func splitRawLine(textnl string) (leadingWhitespace, text, trailingWhitespace, c
 	return
 }
 
-func readLines(fname string, joinContinuationLines bool) ([]*Line, error) {
+func readLines(fname string, joinBackslashLines bool) ([]Line, error) {
 	rawText, err := ioutil.ReadFile(fname)
 	if err != nil {
 		return nil, err
 	}
 
-	return convertToLogicalLines(fname, string(rawText), joinContinuationLines), nil
+	return convertToLogicalLines(fname, string(rawText), joinBackslashLines), nil
 }
 
-func convertToLogicalLines(fname string, rawText string, joinContinuationLines bool) []*Line {
+func convertToLogicalLines(fname string, rawText string, joinBackslashLines bool) []Line {
 	var rawLines []*RawLine
 	for lineno, rawLine := range strings.SplitAfter(rawText, "\n") {
 		if rawLine != "" {
@@ -118,10 +122,10 @@ func convertToLogicalLines(fname string, rawText string, joinContinuationLines b
 		}
 	}
 
-	var loglines []*Line
-	if joinContinuationLines {
+	var loglines []Line
+	if joinBackslashLines {
 		for lineno := 0; lineno < len(rawLines); {
-			loglines = append(loglines, getLogicalLine(fname, rawLines, &lineno))
+			loglines = append(loglines, nextLogicalLine(fname, rawLines, &lineno))
 		}
 	} else {
 		for _, rawLine := range rawLines {
@@ -136,47 +140,4 @@ func convertToLogicalLines(fname string, rawText string, joinContinuationLines b
 	}
 
 	return loglines
-}
-
-func SaveAutofixChanges(lines []*Line) (autofixed bool) {
-	if !G.opts.Autofix {
-		for _, line := range lines {
-			if line.changed {
-				G.autofixAvailable = true
-			}
-		}
-		return
-	}
-
-	changes := make(map[string][]string)
-	changed := make(map[string]bool)
-	for _, line := range lines {
-		if line.changed {
-			changed[line.Fname] = true
-		}
-		changes[line.Fname] = append(changes[line.Fname], line.modifiedLines()...)
-	}
-
-	for fname := range changed {
-		changedLines := changes[fname]
-		tmpname := fname + ".pkglint.tmp"
-		text := ""
-		for _, changedLine := range changedLines {
-			text += changedLine
-		}
-		err := ioutil.WriteFile(tmpname, []byte(text), 0666)
-		if err != nil {
-			NewLineWhole(tmpname).Errorf("Cannot write.")
-			continue
-		}
-		err = os.Rename(tmpname, fname)
-		if err != nil {
-			NewLineWhole(fname).Errorf("Cannot overwrite with auto-fixed content.")
-			continue
-		}
-		msg := "Has been auto-fixed. Please re-run pkglint."
-		logs(llAutofix, fname, "", msg, msg)
-		autofixed = true
-	}
-	return
 }

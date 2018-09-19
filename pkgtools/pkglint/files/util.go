@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"io/ioutil"
+	"netbsd.org/pkglint/regex"
+	"netbsd.org/pkglint/trace"
 	"os"
 	"path"
 	"path/filepath"
-	"reflect"
 	"regexp"
-	"runtime"
 	"sort"
 	"strconv"
 	"strings"
@@ -17,9 +16,30 @@ import (
 )
 
 // Short names for commonly used functions.
-func contains(s, substr string) bool  { return strings.Contains(s, substr) }
-func hasPrefix(s, prefix string) bool { return strings.HasPrefix(s, prefix) }
-func hasSuffix(s, suffix string) bool { return strings.HasSuffix(s, suffix) }
+func contains(s, substr string) bool {
+	return strings.Contains(s, substr)
+}
+func hasPrefix(s, prefix string) bool {
+	return strings.HasPrefix(s, prefix)
+}
+func hasSuffix(s, suffix string) bool {
+	return strings.HasSuffix(s, suffix)
+}
+func matches(s string, re regex.Pattern) bool {
+	return regex.Matches(s, re)
+}
+func match1(s string, re regex.Pattern) (matched bool, m1 string) {
+	return regex.Match1(s, re)
+}
+func match2(s string, re regex.Pattern) (matched bool, m1, m2 string) {
+	return regex.Match2(s, re)
+}
+func match3(s string, re regex.Pattern) (matched bool, m1, m2, m3 string) {
+	return regex.Match3(s, re)
+}
+func match4(s string, re regex.Pattern) (matched bool, m1, m2, m3, m4 string) {
+	return regex.Match4(s, re)
+}
 
 func ifelseStr(cond bool, a, b string) string {
 	if cond {
@@ -28,8 +48,24 @@ func ifelseStr(cond bool, a, b string) string {
 	return b
 }
 
-func mustMatch(s string, re RegexPattern) []string {
-	if m := match(s, re); m != nil {
+func keysJoined(m map[string]bool) string {
+	var keys []string
+	for key := range m {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return strings.Join(keys, " ")
+}
+
+func imax(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}
+
+func mustMatch(s string, re regex.Pattern) []string {
+	if m := regex.Match(s, re); m != nil {
 		return m
 	}
 	panic(fmt.Sprintf("mustMatch %q %q", s, re))
@@ -42,7 +78,7 @@ func isEmptyDir(fname string) bool {
 	}
 	for _, dirent := range dirents {
 		name := dirent.Name()
-		if name == "." || name == ".." || name == "CVS" {
+		if isIgnoredFilename(name) {
 			continue
 		}
 		if dirent.IsDir() && isEmptyDir(fname+"/"+name) {
@@ -62,11 +98,19 @@ func getSubdirs(fname string) []string {
 	var subdirs []string
 	for _, dirent := range dirents {
 		name := dirent.Name()
-		if name != "." && name != ".." && name != "CVS" && dirent.IsDir() && !isEmptyDir(fname+"/"+name) {
+		if dirent.IsDir() && !isIgnoredFilename(name) && !isEmptyDir(fname+"/"+name) {
 			subdirs = append(subdirs, name)
 		}
 	}
 	return subdirs
+}
+
+func isIgnoredFilename(fileName string) bool {
+	switch fileName {
+	case ".", "..", "CVS", ".svn", ".git", ".hg":
+		return true
+	}
+	return false
 }
 
 // Checks whether a file is already committed to the CVS repository.
@@ -96,9 +140,10 @@ func isLocallyModified(fname string) bool {
 			}
 
 			// https://msdn.microsoft.com/en-us/library/windows/desktop/ms724290(v=vs.85).aspx
+			// (System Services > Windows System Information > Time > About Time > File Times)
 			delta := cvsModTime.Unix() - st.ModTime().Unix()
-			if G.opts.Debug {
-				traceStep("cvs.time=%v fs.time=%v delta=%v", cvsModTime, st.ModTime(), delta)
+			if trace.Tracing {
+				trace.Stepf("cvs.time=%v fs.time=%v delta=%v", cvsModTime, st.ModTime(), delta)
 			}
 			return !(-2 <= delta && delta <= 2)
 		}
@@ -106,7 +151,7 @@ func isLocallyModified(fname string) bool {
 	return false
 }
 
-func loadCvsEntries(fname string) []*Line {
+func loadCvsEntries(fname string) []Line {
 	dir := path.Dir(fname)
 	if dir == G.CvsEntriesDir {
 		return G.CvsEntriesLines
@@ -123,7 +168,7 @@ func loadCvsEntries(fname string) []*Line {
 
 // Returns the number of columns that a string occupies when printed with
 // a tabulator size of 8.
-func tabLength(s string) int {
+func tabWidth(s string) int {
 	length := 0
 	for _, r := range s {
 		if r == '\t' {
@@ -133,6 +178,30 @@ func tabLength(s string) int {
 		}
 	}
 	return length
+}
+
+func detab(s string) string {
+	detabbed := ""
+	for _, r := range s {
+		if r == '\t' {
+			detabbed += "        "[:8-len(detabbed)%8]
+		} else {
+			detabbed += string(r)
+		}
+	}
+	return detabbed
+}
+
+func shorten(s string, maxChars int) string {
+	chars := 0
+	for i := range s {
+		if chars >= maxChars {
+			return s[:i] + "..."
+			break
+		}
+		chars++
+	}
+	return s
 }
 
 func varnameBase(varname string) string {
@@ -157,38 +226,34 @@ func varnameParam(varname string) string {
 	return ""
 }
 
-func defineVar(mkline *MkLine, varname string) {
+// defineVar marks a variable as defined in both the current package and the current file.
+func defineVar(mkline MkLine, varname string) {
 	if G.Mk != nil {
-		G.Mk.DefineVar(mkline, varname)
+		G.Mk.vars.Define(varname, mkline)
 	}
 	if G.Pkg != nil {
-		G.Pkg.defineVar(mkline, varname)
+		G.Pkg.vars.Define(varname, mkline)
 	}
-}
-func varIsDefined(varname string) bool {
-	varcanon := varnameCanon(varname)
-	if G.Mk != nil && (G.Mk.vardef[varname] != nil || G.Mk.vardef[varcanon] != nil) {
-		return true
-	}
-	if G.Pkg != nil && (G.Pkg.vardef[varname] != nil || G.Pkg.vardef[varcanon] != nil) {
-		return true
-	}
-	return false
 }
 
+// varIsDefined tests whether the variable (or its canonicalized form)
+// is defined in the current package or in the current file.
+// TODO: rename to similar
+func varIsDefined(varname string) bool {
+	return G.Mk != nil && G.Mk.vars.DefinedSimilar(varname) ||
+		G.Pkg != nil && G.Pkg.vars.DefinedSimilar(varname)
+}
+
+// varIsUsed tests whether the variable (or its canonicalized form)
+// is used in the current package or in the current file.
+// TODO: rename to similar
 func varIsUsed(varname string) bool {
-	varcanon := varnameCanon(varname)
-	if G.Mk != nil && (G.Mk.varuse[varname] != nil || G.Mk.varuse[varcanon] != nil) {
-		return true
-	}
-	if G.Pkg != nil && (G.Pkg.varuse[varname] != nil || G.Pkg.varuse[varcanon] != nil) {
-		return true
-	}
-	return false
+	return G.Mk != nil && G.Mk.vars.UsedSimilar(varname) ||
+		G.Pkg != nil && G.Pkg.vars.UsedSimilar(varname)
 }
 
 func splitOnSpace(s string) []string {
-	return regcomp(`\s+`).Split(s, -1)
+	return regex.Compile(`\S+`).FindAllString(s, -1)
 }
 
 func fileExists(fname string) bool {
@@ -199,109 +264,6 @@ func fileExists(fname string) bool {
 func dirExists(fname string) bool {
 	st, err := os.Stat(fname)
 	return err == nil && st.Mode().IsDir()
-}
-
-type PrefixReplacerMark string
-
-type PrefixReplacer struct {
-	rest string
-	s    string   // The last match from a prefix
-	m    []string // The last match from a regular expression
-}
-
-func NewPrefixReplacer(s string) *PrefixReplacer {
-	return &PrefixReplacer{s, "", nil}
-}
-
-func (pr *PrefixReplacer) AdvanceStr(prefix string) bool {
-	pr.m = nil
-	pr.s = ""
-	if hasPrefix(pr.rest, prefix) {
-		if G.opts.Debug {
-			traceStep("PrefixReplacer.AdvanceStr(%q, %q)", pr.rest, prefix)
-		}
-		pr.s = prefix
-		pr.rest = pr.rest[len(prefix):]
-		return true
-	}
-	return false
-}
-
-func (pr *PrefixReplacer) AdvanceBytesFunc(fn func(c byte) bool) bool {
-	i := 0
-	for i < len(pr.rest) && fn(pr.rest[i]) {
-		i++
-	}
-	if i != 0 {
-		pr.s = pr.rest[:i]
-		pr.rest = pr.rest[i:]
-		return true
-	}
-	return false
-}
-
-func (pr *PrefixReplacer) AdvanceHspace() bool {
-	i := 0
-	rest := pr.rest
-	for i < len(rest) && (rest[i] == ' ' || rest[i] == '\t') {
-		i++
-	}
-	if i != 0 {
-		pr.s = pr.rest[:i]
-		pr.rest = pr.rest[i:]
-		return true
-	}
-	return false
-}
-
-func (pr *PrefixReplacer) AdvanceRegexp(re RegexPattern) bool {
-	pr.m = nil
-	pr.s = ""
-	if !hasPrefix(string(re), "^") {
-		panic(fmt.Sprintf("PrefixReplacer.AdvanceRegexp: regular expression %q must have prefix %q.", re, "^"))
-	}
-	if G.Testing && matches("", re) {
-		panic(fmt.Sprintf("PrefixReplacer.AdvanceRegexp: the empty string must not match the regular expression %q.", re))
-	}
-	if m := match(pr.rest, re); m != nil {
-		if G.opts.Debug {
-			traceStep("PrefixReplacer.AdvanceRegexp(%q, %q, %q)", pr.rest, re, m[0])
-		}
-		pr.rest = pr.rest[len(m[0]):]
-		pr.m = m
-		pr.s = m[0]
-		return true
-	}
-	return false
-}
-
-func (pr *PrefixReplacer) PeekByte() int {
-	rest := pr.rest
-	if len(rest) == 0 {
-		return -1
-	}
-	return int(rest[0])
-}
-
-func (pr *PrefixReplacer) Mark() PrefixReplacerMark {
-	return PrefixReplacerMark(pr.rest)
-}
-func (pr *PrefixReplacer) Reset(mark PrefixReplacerMark) {
-	pr.rest = string(mark)
-}
-func (pr *PrefixReplacer) Skip(n int) {
-	pr.rest = pr.rest[n:]
-}
-func (pr *PrefixReplacer) SkipSpace() {
-	pr.rest = strings.TrimLeft(pr.rest, " \t")
-}
-func (pr *PrefixReplacer) Since(mark PrefixReplacerMark) string {
-	return string(mark[:len(mark)-len(pr.rest)])
-}
-func (pr *PrefixReplacer) AdvanceRest() string {
-	rest := pr.rest
-	pr.rest = ""
-	return rest
 }
 
 // Useful in combination with regex.Find*Index
@@ -324,111 +286,24 @@ func dirglob(dirname string) []string {
 	if err != nil {
 		return nil
 	}
-	fnames := make([]string, len(fis))
-	for i, fi := range fis {
-		fnames[i] = dirname + "/" + fi.Name()
+	var fnames []string
+	for _, fi := range fis {
+		if !(isIgnoredFilename(fi.Name())) {
+			fnames = append(fnames, dirname+"/"+fi.Name())
+		}
 	}
 	return fnames
 }
 
-// http://stackoverflow.com/questions/13476349/check-for-nil-and-nil-interface-in-go
-func isNil(a interface{}) bool {
-	defer func() { recover() }()
-	return a == nil || reflect.ValueOf(a).IsNil()
-}
-
-func argsStr(args ...interface{}) string {
-	argsStr := ""
-	for i, arg := range args {
-		if i != 0 {
-			argsStr += ", "
-		}
-		if str, ok := arg.(fmt.Stringer); ok && !isNil(str) {
-			argsStr += str.String()
-		} else {
-			argsStr += fmt.Sprintf("%#v", arg)
-		}
-	}
-	return argsStr
-}
-
-func traceIndent() string {
-	indent := ""
-	for i := 0; i < G.traceDepth; i++ {
-		indent += fmt.Sprintf("%d ", i+1)
-	}
-	return indent
-}
-
-func traceStep(format string, args ...interface{}) {
-	if G.opts.Debug {
-		msg := fmt.Sprintf(format, args...)
-		io.WriteString(G.debugOut, fmt.Sprintf("TRACE: %s  %s\n", traceIndent(), msg))
-	}
-}
-func traceStep1(format string, arg0 string) {
-	traceStep(format, arg0)
-}
-func traceStep2(format string, arg0, arg1 string) {
-	traceStep(format, arg0, arg1)
-}
-
-func tracecallInternal(args ...interface{}) func() {
-	if !G.opts.Debug {
-		panic("Internal pkglint error: calls to tracecall must only occur in tracing mode")
-	}
-
-	funcname := "?"
-	if pc, _, _, ok := runtime.Caller(2); ok {
-		if fn := runtime.FuncForPC(pc); fn != nil {
-			funcname = strings.TrimPrefix(fn.Name(), "netbsd.org/pkglint.")
-		}
-	}
-	indent := traceIndent()
-	io.WriteString(G.debugOut, fmt.Sprintf("TRACE: %s+ %s(%s)\n", indent, funcname, argsStr(args...)))
-	G.traceDepth++
-
-	return func() {
-		G.traceDepth--
-		io.WriteString(G.debugOut, fmt.Sprintf("TRACE: %s- %s(%s)\n", indent, funcname, argsStr(args...)))
-	}
-}
-func tracecall0() func() {
-	return tracecallInternal()
-}
-func tracecall1(arg1 string) func() {
-	return tracecallInternal(arg1)
-}
-func tracecall2(arg1, arg2 string) func() {
-	return tracecallInternal(arg1, arg2)
-}
-func tracecall(args ...interface{}) func() {
-	return tracecallInternal(args...)
-}
-
-type Ref struct {
-	intf interface{}
-}
-
-func ref(rv interface{}) Ref {
-	return Ref{rv}
-}
-
-func (r Ref) String() string {
-	ptr := reflect.ValueOf(r.intf)
-	ref := reflect.Indirect(ptr)
-	return fmt.Sprintf("%v", ref)
-}
-
-// Emulates make(1)’s :S substitution operator.
+// Emulates make(1)'s :S substitution operator.
 func mkopSubst(s string, left bool, from string, right bool, to string, flags string) string {
-	if G.opts.Debug {
-		defer tracecall(s, left, from, right, to, flags)()
+	if trace.Tracing {
+		defer trace.Call(s, left, from, right, to, flags)()
 	}
-	re := RegexPattern(ifelseStr(left, "^", "") + regexp.QuoteMeta(from) + ifelseStr(right, "$", ""))
+	re := regex.Pattern(ifelseStr(left, "^", "") + regexp.QuoteMeta(from) + ifelseStr(right, "$", ""))
 	done := false
 	gflag := contains(flags, "g")
-	return regcomp(re).ReplaceAllStringFunc(s, func(match string) string {
+	return regex.Compile(re).ReplaceAllStringFunc(s, func(match string) string {
 		if gflag || !done {
 			done = !gflag
 			return to
@@ -437,16 +312,19 @@ func mkopSubst(s string, left bool, from string, right bool, to string, flags st
 	})
 }
 
+// relpath returns the relative path from `from` to `to`.
+// If `to` is not within `from`, it panics.
 func relpath(from, to string) string {
 	absFrom, err1 := filepath.Abs(from)
 	absTo, err2 := filepath.Abs(to)
 	rel, err3 := filepath.Rel(absFrom, absTo)
 	if err1 != nil || err2 != nil || err3 != nil {
-		panic("relpath" + argsStr(from, to, err1, err2, err3))
+		trace.Stepf("relpath.panic", from, to, err1, err2, err3)
+		panic(fmt.Sprintf("relpath %q, %q", from, to))
 	}
 	result := filepath.ToSlash(rel)
-	if G.opts.Debug {
-		traceStep("relpath from %q to %q = %q", from, to, result)
+	if trace.Tracing {
+		trace.Stepf("relpath from %q to %q = %q", from, to, result)
 	}
 	return result
 }
@@ -482,66 +360,12 @@ func containsVarRef(s string) bool {
 	return contains(s, "${")
 }
 
-func reReplaceRepeatedly(from string, re RegexPattern, to string) string {
-	replaced := regcomp(re).ReplaceAllString(from, to)
+func reReplaceRepeatedly(from string, re regex.Pattern, to string) string {
+	replaced := regex.Compile(re).ReplaceAllString(from, to)
 	if replaced != from {
 		return reReplaceRepeatedly(replaced, re, to)
 	}
 	return replaced
-}
-
-type Histogram struct {
-	histo map[string]int
-}
-
-func NewHistogram() *Histogram {
-	h := new(Histogram)
-	h.histo = make(map[string]int)
-	return h
-}
-
-func (h *Histogram) Add(s string, n int) {
-	if G.opts.Profiling {
-		h.histo[s] += n
-	}
-}
-
-func (h *Histogram) PrintStats(caption string, out io.Writer, limit int) {
-	entries := make([]HistogramEntry, len(h.histo))
-
-	i := 0
-	for s, count := range h.histo {
-		entries[i] = HistogramEntry{s, count}
-		i++
-	}
-
-	sort.Sort(ByCountDesc(entries))
-
-	for i, entry := range entries {
-		fmt.Fprintf(out, "%s %6d %s\n", caption, entry.count, entry.s)
-		if limit > 0 && i >= limit {
-			break
-		}
-	}
-}
-
-type HistogramEntry struct {
-	s     string
-	count int
-}
-type ByCountDesc []HistogramEntry
-
-func (a ByCountDesc) Len() int {
-	return len(a)
-}
-func (a ByCountDesc) Swap(i, j int) {
-	a[i], a[j] = a[j], a[i]
-}
-func (a ByCountDesc) Less(i, j int) bool {
-	if a[j].count < a[i].count {
-		return true
-	}
-	return a[i].count == a[j].count && a[i].s < a[j].s
 }
 
 func hasAlnumPrefix(s string) bool {
@@ -550,4 +374,190 @@ func hasAlnumPrefix(s string) bool {
 	}
 	b := s[0]
 	return '0' <= b && b <= '9' || 'A' <= b && b <= 'Z' || b == '_' || 'a' <= b && b <= 'z'
+}
+
+// Once remembers with which arguments its FirstTime method has been called
+// and only returns true on each first call.
+type Once struct {
+	seen map[string]bool
+}
+
+func (o *Once) FirstTime(what string) bool {
+	if o.seen == nil {
+		o.seen = make(map[string]bool)
+	}
+	if _, ok := o.seen[what]; ok {
+		return false
+	}
+	o.seen[what] = true
+	return true
+}
+
+// Scope remembers which variables are defined and which are used
+// in a certain scope, such as a package or a file.
+type Scope struct {
+	defined map[string]MkLine
+	used    map[string]MkLine
+}
+
+func NewScope() Scope {
+	return Scope{make(map[string]MkLine), make(map[string]MkLine)}
+}
+
+// Define marks the variable and its canonicalized form as defined.
+func (s *Scope) Define(varname string, line MkLine) {
+	if s.defined[varname] == nil {
+		s.defined[varname] = line
+		if trace.Tracing {
+			trace.Step2("Defining %q in line %s", varname, line.Linenos())
+		}
+	}
+	varcanon := varnameCanon(varname)
+	if varcanon != varname && s.defined[varcanon] == nil {
+		s.defined[varcanon] = line
+		if trace.Tracing {
+			trace.Step2("Defining %q in line %s", varcanon, line.Linenos())
+		}
+	}
+}
+
+// Use marks the variable and its canonicalized form as used.
+func (s *Scope) Use(varname string, line MkLine) {
+	if s.used[varname] == nil {
+		s.used[varname] = line
+		if trace.Tracing {
+			trace.Step2("Using %q in line %s", varname, line.Linenos())
+		}
+	}
+	varcanon := varnameCanon(varname)
+	if varcanon != varname && s.used[varcanon] == nil {
+		s.used[varcanon] = line
+		if trace.Tracing {
+			trace.Step2("Using %q in line %s", varcanon, line.Linenos())
+		}
+	}
+}
+
+// Defined tests whether the variable is defined.
+// It does NOT test the canonicalized variable name.
+func (s *Scope) Defined(varname string) bool {
+	return s.defined[varname] != nil
+}
+
+// DefinedSimilar tests whether the variable or its canonicalized form is defined.
+func (s *Scope) DefinedSimilar(varname string) bool {
+	if s.defined[varname] != nil {
+		if trace.Tracing {
+			trace.Step1("Variable %q is defined", varname)
+		}
+		return true
+	}
+	varcanon := varnameCanon(varname)
+	if s.defined[varcanon] != nil {
+		if trace.Tracing {
+			trace.Step2("Variable %q (similar to %q) is defined", varcanon, varname)
+		}
+		return true
+	}
+	return false
+}
+
+// Used tests whether the variable is used.
+// It does NOT test the canonicalized variable name.
+func (s *Scope) Used(varname string) bool {
+	return s.used[varname] != nil
+}
+
+// UsedSimilar tests whether the variable or its canonicalized form is used.
+func (s *Scope) UsedSimilar(varname string) bool {
+	if s.used[varname] != nil {
+		return true
+	}
+	return s.used[varnameCanon(varname)] != nil
+}
+
+func (s *Scope) FirstDefinition(varname string) MkLine {
+	return s.defined[varname]
+}
+
+func (s *Scope) FirstUse(varname string) MkLine {
+	return s.used[varname]
+}
+
+// The MIT License (MIT)
+//
+// Copyright (c) 2015 Frits van Bommel
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+// Taken from https://github.com/fvbommel/util/blob/11997822f8/sortorder/natsort.go
+func naturalLess(str1, str2 string) bool {
+
+	isDigit := func(b byte) bool { return '0' <= b && b <= '9' }
+
+	idx := 0
+	len1, len2 := len(str1), len(str2)
+	len := len1 + len2 - imax(len1, len2)
+	for idx < len {
+		c1, c2 := str1[idx], str2[idx]
+		dig1, dig2 := isDigit(c1), isDigit(c2)
+		switch {
+		case dig1 != dig2: // Digits before other characters.
+			return dig1 // True if LHS is a digit, false if the RHS is one.
+		case !dig1: // && !dig2, because dig1 == dig2
+			// UTF-8 compares bytewise-lexicographically, no need to decode
+			// codepoints.
+			if c1 != c2 {
+				return c1 < c2
+			}
+			idx++
+		default: // Digits
+			// Eat zeros.
+			idx1, idx2 := idx, idx
+			for ; idx1 < len1 && str1[idx1] == '0'; idx1++ {
+			}
+			for ; idx2 < len2 && str2[idx2] == '0'; idx2++ {
+			}
+			// Eat all digits.
+			nonZero1, nonZero2 := idx1, idx2
+			for ; idx1 < len1 && isDigit(str1[idx1]); idx1++ {
+			}
+			for ; idx2 < len2 && isDigit(str2[idx2]); idx2++ {
+			}
+			// If lengths of numbers with non-zero prefix differ, the shorter
+			// one is less.
+			if len1, len2 := idx1-nonZero1, idx2-nonZero2; len1 != len2 {
+				return len1 < len2
+			}
+			// If they're not equal, string comparison is correct.
+			if nr1, nr2 := str1[nonZero1:idx1], str2[nonZero2:idx2]; nr1 != nr2 {
+				return nr1 < nr2
+			}
+			// Otherwise, the one with less zeros is less.
+			// Because everything up to the number is equal, comparing the index
+			// after the zeros is sufficient.
+			if nonZero1 != nonZero2 {
+				return nonZero1 < nonZero2
+			}
+			idx = idx1
+		}
+		// They're identical so far, so continue comparing.
+	}
+	// So far they are identical. At least one is ended. If the other continues,
+	// it sorts last.
+	return len1 < len2
 }

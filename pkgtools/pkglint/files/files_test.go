@@ -1,7 +1,7 @@
 package main
 
 import (
-	check "gopkg.in/check.v1"
+	"gopkg.in/check.v1"
 )
 
 func (s *Suite) Test_convertToLogicalLines_no_continuation(c *check.C) {
@@ -29,7 +29,95 @@ func (s *Suite) Test_convertToLogicalLines_continuation(c *check.C) {
 	c.Check(lines[1].String(), equals, "fname_cont:3: third")
 }
 
+// In Makefiles, comment lines can also have continuations.
+// See devel/bmake/files/unit-tests/comment.mk
+func (s *Suite) Test_convertToLogicalLines__comments(c *check.C) {
+	t := s.Init(c)
+
+	lines := t.SetupFileLinesContinuation("comment.mk",
+		"# This is a comment",
+		"",
+		"#\\",
+		"\tMultiline comment",
+		"# Another escaped comment \\",
+		"that \\",
+		"goes \\",
+		"on",
+		"# This is NOT an escaped comment due to the double backslashes \\\\",
+		"VAR=\tThis is not a comment",
+		"",
+		"#\\",
+		"This is a comment",
+		"#\\\\",
+		"This is no comment",
+		"#\\\\\\",
+		"This is a comment",
+		"#\\\\\\\\",
+		"This is no comment",
+		"#\\\\\\\\\\",
+		"This is a comment",
+		"#\\\\\\\\\\\\",
+		"This is no comment")
+
+	var texts []string
+	for _, line := range lines {
+		texts = append(texts, line.Text)
+	}
+
+	c.Check(texts, deepEquals, []string{
+		"# This is a comment",
+		"",
+		"# Multiline comment",
+		"# Another escaped comment that goes on",
+		"# This is NOT an escaped comment due to the double backslashes \\",
+		"VAR=\tThis is not a comment",
+		"",
+		"# This is a comment",
+		"#\\",
+		"This is no comment",
+		"#\\ This is a comment",
+		"#\\\\",
+		"This is no comment",
+		"#\\\\ This is a comment",
+		"#\\\\\\",
+		"This is no comment"})
+
+	var rawTexts []string
+	for _, line := range lines {
+		for _, rawLine := range line.raw {
+			rawTexts = append(rawTexts, rawLine.textnl)
+		}
+	}
+
+	c.Check(rawTexts, deepEquals, []string{
+		"# This is a comment\n",
+		"\n",
+		"#\\\n",
+		"\tMultiline comment\n",
+		"# Another escaped comment \\\n",
+		"that \\\n",
+		"goes \\\n",
+		"on\n",
+		"# This is NOT an escaped comment due to the double backslashes \\\\\n",
+		"VAR=\tThis is not a comment\n",
+		"\n",
+		"#\\\n",
+		"This is a comment\n",
+		"#\\\\\n",
+		"This is no comment\n",
+		"#\\\\\\\n",
+		"This is a comment\n",
+		"#\\\\\\\\\n",
+		"This is no comment\n",
+		"#\\\\\\\\\\\n",
+		"This is a comment\n",
+		"#\\\\\\\\\\\\\n",
+		"This is no comment\n"})
+}
+
 func (s *Suite) Test_convertToLogicalLines_continuationInLastLine(c *check.C) {
+	t := s.Init(c)
+
 	rawText := "" +
 		"last line\\"
 
@@ -37,7 +125,8 @@ func (s *Suite) Test_convertToLogicalLines_continuationInLastLine(c *check.C) {
 
 	c.Check(lines, check.HasLen, 1)
 	c.Check(lines[0].String(), equals, "fname_contlast:1: last line\\")
-	c.Check(s.Stdout(), equals, "ERROR: fname_contlast:EOF: File must end with a newline.\n")
+	t.CheckOutputLines(
+		"ERROR: fname_contlast:EOF: File must end with a newline.")
 }
 
 func (s *Suite) Test_splitRawLine(c *check.C) {
@@ -54,45 +143,4 @@ func (s *Suite) Test_splitRawLine(c *check.C) {
 	c.Check(text, equals, "word")
 	c.Check(trailingWhitespace, equals, "   ")
 	c.Check(continuation, equals, "\\")
-}
-
-func (s *Suite) Test_show_autofix(c *check.C) {
-	s.Init(c)
-	s.UseCommandLine("--show-autofix")
-	fname := s.CreateTmpFile("Makefile", ""+
-		"line1\n"+
-		"line2\n"+
-		"line3\n")
-	lines := LoadExistingLines(fname, true)
-
-	if !lines[1].AutofixReplaceRegexp(`.`, "X") {
-		lines[1].Warnf("Something's wrong here.") // Prints the autofix NOTE afterwards
-	}
-	SaveAutofixChanges(lines)
-
-	c.Check(lines[1].raw[0].textnl, equals, "XXXXX\n")
-	c.Check(s.LoadTmpFile("Makefile"), equals, "line1\nline2\nline3\n")
-	c.Check(s.Output(), equals, ""+
-		"WARN: ~/Makefile:2: Something's wrong here.\n"+
-		"AUTOFIX: ~/Makefile:2: Replacing regular expression \".\" with \"X\".\n")
-}
-
-func (s *Suite) Test_autofix(c *check.C) {
-	s.Init(c)
-	s.UseCommandLine("--autofix")
-	fname := s.CreateTmpFile("Makefile", ""+
-		"line1\n"+
-		"line2\n"+
-		"line3\n")
-	lines := LoadExistingLines(fname, true)
-
-	if !lines[1].AutofixReplaceRegexp(`.`, "X") {
-		lines[1].Warnf("Something's wrong here.") // Prints the autofix NOTE afterwards
-	}
-	SaveAutofixChanges(lines)
-
-	c.Check(s.LoadTmpFile("Makefile"), equals, "line1\nXXXXX\nline3\n")
-	c.Check(s.Output(), equals, ""+
-		"AUTOFIX: ~/Makefile:2: Replacing regular expression \".\" with \"X\".\n"+
-		"AUTOFIX: ~/Makefile: Has been auto-fixed. Please re-run pkglint.\n")
 }

@@ -10,16 +10,16 @@ package main
 // do not.
 //
 // Some methods allow modification of the raw lines contained in the
-// logical line, but leave the “text” field untouched. These methods are
+// logical line, but leave the Text field untouched. These methods are
 // used in the --autofix mode.
 
 import (
 	"fmt"
-	"io"
 	"path"
 	"strconv"
-	"strings"
 )
+
+type Line = *LineImpl
 
 type RawLine struct {
 	Lineno int
@@ -31,48 +31,35 @@ func (rline *RawLine) String() string {
 	return strconv.Itoa(rline.Lineno) + ":" + rline.textnl
 }
 
-type Line struct {
-	Fname          string
-	firstLine      int32 // Zero means not applicable, -1 means EOF
-	lastLine       int32 // Usually the same as firstLine, may differ in Makefiles
-	Text           string
-	raw            []*RawLine
-	changed        bool
-	before         []string
-	after          []string
-	autofixMessage string
+type LineImpl struct {
+	Filename  string
+	firstLine int32 // Zero means not applicable, -1 means EOF
+	lastLine  int32 // Usually the same as firstLine, may differ in Makefiles
+	Text      string
+	raw       []*RawLine
+	autofix   *Autofix
 }
 
-func NewLine(fname string, lineno int, text string, rawLines []*RawLine) *Line {
+func NewLine(fname string, lineno int, text string, rawLines []*RawLine) Line {
 	return NewLineMulti(fname, lineno, lineno, text, rawLines)
 }
 
 // NewLineMulti is for logical Makefile lines that end with backslash.
-func NewLineMulti(fname string, firstLine, lastLine int, text string, rawLines []*RawLine) *Line {
-	return &Line{fname, int32(firstLine), int32(lastLine), text, rawLines, false, nil, nil, ""}
+func NewLineMulti(fname string, firstLine, lastLine int, text string, rawLines []*RawLine) Line {
+	return &LineImpl{fname, int32(firstLine), int32(lastLine), text, rawLines, nil}
 }
 
-// NewLineEOF creates a dummy line for logging, with the “line number” EOF.
-func NewLineEOF(fname string) *Line {
+// NewLineEOF creates a dummy line for logging, with the "line number" EOF.
+func NewLineEOF(fname string) Line {
 	return NewLineMulti(fname, -1, 0, "", nil)
 }
 
 // NewLineWhole creates a dummy line for logging messages that affect a file as a whole.
-func NewLineWhole(fname string) *Line {
+func NewLineWhole(fname string) Line {
 	return NewLine(fname, 0, "", nil)
 }
 
-func (line *Line) modifiedLines() []string {
-	var result []string
-	result = append(result, line.before...)
-	for _, raw := range line.raw {
-		result = append(result, raw.textnl)
-	}
-	result = append(result, line.after...)
-	return result
-}
-
-func (line *Line) linenos() string {
+func (line *LineImpl) Linenos() string {
 	switch {
 	case line.firstLine == -1:
 		return "EOF"
@@ -85,207 +72,118 @@ func (line *Line) linenos() string {
 	}
 }
 
-func (line *Line) ReferenceFrom(other *Line) string {
-	if line.Fname != other.Fname {
-		return cleanpath(relpath(path.Dir(other.Fname), line.Fname)) + ":" + line.linenos()
+func (line *LineImpl) ReferenceFrom(other Line) string {
+	if line.Filename != other.Filename {
+		return cleanpath(relpath(path.Dir(other.Filename), line.Filename)) + ":" + line.Linenos()
 	}
-	return "line " + line.linenos()
+	return "line " + line.Linenos()
 }
 
-func (line *Line) IsMultiline() bool {
+func (line *LineImpl) IsMultiline() bool {
 	return line.firstLine > 0 && line.firstLine != line.lastLine
 }
 
-func (line *Line) printSource(out io.Writer) {
-	if G.opts.PrintSource {
-		io.WriteString(out, "\n")
-		for _, before := range line.before {
-			io.WriteString(out, "+ "+before)
-		}
-		for _, rawLine := range line.raw {
+func (line *LineImpl) printSource(out *SeparatorWriter) {
+	if !G.opts.PrintSource {
+		return
+	}
+
+	printDiff := func(rawLines []*RawLine) {
+		for _, rawLine := range rawLines {
 			if rawLine.textnl != rawLine.orignl {
 				if rawLine.orignl != "" {
-					io.WriteString(out, "- "+rawLine.orignl)
+					out.Write("-\t" + rawLine.orignl)
 				}
 				if rawLine.textnl != "" {
-					io.WriteString(out, "+ "+rawLine.textnl)
+					out.Write("+\t" + rawLine.textnl)
 				}
 			} else {
-				io.WriteString(out, "> "+rawLine.orignl)
-			}
-		}
-		for _, after := range line.after {
-			io.WriteString(out, "+ "+after)
-		}
-	}
-}
-
-func (line *Line) Fatalf(format string, args ...interface{}) {
-	line.printSource(G.logErr)
-	logs(llFatal, line.Fname, line.linenos(), format, fmt.Sprintf(format, args...))
-}
-
-func (line *Line) Errorf(format string, args ...interface{}) {
-	line.printSource(G.logOut)
-	logs(llError, line.Fname, line.linenos(), format, fmt.Sprintf(format, args...))
-	line.logAutofix()
-}
-
-func (line *Line) Warnf(format string, args ...interface{}) {
-	line.printSource(G.logOut)
-	logs(llWarn, line.Fname, line.linenos(), format, fmt.Sprintf(format, args...))
-	line.logAutofix()
-}
-
-func (line *Line) Notef(format string, args ...interface{}) {
-	line.printSource(G.logOut)
-	logs(llNote, line.Fname, line.linenos(), format, fmt.Sprintf(format, args...))
-	line.logAutofix()
-}
-
-func (line *Line) String() string {
-	return line.Fname + ":" + line.linenos() + ": " + line.Text
-}
-
-func (line *Line) logAutofix() {
-	if line.autofixMessage != "" {
-		logs(llAutofix, line.Fname, line.linenos(), "%s", line.autofixMessage)
-		line.autofixMessage = ""
-	}
-}
-
-func (line *Line) AutofixInsertBefore(text string) bool {
-	if G.opts.PrintAutofix || G.opts.Autofix {
-		line.before = append(line.before, text+"\n")
-	}
-	return line.RememberAutofix("Inserting a line %q before this line.", text)
-}
-
-func (line *Line) AutofixInsertAfter(text string) bool {
-	if G.opts.PrintAutofix || G.opts.Autofix {
-		line.after = append(line.after, text+"\n")
-	}
-	return line.RememberAutofix("Inserting a line %q after this line.", text)
-}
-
-func (line *Line) AutofixDelete() bool {
-	if G.opts.PrintAutofix || G.opts.Autofix {
-		for _, rawLine := range line.raw {
-			rawLine.textnl = ""
-		}
-	}
-	return line.RememberAutofix("Deleting this line.")
-}
-
-func (line *Line) AutofixReplace(from, to string) bool {
-	for _, rawLine := range line.raw {
-		if rawLine.Lineno != 0 {
-			if replaced := strings.Replace(rawLine.textnl, from, to, 1); replaced != rawLine.textnl {
-				if G.opts.PrintAutofix || G.opts.Autofix {
-					rawLine.textnl = replaced
-				}
-				return line.RememberAutofix("Replacing %q with %q.", from, to)
+				out.Write(">\t" + rawLine.orignl)
 			}
 		}
 	}
-	return false
-}
 
-func (line *Line) AutofixReplaceRegexp(from RegexPattern, to string) bool {
-	for _, rawLine := range line.raw {
-		if rawLine.Lineno != 0 {
-			if replaced := regcomp(from).ReplaceAllString(rawLine.textnl, to); replaced != rawLine.textnl {
-				if G.opts.PrintAutofix || G.opts.Autofix {
-					rawLine.textnl = replaced
-				}
-				return line.RememberAutofix("Replacing regular expression %q with %q.", from, to)
-			}
+	if line.autofix != nil {
+		for _, before := range line.autofix.linesBefore {
+			out.Write("+\t" + before)
 		}
-	}
-	return false
-}
-
-func (line *Line) RememberAutofix(format string, args ...interface{}) (hasBeenFixed bool) {
-	if line.firstLine < 1 {
-		return false
-	}
-	line.changed = true
-	if G.opts.Autofix {
-		logs(llAutofix, line.Fname, line.linenos(), format, fmt.Sprintf(format, args...))
-		return true
-	}
-	if G.opts.PrintAutofix {
-		line.autofixMessage = fmt.Sprintf(format, args...)
-	}
-	return false
-}
-
-func (line *Line) CheckAbsolutePathname(text string) {
-	if G.opts.Debug {
-		defer tracecall1(text)()
-	}
-
-	// In the GNU coding standards, DESTDIR is defined as a (usually
-	// empty) prefix that can be used to install files to a different
-	// location from what they have been built for. Therefore
-	// everything following it is considered an absolute pathname.
-	//
-	// Another context where absolute pathnames usually appear is in
-	// assignments like "bindir=/bin".
-	if m, path := match1(text, `(?:^|\$[{(]DESTDIR[)}]|[\w_]+\s*=\s*)(/(?:[^"'\s]|"[^"*]"|'[^']*')*)`); m {
-		if matches(path, `^/\w`) {
-			checkwordAbsolutePathname(line, path)
+		printDiff(line.autofix.lines)
+		for _, after := range line.autofix.linesAfter {
+			out.Write("+\t" + after)
 		}
+	} else {
+		printDiff(line.raw)
 	}
 }
 
-func (line *Line) CheckLength(maxlength int) {
-	if len(line.Text) > maxlength {
-		line.Warnf("Line too long (should be no more than %d characters).", maxlength)
-		Explain(
-			"Back in the old time, terminals with 80x25 characters were common.",
-			"And this is still the default size of many terminal emulators.",
-			"Moderately short lines also make reading easier.")
+func (line *LineImpl) log(level *LogLevel, format string, args []interface{}) {
+	if G.opts.PrintAutofix || G.opts.Autofix {
+		// In these two cases, the only interesting diagnostics are
+		// those that can be fixed automatically.
+		// These are logged by Autofix.Apply.
+		return
+	}
+	G.explainNext = shallBeLogged(format)
+	if !G.explainNext {
+		return
+	}
+
+	out := G.logOut
+	if level == llError {
+		out = G.logErr
+	}
+
+	logs(level, line.Filename, line.Linenos(), format, fmt.Sprintf(format, args...))
+	if !G.opts.PrintAutofix && G.opts.PrintSource {
+		line.printSource(out)
+		out.Separate()
 	}
 }
 
-func (line *Line) CheckValidCharacters(reChar RegexPattern) {
-	rest := regcomp(reChar).ReplaceAllString(line.Text, "")
-	if rest != "" {
-		uni := ""
-		for _, c := range rest {
-			uni += fmt.Sprintf(" %U", c)
-		}
-		line.Warnf("Line contains invalid characters (%s).", uni[1:])
-	}
+func (line *LineImpl) Fatalf(format string, args ...interface{}) {
+	line.log(llFatal, format, args)
 }
 
-func (line *Line) CheckTrailingWhitespace() {
-	if hasSuffix(line.Text, " ") || hasSuffix(line.Text, "\t") {
-		if !line.AutofixReplaceRegexp(`\s+\n$`, "\n") {
-			line.Notef("Trailing white-space.")
-			Explain(
-				"When a line ends with some white-space, that space is in most cases",
-				"irrelevant and can be removed.")
-		}
-	}
+func (line *LineImpl) Errorf(format string, args ...interface{}) {
+	line.log(llError, format, args)
 }
 
-func (line *Line) CheckRcsid(prefixRe RegexPattern, suggestedPrefix string) bool {
-	if G.opts.Debug {
-		defer tracecall(prefixRe, suggestedPrefix)()
-	}
+func (line *LineImpl) Warnf(format string, args ...interface{}) {
+	line.log(llWarn, format, args)
+}
 
-	if matches(line.Text, `^`+prefixRe+`\$`+`NetBSD(?::[^\$]+)?\$$`) {
-		return true
-	}
+func (line *LineImpl) Notef(format string, args ...interface{}) {
+	line.log(llNote, format, args)
+}
 
-	if !line.AutofixInsertBefore(suggestedPrefix + "$" + "NetBSD$") {
-		line.Errorf("Expected %q.", suggestedPrefix+"$"+"NetBSD$")
-		Explain(
-			"Several files in pkgsrc must contain the CVS Id, so that their",
-			"current version can be traced back later from a binary package.",
-			"This is to ensure reproducible builds, for example for finding bugs.")
+func (line *LineImpl) String() string {
+	return line.Filename + ":" + line.Linenos() + ": " + line.Text
+}
+
+// Usage:
+//
+//  fix := line.Autofix()
+//
+//  fix.Errorf("Must not be ...")
+//  fix.Warnf("Should not be ...")
+//  fix.Notef("It is also possible ...")
+//
+//  fix.Explain(
+//      "Explanation ...",
+//      "... end of explanation.")
+//
+//  fix.Replace("from", "to")
+//  fix.ReplaceAfter("prefix", "from", "to")
+//  fix.ReplaceRegex(`\s+`, "space", -1)
+//  fix.InsertBefore("new line")
+//  fix.InsertAfter("new line")
+//  fix.Delete()
+//  fix.Custom(func(...))
+//
+//  fix.Apply()
+func (line *LineImpl) Autofix() *Autofix {
+	if line.autofix == nil {
+		line.autofix = NewAutofix(line)
 	}
-	return false
+	return line.autofix
 }

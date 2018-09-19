@@ -1,45 +1,45 @@
 package main
 
 import (
+	"netbsd.org/pkglint/trace"
 	"path"
 	"strings"
 )
 
 // MkLines contains data for the Makefile (or *.mk) that is currently checked.
 type MkLines struct {
-	mklines        []*MkLine
-	lines          []*Line
-	forVars        map[string]bool    // The variables currently used in .for loops
-	target         string             // Current make(1) target
-	vardef         map[string]*MkLine // varname => line; for all variables that are defined in the current file
-	varuse         map[string]*MkLine // varname => line; for all variables that are used in the current file
-	buildDefs      map[string]bool    // Variables that are registered in BUILD_DEFS, to ensure that all user-defined variables are added to it.
-	plistVars      map[string]bool    // Variables that are registered in PLIST_VARS, to ensure that all user-defined variables are added to it.
-	tools          map[string]bool    // Set of tools that are declared to be used.
-	toolRegistry   ToolRegistry       // Tools defined in file scope.
+	mklines        []MkLine
+	lines          []Line
+	forVars        map[string]bool // The variables currently used in .for loops
+	target         string          // Current make(1) target
+	vars           Scope
+	buildDefs      map[string]bool // Variables that are registered in BUILD_DEFS, to ensure that all user-defined variables are added to it.
+	plistVars      map[string]bool // Variables that are registered in PLIST_VARS, to ensure that all user-defined variables are added to it.
+	tools          map[string]bool // Set of tools that are declared to be used.
+	toolRegistry   ToolRegistry    // Tools defined in file scope.
 	SeenBsdPrefsMk bool
 	indentation    Indentation // Indentation depth of preprocessing directives
+	// XXX: Why both tools and toolRegistry?
 }
 
-func NewMkLines(lines []*Line) *MkLines {
-	mklines := make([]*MkLine, len(lines))
+func NewMkLines(lines []Line) *MkLines {
+	mklines := make([]MkLine, len(lines))
 	for i, line := range lines {
 		mklines[i] = NewMkLine(line)
 	}
 	tools := make(map[string]bool)
-	for toolname, tool := range G.globalData.Tools.byName {
+	G.Pkgsrc.Tools.ForEach(func(tool *Tool) {
 		if tool.Predefined {
-			tools[toolname] = true
+			tools[tool.Name] = true
 		}
-	}
+	})
 
 	return &MkLines{
 		mklines,
 		lines,
 		make(map[string]bool),
 		"",
-		make(map[string]*MkLine),
-		make(map[string]*MkLine),
+		NewScope(),
 		make(map[string]bool),
 		make(map[string]bool),
 		tools,
@@ -48,36 +48,23 @@ func NewMkLines(lines []*Line) *MkLines {
 		Indentation{}}
 }
 
-func (mklines *MkLines) DefineVar(mkline *MkLine, varname string) {
-	if mklines.vardef[varname] == nil {
-		mklines.vardef[varname] = mkline
-	}
-	varcanon := varnameCanon(varname)
-	if mklines.vardef[varcanon] == nil {
-		mklines.vardef[varcanon] = mkline
-	}
-}
-
-func (mklines *MkLines) UseVar(mkline *MkLine, varname string) {
-	varcanon := varnameCanon(varname)
-	mklines.varuse[varname] = mkline
-	mklines.varuse[varcanon] = mkline
+func (mklines *MkLines) UseVar(mkline MkLine, varname string) {
+	mklines.vars.Use(varname, mkline)
 	if G.Pkg != nil {
-		G.Pkg.varuse[varname] = mkline
-		G.Pkg.varuse[varcanon] = mkline
+		G.Pkg.vars.Use(varname, mkline)
 	}
 }
 
 func (mklines *MkLines) VarValue(varname string) (value string, found bool) {
-	if mkline := mklines.vardef[varname]; mkline != nil {
+	if mkline := mklines.vars.FirstDefinition(varname); mkline != nil {
 		return mkline.Value(), true
 	}
 	return "", false
 }
 
 func (mklines *MkLines) Check() {
-	if G.opts.Debug {
-		defer tracecall1(mklines.lines[0].Fname)()
+	if trace.Tracing {
+		defer trace.Call1(mklines.lines[0].Filename)()
 	}
 
 	G.Mk = mklines
@@ -95,18 +82,19 @@ func (mklines *MkLines) Check() {
 	// In the first pass, all additions to BUILD_DEFS and USE_TOOLS
 	// are collected to make the order of the definitions irrelevant.
 	mklines.DetermineUsedVariables()
-	mklines.determineDefinedVariables()
+	mklines.DetermineDefinedVariables()
 
 	// In the second pass, the actual checks are done.
 
-	mklines.lines[0].CheckRcsid(`#\s+`, "# ")
+	CheckLineRcsid(mklines.lines[0], `#\s+`, "# ")
 
-	var substcontext SubstContext
+	substcontext := NewSubstContext()
 	var varalign VaralignBlock
 	indentation := &mklines.indentation
 	indentation.Push(0)
 	for _, mkline := range mklines.mklines {
-		mkline.Check()
+		ck := MkLineChecker{mkline}
+		ck.Check()
 		varalign.Check(mkline)
 
 		switch {
@@ -115,6 +103,7 @@ func (mklines *MkLines) Check() {
 
 		case mkline.IsVarassign():
 			mklines.target = ""
+			mkline.Tokenize(mkline.Value())
 			substcontext.Varassign(mkline)
 
 		case mkline.IsInclude():
@@ -128,11 +117,15 @@ func (mklines *MkLines) Check() {
 			}
 
 		case mkline.IsCond():
-			mkline.checkCond(mklines.forVars)
+			ck.checkCond(mklines.forVars, indentation)
+			substcontext.Conditional(mkline)
 
 		case mkline.IsDependency():
-			mkline.checkDependencyRule(allowedTargets)
+			ck.checkDependencyRule(allowedTargets)
 			mklines.target = mkline.Targets()
+
+		case mkline.IsShellcmd():
+			mkline.Tokenize(mkline.Shellcmd())
 		}
 	}
 	lastMkline := mklines.mklines[len(mklines.mklines)-1]
@@ -141,16 +134,16 @@ func (mklines *MkLines) Check() {
 
 	ChecklinesTrailingEmptyLines(mklines.lines)
 
-	if indentation.Len() != 1 && indentation.Depth() != 0 {
-		lastMkline.Line.Errorf("Directive indentation is not 0, but %d.", indentation.Depth())
+	if indentation.Len() != 1 && indentation.Depth("") != 0 {
+		lastMkline.Errorf("Directive indentation is not 0, but %d.", indentation.Depth(""))
 	}
 
 	SaveAutofixChanges(mklines.lines)
 }
 
-func (mklines *MkLines) determineDefinedVariables() {
-	if G.opts.Debug {
-		defer tracecall0()()
+func (mklines *MkLines) DetermineDefinedVariables() {
+	if trace.Tracing {
+		defer trace.Call0()()
 	}
 
 	for _, mkline := range mklines.mklines {
@@ -163,16 +156,16 @@ func (mklines *MkLines) determineDefinedVariables() {
 		case "BUILD_DEFS", "PKG_GROUPS_VARS", "PKG_USERS_VARS":
 			for _, varname := range splitOnSpace(mkline.Value()) {
 				mklines.buildDefs[varname] = true
-				if G.opts.Debug {
-					traceStep1("%q is added to BUILD_DEFS.", varname)
+				if trace.Tracing {
+					trace.Step1("%q is added to BUILD_DEFS.", varname)
 				}
 			}
 
 		case "PLIST_VARS":
 			for _, id := range splitOnSpace(mkline.Value()) {
 				mklines.plistVars["PLIST."+id] = true
-				if G.opts.Debug {
-					traceStep1("PLIST.%s is added to PLIST_VARS.", id)
+				if trace.Tracing {
+					trace.Step1("PLIST.%s is added to PLIST_VARS.", id)
 				}
 				mklines.UseVar(mkline, "PLIST."+id)
 			}
@@ -188,16 +181,16 @@ func (mklines *MkLines) determineDefinedVariables() {
 			for _, tool := range splitOnSpace(tools) {
 				tool = strings.Split(tool, ":")[0]
 				mklines.tools[tool] = true
-				if G.opts.Debug {
-					traceStep1("%s is added to USE_TOOLS.", tool)
+				if trace.Tracing {
+					trace.Step1("%s is added to USE_TOOLS.", tool)
 				}
 			}
 
 		case "SUBST_VARS.*":
 			for _, svar := range splitOnSpace(mkline.Value()) {
 				mklines.UseVar(mkline, varnameCanon(svar))
-				if G.opts.Debug {
-					traceStep1("varuse %s", svar)
+				if trace.Tracing {
+					trace.Step1("varuse %s", svar)
 				}
 			}
 
@@ -214,149 +207,300 @@ func (mklines *MkLines) determineDefinedVariables() {
 
 func (mklines *MkLines) DetermineUsedVariables() {
 	for _, mkline := range mklines.mklines {
-		varnames := mkline.determineUsedVariables()
+		varnames := mkline.DetermineUsedVariables()
 		for _, varname := range varnames {
 			mklines.UseVar(mkline, varname)
 		}
 	}
+	mklines.determineDocumentedVariables()
+}
+
+// Loosely based on mk/help/help.awk, revision 1.28
+func (mklines *MkLines) determineDocumentedVariables() {
+	scope := NewScope()
+	commentLines := 0
+	relevant := true
+
+	finish := func() {
+		if commentLines >= 3 && relevant {
+			for varname, mkline := range scope.used {
+				mklines.vars.Use(varname, mkline)
+			}
+		}
+
+		scope = NewScope()
+		commentLines = 0
+		relevant = true
+	}
+
+	for _, mkline := range mklines.mklines {
+		text := mkline.Text
+		words := splitOnSpace(text)
+
+		if 1 < len(words) && words[0] == "#" {
+			commentLines++
+
+			parser := NewMkParser(mkline.Line, words[1], false)
+			varname := parser.Varname()
+			if hasSuffix(varname, ".") && parser.repl.AdvanceRegexp(`^<\w+>`) {
+				varname += "*"
+			}
+			parser.repl.AdvanceStr(":")
+
+			varbase := varnameBase(varname)
+			if varbase == strings.ToUpper(varbase) && matches(varbase, `[A-Z]`) && parser.EOF() {
+				scope.Use(varname, mkline)
+			}
+
+			if 1 < len(words) && words[1] == "Copyright" {
+				relevant = false
+			}
+		}
+
+		if text == "" {
+			finish()
+		}
+	}
+
+	finish()
 }
 
 func (mklines *MkLines) setSeenBsdPrefsMk() {
 	if !mklines.SeenBsdPrefsMk {
 		mklines.SeenBsdPrefsMk = true
-		if G.opts.Debug {
-			traceStep("Mk.setSeenBsdPrefsMk")
+		if trace.Tracing {
+			trace.Stepf("Mk.setSeenBsdPrefsMk")
 		}
 	}
 }
 
+// VaralignBlock checks that all variable assignments from a paragraph
+// use the same indentation depth for their values.
+// It also checks that the indentation uses tabs instead of spaces.
+//
+// In general, all values should be aligned using tabs.
+// As an exception, very long lines may be aligned with a single space.
+// A typical example is a SITES.very-long-filename.tar.gz variable
+// between HOMEPAGE and DISTFILES.
 type VaralignBlock struct {
-	info []struct {
-		mkline *MkLine
-		prefix string
-		align  string
-	}
-	skip           bool
-	differ         bool
-	maxPrefixWidth int
-	maxSpaceWidth  int
-	maxTabWidth    int
+	infos []*varalignBlockInfo
+	skip  bool
 }
 
-func (va *VaralignBlock) Check(mkline *MkLine) {
-	if !G.opts.WarnSpace || mkline.Line.IsMultiline() || mkline.IsComment() || mkline.IsCond() {
+type varalignBlockInfo struct {
+	mkline         MkLine
+	varnameOp      string // Variable name + assignment operator
+	varnameOpWidth int    // Screen width of varnameOp
+	space          string // Whitespace between varnameOp and the variable value
+	totalWidth     int    // Screen width of varnameOp + space
+	continuation   bool   // A continuation line with no value in the first line.
+}
+
+func (va *VaralignBlock) Check(mkline MkLine) {
+	switch {
+	case !G.opts.WarnSpace:
 		return
-	}
-	if mkline.IsEmpty() {
+
+	case mkline.IsEmpty():
 		va.Finish()
 		return
-	}
-	if !mkline.IsVarassign() {
+
+	case mkline.IsCommentedVarassign():
+		break
+
+	case mkline.IsComment():
+		return
+
+	case mkline.IsCond():
+		return
+
+	case !mkline.IsVarassign():
+		trace.Stepf("Skipping")
 		va.skip = true
 		return
 	}
 
-	valueAlign := mkline.ValueAlign()
-	prefix := strings.TrimRight(valueAlign, " \t")
-	align := valueAlign[len(prefix):]
+	switch {
+	case mkline.Op() == opAssignEval && matches(mkline.Varname(), `^[a-z]`):
+		// Arguments to procedures do not take part in block alignment.
+		//
+		// Example:
+		// pkgpath := ${PKGPATH}
+		return
 
-	va.info = append(va.info, struct {
-		mkline *MkLine
-		prefix string
-		align  string
-	}{mkline, prefix, align})
-
-	alignedWidth := tabLength(valueAlign)
-	if contains(align, " ") {
-		if va.maxSpaceWidth != 0 && alignedWidth != va.maxSpaceWidth {
-			va.differ = true
-		}
-		if alignedWidth > va.maxSpaceWidth {
-			va.maxSpaceWidth = alignedWidth
-		}
-	} else {
-		if va.maxTabWidth != 0 && alignedWidth != va.maxTabWidth {
-			va.differ = true
-		}
-		if alignedWidth > va.maxTabWidth {
-			va.maxTabWidth = alignedWidth
-		}
+	case mkline.Value() == "" && mkline.VarassignComment() == "":
+		// Multiple-inclusion guards usually appear in a block of
+		// their own and therefore do not need alignment.
+		//
+		// Example:
+		// .if !defined(INCLUSION_GUARD_MK)
+		// INCLUSION_GUARD_MK:=
+		// # ...
+		// .endif
+		return
 	}
 
-	va.maxPrefixWidth = imax(va.maxPrefixWidth, tabLength(prefix))
+	continuation := false
+	if mkline.IsMultiline() {
+		// Interpreting the continuation marker as variable value
+		// is cheating, but works well.
+		m, _, _, _, _, _, value, _, _ := MatchVarassign(mkline.raw[0].orignl)
+		continuation = m && value == "\\"
+	}
+
+	valueAlign := mkline.ValueAlign()
+	varnameOp := strings.TrimRight(valueAlign, " \t")
+	space := valueAlign[len(varnameOp):]
+
+	width := tabWidth(valueAlign)
+	va.infos = append(va.infos, &varalignBlockInfo{mkline, varnameOp, tabWidth(varnameOp), space, width, continuation})
 }
 
 func (va *VaralignBlock) Finish() {
-	if !va.skip {
-		for _, info := range va.info {
-			if !info.mkline.Line.IsMultiline() {
-				va.fixalign(info.mkline, info.prefix, info.align)
-			}
-		}
-	}
+	infos := va.infos
+	skip := va.skip
 	*va = VaralignBlock{}
+
+	if len(infos) == 0 || skip {
+		return
+	}
+
+	if trace.Tracing {
+		defer trace.Call(infos[0].mkline.Line)()
+	}
+
+	newWidth := va.optimalWidth(infos)
+	if newWidth == 0 {
+		return
+	}
+
+	for _, info := range infos {
+		va.realign(info.mkline, info.varnameOp, info.space, info.continuation, newWidth)
+	}
 }
 
-func (va *VaralignBlock) fixalign(mkline *MkLine, prefix, oldalign string) {
-	if mkline.Value() == "" && mkline.VarassignComment() == "" {
-		return
-	}
-
-	hasSpace := contains(oldalign, " ")
-	if hasSpace &&
-		va.maxTabWidth != 0 &&
-		va.maxSpaceWidth > va.maxTabWidth &&
-		tabLength(prefix+oldalign) == va.maxSpaceWidth {
-		return
-	}
-
-	// Don’t warn about procedure parameters
-	if mkline.Op() == opAssignEval && matches(mkline.Varname(), `^[a-z]`) {
-		return
-	}
-
-	goodWidth := va.maxTabWidth
-	if goodWidth == 0 && va.differ {
-		goodWidth = va.maxSpaceWidth
-	}
-	minWidth := va.maxPrefixWidth + 1
-	if goodWidth == 0 || minWidth < goodWidth && va.differ {
-		goodWidth = minWidth
-	}
-	goodWidth = (goodWidth + 7) & -8
-
-	newalign := ""
-	for tabLength(prefix+newalign) < goodWidth {
-		newalign += "\t"
-	}
-	if newalign == oldalign {
-		return
-	}
-
-	if !mkline.Line.AutofixReplace(prefix+oldalign, prefix+newalign) {
-		wrongColumn := tabLength(prefix+oldalign) != tabLength(prefix+newalign)
-		switch {
-		case hasSpace && wrongColumn:
-			mkline.Line.Notef("This variable value should be aligned with tabs, not spaces, to column %d.", goodWidth+1)
-		case hasSpace:
-			mkline.Line.Notef("Variable values should be aligned with tabs, not spaces.")
-		case wrongColumn:
-			mkline.Line.Notef("This variable value should be aligned to column %d.", goodWidth+1)
+// optimalWidth computes the minimum necessary screen width for the
+// variable assignment lines. There may be a single line sticking out
+// from the others (called outlier). This is to prevent a single SITES.*
+// variable from forcing the rest of the paragraph to be indented too
+// far to the right.
+func (va *VaralignBlock) optimalWidth(infos []*varalignBlockInfo) int {
+	longest := 0       // The longest seen varnameOpWidth
+	secondLongest := 0 // The second-longest seen varnameOpWidth
+	for _, info := range infos {
+		if info.continuation {
+			continue
 		}
-		if wrongColumn {
-			Explain(
-				"Normally, all variable values in a block should start at the same",
-				"column.  There are some exceptions to this rule:",
-				"",
-				"Definitions for long variable names may be indented with a single",
-				"space instead of tabs, but only if they appear in a block that is",
-				"otherwise indented using tabs.",
-				"",
-				"Variable definitions that span multiple lines are not checked for",
-				"alignment at all.",
-				"",
-				"When the block contains something else than variable definitions,",
-				"it is not checked at all.")
+
+		width := info.varnameOpWidth
+		if width >= longest {
+			secondLongest = longest
+			longest = width
+		} else if width > secondLongest {
+			secondLongest = width
 		}
+	}
+
+	// Minimum required width of varnameOp, without the trailing whitespace.
+	minVarnameOpWidth := longest
+	outlier := 0
+	if secondLongest != 0 && secondLongest/8+1 < longest/8 {
+		minVarnameOpWidth = secondLongest
+		outlier = longest
+	}
+
+	// Widths of the current indentation (including whitespace)
+	minTotalWidth := 0
+	maxTotalWidth := 0
+	for _, info := range infos {
+		if info.continuation {
+			continue
+		}
+
+		if width := info.totalWidth; info.varnameOpWidth != outlier {
+			if minTotalWidth == 0 || width < minTotalWidth {
+				minTotalWidth = width
+			}
+			maxTotalWidth = imax(maxTotalWidth, width)
+		}
+	}
+
+	if trace.Tracing {
+		trace.Stepf("Indentation including whitespace is between %d and %d.",
+			minTotalWidth, maxTotalWidth)
+		trace.Stepf("Minimum required indentation is %d + 1.",
+			minVarnameOpWidth)
+		if outlier != 0 {
+			trace.Stepf("The outlier is at indentation %d.", outlier)
+		}
+	}
+
+	if minTotalWidth > minVarnameOpWidth && minTotalWidth == maxTotalWidth && minTotalWidth%8 == 0 {
+		return minTotalWidth
+	}
+
+	if minVarnameOpWidth == 0 {
+		// Only continuation lines in this paragraph.
+		return 0
+	}
+
+	return (minVarnameOpWidth & -8) + 8
+}
+
+func (va *VaralignBlock) realign(mkline MkLine, varnameOp, oldSpace string, continuation bool, newWidth int) {
+	hasSpace := contains(oldSpace, " ")
+
+	newSpace := ""
+	for tabWidth(varnameOp+newSpace) < newWidth {
+		newSpace += "\t"
+	}
+	// Indent the outlier with a space instead of a tab to keep the line short.
+	if newSpace == "" {
+		if hasPrefix(oldSpace, "\t") {
+			// Even though it is an outlier, it uses a tab and therefore
+			// didn't seem to be too long to the original developer.
+			// Therefore, leave it as-is, but still fix any continuation lines.
+			newSpace = oldSpace
+		} else {
+			newSpace = " "
+		}
+	}
+
+	fix := mkline.Autofix()
+	wrongColumn := tabWidth(varnameOp+oldSpace) != tabWidth(varnameOp+newSpace)
+	switch {
+	case hasSpace && wrongColumn:
+		fix.Notef("This variable value should be aligned with tabs, not spaces, to column %d.", newWidth+1)
+	case hasSpace && oldSpace != newSpace:
+		fix.Notef("Variable values should be aligned with tabs, not spaces.")
+	case wrongColumn:
+		fix.Notef("This variable value should be aligned to column %d.", newWidth+1)
+	default:
+		fix.Notef("Silent-Magic-Diagnostic")
+	}
+	if wrongColumn {
+		fix.Explain(
+			"Normally, all variable values in a block should start at the same",
+			"column.  There are some exceptions to this rule:",
+			"",
+			"Definitions for long variable names may be indented with a single",
+			"space instead of tabs, but only if they appear in a block that is",
+			"otherwise indented using tabs.",
+			"",
+			"Variable definitions that span multiple lines are not checked for",
+			"alignment at all.",
+			"",
+			"When the block contains something else than variable definitions",
+			"and conditionals, it is not checked at all.")
+	}
+	fix.ReplaceAfter(varnameOp, oldSpace, newSpace)
+	fix.Apply()
+
+	if mkline.IsMultiline() {
+		indentation := strings.Repeat("\t", newWidth/8) + strings.Repeat(" ", newWidth%8)
+		fix := mkline.Autofix()
+		fix.Notef("This line should be aligned with %q.", indentation)
+		fix.Realign(mkline, newWidth)
+		fix.Apply()
 	}
 }

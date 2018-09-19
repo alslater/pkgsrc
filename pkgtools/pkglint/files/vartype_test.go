@@ -5,15 +5,17 @@ import (
 )
 
 func (s *Suite) Test_Vartype_EffectivePermissions(c *check.C) {
-	G.globalData.InitVartypes()
+	t := s.Init(c)
 
-	if t := G.globalData.vartypes["PREFIX"]; c.Check(t, check.NotNil) {
+	t.SetupVartypes()
+
+	if t := G.Pkgsrc.vartypes["PREFIX"]; c.Check(t, check.NotNil) {
 		c.Check(t.basicType.name, equals, "Pathname")
-		c.Check(t.aclEntries, check.DeepEquals, []AclEntry{{glob: "*", permissions: aclpUse}})
+		c.Check(t.aclEntries, check.DeepEquals, []ACLEntry{{glob: "*", permissions: aclpUse}})
 		c.Check(t.EffectivePermissions("Makefile"), equals, aclpUse)
 	}
 
-	if t := G.globalData.vartypes["EXTRACT_OPTS"]; c.Check(t, check.NotNil) {
+	if t := G.Pkgsrc.vartypes["EXTRACT_OPTS"]; c.Check(t, check.NotNil) {
 		c.Check(t.basicType.name, equals, "ShellWord")
 		c.Check(t.EffectivePermissions("Makefile"), equals, aclpAppend|aclpSet)
 		c.Check(t.EffectivePermissions("../Makefile"), equals, aclpAppend|aclpSet)
@@ -38,7 +40,7 @@ func (s *Suite) Test_AclPermissions_Contains(c *check.C) {
 }
 
 func (s *Suite) Test_AclPermissions_String(c *check.C) {
-	c.Check(AclPermissions(0).String(), equals, "none")
+	c.Check(ACLPermissions(0).String(), equals, "none")
 	c.Check(aclpAll.String(), equals, "set, set-default, append, use-loadtime, use")
 	c.Check(aclpUnknown.String(), equals, "unknown")
 }
