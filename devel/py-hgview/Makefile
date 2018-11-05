@@ -17,7 +17,7 @@ BUILD_DEPENDS+=	asciidoc-[0-9]*:../../textproc/asciidoc
 BUILD_DEPENDS+=	xmlto-[0-9]*:../../textproc/xmlto
 
 REPLACE_PYTHON= *.py
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 1.8.0
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # not yet ported as of 1.8.0
 
 USE_TOOLS+=	gmake
 

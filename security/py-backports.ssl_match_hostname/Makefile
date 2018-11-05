@@ -10,7 +10,7 @@ HOMEPAGE=	https://pypi.python.org/pypi/backports.ssl_match_hostname
 COMMENT=	Python SSL support module for Python 2
 LICENSE=	python-software-foundation
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # included in 3.2+
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # included in 3.2+
 
 .include "../../lang/python/distutils.mk"
 .include "../../mk/bsd.pkg.mk"

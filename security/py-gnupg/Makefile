@@ -15,7 +15,7 @@ DEPENDS+=	gnupg>=1.0.0:../../security/gnupg
 
 USE_LANGUAGES=	# none
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36
 
 .include "../../lang/python/distutils.mk"
 .include "../../mk/bsd.pkg.mk"

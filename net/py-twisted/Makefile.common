@@ -15,4 +15,4 @@ LICENSE=	mit
 DISTINFO_FILE?=		${.CURDIR}/../py-twisted/distinfo
 PATCHDIR?=		${.CURDIR}/../py-twisted/patches
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # many parts not yet ported as of 16.5.0 (PLIST: 465 files missing)
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # many parts not yet ported as of 16.5.0 (PLIST: 465 files missing)

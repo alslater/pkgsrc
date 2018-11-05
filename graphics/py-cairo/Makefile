@@ -23,7 +23,7 @@ MULTIARCH_DIRS.lib=	# manually defined in PLIST
 
 PKGCONFIG_OVERRIDE+=	pycairo.pc.in
 PY_PATCHPLIST=		yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36
 
 post-extract:
 	cd ${WRKSRC} && touch ChangeLog && aclocal && automake -a

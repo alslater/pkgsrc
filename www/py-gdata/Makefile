@@ -12,7 +12,7 @@ LICENSE=	apache-2.0
 
 DEPENDS+=	${PYPKGPREFIX}-cElementTree-[0-9]*:../../textproc/py-cElementTree
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 2.0.18
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # not yet ported as of 2.0.18
 # https://code.google.com/p/gdata-python-client/issues/detail?id=229
 
 REPLACE_PYTHON=		src/atom/__init__.py

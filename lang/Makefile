@@ -191,6 +191,7 @@ SUBDIR+=	py35-html-docs
 SUBDIR+=	python27
 SUBDIR+=	python34
 SUBDIR+=	python35
+SUBDIR+=	python36
 SUBDIR+=	qore
 SUBDIR+=	racket
 SUBDIR+=	racket-textual

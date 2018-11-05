@@ -1,8 +1,9 @@
-# $NetBSD: Makefile,v 1.18 2016/12/23 19:12:38 jdolecek Exp $
+# $NetBSD: Makefile,v 1.24 2018/05/28 07:46:58 hauke Exp $
 
-DISTNAME=	pip-9.0.3
+DISTNAME=	pip-10.0.1
+PKGREVISION=	1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-CATEGORIES=	devel
+CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=p/pip/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -10,12 +11,21 @@ HOMEPAGE=	http://www.pip-installer.org/
 COMMENT=	Installs Python packages as an easy_install replacement
 LICENSE=	mit
 
-REPLACE_PYTHON+=	pip/__init__.py pip/_vendor/requests/certs.py
-REPLACE_PYTHON+=	pip/_vendor/requests/packages/chardet/chardetect.py
+USE_LANGUAGES=	# none
+
+REPLACE_PYTHON+=	src/pip/_vendor/appdirs.py
+REPLACE_PYTHON+=	src/pip/_vendor/certifi/core.py
+REPLACE_PYTHON+=	src/pip/_vendor/chardet/cli/chardetect.py
+REPLACE_PYTHON+=	src/pip/_vendor/requests/certs.py
 
 post-install:
-	${RM} -f ${DESTDIR}${PREFIX}/bin/pip
-	${RM} -f ${DESTDIR}${PREFIX}/bin/pip[2-3]
+	cd ${DESTDIR}${PREFIX}/bin && ${RM} -f pip pip[2-3]
+	cd ${DESTDIR}${PREFIX}/${PYSITELIB}/pip/_vendor && \
+		chmod -R go-w .
+
+# no tests included
+do-test:
+	${DO_NADA}
 
 .include "../../lang/python/application.mk"
 .include "../../lang/python/egg.mk"

@@ -23,7 +23,7 @@ PYTHON_SELF_CONFLICT=	YES
 
 BUILDLINK_API_DEPENDS.python26+= python26>=2.6.2nb4
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # dead upstream, no plans to port
+PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # dead upstream, no plans to port
 
 BUILDLINK_TRANSFORM.SunOS+=	rm:-std=c9x
 

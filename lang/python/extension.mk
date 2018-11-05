@@ -1,4 +1,4 @@
-# $NetBSD: extension.mk,v 1.49 2016/08/27 20:42:47 wiz Exp $
+# $NetBSD: extension.mk,v 1.53 2018/03/29 17:58:26 adam Exp $
 
 .include "../../lang/python/pyversion.mk"
 
@@ -20,13 +20,18 @@ USE_MULTIARCH?=		lib
 PYSETUP?=		setup.py
 PYSETUPBUILDTARGET?=	build
 PYSETUPBUILDARGS?=	#empty
+# Python 3.5+ supports parallel building
+.if defined(MAKE_JOBS) && ${_PYTHON_VERSION} > 34
+.  if !defined(MAKE_JOBS_SAFE) || empty(MAKE_JOBS_SAFE:M[nN][oO])
+PYSETUPBUILDARGS+=	-j${MAKE_JOBS}
+.  endif
+.endif
 PYSETUPARGS?=		#empty
 PYSETUPINSTALLARGS?=	#empty
 PYSETUPOPTARGS?=	-c -O1
 _PYSETUPINSTALLARGS=	${PYSETUPINSTALLARGS} ${PYSETUPOPTARGS} ${_PYSETUPTOOLSINSTALLARGS}
 _PYSETUPINSTALLARGS+=	--root=${DESTDIR:Q}
 PY_PATCHPLIST?=		yes
-PYSETUPINSTALLARGS?=	#empty
 PYSETUPTESTTARGET?=	test
 PYSETUPTESTARGS?=	#empty
 PYSETUPSUBDIR?=		#empty
@@ -40,7 +45,7 @@ do-install:
 	 ${PYTHONBIN} ${PYSETUP} ${PYSETUPARGS} "install" ${_PYSETUPINSTALLARGS})
 .  if !target(do-test) && !(defined(TEST_TARGET) && !empty(TEST_TARGET))
 do-test:
-	(cd ${WRKSRC}/${PYSETUPSUBDIR} && ${SETENV} ${MAKE_ENV} ${PYTHONBIN} \
+	(cd ${WRKSRC}/${PYSETUPSUBDIR} && ${SETENV} ${TEST_ENV} ${PYTHONBIN} \
 	 ${PYSETUP} ${PYSETUPARGS} ${PYSETUPTESTTARGET} ${PYSETUPTESTARGS})
 .  endif
 
@@ -85,4 +90,11 @@ PRINT_PLIST_AWK+=	/^[^@]/ && /[^\/]+\.py[co]$$/ {
 PRINT_PLIST_AWK+=	gsub(/__pycache__\//, "")
 PRINT_PLIST_AWK+=	gsub(/opt-1\.pyc$$/, "pyo")
 PRINT_PLIST_AWK+=	gsub(/\.cpython-${_PYTHON_VERSION}/, "")}
+.endif
+
+DISTUTILS_BUILDDIR_IN_TEST_ENV?=	no
+
+.if ${DISTUTILS_BUILDDIR_IN_TEST_ENV} == "yes"
+DISTUTILS_BUILDDIR_CMD=	cd ${WRKSRC} && ${PYTHONBIN} ${.CURDIR}/../../lang/python/distutils-builddir.py
+TEST_ENV+=	PYTHONPATH=${DISTUTILS_BUILDDIR_CMD:sh}
 .endif
