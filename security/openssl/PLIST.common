@@ -1049,6 +1049,7 @@ man/man3/OBJ_txt2nid.3
 man/man3/OBJ_txt2obj.3
 man/man3/OPENSSL_Applink.3
 man/man3/OPENSSL_VERSION_NUMBER.3
+man/man3/OPENSSL_VERSION_TEXT.3
 man/man3/OPENSSL_config.3
 man/man3/OPENSSL_ia32cap.3
 man/man3/OPENSSL_ia32cap_loc.3
