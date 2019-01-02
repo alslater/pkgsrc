@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.8 2016/09/19 06:57:49 ryoon Exp $
 
-SHA1 (jre-8u181-solaris-x64.tar.gz) = ca28cf263cf9d4c9a95682630ec76a0b5abb5174
-RMD160 (jre-8u181-solaris-x64.tar.gz) = 3d8f4e5166cc86e0d3b93ee94eeee0cabd6e51ca
-SHA512 (jre-8u181-solaris-x64.tar.gz) = 7b6bef4b739fae9116e2b2ccaa929d8a6bd1369a2e435b17fb75aa14f4b2e6dac7ce2f1ed17c0127298fc49e94c663c8077c451f8659125e84ba8c6ecc4571a0
-Size (jre-8u181-solaris-x64.tar.gz) = 52518576 bytes
+SHA1 (jre-8u192-solaris-x64.tar.gz) = 714349f3bc71f9184fcef4923e67f71d90afd90b
+RMD160 (jre-8u192-solaris-x64.tar.gz) = a87142bf42d445b3a6edb9307538dc07e2148230
+SHA512 (jre-8u192-solaris-x64.tar.gz) = 5762d00c869676bb9ce50b91a760df272d22b3d93a5debd06776d3b102f7e05a9498782c993a1267b64645b12c383eb7429bb4a9e98c9ae8c690229bd5446457
+Size (jre-8u192-solaris-x64.tar.gz) = 52597395 bytes
