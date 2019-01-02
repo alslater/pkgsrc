@@ -5,7 +5,7 @@ ENGINE=		onig
 ENGINE_DIR=	oniguruma
 
 .include "../../devel/lua-lrexlib/Makefile.common"
-PKGREVISION=	3
+PKGREVISION=	4
 
 COMMENT=	Oniguruma regexp library for Lua (lrexlib project)
 MAINTAINER=	cheusov@NetBSD.org
