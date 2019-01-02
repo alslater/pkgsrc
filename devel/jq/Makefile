@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.8 2016/08/10 15:52:15 jperkin Exp $
 
-DISTNAME=	jq-1.5
-PKGREVISION=	1
+DISTNAME=	jq-1.6
+#PKGREVISION=	1
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_GITHUB:=stedolan/}
 GITHUB_PROJECT=	jq
@@ -14,10 +14,14 @@ LICENSE=	mit
 
 USE_LANGUAGES=	c99
 USE_LIBTOOL=	yes
-USE_TOOLS+=	bison flex gmake
-
+USE_TOOLS+= autoreconf autoconf automake bison flex gmake
 GNU_CONFIGURE=	yes
 
 CFLAGS.SunOS+=	-D_XPG6 -D__EXTENSIONS__
+
+pre-configure:
+	cd ${WRKSRC} && autoreconf -fi
+
+.include "options.mk"
 
 .include "../../mk/bsd.pkg.mk"
