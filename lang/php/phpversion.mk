@@ -89,7 +89,7 @@ PHPVERSION_MK=	defined
 # Define each PHP's version.
 PHP56_VERSION=	5.6.38
 PHP70_VERSION=	7.0.32
-PHP71_VERSION=	7.1.22
+PHP71_VERSION=	7.1.24
 
 # Define initial release of major version.
 PHP56_RELDATE=	20140828

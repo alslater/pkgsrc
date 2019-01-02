@@ -1,13 +1,13 @@
 $NetBSD: distinfo,v 1.11.2.1 2017/01/21 10:12:43 bsiegert Exp $
 
-SHA1 (php-7.1.22.tar.bz2) = b91ef7f8f7f6987339ab888c5723384c78416e25
-RMD160 (php-7.1.22.tar.bz2) = f1db44e4e4e09d24e04c8033e0c6a6b19f2c7859
-SHA512 (php-7.1.22.tar.bz2) = b966c1aa85ca9159e3608a42310fe442550dc9224254aed1199bf7733e4e66fa8e5a68b0ce37d6b8a21eb4f1f34c7dd3db4c28e3b67392860456d040e3585327
-Size (php-7.1.22.tar.bz2) = 15059870 bytes
-SHA1 (patch-acinclude.m4) = b682280fd89950c082c2226bdb7364b0dc475bad
+SHA1 (php-7.1.24.tar.bz2) = 1135af2180db3698f82f74c55469d3fda5bfc77a
+RMD160 (php-7.1.24.tar.bz2) = 374afed02d940bc75d61f55099c864008d6cc4d5
+SHA512 (php-7.1.24.tar.bz2) = 87142dbb7ebee8d5cac4df3864b984583a78be71996c0dc68b9be4faace149bb4ad692bea56da37a755e5def3aa1b40088c985339b85950ff3f11d33770b6181
+Size (php-7.1.24.tar.bz2) = 15021575 bytes
+SHA1 (patch-acinclude.m4) = c232e68dbcd58bbfdf6800e491eb46812df15f65
 SHA1 (patch-configure) = a129e19ef87338f6e53ccc967c40ddcde7c7357c
 SHA1 (patch-ext_gd_config.m4) = 93b62daad93b9ee6dc28e06016f739bc26b0dc9f
-SHA1 (patch-ext_imap_config.m4) = f4e10ab81697b72019313f63bc630627a08efd92
+SHA1 (patch-ext_imap_config.m4) = 2a30be4a42f82547e17623e3e5b60e9b8190fcb2
 SHA1 (patch-ext_pcre_pcrelib_config.h) = c5fba95856628f68639fe63feeef04a5f83d3916
 SHA1 (patch-ext_pdo__mysql_config.m4) = b1ef91be5a729040197e9af50da0f5fd1f6c90a8
 SHA1 (patch-ext_pdo_config.m4) = 522281775cc0e70a135b1f813158988ef1f3e244
