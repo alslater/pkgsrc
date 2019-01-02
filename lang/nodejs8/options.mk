@@ -4,6 +4,8 @@ PKG_OPTIONS_VAR=	PKG_OPTIONS.node
 PKG_SUPPORTED_OPTIONS=	openssl dtrace
 PKG_SUGGESTED_OPTIONS=	openssl
 
+.include "../../mk/bsd.prefs.mk"
+
 .if (${OPSYS} == "SunOS" || ${OPSYS} == "Darwin") \
     && exists(/usr/sbin/dtrace)
 PKG_SUGGESTED_OPTIONS+=	dtrace

@@ -1,9 +1,11 @@
 # $NetBSD: Makefile,v 1.8 2018/04/04 10:37:44 fhajny Exp $
 
-DISTNAME=	node-v8.11.3
+DISTNAME=	node-v8.12.0
 
 # Stated by the changelog as of 8.2.0
 GCC_REQD+=	4.9.4
+
+.include "options.mk"
 
 CONFIGURE_ARGS+=	--with-intl=system-icu
 
