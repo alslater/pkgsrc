@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.17 2016/10/03 12:28:19 wiz Exp $
 
-DISTNAME=	nettle-3.3
+DISTNAME=	nettle-3.4.1
 CATEGORIES=	devel security
 MASTER_SITES=	http://www.lysator.liu.se/~nisse/archive/ \
 		ftp://ftp.lysator.liu.se/pub/security/lsh/
@@ -10,7 +10,7 @@ HOMEPAGE=	http://www.lysator.liu.se/~nisse/nettle/
 COMMENT=	Cryptographic library
 LICENSE=	gnu-lgpl-v2.1
 
-USE_LANGUAGES=		c
+USE_LANGUAGES=		c99
 USE_LIBTOOL=		yes
 USE_MULTIARCH=		lib
 USE_TOOLS+=		gm4 gmake
