@@ -5,37 +5,31 @@ $NetBSD: patch-Makefile.PL,v 1.2 2015/09/09 19:13:49 christos Exp $
     their installation.
   - pkgsrc creates B_DATADIR, so there is no need to re-set permissions
 
---- Makefile.PL.orig	2015-04-28 15:57:01.000000000 -0400
-+++ Makefile.PL	2015-09-09 14:59:06.000000000 -0400
-@@ -133,6 +133,7 @@
-       'spamassassin.raw' => 'spamassassin',
-       'sa-learn.raw'     => 'sa-learn',
-       'sa-update.raw'    => 'sa-update',
-+      'spamc/qmail-spamc.c' => 'spamc/qmail-spamc$(EXE_EXT)',
-       'sa-compile.raw'   => 'sa-compile',
-       'sa-awl.raw'       => 'sa-awl',
-       'sa-check_spamd.raw' => 'sa-check_spamd',
-@@ -1093,21 +1094,23 @@
+--- Makefile.PL.orig	2018-09-14 01:27:51.000000000 +0000
++++ Makefile.PL
+@@ -1120,22 +1120,24 @@ qmail/qmail-spamc$(EXE_EXT): spamc/qmail
  
  conf__install:
  	-$(MKPATH) $(B_CONFDIR)
--	$(PERL) -MFile::Copy -e "copy(q{rules/local.cf}, q{$(B_CONFDIR)/local.cf}) unless -f q{$(B_CONFDIR)/local.cf}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/init.pre}, q{$(B_CONFDIR)/init.pre}) unless -f q{$(B_CONFDIR)/init.pre}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/v310.pre}, q{$(B_CONFDIR)/v310.pre}) unless -f q{$(B_CONFDIR)/v310.pre}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/v312.pre}, q{$(B_CONFDIR)/v312.pre}) unless -f q{$(B_CONFDIR)/v312.pre}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/v320.pre}, q{$(B_CONFDIR)/v320.pre}) unless -f q{$(B_CONFDIR)/v320.pre}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/v330.pre}, q{$(B_CONFDIR)/v330.pre}) unless -f q{$(B_CONFDIR)/v330.pre}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/v340.pre}, q{$(B_CONFDIR)/v340.pre}) unless -f q{$(B_CONFDIR)/v340.pre}"
--	$(PERL) -MFile::Copy -e "copy(q{rules/v341.pre}, q{$(B_CONFDIR)/v341.pre}) unless -f q{$(B_CONFDIR)/v341.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/local.cf], q{$(B_CONFDIR)/local.cf}) unless -f q{$(B_CONFDIR)/local.cf}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/init.pre], q{$(B_CONFDIR)/init.pre}) unless -f q{$(B_CONFDIR)/init.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v310.pre], q{$(B_CONFDIR)/v310.pre}) unless -f q{$(B_CONFDIR)/v310.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v312.pre], q{$(B_CONFDIR)/v312.pre}) unless -f q{$(B_CONFDIR)/v312.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v320.pre], q{$(B_CONFDIR)/v320.pre}) unless -f q{$(B_CONFDIR)/v320.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v330.pre], q{$(B_CONFDIR)/v330.pre}) unless -f q{$(B_CONFDIR)/v330.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v340.pre], q{$(B_CONFDIR)/v340.pre}) unless -f q{$(B_CONFDIR)/v340.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v341.pre], q{$(B_CONFDIR)/v341.pre}) unless -f q{$(B_CONFDIR)/v341.pre}"
+-	$(PERL) -MFile::Copy -e "copy(q[rules/v342.pre], q{$(B_CONFDIR)/v342.pre}) unless -f q{$(B_CONFDIR)/v342.pre}"
 +	# manage local.cf and *.pre through pkgsrc .mk files
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/local.cf}, q{$(B_CONFDIR)/local.cf}) unless -f q{$(B_CONFDIR)/local.cf}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/init.pre}, q{$(B_CONFDIR)/init.pre}) unless -f q{$(B_CONFDIR)/init.pre}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/v310.pre}, q{$(B_CONFDIR)/v310.pre}) unless -f q{$(B_CONFDIR)/v310.pre}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/v312.pre}, q{$(B_CONFDIR)/v312.pre}) unless -f q{$(B_CONFDIR)/v312.pre}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/v320.pre}, q{$(B_CONFDIR)/v320.pre}) unless -f q{$(B_CONFDIR)/v320.pre}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/v330.pre}, q{$(B_CONFDIR)/v330.pre}) unless -f q{$(B_CONFDIR)/v330.pre}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/v340.pre}, q{$(B_CONFDIR)/v340.pre}) unless -f q{$(B_CONFDIR)/v340.pre}"
-+	# $(PERL) -MFile::Copy -e "copy(q{rules/v341.pre}, q{$(B_CONFDIR)/v341.pre}) unless -f q{$(B_CONFDIR)/v341.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/local.cf], q{$(B_CONFDIR)/local.cf}) unless -f q{$(B_CONFDIR)/local.cf}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/init.pre], q{$(B_CONFDIR)/init.pre}) unless -f q{$(B_CONFDIR)/init.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v310.pre], q{$(B_CONFDIR)/v310.pre}) unless -f q{$(B_CONFDIR)/v310.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v312.pre], q{$(B_CONFDIR)/v312.pre}) unless -f q{$(B_CONFDIR)/v312.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v320.pre], q{$(B_CONFDIR)/v320.pre}) unless -f q{$(B_CONFDIR)/v320.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v330.pre], q{$(B_CONFDIR)/v330.pre}) unless -f q{$(B_CONFDIR)/v330.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v340.pre], q{$(B_CONFDIR)/v340.pre}) unless -f q{$(B_CONFDIR)/v340.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v341.pre], q{$(B_CONFDIR)/v341.pre}) unless -f q{$(B_CONFDIR)/v341.pre}"
++	# $(PERL) -MFile::Copy -e "copy(q[rules/v342.pre], q{$(B_CONFDIR)/v342.pre}) unless -f q{$(B_CONFDIR)/v342.pre}"
    
  
  data__install:
