@@ -1,15 +1,15 @@
 # $NetBSD: Makefile,v 1.136 2017/10/26 15:01:38 tez Exp $
 
-DISTNAME=	wget-1.19.1
+DISTNAME=	wget-1.20.1
 PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GNU:=wget/}
-EXTRACT_SUFX=	.tar.xz
+EXTRACT_SUFX=	.tar.gz
 
 PATCH_SITES=		http://git.savannah.gnu.org/cgit/wget.git/patch/?id=
 PATCH_DIST_STRIP=	-p1
 # For CVE-2017-6508
-PATCHFILES=		4d729e322fae359a1aefaafec1144764a54e8ad4
+#PATCHFILES=		4d729e322fae359a1aefaafec1144764a54e8ad4
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://www.gnu.org/software/wget/wget.html
