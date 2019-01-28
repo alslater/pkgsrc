@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.176 2017/09/06 13:41:26 wiz Exp $
 
-DISTNAME=	gnutls-3.6.0
+DISTNAME=	gnutls-3.6.5
 CATEGORIES=	security devel
 MASTER_SITES=	ftp://ftp.gnutls.org/gcrypt/gnutls/v3.6/
 EXTRACT_SUFX=	.tar.xz
@@ -76,7 +76,7 @@ CHECK_BUILTIN.zlib:=yes
 #.include "../../lang/guile20/buildlink3.mk"
 BUILDLINK_API_DEPENDS.libtasn1+=	libtasn1>=4.9
 .include "../../security/libtasn1/buildlink3.mk"
-BUILDLINK_API_DEPENDS.nettle+=		nettle>=3.1
+BUILDLINK_API_DEPENDS.nettle+=		nettle>=3.4
 .include "../../security/nettle/buildlink3.mk"
 .include "../../textproc/libunistring/buildlink3.mk"
 .include "../../mk/readline.buildlink3.mk"
