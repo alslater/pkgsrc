@@ -169,9 +169,6 @@ ${PYSITELIB}/tortoisehg/hgqt/qdelete.pyo
 ${PYSITELIB}/tortoisehg/hgqt/qfold.py
 ${PYSITELIB}/tortoisehg/hgqt/qfold.pyc
 ${PYSITELIB}/tortoisehg/hgqt/qfold.pyo
-${PYSITELIB}/tortoisehg/hgqt/qrename.py
-${PYSITELIB}/tortoisehg/hgqt/qrename.pyc
-${PYSITELIB}/tortoisehg/hgqt/qrename.pyo
 ${PYSITELIB}/tortoisehg/hgqt/qsci.py
 ${PYSITELIB}/tortoisehg/hgqt/qsci.pyc
 ${PYSITELIB}/tortoisehg/hgqt/qsci.pyo
