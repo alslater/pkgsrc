@@ -3,7 +3,7 @@
 GST_PLUGINS1_NAME=	soup
 GST_PLUGINS1_DIRS=	ext/soup
 
-PKGREVISION= 2
+PKGREVISION= 3
 .include "../../multimedia/gst-plugins1-good/Makefile.common"
 
 .include "../../net/libsoup/buildlink3.mk"

@@ -3,12 +3,14 @@
 MODNAME=		intl
 CATEGORIES+=		textproc
 COMMENT=		PHP extension for i18n
-PKGREVISION=		1
+PKGREVISION=		2
 LICENSE=		php
 
 CXXFLAGS+=		-std=c++11
 USE_LANGUAGES=		c c++
 CONFIGURE_ARGS+=	--enable-${MODNAME}=shared,${BUILDLINK_DIR}
+
+CFLAGS+=		-DU_USING_ICU_NAMESPACE=1
 
 .include "../../lang/php/ext.mk"
 .include "../../textproc/icu/buildlink3.mk"

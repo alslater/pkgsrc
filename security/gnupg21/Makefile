@@ -2,7 +2,7 @@
 
 DISTNAME=	gnupg-2.1.16
 PKGNAME=	${DISTNAME:S/gnupg-/gnupg21-/}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	security
 MASTER_SITES=	ftp://ftp.gnupg.org/gcrypt/gnupg/
 EXTRACT_SUFX=	.tar.bz2

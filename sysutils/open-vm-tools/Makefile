@@ -2,7 +2,7 @@
 
 DISTNAME=	open-vm-tools-10.1.0-4449150
 PKGNAME=	open-vm-tools-10.1.0
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	sysutils
 MASTER_SITES=	https://github.com/vmware/open-vm-tools/files/590760/
 

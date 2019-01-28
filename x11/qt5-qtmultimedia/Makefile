@@ -2,7 +2,7 @@
 
 DISTNAME=	qtmultimedia-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtmultimedia-${QTVERSION}
-PKGREVISION=	7
+PKGREVISION=	8
 COMMENT=	Qt5 module for multimedia
 
 BUILD_TARGET=		sub-src

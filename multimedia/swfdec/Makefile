@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		swfdec-0.8.4
-PKGREVISION=		48
+PKGREVISION=		49
 CATEGORIES=		multimedia
 MASTER_SITES=		http://swfdec.freedesktop.org/download/swfdec/0.8/
 

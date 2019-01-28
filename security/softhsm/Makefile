@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	softhsm-1.3.7
-PKGREVISION=	8
+PKGREVISION=	9
 CATEGORIES=	security
 MASTER_SITES=	http://www.opendnssec.org/files/source/
 

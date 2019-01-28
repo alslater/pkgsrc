@@ -10,3 +10,12 @@ $NetBSD$
  
  #ifdef NODE_HAVE_SMALL_ICU
  /* if this is defined, we have a 'secondary' entry point.
+@@ -364,7 +365,7 @@ static const char* GetVersion(const char
+   } else if (!strcmp(type, TYPE_UNICODE)) {
+     return U_UNICODE_VERSION;
+   } else if (!strcmp(type, TYPE_TZ)) {
+-    return TimeZone::getTZDataVersion(*status);
++    return icu::TimeZone::getTZDataVersion(*status);
+   } else if (!strcmp(type, TYPE_CLDR)) {
+     UVersionInfo versionArray;
+     ulocdata_getCLDRVersion(versionArray, status);

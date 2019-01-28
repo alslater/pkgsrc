@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		gtk-sharp-2.12.26
-PKGREVISION=		7
+PKGREVISION=		8
 CATEGORIES=		x11
 MASTER_SITES=		http://download.mono-project.com/sources/gtk-sharp212/
 

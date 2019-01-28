@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		Cenon-3.9.6
-PKGREVISION=		10
+PKGREVISION=		11
 CATEGORIES=		graphics cad gnustep
 MASTER_SITES=		http://www.vhf-group.com/vhfInterservice/download/source/
 EXTRACT_SUFX=		.tar.bz2

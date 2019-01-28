@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gnome-netstatus-2.26.0
-PKGREVISION=	49
+PKGREVISION=	50
 CATEGORIES=	net gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-netstatus/2.26/}
 EXTRACT_SUFX=	.tar.bz2

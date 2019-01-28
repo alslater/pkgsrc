@@ -2,7 +2,7 @@
 
 CONFLICTS+=	emacs25-nox11-[0-9]*
 
-PKGREVISION= 3
+PKGREVISION= 4
 .include "../../editors/emacs25/Makefile.common"
 
 .include "options.mk"

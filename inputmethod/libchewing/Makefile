@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libchewing-0.4.0
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	chinese inputmethod
 MASTER_SITES=	https://github.com/chewing/libchewing/releases/download/v${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tar.bz2

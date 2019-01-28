@@ -3,7 +3,7 @@
 
 PKGNAME=	ObjectiveLib-1.0.0
 DISTNAME=	objectivelib-1.0.0
-PKGREVISION=	11
+PKGREVISION=	12
 CATEGORIES=	devel gnustep
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=objectivelib/}
 

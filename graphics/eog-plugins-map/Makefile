@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	eog-plugins-map-2.30.2
-PKGREVISION=	36
+PKGREVISION=	37
 COMMENT=	Plugin collection for eog - map plugin
 
 BUILD_DIRS=	plugins/map

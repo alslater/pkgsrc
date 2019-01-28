@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	swfdec-mozilla-0.8.2
-PKGREVISION=	50
+PKGREVISION=	51
 CATEGORIES=	multimedia
 MASTER_SITES=	http://swfdec.freedesktop.org/download/swfdec-mozilla/0.8/
 

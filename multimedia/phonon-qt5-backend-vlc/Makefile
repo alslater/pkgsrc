@@ -2,7 +2,7 @@
 
 DISTNAME=	phonon-backend-vlc-0.9.0
 PKGNAME=	${DISTNAME:S/-/-qt5-/}
-PKGREVISION=	2
+PKGREVISION=	3
 
 COMMENT=	Multimedia API for KF5 - VLC backend
 

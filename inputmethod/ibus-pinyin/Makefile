@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	ibus-pinyin-1.5.0
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	inputmethod chinese
 MASTER_SITES=	http://ibus.googlecode.com/files/
 

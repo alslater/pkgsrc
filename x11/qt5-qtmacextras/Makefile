@@ -2,7 +2,7 @@
 
 DISTNAME=	qtmacextras-opensource-src-${QTVERSION}
 PKGNAME=	qt5-qtmacextras-${QTVERSION}
-PKGREVISION=	5
+PKGREVISION=	6
 COMMENT=	Qt5 module for Mac extras
 
 BUILD_TARGET=		sub-src

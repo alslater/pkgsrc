@@ -4,7 +4,7 @@
 .include "../../multimedia/totem/Makefile.common"
 
 PKGNAME=	${DISTNAME:S/totem/totem-nautilus/}
-PKGREVISION=	37
+PKGREVISION=	38
 
 # override Makefile.common
 PLIST_SRC=      ${.CURDIR}/PLIST
