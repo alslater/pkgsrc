@@ -19,6 +19,9 @@ ${PYSITELIB}/urllib3/connectionpool.pyo
 ${PYSITELIB}/urllib3/contrib/__init__.py
 ${PYSITELIB}/urllib3/contrib/__init__.pyc
 ${PYSITELIB}/urllib3/contrib/__init__.pyo
+${PYSITELIB}/urllib3/contrib/_appengine_environ.py
+${PYSITELIB}/urllib3/contrib/_appengine_environ.pyc
+${PYSITELIB}/urllib3/contrib/_appengine_environ.pyo
 ${PYSITELIB}/urllib3/contrib/_securetransport/__init__.py
 ${PYSITELIB}/urllib3/contrib/_securetransport/__init__.pyc
 ${PYSITELIB}/urllib3/contrib/_securetransport/__init__.pyo
@@ -61,9 +64,6 @@ ${PYSITELIB}/urllib3/packages/backports/__init__.pyo
 ${PYSITELIB}/urllib3/packages/backports/makefile.py
 ${PYSITELIB}/urllib3/packages/backports/makefile.pyc
 ${PYSITELIB}/urllib3/packages/backports/makefile.pyo
-${PYSITELIB}/urllib3/packages/ordered_dict.py
-${PYSITELIB}/urllib3/packages/ordered_dict.pyc
-${PYSITELIB}/urllib3/packages/ordered_dict.pyo
 ${PYSITELIB}/urllib3/packages/six.py
 ${PYSITELIB}/urllib3/packages/six.pyc
 ${PYSITELIB}/urllib3/packages/six.pyo
