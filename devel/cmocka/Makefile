@@ -1,21 +1,21 @@
-# $NetBSD: Makefile,v 1.4 2016/08/06 15:03:30 mef Exp $
+# $NetBSD: Makefile,v 1.6 2018/12/03 15:16:33 adam Exp $
 
-DISTNAME=	cmocka-1.0.1
+DISTNAME=	cmocka-1.1.3
 CATEGORIES=	devel
-MASTER_SITES=	https://cmocka.org/files/1.0/
+MASTER_SITES=	https://cmocka.org/files/${PKGVERSION_NOREV:R}/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	https://cmocka.org/files/1.0/
-COMMENT=	Unit testing framework for C supporing mock objects
+HOMEPAGE=	https://cmocka.org/
+COMMENT=	Unit testing framework for C supporting mock objects
 LICENSE=	apache-2.0
 
 USE_CMAKE=	yes
-WRKSRC=		${WRKDIR}/${DISTNAME}/build
-CMAKE_ARG_PATH=	${WRKDIR}/${DISTNAME}
+
+CONFIGURE_DIRS=	${WRKDIR}/build
+CMAKE_ARG_PATH=	${WRKSRC}
 
 post-extract:
-		mkdir -p ${WRKSRC}
-		rm -f ${WRKDIR}/${DISTNAME}/CMakeCache.txt
+	${MKDIR} ${WRKDIR}/build
 
 .include "../../mk/bsd.pkg.mk"
