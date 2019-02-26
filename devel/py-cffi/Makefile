@@ -1,25 +1,40 @@
-# $NetBSD: Makefile,v 1.23 2016/11/14 14:31:18 wiz Exp $
+# $NetBSD: Makefile,v 1.34 2018/07/29 10:48:14 leot Exp $
 
-DISTNAME=	cffi-1.9.1
-PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-CATEGORIES=	devel
-MASTER_SITES=	${MASTER_SITE_PYPI:=c/cffi/}
+DISTNAME=   cffi-1.11.5
+PKGNAME=    ${PYPKGPREFIX}-${DISTNAME}
+PKGREVISION=    1
+CATEGORIES= devel python
+MASTER_SITES=   ${MASTER_SITE_PYPI:=c/cffi/}
 
-MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	https://pypi.python.org/pypi/cffi/
-COMMENT=	Foreign Function Interface for Python calling C code
-LICENSE=	mit
+MAINTAINER= pkgsrc-users@NetBSD.org
+HOMEPAGE=   http://cffi.readthedocs.io/en/latest/
+COMMENT=    Foreign Function Interface for Python calling C code
+LICENSE=    mit
 
-USE_TOOLS+=	pkg-config
+USE_LANGUAGES=  c c++
+USE_TOOLS+= pkg-config
 
-DEPENDS+=	${PYPKGPREFIX}-cparser-[0-9]*:../../devel/py-cparser
+DEPENDS+=   ${PYPKGPREFIX}-cparser-[0-9]*:../../devel/py-cparser
+BUILD_DEPENDS+= ${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
 
-NOT_PAX_MPROTECT_SAFE=	${PYSITELIB}/_cffi_backend.so
+#
+# XXX: Kludge to avoid __thread that at the moment is still not properly
+# XXX: supported on NetBSD/evbarm aarch64.
+#
+.include "../../mk/bsd.prefs.mk"
+.if ${OPSYS} == "NetBSD" && ${MACHINE_ARCH} == "aarch64"
+BUILDLINK_TRANSFORM+=   rm:-DUSE__THREAD
+.endif
 
-# tests don't run on MPROTECT enabled systems, and I haven't found
-# the magic to fix that, so workaround:
-# sysctl -w security.pax.mprotect.global=0
+DISTUTILS_BUILDDIR_IN_TEST_ENV= yes
+
+TEST_ENV+=  TMPDIR=${WRKDIR}/tmp
+
+do-test:
+	${MKDIR} ${WRKDIR}/tmp
+	cd ${WRKSRC} && ${SETENV} ${TEST_ENV} py.test-${PYVERSSUFFIX}
 
 .include "../../devel/libffi/buildlink3.mk"
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"
+
