@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.4 2016/06/01 12:36:39 wiz Exp $
+# $NetBSD: Makefile,v 1.14 2018/10/18 19:44:30 adam Exp $
 
-DISTNAME=	certifi-2015.11.20.1
+DISTNAME=	certifi-2018.10.15
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-CATEGORIES=	security
+CATEGORIES=	security python
 MASTER_SITES=	${MASTER_SITE_PYPI:=c/certifi/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://certifi.io/
+HOMEPAGE=	https://certifi.io/
 COMMENT=	Python package for providing Mozilla's CA Bundle
 LICENSE=	isc
 
