@@ -1,26 +1,39 @@
-# $NetBSD: Makefile,v 1.18 2016/08/01 11:10:24 wiz Exp $
+# $NetBSD: Makefile,v 1.29 2018/12/22 08:55:29 adam Exp $
 
-DISTNAME=	talloc-2.1.8
+DISTNAME=	talloc-2.1.14
 CATEGORIES=	devel
 MASTER_SITES=	http://www.samba.org/ftp/talloc/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://talloc.samba.org/
+HOMEPAGE=	https://talloc.samba.org/talloc/doc/html/index.html
 COMMENT=	Hierarchical pool based memory allocator with destructors
 LICENSE=	gnu-gpl-v3 AND gnu-lgpl-v3
 
 BUILD_DEPENDS+=	libxslt-[0-9]*:../../textproc/libxslt
+BUILD_DEPENDS+=	docbook-xsl-[0-9]*:../../textproc/docbook-xsl
 
-HAS_CONFIGURE=	yes	# wrapper script around WAF
-USE_TOOLS+=	pkg-config
+USE_TOOLS+=		pkg-config
+HAS_CONFIGURE=		yes
+CONFIG_SHELL=		${PYTHONBIN}
+CONFIGURE_SCRIPT=	${WRKSRC}/buildtools/bin/waf
+CONFIGURE_ARGS+=	configure
+CONFIGURE_ARGS+=	--mandir=${PREFIX}/${PKGMANDIR}
+CONFIGURE_ARGS+=	--abi-check-disable
+CONFIGURE_ARGS+=	--disable-symbol-versions
+.if defined(MAKE_JOBS) && !empty(MAKE_JOBS) && !(defined(MAKE_JOBS_SAFE) && !empty(MAKE_JOBS_SAFE:M[nN][oO]))
+CONFIGURE_ARGS+=	--jobs=${MAKE_JOBS}
+.else
+CONFIGURE_ARGS+=	--jobs=1
+.endif
+TEST_TARGET=		test
 
 PKGCONFIG_OVERRIDE+=	talloc.pc.in
 PKGCONFIG_OVERRIDE+=	pytalloc-util.pc.in
-PY_PATCHPLIST=		yes
-PYTHON_VERSIONS_INCOMPATIBLE=  34 35 # not yet ported as of 2.1.0
+
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 2.1.0
 
 # include/talloc.h
-CONFLICTS+=	samba-[0-9]*
+CONFLICTS+=	samba<=4.6.8nb3
 
 REPLACE_PYTHON+=	buildtools/bin/waf
 REPLACE_PYTHON+=	buildtools/wafsamba/__init__.py
@@ -31,33 +44,14 @@ REPLACE_PYTHON+=	lib/replace/system/wscript_configure
 REPLACE_PYTHON+=	lib/replace/wscript
 REPLACE_PYTHON+=	wscript
 
-.include "../../mk/bsd.prefs.mk"
+SUBST_CLASSES+=		docbook
+SUBST_MESSAGE.docbook=	Fixing docbook URLs.
+SUBST_FILES.docbook+=	buildtools/wafsamba/samba_conftests.py
+SUBST_FILES.docbook+=	buildtools/wafsamba/wafsamba.py
+SUBST_STAGE.docbook=	pre-configure
+SUBST_SED.docbook+=	-e 's,http://docbook.sourceforge.net/release/xsl/current,${PREFIX}/share/xsl/docbook,g'
 
-# Fix install names of libraries on Darwin.
-# Upstream bug report: https://bugzilla.samba.org/show_bug.cgi?id=10791
-post-install:
-.if ${OPSYS} == "Darwin"
-	install_name_tool \
-	    -id \
-	    ${PREFIX}/lib/libpytalloc-util.${PKGVERSION_NOREV}.dylib \
-	    -change \
-	    ${WRKSRC}/bin/default/libtalloc.dylib \
-	    ${PREFIX}/lib/libtalloc.dylib \
-	    ${DESTDIR}${PREFIX}/lib/libpytalloc-util.${PKGVERSION_NOREV}.dylib
-	install_name_tool \
-	    -id \
-	    ${PREFIX}/lib/libtalloc.${PKGVERSION_NOREV}.dylib \
-	    ${DESTDIR}${PREFIX}/lib/libtalloc.${PKGVERSION_NOREV}.dylib
-	install_name_tool \
-	    -change \
-	    ${WRKSRC}/bin/default/libpytalloc-util.dylib \
-	    ${PREFIX}/lib/libpytalloc-util.dylib \
-	    -change \
-	    ${WRKSRC}/bin/default/libtalloc.dylib \
-	    ${PREFIX}/lib/libtalloc.dylib \
-	    ${DESTDIR}${PREFIX}/${PYSITELIB}/talloc.so
-.endif
-
+PY_PATCHPLIST=		yes
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
 .include "../../mk/bsd.pkg.mk"
