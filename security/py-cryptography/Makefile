@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.49 2016/12/19 08:57:51 wiz Exp $
 
-DISTNAME=	cryptography-1.7.1
+DISTNAME=	cryptography-2.5
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	security python
 MASTER_SITES=	${MASTER_SITE_PYPI:=c/cryptography/}
@@ -10,16 +10,17 @@ HOMEPAGE=	https://pypi.python.org/pypi/cryptography/
 COMMENT=	Cryptographic recipes and primitives for Python
 LICENSE=	apache-2.0 OR modified-bsd
 
-DEPENDS+=	${PYPKGPREFIX}-asn1-[0-9]*:../../security/py-asn1
-DEPENDS+=	${PYPKGPREFIX}-cffi>=1.8.2:../../devel/py-cffi
-DEPENDS+=	${PYPKGPREFIX}-cparser>=2.10:../../devel/py-cparser
-DEPENDS+=	${PYPKGPREFIX}-idna-[0-9]*:../../www/py-idna
-DEPENDS+=	${PYPKGPREFIX}-six-[0-9]*:../../lang/py-six
-# actually, TEST_DEPENDS
-BUILD_DEPENDS+=	${PYPKGPREFIX}-iso8601-[0-9]*:../../time/py-iso8601
-BUILD_DEPENDS+=	${PYPKGPREFIX}-pretend-[0-9]*:../../devel/py-pretend
-BUILD_DEPENDS+=	${PYPKGPREFIX}-requests>=0.8:../../devel/py-requests
-BUILD_DEPENDS+=	${PYPKGPREFIX}-test>=0.8:../../devel/py-test
+DEPENDS+=   ${PYPKGPREFIX}-asn1crypto>=0.21.0:../../security/py-asn1crypto
+DEPENDS+=   ${PYPKGPREFIX}-cffi>=1.11.4:../../devel/py-cffi
+DEPENDS+=   ${PYPKGPREFIX}-cparser>=2.10:../../devel/py-cparser
+DEPENDS+=   ${PYPKGPREFIX}-idna>=2.1:../../www/py-idna
+DEPENDS+=   ${PYPKGPREFIX}-six>=1.4.1:../../lang/py-six
+TEST_DEPENDS+=  ${PYPKGPREFIX}-cryptography_vectors-[0-9]*:../../security/py-cryptography_vectors
+TEST_DEPENDS+=  ${PYPKGPREFIX}-hypothesis>=1.11.4:../../devel/py-hypothesis
+TEST_DEPENDS+=  ${PYPKGPREFIX}-iso8601-[0-9]*:../../time/py-iso8601
+TEST_DEPENDS+=  ${PYPKGPREFIX}-pretend-[0-9]*:../../devel/py-pretend
+TEST_DEPENDS+=  ${PYPKGPREFIX}-pytz-[0-9]*:../../time/py-pytz
+TEST_DEPENDS+=  ${PYPKGPREFIX}-test>=3.9.3:../../devel/py-test
 
 .include "../../lang/python/pyversion.mk"
 
