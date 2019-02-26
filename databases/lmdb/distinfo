@@ -1,8 +1,7 @@
 $NetBSD: distinfo,v 1.5 2016/11/25 15:50:13 fhajny Exp $
 
-SHA1 (LMDB-0.9.18.tar.gz) = 375e31bd0a4d8426e5fc4bfdb00d532c206d4f2b
-RMD160 (LMDB-0.9.18.tar.gz) = 498e2076e9c3e1145d14d83880a54430f20875d8
-SHA512 (LMDB-0.9.18.tar.gz) = 394e88d99d446eb30771d7cf7a661584683a0d6d8e976cc561b5eecbb2a5d0817bbd59994002afa4eae6c86a39f05f50ebc2eff77cd70dd8c67225df4611f5e6
-Size (LMDB-0.9.18.tar.gz) = 139156 bytes
-SHA1 (patch-libraries_liblmdb_Makefile) = da5288510ae26b498e1cf8ed453bb1c74f25e54a
-SHA1 (patch-libraries_liblmdb_mdb.c) = 26d1dd1e59b30f8e814bcc3a5d2ff9fd449f83ab
+SHA1 (LMDB-0.9.23.tar.gz) = 801e97190ab68fdceb6daf5fc623f9c3c29d4b4a
+RMD160 (LMDB-0.9.23.tar.gz) = ddaa12f026e86a1b7796a4255ce05fdea03f4d10
+SHA512 (LMDB-0.9.23.tar.gz) = 47466a96ce288d18d489acf1abf811aa973649848a4cac31f71e1f25ea781a055ebd6616d2d630214b2df2f146f12609c82d65be0196f49d6b46a6c96464e120
+Size (LMDB-0.9.23.tar.gz) = 143813 bytes
+SHA1 (patch-libraries_liblmdb_Makefile) = 6b2f0bb477b17b073095d499ff4496f3b30dc08f
