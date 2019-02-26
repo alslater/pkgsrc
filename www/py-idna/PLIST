@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.3 2016/04/08 15:23:33 wiz Exp $
+@comment $NetBSD$
 ${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
 ${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
 ${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
@@ -21,6 +21,9 @@ ${PYSITELIB}/idna/idnadata.pyo
 ${PYSITELIB}/idna/intranges.py
 ${PYSITELIB}/idna/intranges.pyc
 ${PYSITELIB}/idna/intranges.pyo
+${PYSITELIB}/idna/package_data.py
+${PYSITELIB}/idna/package_data.pyc
+${PYSITELIB}/idna/package_data.pyo
 ${PYSITELIB}/idna/uts46data.py
 ${PYSITELIB}/idna/uts46data.pyc
 ${PYSITELIB}/idna/uts46data.pyo
