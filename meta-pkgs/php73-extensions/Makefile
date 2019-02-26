@@ -25,7 +25,8 @@ DEPENDS+=	${PHP_PKG_PREFIX}-gd>=${PHP_VERSION}<${NEXT_VERS}:../../graphics/php-g
 DEPENDS+=	${PHP_PKG_PREFIX}-gettext>=${PHP_VERSION}<${NEXT_VERS}:../../devel/php-gettext
 DEPENDS+=	${PHP_PKG_PREFIX}-gmp>=${PHP_VERSION}<${NEXT_VERS}:../../devel/php-gmp
 DEPENDS+=	${PHP_PKG_PREFIX}-iconv>=${PHP_VERSION}<${NEXT_VERS}:../../converters/php-iconv
-DEPENDS+=	${PHP_PKG_PREFIX}-recode>=${PHP_VERSION}<${NEXT_VERS}:../../converters/php-recode
+# Caused segfault when installed as default.  Install manually and rename php.d/recode.ini to arecode.ini (move to first)
+# DEPENDS+=	${PHP_PKG_PREFIX}-recode>=${PHP_VERSION}<${NEXT_VERS}:../../converters/php-recode
 DEPENDS+=	${PHP_PKG_PREFIX}-imap>=${PHP_VERSION}<${NEXT_VERS}:../../mail/php-imap
 DEPENDS+=	${PHP_PKG_PREFIX}-intl>=${PHP_VERSION}<${NEXT_VERS}:../../textproc/php-intl
 DEPENDS+=	${PHP_PKG_PREFIX}-json>=${PHP_VERSION}<${NEXT_VERS}:../../textproc/php-json
