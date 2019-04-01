@@ -10,7 +10,7 @@ COMMENT=	This plugin handles S/MIME signed and/or encrypted mails
 
 PLIST_SRC+=	PLIST
 
-DEPENDS+=	gnupg2>=2.0<2.1:../../security/gnupg2
+DEPENDS+=	gnupg2-[0-9]*:../../security/gnupg2
 
 CONFIGURE_ARGS+=	--enable-smime-plugin
 CONFIGURE_ARGS+=	--enable-pgpcore-plugin

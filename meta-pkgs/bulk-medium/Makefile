@@ -115,7 +115,7 @@ BUILD_DEPENDS+=	ghostscript-agpl-[0-9]*:../../print/ghostscript-agpl
 BUILD_DEPENDS+=	poppler-utils-[0-9]*:../../print/poppler-utils
 BUILD_DEPENDS+=	xpdf-[0-9]*:../../print/xpdf
 BUILD_DEPENDS+=	gnupg-[0-9]*:../../security/gnupg
-BUILD_DEPENDS+=	gnupg2>=2.0<2.1:../../security/gnupg2
+BUILD_DEPENDS+=	gnupg2-[0-9]*:../../security/gnupg2
 BUILD_DEPENDS+=	desktop-file-utils-[0-9]*:../../sysutils/desktop-file-utils
 BUILD_DEPENDS+=	xe-guest-utilities-[0-9]*:../../sysutils/xe-guest-utilities
 BUILD_DEPENDS+=	xenkernel41-[0-9]*:../../sysutils/xenkernel41

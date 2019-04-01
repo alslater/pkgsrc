@@ -95,7 +95,6 @@ SUBDIR+=	gnu-pw-mgr
 SUBDIR+=	gnupg
 SUBDIR+=	gnupg-pkcs11-scd
 SUBDIR+=	gnupg2
-SUBDIR+=	gnupg21
 SUBDIR+=	gnutls
 SUBDIR+=	go-crypto
 SUBDIR+=	go-oauth2
