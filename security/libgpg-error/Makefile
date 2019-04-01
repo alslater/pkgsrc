@@ -1,11 +1,9 @@
 # $NetBSD: Makefile,v 1.54 2016/11/28 12:50:19 wiz Exp $
 
-DISTNAME=	libgpg-error-1.25
+DISTNAME=	libgpg-error-1.35
 CATEGORIES=	security
 MASTER_SITES=	ftp://ftp.gnupg.org/gcrypt/libgpg-error/ \
-		ftp://ftp.ring.gr.jp/pub/net/gnupg/libgpg-error/ \
-		ftp://mirror.switch.ch/mirror/gnupg/libgpg-error/ \
-		ftp://ftp.freenet.de/pub/ftp.gnupg.org/gcrypt/libgpg-error/
+		ftp://ftp.ring.gr.jp/pub/net/gnupg/libgpg-error/ 
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	minskim@NetBSD.org
@@ -19,8 +17,8 @@ USE_TOOLS+=		gmake
 USE_PKGLOCALEDIR=	yes
 GNU_CONFIGURE=		yes
 MAKE_ENV+=		LC_ALL="C"
-MAKE_JOBS_SAFE=		no
 INFO_FILES=		yes
+TEST_TARGET=		check
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -32,26 +30,16 @@ CONFIGURE_ENV+=		CC_FOR_BUILD=${CC:Q}\ ${CFLAGS:M*:Q}
 
 # XXX See HACKS
 .if ${OPSYS} == "IRIX" || !empty(MACHINE_PLATFORM:MNetBSD-[3-9]*)
-USE_TOOLS+=		awk
+USE_TOOLS+=            awk
 .else
-USE_TOOLS+=		gawk
+USE_TOOLS+=            gawk
 .endif
+
 
 .if !empty(MACHINE_PLATFORM:MSunOS-5.10-*)
 LIBS+=	-lrt
 .endif
 
-# On Dragonfly i386, Pkgsrc libintl segfaults on bindtextdomain function
-# while locking a thread.  Until that's resolved, stop libgpg-error from
-# using NLS which invokes that function during initialization.
-PLIST_VARS+=	nls
-.if ${OPSYS} == "DragonFly" && ${MACHINE} == "i386"
-CONFIGURE_ARGS+=	--disable-nls
-.else
-PLIST.nls=	yes
-.endif
-
-TEST_TARGET=		check
 
 .include "../../converters/libiconv/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
