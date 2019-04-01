@@ -4,7 +4,7 @@
 # used by security/pinentry-gtk2/Makefile
 # used by security/pinentry-qt4/Makefile
 
-PINENTRY_VERSION=	1.0.0
+PINENTRY_VERSION=	1.1.0
 DISTNAME=		pinentry-${PINENTRY_VERSION}
 
 CATEGORIES=		security
@@ -25,7 +25,7 @@ INFO_FILES=		yes
 
 BUILDLINK_API_DEPENDS.libassuan+=       libassuan>=2.1.0
 .include "../../security/libassuan2/buildlink3.mk"
-BUILDLINK_API_DEPENDS.libgpg-error+=	libgpg-error>=1.16
+BUILDLINK_API_DEPENDS.libgpg-error+=	libgpg-error>=1.35
 .include "../../security/libgpg-error/buildlink3.mk"
 .include "../../converters/libiconv/buildlink3.mk"
 .include "../../devel/ncurses/buildlink3.mk"
