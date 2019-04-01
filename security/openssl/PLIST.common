@@ -1627,6 +1627,7 @@ man/man3/X509_check_host.3
 man/man3/X509_check_ip.3
 man/man3/X509_check_ip_asc.3
 man/man3/X509_check_private_key.3
+man/man3/X509_cmp_time.3
 man/man3/X509_free.3
 man/man3/X509_new.3
 man/man3/X509_verify_cert.3
