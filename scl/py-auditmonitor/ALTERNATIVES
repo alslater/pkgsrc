@@ -1,0 +1,1 @@
+bin/auditmon @PREFIX@/bin/auditmon@PYVERSSUFFIX@
