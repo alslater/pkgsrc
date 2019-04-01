@@ -12,7 +12,7 @@ HOMEPAGE=	http://delta.affinix.com/qca/
 COMMENT=	Cross-platform crypto API for QT - GnuPG plugin
 LICENSE=	gnu-lgpl-v2.1
 
-DEPENDS+=	gnupg2>=2.0<2.1:../../security/gnupg2
+DEPENDS+=   gnupg2-[0-9]*:../../security/gnupg2
 
 USE_TOOLS+=	gmake
 USE_LIBTOOL=	yes
