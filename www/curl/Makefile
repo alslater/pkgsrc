@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.191 2018/01/01 21:18:12 adam Exp $
 
-DISTNAME=	curl-7.64.0
+DISTNAME=	curl-7.64.1
 #PKGREVISION=	1
 CATEGORIES=	www
 MASTER_SITES=	https://curl.haxx.se/download/
@@ -35,10 +35,10 @@ USE_TOOLS+=		perl
 
 .include "options.mk"
 
-post-install:
-.for f in MANUAL TheArtOfHttpScripting FAQ
-	${INSTALL_DATA} ${WRKSRC}/docs/${f} ${DESTDIR}${PREFIX}/share/doc/curl/
-.endfor
+#post-install:
+#.for f in MANUAL TheArtOfHttpScripting FAQ
+#	${INSTALL_DATA} ${WRKSRC}/docs/${f} ${DESTDIR}${PREFIX}/share/doc/curl/
+#.endfor
 
 .include "../../devel/gettext-lib/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
