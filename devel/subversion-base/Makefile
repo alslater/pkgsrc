@@ -1,8 +1,6 @@
 # $NetBSD: Makefile,v 1.107 2016/12/12 14:26:15 wiz Exp $
 
 PKGNAME=	subversion-base-${SVNVER}
-PKGREVISION=	1
-#PKGREVISION=	1
 COMMENT=	Version control system, base programs and libraries
 
 # on at least solaris, configure fails to figure out
@@ -11,7 +9,7 @@ BROKEN_GETTEXT_DETECTION=	yes
 
 .include "../../devel/subversion/Makefile.common"
 
-USE_TOOLS+=		msgfmt
+USE_TOOLS+=		msgfmt pkg-config
 
 CONFIGURE_ARGS+=	--without-apxs
 
@@ -22,7 +20,6 @@ CFLAGS.SunOS+=		-D__EXTENSIONS__
 
 BUILDLINK_API_DEPENDS.sqlite3+=	sqlite3>=3.7.15.1
 .include "../../databases/sqlite3/buildlink3.mk"
-.include "../../devel/zlib/buildlink3.mk"
 
 PLIST_VARS+=		db4
 .include "../../devel/apr-util/buildlink3.mk"
