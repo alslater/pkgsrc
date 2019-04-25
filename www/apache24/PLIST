@@ -164,6 +164,7 @@ lib/httpd/mod_sed.so
 lib/httpd/mod_session.so
 lib/httpd/mod_session_cookie.so
 ${PLIST.ssl}lib/httpd/mod_session_crypto.so
+lib/httpd/mod_socache_redis.so
 lib/httpd/mod_session_dbd.so
 lib/httpd/mod_setenvif.so
 lib/httpd/mod_slotmem_plain.so
