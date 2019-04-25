@@ -1,6 +1,6 @@
 $NetBSD$
 
-SHA1 (auditmonitor/auditmonitor-0.2.4.tar.gz) = e556516e59a9f1b2380d80f8415c22e13e103073
-RMD160 (auditmonitor/auditmonitor-0.2.4.tar.gz) = 0d5d8e6b1f44e9544908bf58fadf2a814e2a5cb1
-SHA512 (auditmonitor/auditmonitor-0.2.4.tar.gz) = cc780f35dce3f9757afc985ab9e6cc7d4d5afb6d8d9352d7106dc25bd04d4832f26a3db28430fb053144c44f9871e1802e082772ae411387b5b7bb62afc787ab
-Size (auditmonitor/auditmonitor-0.2.4.tar.gz) = 6625 bytes
+SHA1 (auditmonitor/auditmonitor-0.2.5.tar.gz) = 2f2369bb1090b8f9535bea8eb944293c8b81f007
+RMD160 (auditmonitor/auditmonitor-0.2.5.tar.gz) = 0cb9b9b0f3c674866af376ab08785071bc53f386
+SHA512 (auditmonitor/auditmonitor-0.2.5.tar.gz) = 92597028e77cc6313d33f2f424ca8dd041b46d312f325dd09eaf0386f9bdb44e239e73f8110185980376bb36d10342bb1b28decdb25af64431ece9d48b4e85bd
+Size (auditmonitor/auditmonitor-0.2.5.tar.gz) = 6800 bytes
