@@ -1995,7 +1995,6 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/_md5.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_multibytecodec.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_multiprocessing.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_opcode.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_pickle.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_posixsubprocess.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_random.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_sha1.so
@@ -2610,6 +2609,7 @@ lib/python${PY_VER_SUFFIX}/test/ssltests.pyo
 lib/python${PY_VER_SUFFIX}/test/ssltests.pyc
 lib/python${PY_VER_SUFFIX}/test/string_tests.pyo
 lib/python${PY_VER_SUFFIX}/test/string_tests.pyc
+lib/python${PY_VER_SUFFIX}/test/talos-2019-0758.pem
 lib/python${PY_VER_SUFFIX}/test/test___all__.pyo
 lib/python${PY_VER_SUFFIX}/test/test___all__.pyc
 lib/python${PY_VER_SUFFIX}/test/test___future__.pyo
