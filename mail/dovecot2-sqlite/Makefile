@@ -2,7 +2,7 @@
 #
 
 PKGREVISION= 3
-.include "../../mail/dovecot2/Makefile.plugin"
+.include "../../mail/dovecot2/Makefile.common"
 
 PKGNAME=		${DISTNAME:S/dovecot/dovecot-sqlite/}
 COMMENT+=		(sqlite plugin)

@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.1 2016/07/18 15:03:06 fhajny Exp $
 #
 
-.include "../../mail/dovecot2/Makefile.plugin"
+.include "../../mail/dovecot2/Makefile.common"
 
 PKGNAME=		${DISTNAME:S/dovecot/dovecot-mysql/}
 COMMENT+=		(mysql plugin)

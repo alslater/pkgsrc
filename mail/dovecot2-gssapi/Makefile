@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.3 2016/12/12 14:22:03 wiz Exp $
 #
 
-.include "../../mail/dovecot2/Makefile.plugin"
+.include "../../mail/dovecot2/Makefile.common"
 
 PKGNAME=		${DISTNAME:S/dovecot/dovecot-gssapi/}
 COMMENT+=		(GSSAPI plugin)

@@ -2,7 +2,7 @@
 #
 
 PKGREVISION= 1
-.include "../../mail/dovecot2/Makefile.plugin"
+.include "../../mail/dovecot2/Makefile.common"
 
 PKGNAME=		${DISTNAME:S/dovecot/dovecot-pgsql/}
 COMMENT+=		(pgsql plugin)
