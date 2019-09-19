@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.4 2016/08/17 18:58:05 maya Exp $
+@comment $NetBSD$
 bin/byobu
 bin/byobu-config
 bin/byobu-ctrl-a
@@ -126,6 +126,7 @@ man/man1/purge-old-kernels.1
 man/man1/vigpg.1
 man/man1/wifi-status.1
 share/byobu/desktop/byobu.desktop
+share/byobu/desktop/byobu.desktop.old
 share/byobu/keybindings/common
 share/byobu/keybindings/f-keys
 share/byobu/keybindings/f-keys.screen

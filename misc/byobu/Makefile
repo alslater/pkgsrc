@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.12 2016/08/17 18:58:05 maya Exp $
 
-BYOBUVER=	5.111
+BYOBUVER=	5.125
 DISTNAME=	byobu_${BYOBUVER}.orig
 PKGNAME=	${DISTNAME:S/_/-/:S/.orig//}
 CATEGORIES=	misc
