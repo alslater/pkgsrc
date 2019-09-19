@@ -1,7 +1,6 @@
 # $NetBSD: Makefile,v 1.10 2017/09/07 13:47:21 wiz Exp $
 
-DISTNAME=	pcre2-10.31
-PKGREVISION=	1
+DISTNAME=	pcre2-10.33
 CATEGORIES=	devel
 MASTER_SITES=	ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
 MASTER_SITES+=	https://ftp.pcre.org/pub/pcre/
@@ -27,6 +26,9 @@ CONFIGURE_ARGS+=	--enable-pcre2-32
 CONFIGURE_ARGS+=	--enable-pcre2grep-libz
 CONFIGURE_ARGS+=	--enable-pcre2grep-libbz2
 
+# On NetBSD, needs:
+# sysctl -w security.pax.mprotect.enabled=0
+# because of its JIT.
 TEST_TARGET=		check
 
 .include "options.mk"
