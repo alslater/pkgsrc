@@ -21,7 +21,7 @@ CONFIGURE_ARGS+=	--with-ssl=${BUILDLINK_PREFIX.openssl}
 
 PTHREAD_OPTS+=		require native
 CONFIGURE_ARGS+=	--enable-threads
-CFLAGS+=        -pthreads
+CFLAGS+=        -pthreads -D__EXTENSIONS__
 
 
 .include "../../mk/bsd.prefs.mk"
