@@ -56,7 +56,6 @@ SHA1 (patch-mono_utils_mono-mmap.c) = 869c24a57861fcfb1bdc8a04ed0e0d1fd5a0e0b5
 SHA1 (patch-mono_utils_mono-semaphore.c) = a47c7816445c7781e1cf0efc889dedfbf5b351f9
 SHA1 (patch-mono_utils_mono-threads-dragonfly.c) = d41c7735d5ba0224ff4a4cf70308fb835ec00bbe
 SHA1 (patch-mono_utils_mono-threads-netbsd.c) = 29d7bdb4906bca4e2f5a0a94b7e70e04570df8ee
-SHA1 (patch-mono_utils_mono-threads-posix.c) = d0cb2b1be62cbafe86a3efa817b8120af4ab1086
 SHA1 (patch-mono_utils_mono-threads-solaris.c) = 8781c9e09edfbbbc9940f02cce46a3ce5b6c10c3
 SHA1 (patch-po_Makefile.in) = 53f967c75ae028d991f118fb3bbc5b90bb4ceea7
 SHA1 (patch-support_signal.c) = 33e0c19c21955b105d78a05b2b10d00f479a60c2
