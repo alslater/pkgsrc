@@ -9,6 +9,8 @@ BUILDLINK_API_DEPENDS.rhash+=	rhash>=1.3.1
 BUILDLINK_PKGSRCDIR.rhash?=	../../misc/rhash
 
 BUILDLINK_DEPMETHOD.rhash?=	build
+
+.include "../../security/openssl/buildlink3.mk"
 .endif	# RHASH_BUILDLINK3_MK
 
 BUILDLINK_TREE+=	-rhash
