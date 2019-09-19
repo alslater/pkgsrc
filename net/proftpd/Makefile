@@ -53,8 +53,10 @@ INSTALLATION_DIRS+=	share/doc/proftpd
 INSTALLATION_DIRS+=	share/examples/proftpd
 
 post-install:
-.for i in NEWS README README.IPv6 README.LDAP README.PAM README.capabilities \
-          README.classes README.controls README.facl README.modules
+.for i in NEWS README.AIX README.DSO README.FreeBSD README.IPv6 README.LDAP \
+          README.PAM README.Solaris2.5x README.Unixware README.capabilities README.classes \
+          README.controls README.cygwin README.facl README.md README.modules README.ports
+
 	${INSTALL_DATA} ${WRKSRC}/${i} ${DESTDIR}${PREFIX}/share/doc/proftpd
 .endfor
 .for i in Configuration.html faq.html license.txt
