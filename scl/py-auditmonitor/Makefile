@@ -1,6 +1,6 @@
 # $NetBSD$
 
-DISTNAME=	auditmonitor-0.2.5
+DISTNAME=	auditmonitor-0.6
 #PKGREVICSION=	1
 CATEGORIES=	scl python
 MASTER_SITES=	${MASTER_SITE_GITHUB:=alslater/}
