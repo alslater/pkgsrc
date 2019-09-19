@@ -9,7 +9,7 @@
 # used by mail/dovecot2-mysql/Makefile
 # used by mail/dovecot2-pgsql/Makefile
 
-DISTNAME=	dovecot-2.3.5.1
+DISTNAME=	dovecot-2.3.6
 CATEGORIES=	mail
 MASTER_SITES=	https://www.dovecot.org/releases/${PKGVERSION_NOREV:R}/
 
@@ -27,11 +27,18 @@ GNU_CONFIGURE=		yes
 
 .include "../../mk/bsd.prefs.mk"
 
+.if "${PKGPATH}" != "mail/dovecot2"
+DEPENDS+=		dovecot>=${PKGVERSION_NOREV}{nb*,}:../../mail/dovecot2
+.endif
+
 CONFIGURE_ARGS+=	--localstatedir=${VARBASE}
 CONFIGURE_ARGS+=	--sysconfdir=${PKG_SYSCONFDIR}
 CONFIGURE_ARGS+=	--with-ssldir=${SSLDIR}
 CONFIGURE_ARGS+=	--without-gssapi
 CONFIGURE_ARGS+=	--without-ldap
+
+# Leave pkgsrc to enable compiler security features as appropriate.
+CONFIGURE_ARGS+=	--disable-hardening
 
 # Enable generic SQL backend support
 CONFIGURE_ARGS+=	--with-sql
@@ -45,7 +52,7 @@ CONFIGURE_ARGS.SunOS+=	--with-notify=none
 
 # Sharing sources between binary and lib triggers libtool bugs
 # mv: rename .deps/auth-stats.Tpo to .deps/auth-stats.Po: No such file or directory
-MAKE_JOBS_SAFE=	no
+#MAKE_JOBS_SAFE=	no
 
 .include "options.mk"
 

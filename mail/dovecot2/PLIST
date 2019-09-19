@@ -729,6 +729,8 @@ share/doc/dovecot/documentation.txt
 share/doc/dovecot/dovecot-openssl.cnf
 share/doc/dovecot/mkcert.sh
 share/doc/dovecot/securecoding.txt
+share/doc/dovecot/solr-config-7.7.0.xml
+share/doc/dovecot/solr-schema-7.7.0.xml
 share/doc/dovecot/solr-schema.xml
 share/doc/dovecot/thread-refs.txt
 share/doc/dovecot/wiki/ACL.txt
