@@ -38,7 +38,7 @@ PKG_SUPPORTED_OPTIONS+=	squid-ipf
 PKG_SUPPORTED_OPTIONS+=	squid-pf
 .endif
 
-.if (${OPSYS} == "FreeBSD" || ${OPSYS} == "NetBSD") && \
+.if (${OPSYS} == "NetBSD") && \
 	!empty(PKG_SUPPORTED_OPTIONS:Msquid-ipf)
 PKG_SUGGESTED_OPTIONS+=	squid-ipf
 .endif
@@ -132,6 +132,7 @@ CONFIGURE_ARGS+=	--disable-snmp
 
 .if !empty(PKG_OPTIONS:Mssl)
 CONFIGURE_ARGS+=	--enable-ssl --with-openssl=${SSLBASE:Q}
+CONFIGURE_ARGS+=	--enable-ssl-crtd
 .  include "../../security/openssl/buildlink3.mk"
 PLIST.ssl=		yes
 .endif
