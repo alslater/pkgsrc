@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.132 2018/03/29 11:08:44 wiz Exp $
 
-SHA1 (openssl-1.0.2r.tar.gz) = b9aec1fa5cedcfa433aed37c8fe06b0ab0ce748d
-RMD160 (openssl-1.0.2r.tar.gz) = f268c8f87ee6b8ca1523761b064de575f6851ae0
-SHA512 (openssl-1.0.2r.tar.gz) = 6eb2211f3ad56d7573ac26f388338592c37e5faaf5e2d44c0fa9062c12186e56a324f135d1c956a89b55fcce047e6428bec2756658d103e7275e08b46f741235
-Size (openssl-1.0.2r.tar.gz) = 5348369 bytes
+SHA1 (openssl-1.0.2s.tar.gz) = cf43d57a21e4baf420b3628677ebf1723ed53bc1
+RMD160 (openssl-1.0.2s.tar.gz) = 6067f88e5f1ac797e189648386adb12ca4aba85d
+SHA512 (openssl-1.0.2s.tar.gz) = 9f745452c4f777df694158e95003cde78a2cf8199bc481a563ec36644664c3c1415a774779b9791dd18f2aeb57fa1721cb52b3db12d025955e970071d5b66d2a
+Size (openssl-1.0.2s.tar.gz) = 5349149 bytes
 SHA1 (patch-Configure) = 2d963d781314276a0ee1bc531df6bc50f0f6b32b
 SHA1 (patch-Makefile.org) = b990414c1e6707831e6d193dc95796aef2761ef1
 SHA1 (patch-Makefile.shared) = 273154600c6cf0cf4de4ae16d56c5555bca5f9ad
