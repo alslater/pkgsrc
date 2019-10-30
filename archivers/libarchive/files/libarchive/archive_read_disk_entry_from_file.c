@@ -127,7 +127,7 @@ archive_read_disk_entry_setup_acls(struct archive_read_disk *a,
 /*
  * Enter working directory and return working pathname of archive_entry.
  * If a pointer to an integer is provided and its value is below zero
- * open a file descriptor on this pahtname.
+ * open a file descriptor on this pathname.
  */
 const char *
 archive_read_disk_entry_setup_path(struct archive_read_disk *a,
@@ -163,6 +163,9 @@ archive_read_disk_entry_from_file(struct archive *_a,
 	int initial_fd = fd;
 	int r, r1;
 
+	archive_check_magic(_a, ARCHIVE_READ_DISK_MAGIC, ARCHIVE_STATE_ANY,
+		"archive_read_disk_entry_from_file");
+
 	archive_clear_error(_a);
 	path = archive_entry_sourcepath(entry);
 	if (path == NULL)
@@ -188,7 +191,7 @@ archive_read_disk_entry_from_file(struct archive *_a,
 				}
 			} else
 #endif
-			if (stat(path, &s) != 0) {
+			if (la_stat(path, &s) != 0) {
 				archive_set_error(&a->archive, errno,
 				    "Can't stat %s", path);
 				return (ARCHIVE_FAILED);

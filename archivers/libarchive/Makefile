@@ -1,17 +1,16 @@
-# $NetBSD: Makefile,v 1.47 2017/02/25 21:13:58 joerg Exp $
+# $NetBSD: Makefile,v 1.48 2019/04/10 08:24:03 adam Exp $
 
 .include "Makefile.common"
 
 COMMENT=	Library to read/create different archive formats
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 CONFIGURE_ARGS+=	--disable-bsdcat
 CONFIGURE_ARGS+=	--disable-bsdcpio
 CONFIGURE_ARGS+=	--disable-bsdtar
 
 do-extract:
-	${CP} -r ${FILESDIR} ${WRKSRC}
+	${CP} -R ${FILESDIR} ${WRKSRC}
 	# Contents of ${FILESDIR} may not have the u=w bit set, and
 	# the build system assumes files in ${WRKSRC} are writable.
 	${CHMOD} -R u+w ${WRKSRC}
