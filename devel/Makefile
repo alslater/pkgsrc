@@ -2226,6 +2226,7 @@ SUBDIR+=	tcllib
 SUBDIR+=	tclreadline
 SUBDIR+=	teem
 SUBDIR+=	tet3
+SUBDIR+=	tevent
 SUBDIR+=	tex-etoolbox
 SUBDIR+=	tex-etoolbox-doc
 SUBDIR+=	tex-l3experimental
