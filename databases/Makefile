@@ -61,6 +61,7 @@ SUBDIR+=	jdbc-postgresql94
 SUBDIR+=	kmysqladmin
 SUBDIR+=	krecipes
 SUBDIR+=	kyotocabinet
+SUBDIR+=	ldb
 SUBDIR+=	lbdb
 SUBDIR+=	ldapvi
 SUBDIR+=	libcassandra
