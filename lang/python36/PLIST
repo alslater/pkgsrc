@@ -3927,6 +3927,7 @@ lib/python${PY_VER_SUFFIX}/test/support/testresult.pyo
 lib/python${PY_VER_SUFFIX}/test/support/testresult.pyc
 lib/python${PY_VER_SUFFIX}/test/support/script_helper.py
 lib/python${PY_VER_SUFFIX}/test/support/testresult.py
+lib/python${PY_VER_SUFFIX}/test/talos-2019-0758.pem
 lib/python${PY_VER_SUFFIX}/test/test___all__.py
 lib/python${PY_VER_SUFFIX}/test/test___future__.py
 lib/python${PY_VER_SUFFIX}/test/test__locale.py
