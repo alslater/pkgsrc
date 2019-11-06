@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.24 2017/10/23 21:12:44 adam Exp $
+@comment $NetBSD: PLIST,v 1.31 2019/08/15 08:03:38 adam Exp $
 bin/ab
 bin/apxs
 bin/dbmmanage
@@ -95,6 +95,7 @@ lib/httpd/mod_authz_host.so
 lib/httpd/mod_authz_owner.so
 lib/httpd/mod_authz_user.so
 lib/httpd/mod_autoindex.so
+${PLIST.brotli}lib/httpd/mod_brotli.so
 lib/httpd/mod_buffer.so
 lib/httpd/mod_cache.so
 lib/httpd/mod_cache_disk.so
@@ -150,6 +151,7 @@ lib/httpd/mod_proxy_fcgi.so
 lib/httpd/mod_proxy_fdpass.so
 lib/httpd/mod_proxy_ftp.so
 lib/httpd/mod_proxy_hcheck.so
+${PLIST.xml}lib/httpd/mod_proxy_html.so
 lib/httpd/mod_proxy_http.so
 lib/httpd/mod_proxy_scgi.so
 lib/httpd/mod_proxy_uwsgi.so
@@ -164,13 +166,13 @@ lib/httpd/mod_sed.so
 lib/httpd/mod_session.so
 lib/httpd/mod_session_cookie.so
 ${PLIST.ssl}lib/httpd/mod_session_crypto.so
-lib/httpd/mod_socache_redis.so
 lib/httpd/mod_session_dbd.so
 lib/httpd/mod_setenvif.so
 lib/httpd/mod_slotmem_plain.so
 lib/httpd/mod_slotmem_shm.so
 lib/httpd/mod_socache_dbm.so
 lib/httpd/mod_socache_memcache.so
+lib/httpd/mod_socache_redis.so
 lib/httpd/mod_socache_shmcb.so
 lib/httpd/mod_speling.so
 lib/httpd/mod_ssl.so
@@ -184,6 +186,7 @@ lib/httpd/mod_usertrack.so
 lib/httpd/mod_version.so
 lib/httpd/mod_vhost_alias.so
 lib/httpd/mod_watchdog.so
+${PLIST.xml}lib/httpd/mod_xml2enc.so
 libexec/cgi-bin/printenv
 libexec/cgi-bin/printenv.vbs
 libexec/cgi-bin/printenv.wsf
@@ -1215,6 +1218,8 @@ share/httpd/manual/mod/mod_socache_dc.html.fr.utf8
 share/httpd/manual/mod/mod_socache_memcache.html
 share/httpd/manual/mod/mod_socache_memcache.html.en
 share/httpd/manual/mod/mod_socache_memcache.html.fr.utf8
+share/httpd/manual/mod/mod_socache_redis.html
+share/httpd/manual/mod/mod_socache_redis.html.en
 share/httpd/manual/mod/mod_socache_shmcb.html
 share/httpd/manual/mod/mod_socache_shmcb.html.en
 share/httpd/manual/mod/mod_socache_shmcb.html.fr.utf8
@@ -1299,6 +1304,7 @@ share/httpd/manual/mod/mpmt_os2.html.en
 share/httpd/manual/mod/mpmt_os2.html.fr.utf8
 share/httpd/manual/mod/overrides.html
 share/httpd/manual/mod/overrides.html.en
+share/httpd/manual/mod/overrides.html.fr.utf8
 share/httpd/manual/mod/prefork.html
 share/httpd/manual/mod/prefork.html.de
 share/httpd/manual/mod/prefork.html.en

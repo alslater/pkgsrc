@@ -1,10 +1,10 @@
-# $NetBSD: options.mk,v 1.13 2017/01/28 04:57:57 ryoon Exp $
+# $NetBSD: options.mk,v 1.15 2019/06/07 11:26:20 tm Exp $
 
 PKG_OPTIONS_VAR=		PKG_OPTIONS.apache
 PKG_SUPPORTED_OPTIONS=		apache-mpm-event apache-mpm-prefork apache-mpm-worker \
-				lua http2 suexec
+				brotli lua http2 suexec xml
 PKG_SUGGESTED_OPTIONS=		apache-mpm-event apache-mpm-prefork \
-				apache-mpm-worker http2
+				apache-mpm-worker brotli http2 xml
 
 .if ${OPSYS} == "SunOS" && !empty(OS_VERSION:M5.1[0-9])
 PKG_SUPPORTED_OPTIONS+=		privileges
@@ -25,7 +25,7 @@ PKG_SUPPORTED_OPTIONS+=		privileges
 #	worker		hybrid multi-threaded multi-process web server
 #
 PLIST_VARS+=		worker prefork event only-prefork not-only-prefork
-PLIST_VARS+=		http2 lua privileges suexec
+PLIST_VARS+=		brotli http2 lua privileges suexec xml
 
 .if !empty(PKG_OPTIONS:Mapache-mpm-event)
 MPMS+=			event
@@ -77,7 +77,7 @@ CONFIGURE_ARGS+=	${APACHE_SUEXEC_CONFIGURE_ARGS:M--with-suexec-*}
 BUILD_DEFS+=		APACHE_SUEXEC_CONFIGURE_ARGS
 BUILD_TARGET=		all suexec
 PLIST.suexec=		yes
-SPECIAL_PERMS+=		sbin${BINARCHSUFFIX}/suexec ${REAL_ROOT_USER} ${APACHE_GROUP} 4510
+SPECIAL_PERMS+=		sbin/suexec ${REAL_ROOT_USER} ${APACHE_GROUP} 4510
 .endif
 
 .if !empty(PKG_OPTIONS:Mhttp2)
@@ -103,6 +103,24 @@ CONFIGURE_ARGS+=	--disable-lua
 .if !empty(PKG_OPTIONS:Mprivileges)
 CONFIGURE_ARGS+=	--enable-privileges
 PLIST.privileges=	yes
+.endif
+
+.if !empty(PKG_OPTIONS:Mxml)
+.include "../../textproc/libxml2/buildlink3.mk"
+CONFIGURE_ARGS+=	--with-libxml2=${BUILDLINK_PREFIX.libxml2}
+CONFIGURE_ARGS+=	--enable-proxy-html
+CONFIGURE_ARGS+=	--enable-xml2enc
+PLIST.xml=		yes
+.else
+CONFIGURE_ARGS+=	--disable-proxy-html
+CONFIGURE_ARGS+=	--disable-xml2enc
+.endif
+
+.if !empty(PKG_OPTIONS:Mbrotli)
+.include "../../archivers/brotli/buildlink3.mk"
+CONFIGURE_ARGS+=       --enable-brotli
+CONFIGURE_ARGS+=       --with-brotli=${PREFIX}
+PLIST.brotli=          yes
 .endif
 
 # DTrace support is manifest, but actually not implemented at all
