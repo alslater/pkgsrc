@@ -1,15 +1,18 @@
-# $NetBSD: Makefile,v 1.57 2018/12/22 01:13:52 adam Exp $
+# $NetBSD: Makefile,v 1.81 2019/09/09 00:33:05 taca Exp $
 
-DISTNAME=	samba-4.9.4
+DISTNAME=	samba-4.10.8
+PKGREVISION=	1
 CATEGORIES=	net
-MASTER_SITES=	http://download.samba.org/pub/samba/stable/
+MASTER_SITES=	https://download.samba.org/pub/samba/stable/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.samba.org/
+HOMEPAGE=	https://www.samba.org/
 COMMENT=	SMB/CIFS protocol server suite
 LICENSE=	gnu-gpl-v3
 
-CONFLICTS+=	ja-samba-[0-9]* tdb-[0-9]* winbind-[0-9]*
+CONFLICTS+=	ja-samba-[0-9]* winbind-[0-9]*
+
+PYTHON_VERSIONS_INCOMPATIBLE=	27
 
 GCC_REQD+=	4.4
 BUILD_DEPENDS+=	libxslt-[0-9]*:../../textproc/libxslt
@@ -58,7 +61,7 @@ USE_GNU_ICONV=		yes	# FIXME: something doesn't work on NetBSD
 BROKEN_GETTEXT_DETECTION=yes
 
 # Debugging
-CONFIGURE_ARGS+=	-vvv
+#CONFIGURE_ARGS+=	-vvv
 #CONFIGURE_ARGS+=	--enable-developer
 #CONFIGURE_ARGS+=	--fatal-errors
 
@@ -89,7 +92,6 @@ CONFIGURE_ARGS+=	--with-libiconv=${BUILDLINK_PREFIX.iconv}
 CONFIGURE_ARGS+=	--abi-check-disable
 CONFIGURE_ARGS+=	--disable-symbol-versions
 CONFIGURE_ARGS+=	--enable-gnutls
-#CONFIGURE_ARGS+=	--bundled-libraries=!crypto,ldb,ntdb,!talloc,tdb,tevent
 .if defined(MAKE_JOBS) && !empty(MAKE_JOBS) && !(defined(MAKE_JOBS_SAFE) && !empty(MAKE_JOBS_SAFE:M[nN][oO]))
 CONFIGURE_ARGS+=	--jobs=${MAKE_JOBS}
 .else
@@ -100,17 +102,20 @@ CONFIGURE_ARGS+=	--without-gpgme
 # Depends on ncurses, explicitly disable for now.
 CONFIGURE_ARGS+=	--without-regedit
 
+PY_PATCHPLIST=		yes
+MAKE_FLAGS+=		WAF_BINARY=${PYTHONBIN}\ ${WRKSRC}/buildtools/bin/waf
+
 # for winbind option build.
 .if "${OPSYS}" != "Darwin" && "${OPSYS}" != "SunOS"
 LDFLAGS+=		-Wl,--allow-shlib-undefined
 .endif
 LDFLAGS+=		${BUILDLINK_LDADD.gettext}
 LDFLAGS+=		${COMPILER_RPATH_FLAG}${SMB_PRIVATELIB}
-LDFLAGS.SunOS+=             -lsocket -lnsl
 
 CFLAGS.SunOS+=		-DHAVE_SOLARIS_GETGRENT_R
 # workaround https://bugzilla.samba.org/show_bug.cgi?id=12502 for now
 CFLAGS.SunOS+=		-DMSG_NOSIGNAL=0
+LDFLAGS.SunOS+=		-lsocket -lnsl -lsendfile
 
 .include "options.mk"
 
@@ -130,14 +135,6 @@ MAKEFLAGS+=	PWD_MKDB=${PWD_MKDB:Q}
 FILES_SUBST+=	MKTEMP=${MKTEMP:Q}
 FILES_SUBST+=	PWD_MKDB=${PWD_MKDB:Q}
 
-PLIST_VARS+=	64bit
-.if !empty(LP64PLATFORMS:@.PLAT.@${MACHINE_PLATFORM:M${.PLAT.}}@) || \
-	(defined(ABI) && ${ABI} == "64")
-PLIST.64bit=		yes
-.else
-CONFIGURE_ARGS+=	--without-ldb-lmdb
-.endif
-
 INSTALLATION_DIRS+=	${DOCDIR} ${EGDIR}
 
 DOCDIR=		share/doc/${PKGBASE}
@@ -150,6 +147,7 @@ SUBST_CLASSES+=		docbook
 SUBST_MESSAGE.docbook=	Fixing docbook URLs.
 SUBST_FILES.docbook+=	buildtools/wafsamba/wafsamba.py
 SUBST_FILES.docbook+=	ctdb/doc/*.xml
+SUBST_FILES.docbook+=	docs-xml/build/DTD/samba-doc
 SUBST_FILES.docbook+=	docs-xml/xslt/*.xsl
 SUBST_FILES.docbook+=	lib/ldb/docs/builddocs.sh
 SUBST_FILES.docbook+=	librpc/tools/*.xml
@@ -172,10 +170,6 @@ SUBST_MESSAGE.logpath=	Fixing log path.
 SUBST_FILES.logpath=	examples/smb.conf.default
 SUBST_STAGE.logpath=	pre-configure
 SUBST_SED.logpath+=	-e 's,/usr/local/samba/var/log.%m,${SMB_LOGFILEBASE}/log.%m,g'
-
-.if ${INIT_SYSTEM} == "rc.d"
-MESSAGE_SRC=		${PKGDIR}/MESSAGE.rcd
-.endif
 
 SMF_INSTANCES=	smbd nmbd
 
@@ -210,17 +204,12 @@ REPLACE_PYTHON+=	buildtools/bin/waf
 REPLACE_PYTHON+=	source4/setup/wscript_build
 REPLACE_PYTHON+=	source4/scripting/bin/*
 
-PYTHON_VERSIONS_ACCEPTED=	27 # as of 4.3.2
-
-PY_PATCHPLIST=	yes
-.include "../../lang/python/application.mk"
-.include "../../lang/python/extension.mk"
-
 .if "${OPSYS}" == "Linux"
 .include "../../devel/libuuid/buildlink3.mk"
 .endif
 .include "../../archivers/libarchive/buildlink3.mk"
 .include "../../converters/libiconv/buildlink3.mk"
+.include "../../databases/ldb/buildlink3.mk"
 .include "../../databases/lmdb/buildlink3.mk"
 .include "../../devel/cmocka/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
@@ -228,7 +217,10 @@ PY_PATCHPLIST=	yes
 .include "../../devel/readline/buildlink3.mk"
 BUILDLINK_API_DEPENDS.talloc+=	talloc>=2.1.9
 .include "../../devel/talloc/buildlink3.mk"
+.include "../../devel/tevent/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
+.include "../../lang/python/application.mk"
+.include "../../lang/python/extension.mk"
 .include "../../security/gnutls/buildlink3.mk"
 .include "../../security/libgcrypt/buildlink3.mk"
 .include "../../textproc/jansson/buildlink3.mk"
