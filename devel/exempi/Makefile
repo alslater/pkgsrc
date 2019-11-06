@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.25 2016/10/07 18:25:42 adam Exp $
 
-DISTNAME=	exempi-2.3.0
+DISTNAME=	exempi-2.5.1
 PKGREVISION=	1
 CATEGORIES=	devel graphics
 MASTER_SITES=	http://libopenraw.freedesktop.org/download/
@@ -14,19 +14,25 @@ LICENSE=	modified-bsd
 GNU_CONFIGURE=	yes
 CONFIGURE_ENV+=	ac_cv_tls=none
 USE_LIBTOOL=	yes
-USE_TOOLS+=	pkg-config
+USE_TOOLS+=	gmake pkg-config
 USE_LANGUAGES=	c c++
 
-CONFIGURE_ARGS+=	LIBS=${BUILDLINK_LDADD.iconv:Q}
+GCC_REQD+=  4.8
 
-PTHREAD_AUTO_VARS=	yes
+CONFIGURE_ARGS+=    LIBS=${BUILDLINK_LDADD.iconv:Q}
+#CONFIGURE_ARGS+=    --disable-dependency-tracking
 
-PKGCONFIG_OVERRIDE+=	exempi/exempi-2.0.pc.in
+PTHREAD_AUTO_VARS=  yes
+
+PKGCONFIG_OVERRIDE+=    exempi/exempi-2.0.pc.in
 
 .include "options.mk"
 
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../converters/libiconv/buildlink3.mk"
 .include "../../textproc/expat/buildlink3.mk"
+.include "../../mk/dlopen.buildlink3.mk"
+BUILDLINK_TRANSFORM+= opt:-ldl:${BUILDLINK_LDADD.dl:Q}
 .include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
+
