@@ -1,10 +1,12 @@
-# $NetBSD: Makefile,v 1.75 2018/12/12 14:22:11 ryoon Exp $
+# $NetBSD: Makefile,v 1.85 2019/10/01 14:43:32 tnn Exp $
 
-DISTNAME=	openjdk-1.8.202-20190219
-PKGNAME=	openjdk8-1.8.202
+DISTNAME=	openjdk-jdk8u-${GITHUB_TAG}
+PKGNAME=	openjdk8-1.8.${GITHUB_TAG:C/.*u([0-9]+).*/\1/}
 CATEGORIES=	lang
-MASTER_SITES=	${MASTER_SITE_LOCAL:=openjdk7/}
-EXTRACT_SUFX=	.tar.xz
+MASTER_SITES=	${MASTER_SITE_GITHUB:=battleblow/}
+MASTER_SITES+=	${MASTER_SITE_LOCAL:=openjdk7/}	# for bootstrap kits
+GITHUB_PROJECT= openjdk-jdk8u
+GITHUB_TAG=     jdk8u222-b10.1
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://openjdk.java.net/
@@ -25,6 +27,7 @@ JAVA_WRAPPERS=	jar java javac javadoc javah javap jcmd jhat jps jstack \
 BUILD_DEPENDS+=		mozilla-rootcerts>=1.0.20140820nb2:../../security/mozilla-rootcerts
 
 GNU_CONFIGURE=		yes
+USE_GNU_CONFIGURE_HOST=	no
 CONFIGURE_SCRIPT=	configure
 CONFIG_SHELL=		bash
 CONFIG_SUB_OVERRIDE+=	common/autoconf/build-aux/config.sub
@@ -34,9 +37,8 @@ CONFIG_GUESS_OVERRIDE+=	common/autoconf/build-aux/autoconf-config.guess
 USE_LANGUAGES=		c c++
 USE_TOOLS+=		bash gmake pax pkg-config unzip:run zip:run
 UNLIMIT_RESOURCES=	datasize stacksize
-WRKSRC=			${WRKDIR}/openjdk
 PLIST_SRC+=		${PLIST_SRC_DFLT}
-CHECK_SHLIBS_SKIP+=	java/openjdk8/jre/lib/${LIBDIR_ARCH}/libinstrument.so
+CHECK_SHLIBS_SKIP+=	java/${JAVA_NAME}/jre/lib/${LIBDIR_ARCH}/libinstrument.so
 
 BUILDLINK_PASSTHRU_DIRS+=	${ALT_BOOTDIR}
 PREPEND_PATH+=			${ALT_BOOTDIR}/bin
@@ -45,12 +47,11 @@ BUILDLINK_TRANSFORM+=	rm:-Werror
 
 CONFIGURE_ARGS+=	--disable-option-checking # for --with-libiconv-prefix
 CONFIGURE_ARGS+=	--prefix=${PREFIX:Q}
-CONFIGURE_ARGS+=	--build=${MACHINE_GNU_PLATFORM:Q}
-CONFIGURE_ARGS+=	--host=${MACHINE_GNU_PLATFORM:Q}
+CONFIGURE_ARGS+=	--openjdk-target=${MACHINE_GNU_PLATFORM:Q}
 CONFIGURE_ARGS+=	--with-boot-jdk=${ALT_BOOTDIR}
 CONFIGURE_ARGS+=	--with-zlib=system
 CONFIGURE_ARGS+=	--with-giflib=bundled
-CONFIGURE_ARGS+=	--with-cups=${BUILDLINK_PREFIX.cups}
+CONFIGURE_ARGS+=        --with-cups=${BUILDLINK_PREFIX.cups}
 CONFIGURE_ARGS+=	--with-freetype-lib=${BUILDLINK_PREFIX.freetype2}/lib
 CONFIGURE_ARGS+=	--with-freetype-include=${BUILDLINK_PREFIX.freetype2}/include
 CONFIGURE_ARGS+=	--disable-freetype-bundling
@@ -65,12 +66,12 @@ CONFIGURE_ARGS+=	--with-extra-ldflags=${LDFLAGS:Q}
 
 CHECK_PORTABILITY_SKIP+=	hotspot/test/runtime/*/*.sh
 
-NOT_PAX_MPROTECT_SAFE+= java/openjdk8/bin/[a-ik-z]*
-NOT_PAX_MPROTECT_SAFE+= java/openjdk8/bin/j[b-z]*
-NOT_PAX_MPROTECT_SAFE+= java/openjdk8/bin/jar*
-NOT_PAX_MPROTECT_SAFE+= java/openjdk8/bin/java
-NOT_PAX_MPROTECT_SAFE+= java/openjdk8/bin/java[a-z]*
-NOT_PAX_MPROTECT_SAFE+= java/openjdk8/jre/bin/*
+NOT_PAX_MPROTECT_SAFE+= java/${JAVA_NAME}/bin/[a-ik-z]*
+NOT_PAX_MPROTECT_SAFE+= java/${JAVA_NAME}/bin/j[b-z]*
+NOT_PAX_MPROTECT_SAFE+= java/${JAVA_NAME}/bin/jar*
+NOT_PAX_MPROTECT_SAFE+= java/${JAVA_NAME}/bin/java
+NOT_PAX_MPROTECT_SAFE+= java/${JAVA_NAME}/bin/java[a-z]*
+NOT_PAX_MPROTECT_SAFE+= java/${JAVA_NAME}/jre/bin/*
 
 # Avoid build errors when JAVA_HOME and CLASSPATH are defined by user.
 MAKE_ENV+=	JAVA_HOME=
@@ -85,7 +86,7 @@ CONFIGURE_ENV+=	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 MAKE_ENV+=	LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
 CONFIGURE_ENV+=	LFLAGS=${LDFLAGS:Q}
 MAKE_ENV+=	LFLAGS=${LDFLAGS:Q}
-BUILDLINK_PASSTHRU_RPATHDIRS+=	${PREFIX}/java/openjdk8/jre/lib/${LIBDIR_ARCH}
+BUILDLINK_PASSTHRU_RPATHDIRS+=	${PREFIX}/java/${JAVA_NAME}/jre/lib/${LIBDIR_ARCH}
 
 PLIST_SUBST+=	ARCH=${LIBDIR_ARCH}
 PLIST_SUBST+=	LOWER_OPSYS=${LOWER_OPSYS:S/sunos/solaris/}
@@ -102,12 +103,6 @@ CXXFLAGS+=	-D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS
 
 CONFIGURE_ENV+=	CFLAGS_JDK=${CFLAGS:Q}
 CONFIGURE_ENV+=	CXXFLAGS_JDK=${CXXFLAGS:Q}
-
-# Fix segfault under NetBSD/amd64 8.99 with GCC 6.4.0
-.if !empty(CC_VERSION:Mgcc-[67].*)
-CFLAGS+=	-fno-lifetime-dse
-CFLAGS+=	-fno-delete-null-pointer-checks
-.endif
 
 .if ${OPSYS} == "SunOS" && !empty(PKGSRC_COMPILER:Mgcc)
 MAKE_ENV+=	USE_GCC=1
@@ -158,8 +153,8 @@ SUBST_STAGE.fontpaths=		pre-build
 SUBST_MESSAGE.fontpaths=	fixing font paths
 SUBST_FILES.fontpaths=		jdk/src/solaris/classes/sun/awt/fontconfigs/bsd.fontconfig.properties
 SUBST_FILES.fontpaths+=		jdk/src/solaris/native/sun/awt/fontpath.c
-SUBST_SED.fontpaths=		-e 's|@PREFIX@|${PREFIX}|g'
-SUBST_SED.fontpaths+=		-e 's|@BUILDLINK_PREFIX.fontconfig@|${BUILDLINK_PREFIX.fontconfig}|g'
+SUBST_VARS.fontpaths=		PREFIX
+SUBST_VARS.fontpaths+=		BUILDLINK_PREFIX.fontconfig
 
 SUBST_CLASSES+=			zlibpath
 SUBST_STAGE.zlibpath=		pre-build
