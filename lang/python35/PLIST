@@ -1995,6 +1995,7 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/_md5.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_multibytecodec.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_multiprocessing.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_opcode.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_pickle.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_posixsubprocess.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_random.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_sha1.so
@@ -3454,6 +3455,7 @@ lib/python${PY_VER_SUFFIX}/test/capath/5ed36f99.0
 lib/python${PY_VER_SUFFIX}/test/capath/6e88d7b8.0
 lib/python${PY_VER_SUFFIX}/test/capath/99d0fa06.0
 lib/python${PY_VER_SUFFIX}/test/capath/ce7b8643.0
+lib/python${PY_VER_SUFFIX}/test/capath/efa5f9c3.0
 lib/python${PY_VER_SUFFIX}/test/cfgparser.1
 lib/python${PY_VER_SUFFIX}/test/cfgparser.2
 lib/python${PY_VER_SUFFIX}/test/cfgparser.3
