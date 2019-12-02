@@ -4,7 +4,7 @@ GCC support.
 
 --- hotspot/make/solaris/makefiles/jsig.make.orig	2019-10-16 01:41:55.000000000 +0000
 +++ hotspot/make/solaris/makefiles/jsig.make
-@@ -39,18 +39,28 @@ DEST_JSIG_DIZ       = $(JDK_LIBDIR)/$(LI
+@@ -39,10 +39,11 @@ DEST_JSIG_DIZ       = $(JDK_LIBDIR)/$(LI
  
  LIBJSIG_MAPFILE = $(MAKEFILES_DIR)/mapfile-vers-jsig
  
@@ -17,20 +17,17 @@ GCC support.
  else
  LFLAGS_JSIG += -mt -xnolib
  endif
- 
-+ifndef USE_GCC
- # Optimize jsig lib unless it's a slowdebug build
- ifneq ($(DEBUG_LEVEL), slowdebug)
+@@ -52,6 +53,13 @@ ifneq ($(DEBUG_LEVEL), slowdebug)
    JSIG_OPT_FLAGS = -xO4 -g
  endif
-+endif
-+
+ 
 +# DEBUG_BINARIES overrides everything, use full -g debug information
 +ifdef USE_GCC
 +  ifeq ($(DEBUG_BINARIES), true)
 +    JSIG_OPT_FLAGS = -g
 +  endif
 +endif
- 
++
  $(LIBJSIG): $(JSIGSRCDIR)/jsig.c $(LIBJSIG_MAPFILE)
  	@echo Making signal interposition lib...
+ 	$(QUIETLY) $(CC) $(SYMFLAG) $(ARCHFLAG) $(SHARED_FLAG) $(PICFLAG) \
