@@ -1,9 +1,10 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.68 2019/10/04 17:25:53 nia Exp $
 bin/certtool
 bin/gnutls-cli
 bin/gnutls-cli-debug
 bin/gnutls-serv
 bin/ocsptool
+bin/p11tool
 bin/psktool
 bin/srptool
 include/gnutls/abstract.h
@@ -37,22 +38,6 @@ info/gnutls.info
 info/pkcs11-vision.png
 lib/libgnutls.la
 lib/libgnutlsxx.la
-share/locale/cs/LC_MESSAGES/gnutls.mo
-share/locale/de/LC_MESSAGES/gnutls.mo
-share/locale/eo/LC_MESSAGES/gnutls.mo
-share/locale/es/LC_MESSAGES/gnutls.mo
-share/locale/fi/LC_MESSAGES/gnutls.mo
-share/locale/fr/LC_MESSAGES/gnutls.mo
-share/locale/it/LC_MESSAGES/gnutls.mo
-share/locale/ms/LC_MESSAGES/gnutls.mo
-share/locale/nl/LC_MESSAGES/gnutls.mo
-share/locale/pl/LC_MESSAGES/gnutls.mo
-share/locale/pt_BR/LC_MESSAGES/gnutls.mo
-share/locale/sr/LC_MESSAGES/gnutls.mo
-share/locale/sv/LC_MESSAGES/gnutls.mo
-share/locale/uk/LC_MESSAGES/gnutls.mo
-share/locale/vi/LC_MESSAGES/gnutls.mo
-share/locale/zh_CN/LC_MESSAGES/gnutls.mo
 lib/pkgconfig/gnutls.pc
 man/man1/certtool.1
 man/man1/gnutls-cli-debug.1
@@ -82,9 +67,11 @@ man/man3/dane_verify_crt.3
 man/man3/dane_verify_crt_raw.3
 man/man3/dane_verify_session_crt.3
 man/man3/gnutls_aead_cipher_decrypt.3
+man/man3/gnutls_aead_cipher_decryptv2.3
 man/man3/gnutls_aead_cipher_deinit.3
 man/man3/gnutls_aead_cipher_encrypt.3
 man/man3/gnutls_aead_cipher_encryptv.3
+man/man3/gnutls_aead_cipher_encryptv2.3
 man/man3/gnutls_aead_cipher_init.3
 man/man3/gnutls_alert_get.3
 man/man3/gnutls_alert_get_name.3
@@ -240,6 +227,7 @@ man/man3/gnutls_dh_params_import_dsa.3
 man/man3/gnutls_dh_params_import_pkcs3.3
 man/man3/gnutls_dh_params_import_raw.3
 man/man3/gnutls_dh_params_import_raw2.3
+man/man3/gnutls_dh_params_import_raw3.3
 man/man3/gnutls_dh_params_init.3
 man/man3/gnutls_dh_set_prime_bits.3
 man/man3/gnutls_digest_get_id.3
@@ -277,6 +265,7 @@ man/man3/gnutls_ext_set_data.3
 man/man3/gnutls_fingerprint.3
 man/man3/gnutls_fips140_mode_enabled.3
 man/man3/gnutls_fips140_set_mode.3
+man/man3/gnutls_get_system_config_file.3
 man/man3/gnutls_global_deinit.3
 man/man3/gnutls_global_init.3
 man/man3/gnutls_global_set_audit_log_function.3
@@ -302,6 +291,7 @@ man/man3/gnutls_handshake_set_private_extensions.3
 man/man3/gnutls_handshake_set_random.3
 man/man3/gnutls_handshake_set_timeout.3
 man/man3/gnutls_hash.3
+man/man3/gnutls_hash_copy.3
 man/man3/gnutls_hash_deinit.3
 man/man3/gnutls_hash_fast.3
 man/man3/gnutls_hash_get_len.3
@@ -319,6 +309,7 @@ man/man3/gnutls_hex_decode2.3
 man/man3/gnutls_hex_encode.3
 man/man3/gnutls_hex_encode2.3
 man/man3/gnutls_hmac.3
+man/man3/gnutls_hmac_copy.3
 man/man3/gnutls_hmac_deinit.3
 man/man3/gnutls_hmac_fast.3
 man/man3/gnutls_hmac_get_len.3
@@ -538,6 +529,7 @@ man/man3/gnutls_pkcs8_info.3
 man/man3/gnutls_pkcs_schema_get_name.3
 man/man3/gnutls_pkcs_schema_get_oid.3
 man/man3/gnutls_prf.3
+man/man3/gnutls_prf_early.3
 man/man3/gnutls_prf_raw.3
 man/man3/gnutls_prf_rfc5705.3
 man/man3/gnutls_priority_certificate_type_list.3
@@ -689,6 +681,7 @@ man/man3/gnutls_record_send2.3
 man/man3/gnutls_record_send_early_data.3
 man/man3/gnutls_record_send_range.3
 man/man3/gnutls_record_set_max_early_data_size.3
+man/man3/gnutls_record_set_max_recv_size.3
 man/man3/gnutls_record_set_max_size.3
 man/man3/gnutls_record_set_state.3
 man/man3/gnutls_record_set_timeout.3
@@ -1224,3 +1217,19 @@ share/examples/gnutls/print-ciphersuites.c
 share/examples/gnutls/tcp.c
 share/examples/gnutls/udp.c
 share/examples/gnutls/verify.c
+share/locale/cs/LC_MESSAGES/gnutls.mo
+share/locale/de/LC_MESSAGES/gnutls.mo
+share/locale/eo/LC_MESSAGES/gnutls.mo
+share/locale/es/LC_MESSAGES/gnutls.mo
+share/locale/fi/LC_MESSAGES/gnutls.mo
+share/locale/fr/LC_MESSAGES/gnutls.mo
+share/locale/it/LC_MESSAGES/gnutls.mo
+share/locale/ms/LC_MESSAGES/gnutls.mo
+share/locale/nl/LC_MESSAGES/gnutls.mo
+share/locale/pl/LC_MESSAGES/gnutls.mo
+share/locale/pt_BR/LC_MESSAGES/gnutls.mo
+share/locale/sr/LC_MESSAGES/gnutls.mo
+share/locale/sv/LC_MESSAGES/gnutls.mo
+share/locale/uk/LC_MESSAGES/gnutls.mo
+share/locale/vi/LC_MESSAGES/gnutls.mo
+share/locale/zh_CN/LC_MESSAGES/gnutls.mo
