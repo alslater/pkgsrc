@@ -1,20 +1,21 @@
-# $NetBSD: Makefile,v 1.27 2016/12/02 11:00:39 fhajny Exp $
+# $NetBSD: Makefile,v 1.44 2019/07/23 16:12:39 jperkin Exp $
 
-DISTNAME=		rabbitmq-server-3.7.7
+DISTNAME=		rabbitmq-server-3.7.16
 PKGNAME=		${DISTNAME:S/-server//}
-PKGREVISION=		1
 CATEGORIES=		net
-MASTER_SITES=		https://github.com/rabbitmq/rabbitmq-server/releases/download/v${PKGVERSION_NOREV}/
+MASTER_SITES=		${MASTER_SITE_GITHUB:=rabbitmq/}
 EXTRACT_SUFX=		.tar.xz
+GITHUB_PROJECT=		rabbitmq-server
+GITHUB_RELEASE=		v${PKGVERSION_NOREV}
 
-MAINTAINER=		filip@joyent.com
+MAINTAINER=		pkgsrc-users@NetBSD.org
 HOMEPAGE=		http://www.rabbitmq.com/server.html
 COMMENT=		Implementation of AMQP that provides robust messaging for applications
 LICENSE=		mpl-1.1
 
 USE_TOOLS+=		bash:run gmake unzip zip
 
-BUILD_DEPENDS+= 	elixir-[0-9]*:../../lang/elixir
+BUILD_DEPENDS+=		elixir-[0-9]*:../../lang/elixir
 BUILD_DEPENDS+=		libxslt-[0-9]*:../../textproc/libxslt
 BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 BUILD_DEPENDS+=		rsync-[0-9]*:../../net/rsync
@@ -23,10 +24,11 @@ DEPENDS+=		${PYPKGPREFIX}-simplejson>=2:../../converters/py-simplejson
 
 BUILD_DEFS+=		VARBASE
 
-.include		"../../mk/bsd.prefs.mk"
+# Create a mix tool to avoid nested interpreter issues.
+TOOLS_CREATE+=		mix
+TOOLS_SCRIPT.mix=	${PREFIX}/bin/elixir -r ${PREFIX}/bin/mix -- "$$@"
 
-# mix[2]: Mix.start: not found [No such file or directory]
-MAKE_JOBS_SAFE= no
+.include		"../../mk/bsd.prefs.mk"
 
 RMQ_USER?=		rabbitmq
 RMQ_GROUP?=		${RMQ_USER}
@@ -45,16 +47,15 @@ PKG_SHELL.${RMQ_USER}=	${RMQ_SHELL}
 
 PKG_SYSCONFSUBDIR=	${PKGBASE}
 CONF_FILES+=		share/examples/rabbitmq/rabbitmq-env.conf \
-			  ${PKG_SYSCONFDIR}/rabbitmq-env.conf
+			${PKG_SYSCONFDIR}/rabbitmq-env.conf
 CONF_FILES+=		share/examples/rabbitmq/rabbitmq.config.example \
-			  ${PKG_SYSCONFDIR}/rabbitmq.config
+			${PKG_SYSCONFDIR}/rabbitmq.config
 
 FILES_SUBST+=		RMQ_USER=${RMQ_USER}
 FILES_SUBST+=		RMQ_GROUP=${RMQ_GROUP}
 FILES_SUBST+=		RMQ_DIR=${RMQ_DIR}
 
-#RABBITMQ_HOME=		${PREFIX}/lib/erlang/lib/rabbitmq_server-${PKGVERSION_NOREV}
-RABBITMQ_HOME= lib/erlang/lib/rabbitmq_server-${PKGVERSION_NOREV}
+RABBITMQ_HOME=		lib/erlang/lib/rabbitmq_server-${PKGVERSION_NOREV}
 
 INSTALLATION_DIRS+=	share/examples/rabbitmq
 
@@ -70,7 +71,7 @@ SUBST_SED.paths=	-e 's|/etc/rabbitmq|${PKG_SYSCONFDIR}|g'
 SUBST_SED.paths+=	-e 's|/var/lib|${VARBASE}/db|g'
 SUBST_SED.paths+=	-e 's|/var/log|${VARBASE}/log|g'
 SUBST_SED.paths+=	-e 's|erl|${PREFIX}/bin/erl|g'
-SUBST_SED.paths+=       -e 's|@RABBITMQ_HOME@|${PREFIX}/${RABBITMQ_HOME}|g'
+SUBST_SED.paths+=	-e 's|@RABBITMQ_HOME@|${PREFIX}/${RABBITMQ_HOME}|g'
 
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmqctl
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-defaults
@@ -78,12 +79,11 @@ REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-env
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-plugins
 REPLACE_BASH+=		${SCRIPTS_DIR}/rabbitmq-server
 
-
 # Too much effort to replace the shebang on generated files
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-diagnostics
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-plugins
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmqctl
-CHECK_INTERPRETER_SKIP+= 	${RABBITMQ_HOME}/sbin/cuttlefish
+CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/sbin/cuttlefish
 
 MAKE_ENV+=		MANDIR="${PREFIX}/${PKGMANDIR}"
 MAKE_ENV+=		RMQ_BINDIR="${PREFIX}/sbin"
@@ -92,18 +92,14 @@ MAKE_ENV+=		RSYNC="${PREFIX}/bin/rsync"
 MAKE_ENV+=		VERSION="${PKGVERSION_NOREV}"
 
 INSTALL_TARGET=		install-erlapp install-scripts install-bin install-man
+TEST_TARGET=		check
 
 post-install:
-	${INSTALL_DATA} ${WRKSRC}/deps/rabbit/docs/rabbitmq.config.example		\
+	${INSTALL_DATA} ${WRKSRC}/deps/rabbit/docs/rabbitmq.config.example \
 		${DESTDIR}${PREFIX}/share/examples/rabbitmq
-	${INSTALL_DATA} ${FILESDIR}/rabbitmq-env.conf 				\
+	${INSTALL_DATA} ${FILESDIR}/rabbitmq-env.conf \
 		${DESTDIR}${PREFIX}/share/examples/rabbitmq
 
 .include "../../lang/erlang/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"
-
-MAKE_ENV+=              LC_CTYPE="en_US.UTF-8"
-MAKE_ENV+=              LC_LANG="en_US.UTF-8"
-MAKE_ENV+=              LC_ALL=""
-

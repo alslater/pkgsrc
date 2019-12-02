@@ -16,4 +16,3 @@ Somehow there is a pre-existing file.
  endif
  
  app:: $(ESCRIPTS)
-
