@@ -1,0 +1,10 @@
+$NetBSD: distinfo,v 1.1.1.1 2010/09/02 15:20:36 drochner Exp $
+
+SHA1 (omniEvents-2_6_2-src.tar.gz) = 38a7a1cebe489f1bdcfd9992fbe320147f40c7fa
+RMD160 (omniEvents-2_6_2-src.tar.gz) = a4d7eb057187de26133b85d532fd4c0d765a6cb4
+Size (omniEvents-2_6_2-src.tar.gz) = 1328376 bytes
+
+SHA1 (patch-aa) = 9b998a97e5e9c51fb00599242e1c4d40e3993485
+SHA1 (patch-ab) = 4de3679003e8dacbcad56b944a9c0b764a2dfb47
+SHA1 (patch-ac) = c1549511bd4df00e563819ceae262f4d3765a0f2
+

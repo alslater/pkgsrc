@@ -1,0 +1,10 @@
+--- src/main.cc.orig	2015-07-08 09:11:39.657898414 +0000
++++ src/main.cc	2015-07-08 09:12:45.072964152 +0000
+@@ -61,6 +61,7 @@
+ #endif
+ 
+ #include <stdio.h> // for sprintf
++#include <stdlib.h>
+ 
+ int main(int argc, char** argv)
+ {
