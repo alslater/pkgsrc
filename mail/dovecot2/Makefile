@@ -32,6 +32,9 @@ INSTALLATION_DIRS+=	share/examples/dovecot share/examples/dovecot/conf.d
 OWN_DIRS=		${PKG_SYSCONFDIR}/dovecot/
 OWN_DIRS+=		${PKG_SYSCONFDIR}/dovecot/conf.d
 
+REPLACE_BASH=		src/util/health-check.sh
+#CHECK_PORTABILITY_SKIP+= src/util/health-check.sh
+
 post-install:
 	${INSTALL_DATA} ${WRKSRC}/doc/dovecot-openssl.cnf ${DESTDIR}${EGDIR}
 	${INSTALL_SCRIPT} ${WRKSRC}/doc/mkcert.sh ${DESTDIR}${EGDIR}

@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.66 2019/07/18 13:38:18 taca Exp $
+@comment $NetBSD$
 bin/doveadm
 bin/doveconf
 bin/dsync
@@ -525,6 +525,7 @@ include/dovecot/sha1.h
 include/dovecot/sha2.h
 include/dovecot/sha3.h
 include/dovecot/shared-storage.h
+include/dovecot/sleep.h
 include/dovecot/smtp-address.h
 include/dovecot/smtp-client-command.h
 include/dovecot/smtp-client-connection.h
@@ -653,6 +654,7 @@ libexec/dovecot/dns-client
 libexec/dovecot/doveadm-server
 libexec/dovecot/dovecot-lda
 libexec/dovecot/gdbhelper
+libexec/dovecot/health-check.sh
 libexec/dovecot/imap
 libexec/dovecot/imap-hibernate
 libexec/dovecot/imap-login
@@ -1056,3 +1058,4 @@ share/examples/dovecot/dovecot-openssl.cnf
 share/examples/dovecot/dovecot-sql.conf.ext
 share/examples/dovecot/dovecot.conf
 share/examples/dovecot/mkcert.sh
+@pkgdir etc/dovecot
