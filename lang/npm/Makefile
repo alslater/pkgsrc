@@ -1,8 +1,8 @@
 # $NetBSD: Makefile,v 1.22 2019/04/25 07:33:03 maya Exp $
 
-DISTNAME=	cli-6.9.0
+DISTNAME=	cli-6.10.3
 PKGNAME=	${DISTNAME:S/cli/npm/}
-PKGREVISION=	1
+#PKGREVISION=	1
 CATEGORIES=	lang
 MASTER_SITES=	${MASTER_SITE_GITHUB:=npm/}
 GITHUB_PROJECT=	cli
@@ -14,13 +14,13 @@ COMMENT=	Package manager for JavaScript
 LICENSE=	artistic-2.0
 
 # Pre-fetch marked so that man pages can be built offline
-MARKED=			marked-0.6.1
+MARKED=			marked-0.7.0
 DISTFILES+=		${DISTNAME}${EXTRACT_SUFX} ${MARKED}.tar.gz
 SITES.${MARKED}.tar.gz=	-https://github.com/markedjs/marked/archive/v${MARKED:S/marked-//}.tar.gz
 
 DEPENDS+=	nodejs-[0-9]*:../../lang/nodejs
 
-USE_TOOLS+=	gmake perl
+USE_TOOLS+=	bash gmake perl
 
 PYTHON_VERSIONS_ACCEPTED=	27 # required by gyp scripts included
 
