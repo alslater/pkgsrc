@@ -50,7 +50,7 @@ CCARGS+=	-DDEF_SERVER_SASL_TYPE=\"dovecot\"
 ###
 .if !empty(PKG_OPTIONS:Meai)
 .  include "../../textproc/icu/buildlink3.mk"
-CCARGS+=	-DHAS_EAI -I${BUILDLINK_PREFIX.icu}/include
+CCARGS+=	-I${BUILDLINK_PREFIX.icu}/include
 AUXLIBS+=	-L${BUILDLINK_PREFIX.icu}/lib -licuuc			\
 		${COMPILER_RPATH_FLAG}${BUILDLINK_PREFIX.icu}/lib
 .else

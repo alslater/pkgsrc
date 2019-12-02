@@ -2,13 +2,12 @@
 
 .include "../../mail/postfix/Makefile.common"
 
-#PKGREVISION=	1
 COMMENT=	Postfix SMTP server and tools
 
 CONFLICTS+=	courier-mta-[0-9]* fastforward>=0.51nb2 sendmail-[0-9]*
 CONFLICTS+=	esmtp>=1.2 nullmailer-[0-9]*
 
-USE_TOOLS+=	perl
+USE_TOOLS+=	perl pkg-config
 
 SPECIAL_PERMS+=	sbin/postdrop ${POSTFIX_USER} ${MAILDROP_GROUP} 2555
 SPECIAL_PERMS+=	sbin/postqueue ${POSTFIX_USER} ${MAILDROP_GROUP} 2555
