@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.24 2018/05/28 07:46:58 hauke Exp $
 
-DISTNAME=	pip-10.0.1
+DISTNAME=	pip-19.3.1
 PKGREVISION=	1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	devel python
