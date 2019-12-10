@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.14 2016/03/05 11:27:52 jperkin Exp $
+# $NetBSD: buildlink3.mk,v 1.15 2018/01/07 13:04:27 rillig Exp $
 
 BUILDLINK_TREE+=	net-snmp
 
