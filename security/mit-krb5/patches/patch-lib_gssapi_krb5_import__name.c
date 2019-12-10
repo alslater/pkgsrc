@@ -1,4 +1,4 @@
-$NetBSD: patch-al,v 1.7 2016/03/15 15:16:39 tez Exp $
+$NetBSD: patch-lib_gssapi_krb5_import__name.c,v 1.1 2018/12/21 15:45:13 adam Exp $
 
 Add DragonFly support. Fallback to LINE_MAX if BUFSIZ is not defined.
 
