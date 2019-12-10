@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.113 2016/08/03 10:23:37 adam Exp $
+# $NetBSD: Makefile,v 1.131 2019/11/03 09:14:16 rillig Exp $
 
 PKGNAME=	qt4-libs-${QTVERSION}
-PKGREVISION=	4
+PKGREVISION=	18
 COMMENT=	C++ X GUI toolkit
 
 .include "../../x11/qt4-libs/Makefile.common"
@@ -28,15 +28,7 @@ CONFIGURE_ARGS+=	-openssl-linked
 
 CONFIGURE_ARGS+=	-iconv
 
-.include "../../mk/compiler.mk"
-.if !empty(PKGSRC_COMPILER:Mclang)
-CXXFLAGS+=	-std=c++11 -Wno-c++11-narrowing
-.  if empty(MACHINE_PLATFORM:MDarwin-*-*)
-CXXFLAGS+=	-D_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC=1
-.  endif
-.endif
-
-INSTALLATION_DIRS=	lib${LIBARCHSUFFIX}/pkgconfig
+INSTALLATION_DIRS=	lib/pkgconfig
 INSTALLATION_DIRS+=	${QTPREFIX}/bin
 INSTALLATION_DIRS+=	${QTPREFIX}/imports${LIBARCHSUFFIX}/Qt/labs/folderlistmodel
 INSTALLATION_DIRS+=	${QTPREFIX}/imports${LIBARCHSUFFIX}/Qt/labs/gestures

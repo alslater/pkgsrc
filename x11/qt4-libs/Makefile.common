@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.common,v 1.41 2016/02/25 08:27:05 jperkin Exp $
+# $NetBSD: Makefile.common,v 1.49 2019/11/03 09:14:16 rillig Exp $
 # used by x11/qt4-docs/Makefile
 # used by x11/qt4-libs/Makefile
 # used by x11/qt4-mng/Makefile
@@ -10,7 +10,7 @@
 
 DISTNAME=	qt-everywhere-opensource-src-${QTVERSION}
 CATEGORIES=	x11
-MASTER_SITES=	http://download.qt-project.org/official_releases/qt/${QTVERSION:R}/${QTVERSION}/
+MASTER_SITES=	http://download.qt.io/archive/qt/${QTVERSION:R}/${QTVERSION}/
 EXTRACT_USING=	bsdtar
 
 .include "../../x11/qt4/Makefile.common"
@@ -57,6 +57,7 @@ MAKE_ENV+=		QTPREFIX=${QTPREFIX:Q}
 MAKE_ENV+=		QTDIR=${WRKSRC}
 PLIST_VARS+=		mac unix
 .if ${OPSYS} == "Darwin"
+CFLAGS+=		-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=1
 PLIST.mac=		yes
 QMAKE_CONF=		qmake.conf.mac
 QMAKE_RANLIB=		${RANLIB}
@@ -71,8 +72,21 @@ SCRIPTS_ENV+=		HOME=${WRKDIR}
 
 .include "../../mk/compiler.mk"
 
+# We can't set USE_LANGUAGES+=c++11 yet because doing so breaks the GCC build
+# in lots of ways, so for now just enable it manually for clang, and enforce
+# C++98 for GCC as GCC 7 defaults to C++14.
+#
+.if !empty(PKGSRC_COMPILER:Mclang)
+CXXFLAGS+=	-std=c++11 -Wno-c++11-narrowing
+.  if empty(MACHINE_PLATFORM:MDarwin-*-*)
+CXXFLAGS+=	-D_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC=1
+.  endif
+.elif !empty(PKGSRC_COMPILER:Mgcc)
+CXXFLAGS+=	-std=c++98
+.endif
+
 .if ${OPSYS} == "SunOS"
-.  if !empty(CC_VERSION:Mgcc*)
+.  if !empty(PKGSRC_COMPILER:Mgcc) || !empty(PKGSRC_COMPILER:Mclang)
 .    if ${ABI:U} == "64"
 CONFIGURE_ARGS+=	-platform solaris-g++-64
 .    else
