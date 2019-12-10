@@ -1,4 +1,4 @@
-/* $NetBSD: lib.h,v 1.67 2015/10/15 13:31:27 sevan Exp $ */
+/* $NetBSD: lib.h,v 1.69 2018/02/26 23:45:02 ginsbach Exp $ */
 
 /* from FreeBSD Id: lib.h,v 1.25 1997/10/08 07:48:03 charnier Exp */
 
@@ -167,8 +167,7 @@ typedef enum pl_ent_t {
 	PLIST_OPTION,		/* 14 */
 	PLIST_PKGCFL,		/* 15 */
 	PLIST_BLDDEP,		/* 16 */
-	PLIST_PKGDIR,		/* 17 */
-	PLIST_LINK		/* 18 */
+	PLIST_PKGDIR		/* 17 */
 }       pl_ent_t;
 
 /* Enumerated constants for build info */
@@ -317,6 +316,7 @@ int	has_pkgdir(const char *);
 struct archive;
 struct archive_entry;
 
+struct archive *prepare_archive(void);
 struct archive *open_archive(const char *, char **);
 struct archive *find_archive(const char *, int, char **);
 void	process_pkg_path(void);
@@ -374,7 +374,7 @@ struct pkg_vulnerabilities *read_pkg_vulnerabilities_file(const char *, int, int
 struct pkg_vulnerabilities *read_pkg_vulnerabilities_memory(void *, size_t, int);
 void free_pkg_vulnerabilities(struct pkg_vulnerabilities *);
 int audit_package(struct pkg_vulnerabilities *, const char *, const char *,
-    int);
+    int, int);
 
 /* Parse configuration file */
 void pkg_install_config(void);
@@ -413,7 +413,12 @@ char *xstrdup(const char *);
 void *xrealloc(void *, size_t);
 void *xcalloc(size_t, size_t);
 void *xmalloc(size_t);
-char *xasprintf(const char *, ...);
+#if defined(__GNUC__) && __GNUC__ >= 2
+char	*xasprintf(const char *, ...)
+			   __attribute__((__format__(__printf__, 1, 2)));
+#else
+char	*xasprintf(const char *, ...);
+#endif
 
 /* Externs */
 extern Boolean Verbose;
