@@ -66,6 +66,9 @@ LIBS.SunOS+=		-lcrypto
 .  else
 CONFIGURE_ARGS+=	--with-openssl=${BUILDLINK_PREFIX.openssl}
 .  endif
+PATCH_SITES+=		http://zettasystem.com/
+PATCHFILES+=		PHP-5.6.31-OpenSSL-1.1.0-compatibility-20170801.patch
+PATCH_DIST_STRIP=	-p1
 .else
 CONFIGURE_ARGS+=	--without-openssl
 .endif
