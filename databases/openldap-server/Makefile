@@ -1,7 +1,6 @@
-# $NetBSD: Makefile,v 1.50 2016/12/13 10:38:06 he Exp $
+# $NetBSD: Makefile,v 1.54 2019/09/28 08:07:51 adam Exp $
 
 PKGNAME=	${DISTNAME:S/-/-server-/}
-PKGREVISION=	4
 COMMENT=	Lightweight Directory Access Protocol server suite
 
 CONFLICTS+=	openldap<2.3.23nb1
@@ -10,6 +9,7 @@ DEPENDS+=	openldap-client>=2.3.27nb1:../../databases/openldap-client
 
 CFLAGS.FreeBSD+=	-DMDB_DSYNC=O_SYNC
 CFLAGS.DragonFly+=	-DMDB_DSYNC=O_SYNC -DMDB_FDATASYNC=fsync
+CFLAGS.SunOS+=		-D_POSIX_PTHREAD_SEMANTICS	# sigwait
 
 # slapd options
 CONFIGURE_ARGS+=	--enable-slapd
@@ -51,8 +51,6 @@ CNFS_SCHEMAS_cmd=	${SED} -ne "/\.ldif$$/p;/\.schema$$/p" ${PKGDIR}/PLIST | ${SED
 
 CNFS_PERMS=		slapd.conf
 
-DB_CONFIG=		DB_CONFIG
-
 RCD_SCRIPTS=		slapd
 
 FILES_SUBST+=		OPENLDAP_ETCDIR=${OPENLDAP_ETCDIR}
@@ -71,7 +69,10 @@ MESSAGE_SUBST+=		CHMOD=${CHMOD:Q}
 
 .include "../../databases/openldap/Makefile.common"
 
+.if !empty(PKG_OPTIONS:Mbdb)
 CONF_FILES_PERMS+=	${EGDIR}/DB_CONFIG ${OPENLDAP_VARDIR}/openldap-data/DB_CONFIG ${OPENLDAP_FILEPERMS}
+DB_CONFIG=		DB_CONFIG
+.endif
 
 .include "../../mk/bsd.prefs.mk"
 .if ${OPSYS} == "Linux" || ${OPSYS} == "SunOS"
