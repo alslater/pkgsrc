@@ -18,7 +18,7 @@ USE_LANGUAGES+=	c c++
 MAKE_FILE=	GNUmakefile
 
 PYTHON_SELF_CONFLICT=	yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # omniORB
+PYTHON_VERSIONS_ACCEPTED=	27 # omniORB
 
 .include "../../lang/python/application.mk"
 .include "../../net/omniORB/buildlink3.mk"
