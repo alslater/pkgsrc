@@ -1,10 +1,10 @@
-# $NetBSD: options.mk,v 1.35 2017/07/24 16:33:22 he Exp $
-
-.include "../../mk/bsd.prefs.mk"
+# $NetBSD: options.mk,v 1.38 2019/11/04 21:12:56 rillig Exp $
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.openssh
-PKG_SUPPORTED_OPTIONS=	kerberos openssl pam
-PKG_SUGGESTED_OPTIONS=	openssl
+PKG_SUPPORTED_OPTIONS=	editline kerberos openssl pam legacymodsz
+PKG_SUGGESTED_OPTIONS=	editline openssl
+
+.include "../../mk/bsd.prefs.mk"
 
 .if ${OPSYS} == "NetBSD"
 PKG_SUGGESTED_OPTIONS+=	pam
@@ -27,6 +27,10 @@ CONFIGURE_ENV+=		ac_cv_search_k_hasafs=no
 .  endif
 .endif
 
+.if !empty(PKG_OPTIONS:Mlegacymodsz)
+CONFIGURE_ARGS+=	CPPFLAGS="${CPPFLAGS} -DSSH_RSA_INSECURE_LEGACY_MIN_MOD_SZ=768"
+.endif
+
 #.if !empty(PKG_OPTIONS:Mhpn-patch)
 #PATCHFILES=		openssh-7.1p1-hpn-20150822.diff.bz2
 #PATCH_SITES=		ftp://ftp.NetBSD.org/pub/NetBSD/misc/openssh/
@@ -43,4 +47,9 @@ MESSAGE_SUBST+=		EGDIR=${EGDIR}
 .  if ${OPSYS} == "Linux"
 PLIST.pam=	yes
 .  endif
+.endif
+
+.if !empty(PKG_OPTIONS:Meditline)
+.include "../../devel/editline/buildlink3.mk"
+CONFIGURE_ARGS+=	--with-libedit=${BUILDLINK_PREFIX.editline}
 .endif
