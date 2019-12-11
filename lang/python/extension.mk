@@ -2,9 +2,6 @@
 
 .include "../../lang/python/pyversion.mk"
 
-# Python packages need to be multiarch by default.
-USE_MULTIARCH?=		lib
-
 # Packages that are a non-egg distutils extension should set
 # PYDISTUTILSPKG=YES and include this mk file.
 
@@ -67,13 +64,6 @@ INSTALL_ENV+=		PKGSRC_PYTHON_NO_EGG=defined
 .if defined(PY_PATCHPLIST)
 PLIST_SUBST+=	PYINC=${PYINC} PYLIB=${PYLIB} PYSITELIB=${PYSITELIB}
 PLIST_SUBST+=	PYVERSSUFFIX=${PYVERSSUFFIX}
-# Ok, this is ugly :/
-.  if defined(MULTIARCH)
-PLIST_SUBST+=		PYSITELIB=${PYSITELIB.32}${LIBARCHSUFFIX}
-MULTIARCH_DIRS.lib?=	${PYSITELIB.32}
-.  else
-PLIST_SUBST+=	PYSITELIB=${PYSITELIB}
-.  endif
 .endif
 
 # mostly for ALTERNATIVES files
