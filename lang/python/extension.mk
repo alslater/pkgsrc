@@ -1,4 +1,4 @@
-# $NetBSD: extension.mk,v 1.53 2018/03/29 17:58:26 adam Exp $
+# $NetBSD: extension.mk,v 1.56 2019/05/02 22:06:15 wiz Exp $
 
 .include "../../lang/python/pyversion.mk"
 
@@ -21,7 +21,7 @@ PYSETUP?=		setup.py
 PYSETUPBUILDTARGET?=	build
 PYSETUPBUILDARGS?=	#empty
 # Python 3.5+ supports parallel building
-.if defined(MAKE_JOBS) && ${_PYTHON_VERSION} > 34
+.  if defined(MAKE_JOBS) && ${_PYTHON_VERSION} != 27
 .  if !defined(MAKE_JOBS_SAFE) || empty(MAKE_JOBS_SAFE:M[nN][oO])
 PYSETUPBUILDARGS+=	-j${MAKE_JOBS}
 .  endif
@@ -43,6 +43,7 @@ do-build:
 do-install:
 	(cd ${WRKSRC}/${PYSETUPSUBDIR} && ${SETENV} ${INSTALL_ENV} ${MAKE_ENV} \
 	 ${PYTHONBIN} ${PYSETUP} ${PYSETUPARGS} "install" ${_PYSETUPINSTALLARGS})
+
 .  if !target(do-test) && !(defined(TEST_TARGET) && !empty(TEST_TARGET))
 do-test:
 	(cd ${WRKSRC}/${PYSETUPSUBDIR} && ${SETENV} ${TEST_ENV} ${PYTHONBIN} \
@@ -59,12 +60,12 @@ do-test:
 # appears to be that creating egg info files was new in Python 2.5.
 PY_NO_EGG?=		yes
 .if !empty(PY_NO_EGG:M[yY][eE][sS])
-# see python*/patches/patch-av
+# see python*/patches/patch-Lib_distutils_command_install.py
 INSTALL_ENV+=		PKGSRC_PYTHON_NO_EGG=defined
 .endif
 
 .if defined(PY_PATCHPLIST)
-PLIST_SUBST+=	PYINC=${PYINC} PYLIB=${PYLIB}
+PLIST_SUBST+=	PYINC=${PYINC} PYLIB=${PYLIB} PYSITELIB=${PYSITELIB}
 PLIST_SUBST+=	PYVERSSUFFIX=${PYVERSSUFFIX}
 # Ok, this is ugly :/
 .  if defined(MULTIARCH)
@@ -81,9 +82,6 @@ FILES_SUBST+=	PYVERSSUFFIX=${PYVERSSUFFIX}
 # prepare Python>=3.2 bytecode file location change
 # http://www.python.org/dev/peps/pep-3147/
 .if empty(_PYTHON_VERSION:M2?)
-PY_PEP3147?=		yes
-.endif
-.if defined(PY_PEP3147) && !empty(PY_PEP3147:M[yY][eE][sS])
 PLIST_AWK+=		-f ${PKGSRCDIR}/lang/python/plist-python.awk
 PLIST_AWK_ENV+=		PYVERS="${PYVERSSUFFIX:S/.//}"
 PRINT_PLIST_AWK+=	/^[^@]/ && /[^\/]+\.py[co]$$/ {

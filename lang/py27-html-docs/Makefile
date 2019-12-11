@@ -1,15 +1,15 @@
-# $NetBSD: Makefile,v 1.7 2016/07/06 15:22:35 leot Exp $
+# $NetBSD: Makefile,v 1.13 2019/10/21 10:08:08 leot Exp $
 #
 
-VERS=		2.7.12
+VERS=		2.7.17
 DISTNAME=	python-${VERS}-docs-html
 PKGNAME=	py27-html-docs-${VERS}
 CATEGORIES=	lang python
 MASTER_SITES=	https://www.python.org/ftp/python/doc/${VERS}/
 EXTRACT_SUFX=	.tar.bz2
 
-MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.python.org/doc/
+MAINTAINER=	leot@NetBSD.org
+HOMEPAGE=	https://www.python.org/doc/
 COMMENT=	HTML Documentation for Python 2.7
 LICENSE=	python-software-foundation
 
