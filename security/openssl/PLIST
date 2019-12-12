@@ -105,8 +105,8 @@ include/openssl/x509_vfy.h
 include/openssl/x509err.h
 include/openssl/x509v3.h
 include/openssl/x509v3err.h
-lib/engines-1.1/capi.${SOEXT}
-lib/engines-1.1/padlock.${SOEXT}
+lib/engines-1.1/capi.so
+lib/engines-1.1/padlock.so
 lib/libcrypto.a
 lib/libcrypto.so
 lib/libcrypto.so.1.1
