@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.25 2019/11/13 12:26:40 wiz Exp $
 bin/hg
 ${PYSITELIB}/hgdemandimport/__init__.py
 ${PYSITELIB}/hgdemandimport/__init__.pyc
@@ -343,9 +343,6 @@ ${PYSITELIB}/hgext/remotefilelog/datapack.pyo
 ${PYSITELIB}/hgext/remotefilelog/debugcommands.py
 ${PYSITELIB}/hgext/remotefilelog/debugcommands.pyc
 ${PYSITELIB}/hgext/remotefilelog/debugcommands.pyo
-${PYSITELIB}/hgext/remotefilelog/extutil.py
-${PYSITELIB}/hgext/remotefilelog/extutil.pyc
-${PYSITELIB}/hgext/remotefilelog/extutil.pyo
 ${PYSITELIB}/hgext/remotefilelog/fileserverclient.py
 ${PYSITELIB}/hgext/remotefilelog/fileserverclient.pyc
 ${PYSITELIB}/hgext/remotefilelog/fileserverclient.pyo
@@ -391,9 +388,6 @@ ${PYSITELIB}/hgext/schemes.pyo
 ${PYSITELIB}/hgext/share.py
 ${PYSITELIB}/hgext/share.pyc
 ${PYSITELIB}/hgext/share.pyo
-${PYSITELIB}/hgext/shelve.py
-${PYSITELIB}/hgext/shelve.pyc
-${PYSITELIB}/hgext/shelve.pyo
 ${PYSITELIB}/hgext/show.py
 ${PYSITELIB}/hgext/show.pyc
 ${PYSITELIB}/hgext/show.pyo
@@ -629,6 +623,7 @@ ${PYSITELIB}/mercurial/help/internals/changegroups.txt
 ${PYSITELIB}/mercurial/help/internals/config.txt
 ${PYSITELIB}/mercurial/help/internals/extensions.txt
 ${PYSITELIB}/mercurial/help/internals/linelog.txt
+${PYSITELIB}/mercurial/help/internals/mergestate.txt
 ${PYSITELIB}/mercurial/help/internals/requirements.txt
 ${PYSITELIB}/mercurial/help/internals/revlogs.txt
 ${PYSITELIB}/mercurial/help/internals/wireprotocol.txt
@@ -688,6 +683,18 @@ ${PYSITELIB}/mercurial/httppeer.pyo
 ${PYSITELIB}/mercurial/i18n.py
 ${PYSITELIB}/mercurial/i18n.pyc
 ${PYSITELIB}/mercurial/i18n.pyo
+${PYSITELIB}/mercurial/interfaces/__init__.py
+${PYSITELIB}/mercurial/interfaces/__init__.pyc
+${PYSITELIB}/mercurial/interfaces/__init__.pyo
+${PYSITELIB}/mercurial/interfaces/dirstate.py
+${PYSITELIB}/mercurial/interfaces/dirstate.pyc
+${PYSITELIB}/mercurial/interfaces/dirstate.pyo
+${PYSITELIB}/mercurial/interfaces/repository.py
+${PYSITELIB}/mercurial/interfaces/repository.pyc
+${PYSITELIB}/mercurial/interfaces/repository.pyo
+${PYSITELIB}/mercurial/interfaces/util.py
+${PYSITELIB}/mercurial/interfaces/util.pyc
+${PYSITELIB}/mercurial/interfaces/util.pyo
 ${PYSITELIB}/mercurial/keepalive.py
 ${PYSITELIB}/mercurial/keepalive.pyc
 ${PYSITELIB}/mercurial/keepalive.pyo
@@ -832,9 +839,6 @@ ${PYSITELIB}/mercurial/repair.pyo
 ${PYSITELIB}/mercurial/repocache.py
 ${PYSITELIB}/mercurial/repocache.pyc
 ${PYSITELIB}/mercurial/repocache.pyo
-${PYSITELIB}/mercurial/repository.py
-${PYSITELIB}/mercurial/repository.pyc
-${PYSITELIB}/mercurial/repository.pyo
 ${PYSITELIB}/mercurial/repoview.py
 ${PYSITELIB}/mercurial/repoview.pyc
 ${PYSITELIB}/mercurial/repoview.pyo
@@ -850,6 +854,12 @@ ${PYSITELIB}/mercurial/revlogutils/constants.pyo
 ${PYSITELIB}/mercurial/revlogutils/deltas.py
 ${PYSITELIB}/mercurial/revlogutils/deltas.pyc
 ${PYSITELIB}/mercurial/revlogutils/deltas.pyo
+${PYSITELIB}/mercurial/revlogutils/flagutil.py
+${PYSITELIB}/mercurial/revlogutils/flagutil.pyc
+${PYSITELIB}/mercurial/revlogutils/flagutil.pyo
+${PYSITELIB}/mercurial/revlogutils/sidedata.py
+${PYSITELIB}/mercurial/revlogutils/sidedata.pyc
+${PYSITELIB}/mercurial/revlogutils/sidedata.pyo
 ${PYSITELIB}/mercurial/revset.py
 ${PYSITELIB}/mercurial/revset.pyc
 ${PYSITELIB}/mercurial/revset.pyo
@@ -874,6 +884,9 @@ ${PYSITELIB}/mercurial/server.pyo
 ${PYSITELIB}/mercurial/setdiscovery.py
 ${PYSITELIB}/mercurial/setdiscovery.pyc
 ${PYSITELIB}/mercurial/setdiscovery.pyo
+${PYSITELIB}/mercurial/shelve.py
+${PYSITELIB}/mercurial/shelve.pyc
+${PYSITELIB}/mercurial/shelve.pyo
 ${PYSITELIB}/mercurial/similar.py
 ${PYSITELIB}/mercurial/similar.pyc
 ${PYSITELIB}/mercurial/similar.pyo
@@ -1229,15 +1242,18 @@ ${PYSITELIB}/mercurial/utils/__init__.pyo
 ${PYSITELIB}/mercurial/utils/cborutil.py
 ${PYSITELIB}/mercurial/utils/cborutil.pyc
 ${PYSITELIB}/mercurial/utils/cborutil.pyo
+${PYSITELIB}/mercurial/utils/compression.py
+${PYSITELIB}/mercurial/utils/compression.pyc
+${PYSITELIB}/mercurial/utils/compression.pyo
 ${PYSITELIB}/mercurial/utils/dateutil.py
 ${PYSITELIB}/mercurial/utils/dateutil.pyc
 ${PYSITELIB}/mercurial/utils/dateutil.pyo
-${PYSITELIB}/mercurial/utils/interfaceutil.py
-${PYSITELIB}/mercurial/utils/interfaceutil.pyc
-${PYSITELIB}/mercurial/utils/interfaceutil.pyo
 ${PYSITELIB}/mercurial/utils/procutil.py
 ${PYSITELIB}/mercurial/utils/procutil.pyc
 ${PYSITELIB}/mercurial/utils/procutil.pyo
+${PYSITELIB}/mercurial/utils/repoviewutil.py
+${PYSITELIB}/mercurial/utils/repoviewutil.pyc
+${PYSITELIB}/mercurial/utils/repoviewutil.pyo
 ${PYSITELIB}/mercurial/utils/storageutil.py
 ${PYSITELIB}/mercurial/utils/storageutil.pyc
 ${PYSITELIB}/mercurial/utils/storageutil.pyo
