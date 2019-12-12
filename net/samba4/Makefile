@@ -1,7 +1,6 @@
 # $NetBSD: Makefile,v 1.81 2019/09/09 00:33:05 taca Exp $
 
-DISTNAME=	samba-4.10.8
-PKGREVISION=	1
+DISTNAME=	samba-4.11.3
 CATEGORIES=	net
 MASTER_SITES=	https://download.samba.org/pub/samba/stable/
 
@@ -91,7 +90,6 @@ CONFIGURE_ARGS+=	--with-libiconv=${BUILDLINK_PREFIX.iconv}
 #CONFIGURE_ARGS+=	--bundled-libraries=com_err
 CONFIGURE_ARGS+=	--abi-check-disable
 CONFIGURE_ARGS+=	--disable-symbol-versions
-CONFIGURE_ARGS+=	--enable-gnutls
 .if defined(MAKE_JOBS) && !empty(MAKE_JOBS) && !(defined(MAKE_JOBS_SAFE) && !empty(MAKE_JOBS_SAFE:M[nN][oO]))
 CONFIGURE_ARGS+=	--jobs=${MAKE_JOBS}
 .else
@@ -221,6 +219,7 @@ BUILDLINK_API_DEPENDS.talloc+=	talloc>=2.1.9
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
+.include "../../net/avahi/buildlink3.mk"
 .include "../../security/gnutls/buildlink3.mk"
 .include "../../security/libgcrypt/buildlink3.mk"
 .include "../../textproc/jansson/buildlink3.mk"
