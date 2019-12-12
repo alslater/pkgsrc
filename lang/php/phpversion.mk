@@ -10,7 +10,7 @@
 #	The PHP version to choose when more than one is acceptable to
 #	the package.
 #
-#	Possible: 56 70 71 72 73
+#	Possible: 56 71 72 73
 #	Default: 56
 #
 # === Infrastructure variables ===
@@ -27,13 +27,13 @@
 # PHP_VERSIONS_ACCEPTED
 #	The PHP versions that are accepted by the package.
 #
-#	Possible: 56 70 71 72 73
+#	Possible: 56 71 72 73
 #	Default: 56
 #
 # PHP_VERSIONS_INCOMPATIBLE
 #	The PHP versions that are not supported by the package.
 #
-#	Possible: 56 70 71 72 73
+#	Possible: 56 71 72 73
 #	Default: (empty)
 #
 # PHP_CHECK_INSTALLED
@@ -48,7 +48,7 @@
 # PKG_PHP_VERSION
 #	The selected PHP version.
 #
-#	Possible: 56 70 71 72 73
+#	Possible: 56 71 72 73
 #	Default: ${PHP_VERSION_DEFAULT}
 #
 # PHP_BASE_VERS
@@ -72,7 +72,7 @@
 # PHP_PKG_PREFIX
 #	The prefix that is prepended to the package name.
 #
-#	Example: php56 php70 php71 php72 php73
+#	Example: php56 php71 php72 php73
 #
 # PHP_EXTENSION_DIR
 #	Relative path to ${PREFIX} for PHP's extensions.  It is derived from
@@ -88,7 +88,6 @@ PHPVERSION_MK=	defined
 
 # Define each PHP's version.
 PHP56_VERSION=	5.6.40
-PHP70_VERSION=	7.0.33
 PHP71_VERSION=	7.1.33
 PHP72_VERSION=	7.2.24
 PHP73_VERSION=	7.3.11
@@ -108,8 +107,8 @@ _SYS_VARS.php=	PKG_PHP_VERSION PKG_PHP PHPPKGSRCDIR PHP_PKG_PREFIX \
 
 .include "../../mk/bsd.prefs.mk"
 
-PHP_VERSION_DEFAULT?=		56
-PHP_VERSIONS_ACCEPTED?=		56 70 71 72 73
+PHP_VERSION_DEFAULT?=		73
+PHP_VERSIONS_ACCEPTED?=		73 71 72
 .for pv in ${PHP_VERSIONS_ACCEPTED}
 .  if empty(PHP_VERSIONS_INCOMPATIBLE:M${pv})
 _PHP_VERSIONS_ACCEPTED+=	${pv}
@@ -130,9 +129,6 @@ _PHP_VERSION_72_INSTALLED=	yes
 _PHP_INSTALLED=			yes
 .elif exists(${LOCALBASE}/lib/php/${PHP71_RELDATE})
 _PHP_VERSION_71_INSTALLED=	yes
-_PHP_INSTALLED=			yes
-.elif exists(${LOCALBASE}/lib/php/${PHP70_RELDATE})
-_PHP_VERSION_70_INSTALLED=	yes
 _PHP_INSTALLED=			yes
 .elif exists(${LOCALBASE}/lib/php/${PHP56_RELDATE})
 _PHP_VERSION_56_INSTALLED=	yes
@@ -211,12 +207,6 @@ PHP_VERSION=		${PHP56_VERSION}
 PHP_INITIAL_TEENY=	3
 PHP_PKG_PREFIX=		php56
 PHP_EXTENSION_DIR=	lib/php/${PHP56_RELDATE}
-.elif ${_PHP_VERSION} == "70"
-PHPPKGSRCDIR=		../../lang/php70
-PHP_VERSION=		${PHP70_VERSION}
-PHP_INITIAL_TEENY=	0
-PHP_PKG_PREFIX=		php70
-PHP_EXTENSION_DIR=	lib/php/${PHP70_RELDATE}
 .elif ${_PHP_VERSION} == "71"
 PHPPKGSRCDIR=		../../lang/php71
 PHP_VERSION=		${PHP71_VERSION}
