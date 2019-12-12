@@ -1,25 +1,24 @@
-$NetBSD: patch-src_libstd_build.rs,v 1.5 2019/09/19 17:37:29 jperkin Exp $
+$NetBSD: patch-src_libstd_build.rs,v 1.3 2019/01/19 12:44:08 ryoon Exp $
 
 SunOS support:
  - Support PKGSRC_USE_SSP (ugly for now).
  - Add libumem support.
  - Add libexecinfo for backtrace().
 
---- src/libstd/build.rs.orig	2019-08-13 06:27:22.000000000 +0000
+--- src/libstd/build.rs.orig	2019-01-16 09:30:27.000000000 +0000
 +++ src/libstd/build.rs
-@@ -18,6 +18,7 @@ fn main() {
+@@ -42,6 +42,7 @@ fn main() {
          println!("cargo:rustc-link-lib=execinfo");
          println!("cargo:rustc-link-lib=pthread");
      } else if target.contains("netbsd") {
 +        println!("cargo:rustc-link-lib=execinfo");
          println!("cargo:rustc-link-lib=pthread");
          println!("cargo:rustc-link-lib=rt");
-     } else if target.contains("dragonfly") || target.contains("openbsd") {
-@@ -27,6 +28,10 @@ fn main() {
+     } else if target.contains("dragonfly") || target.contains("bitrig") ||
+@@ -52,6 +53,9 @@ fn main() {
          println!("cargo:rustc-link-lib=posix4");
          println!("cargo:rustc-link-lib=pthread");
          println!("cargo:rustc-link-lib=resolv");
-+        println!("cargo:rustc-link-lib=nsl");
 +        // pkgsrc hack until I can figure out how to pass it through properly
 +        println!("cargo:rustc-link-lib=ssp");
 +        println!("cargo:rustc-link-lib=umem");
