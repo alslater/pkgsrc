@@ -1,7 +1,0 @@
-$NetBSD: distinfo,v 1.4 2015/11/03 03:29:09 agc Exp $
-
-SHA1 (hgview-1.10.4.tar.gz) = 9461553fe62c50ccb3cc88ba5ee42752b49cb75e
-RMD160 (hgview-1.10.4.tar.gz) = a1a4151c42736ac6c4873a64f5573e4403b63466
-SHA512 (hgview-1.10.4.tar.gz) = edae64eb0a908b77cda740be6de488e6026f221d67ab78ad5472ce5672f9cccac6aa20a9e4fa6aac2b4d1b14d12263d4a9b80eb38b130cf971aa8d5b0f2663e5
-Size (hgview-1.10.4.tar.gz) = 306479 bytes
-SHA1 (patch-setup.py) = 967ce6f5c21cf0497c70a5c121446da9dbfc9271
