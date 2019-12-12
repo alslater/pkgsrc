@@ -12,6 +12,7 @@ LICENSE=	python-software-foundation
 USE_GCC_RUNTIME=	yes
 
 EXTRACT_ELEMENTS=	${PYSUBDIR}/Modules/_tkinter.c \
+			${PYSUBDIR}/Modules/clinic/_tkinter.c.h \
 			${PYSUBDIR}/Modules/tkappinit.c
 
 MULTIARCH_DIRS.lib=	${PYLIB}/lib-dynload
