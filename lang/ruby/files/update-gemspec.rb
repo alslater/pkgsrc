@@ -1,9 +1,10 @@
 #!/usr/pkg/bin/ruby
 # -*- coding: utf-8 -*-
 #
-# $NetBSD: update-gemspec.rb,v 1.8 2016/11/19 13:50:19 taca Exp $
+# $NetBSD: update-gemspec.rb,v 1.11 2018/12/31 14:36:15 taca Exp $
 #
-# Copyright (c) 2011, 2012, 2013, 2014, 2015, 2016 The NetBSD Foundation, Inc.
+# Copyright (c) 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018
+# The NetBSD Foundation, Inc.
 # All rights reserved.
 #
 # This code is derived from software contributed to The NetBSD Foundation
@@ -73,7 +74,9 @@ class GemSpecUpdater
           key = nil
         elsif /^:([a-z_]+)+/ =~ ru
           key = $1
+          if @attr[key].nil?
           @attr[key] = []
+          end
         elsif not key.nil?
           @attr[key].push ru unless key.nil?
         else
@@ -106,8 +109,8 @@ class GemSpecUpdater
       update = @requirements[dep.name]
       if not update.nil? and update[:method] == :update
         r = dep.requirement.requirements
-        r[0][0] = update[:op]
-        r[0][1] = update[:version]
+        r.clear
+        r[0] = [update[:op], update[:version]]
         unless update[:name].nil?
           dep.name = update[:name]
         end
@@ -131,6 +134,7 @@ class GemSpecUpdater
           if /^([^=]+)=([^=]+)$/ =~ op
             ov = $1
             nv = $2
+            puts "#{ov} => #{nv}"
             if av.include? ov
               av.delete ov
               modified = true

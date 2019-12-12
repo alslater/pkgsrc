@@ -1,4 +1,4 @@
-# $NetBSD: gem.mk,v 1.37 2016/11/19 15:35:03 taca Exp $
+# $NetBSD: gem.mk,v 1.41 2019/11/03 19:04:06 rillig Exp $
 #
 # This Makefile fragment is intended to be included by packages that build
 # and install Ruby gems.
@@ -127,10 +127,6 @@ GEM_BUILD?=	gemspec
 
 OVERRIDE_GEMSPEC?=	# default is empty
 
-.if ${GEM_BUILD} == "rake"
-USE_RAKE?=		YES
-.endif
-
 # Include this early in case some of its target are needed
 .include "../../lang/ruby/modules.mk"
 
@@ -228,7 +224,7 @@ do-build: _gem-pre-build gem-build
 
 _gem-pre-build:
 .if !empty(OVERRIDE_GEMSPEC)
-	@${STEP_MSG} Override gemspec dependency
+	@${STEP_MSG} Override gemspec
 	@${RUBY} ${.CURDIR}/${UPDATE_GEMSPEC} ${WRKDIR}/${GEM_NAME}.gemspec \
 		${OVERRIDE_GEMSPEC:Q}
 .endif
@@ -262,11 +258,8 @@ _RUBYGEM_OPTIONS+=	--install-dir ${PREFIX}/${GEM_HOME}
 _RUBYGEM_OPTIONS+=	${RUBYGEM_INSTALL_ROOT_OPTION}
 _RUBYGEM_OPTIONS+=	--ignore-dependencies
 _RUBYGEM_OPTIONS+=	--local ${WRKSRC}/${GEM_NAME}.gem
-.if !empty(RUBY_BUILD_RI:M[nN][oO])
-_RUBYGEM_OPTIONS+=	--no-ri
-.endif
-.if !empty(RUBY_BUILD_RDOC:M[nN][oO])
-_RUBYGEM_OPTIONS+=	--no-rdoc
+.if !empty(RUBY_BUILD_DOCUMENT:M[nN][oO])
+_RUBYGEM_OPTIONS+=	--no-document
 .endif
 .if !empty(CONFIGURE_ARGS) || !empty(RUBY_EXTCONF_ARGS)
 _RUBYGEM_OPTIONS+=	--
