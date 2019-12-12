@@ -51,7 +51,7 @@ SHLIB_EXT=	dylib
 SHLIB_EXT=	so
 .endif
 
-PRINT_PLIST_AWK+=	/^lib\/engines/ { gsub(/\.${SHLIB_EXT}$$/, ".$${SHLIB_EXT}"); }
+#PRINT_PLIST_AWK+=	/^lib\/engines/ { gsub(/\.${SHLIB_EXT}$$/, ".$${SHLIB_EXT}"); }
 
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
