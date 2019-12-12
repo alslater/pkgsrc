@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.2 2016/06/08 17:43:21 wiz Exp $
+# $NetBSD: Makefile,v 1.6 2018/11/30 11:21:37 adam Exp $
 
-DISTNAME=	colorama-0.3.2
+DISTNAME=	colorama-0.4.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	comms python
 MASTER_SITES=	${MASTER_SITE_PYPI:=c/colorama/}
 
 MAINTAINER=	kamelderouiche@yahoo.com
-HOMEPAGE=	https://pypi.python.org/pypi/colorama
+HOMEPAGE=	https://github.com/tartley/colorama
 COMMENT=	Cross-platform coloured terminal text
 LICENSE=	modified-bsd
 
