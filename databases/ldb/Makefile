@@ -40,7 +40,7 @@ MAKE_FLAGS+=		WAF_BINARY=${PYTHONBIN}\ ${WRKSRC}/buildtools/bin/waf
 
 .include "../../mk/bsd.prefs.mk"
 
-.if ${SHLIB_TYPE} == "dylib"
+.if ${_OPSYS_SHLIB_TYPE} == "dylib"
 PLIST_SUBST+=	SOEXT=dylib
 .else
 PLIST_SUBST+=	SOEXT=so
