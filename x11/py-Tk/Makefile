@@ -13,14 +13,6 @@ USE_GCC_RUNTIME=	yes
 
 EXTRACT_ELEMENTS=	${PYSUBDIR}/Modules/_tkinter.c \
 			${PYSUBDIR}/Modules/tkappinit.c
-
-.include "../../lang/python/pyversion.mk"
-.if ${_PYTHON_VERSION} != 27
-EXTRACT_ELEMENTS+=  ${PYSUBDIR}/Modules/clinic/_tkinter.c.h
-.endif
-
-MULTIARCH_DIRS.lib=	${PYLIB}/lib-dynload
-
 PYDISTUTILSPKG=		yes
 PY_PATCHPLIST=		yes
 PY_SETUP_SUBST+=	BLPREFIX=${LOCALBASE}
@@ -43,6 +35,9 @@ PY_SETUP_SUBST+=	X11LIB=\'X11\'
 .if ${_PYTHON_VERSION} >= 27
 EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/tkinter.h
 .endif
+.if ${_PYTHON_VERSION} >= 38
+EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/clinic
+.endif
 
 # ignore errors due to missing files (EXTRACT_ELEMENTS!)
 do-patch:
@@ -53,5 +48,4 @@ do-patch:
 .include "../../lang/python/srcdist.mk"
 .include "../../lang/tcl/buildlink3.mk"
 .include "../../x11/tk/buildlink3.mk"
-.include "../../x11/libX11/builtin.mk"
 .include "../../mk/bsd.pkg.mk"
