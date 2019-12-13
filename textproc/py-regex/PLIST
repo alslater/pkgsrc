@@ -1,0 +1,15 @@
+@comment $NetBSD: PLIST,v 1.4 2019/11/15 14:31:02 adam Exp $
+${PYSITELIB}/${EGG_FILE}
+${PYSITELIB}/regex/__init__.py
+${PYSITELIB}/regex/__init__.pyc
+${PYSITELIB}/regex/__init__.pyo
+${PYSITELIB}/regex/_regex.so
+${PYSITELIB}/regex/_regex_core.py
+${PYSITELIB}/regex/_regex_core.pyc
+${PYSITELIB}/regex/_regex_core.pyo
+${PYSITELIB}/regex/regex.py
+${PYSITELIB}/regex/regex.pyc
+${PYSITELIB}/regex/regex.pyo
+${PYSITELIB}/regex/test_regex.py
+${PYSITELIB}/regex/test_regex.pyc
+${PYSITELIB}/regex/test_regex.pyo

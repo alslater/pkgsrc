@@ -1,21 +1,23 @@
-# $NetBSD: Makefile,v 1.7 2016/11/07 11:10:24 wiz Exp $
+# $NetBSD: Makefile,v 1.81 2019/11/13 21:08:30 adam Exp $
 
-DISTNAME=	hypothesis-3.6.0
+DISTNAME=	hypothesis-4.44.2
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-CATEGORIES=	devel
+CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=h/hypothesis/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	https://pypi.python.org/pypi/hypothesis/
+HOMEPAGE=	https://github.com/HypothesisWorks/hypothesis
 COMMENT=	Python library for property based testing
 LICENSE=	mpl-2.0
 
-DEPENDS+=	${PYPKGPREFIX}-sqlite3-[0-9]*:../../databases/py-sqlite3
+DEPENDS+=	${PYPKGPREFIX}-attrs>=19.2.0:../../devel/py-attrs
+
+.include "../../lang/python/pyversion.mk"
+.if ${_PYTHON_VERSION} == 27
+DEPENDS+=	${PYPKGPREFIX}-enum34-[0-9]*:../../devel/py-enum34
+.endif
 
 USE_LANGUAGES=	# none
-
-# actual tests only in github distfile, but that needs py-test and
-# py-test depends on py-hypothesis...
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"
