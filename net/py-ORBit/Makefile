@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.51 2016/07/09 13:03:59 wiz Exp $
+# $NetBSD: Makefile,v 1.57 2019/11/03 11:45:49 rillig Exp $
 
 DISTNAME=	pyorbit-2.24.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/pyorbit/ORBit/}
@@ -8,7 +8,7 @@ MASTER_SITES=	${MASTER_SITE_GNOME:=sources/pyorbit/2.24/}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/
+HOMEPAGE=	https://www.gnome.org/
 COMMENT=	Python bindings for ORBit2
 LICENSE=	gnu-lgpl-v2.1
 
@@ -23,7 +23,7 @@ PYTHON_SELF_CONFLICT=	YES
 
 BUILDLINK_API_DEPENDS.python26+= python26>=2.6.2nb4
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # dead upstream, no plans to port
+PYTHON_VERSIONS_ACCEPTED=	27 # dead upstream, no plans to port
 
 BUILDLINK_TRANSFORM.SunOS+=	rm:-std=c9x
 
