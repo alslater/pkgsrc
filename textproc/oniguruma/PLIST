@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.2 2018/01/15 08:49:04 adam Exp $
 bin/onig-config
 include/oniggnu.h
 include/onigposix.h
