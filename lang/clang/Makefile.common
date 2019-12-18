@@ -1,23 +1,22 @@
-# $NetBSD: Makefile.common,v 1.26 2018/05/22 12:39:23 adam Exp $
+# $NetBSD: Makefile.common,v 1.37 2019/11/03 19:03:56 rillig Exp $
 # used by lang/clang/Makefile
 # used by lang/clang-static-analyzer/Makefile
+# used by lang/clang-tools-extra/Makefile
 
-DISTNAME=	cfe-5.0.2.src
+DISTNAME=	cfe-9.0.0.src
 CATEGORIES=	lang devel
-MASTER_SITES=	http://llvm.org/releases/${PKGVERSION_NOREV}/
+MASTER_SITES=	http://releases.llvm.org/${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://clang.llvm.org/
 COMMENT=	C language family frontend for LLVM
-LICENSE=	modified-bsd
+LICENSE=	apache-2.0
 
-DISTINFO_FILE=		${.CURDIR}/../../lang/clang/distinfo
-PATCHDIR=		${.CURDIR}/../../lang/clang/patches
 CONFIGURE_DIRS=		${WRKDIR}/build
 CMAKE_ARG_PATH=		${WRKSRC}
 
-USE_LANGUAGES=		c c++
+USE_LANGUAGES=		c c++11
 USE_CMAKE=		yes
 GCC_REQD+=		4.8
 
@@ -27,7 +26,9 @@ CMAKE_ARGS+=	-DCMAKE_C_COMPILER=${CC:Q}
 CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=${CXX:Q}
 # XXX can't disable static-analyzer without also disabling ARCMT
 CMAKE_ARGS+=	-DCLANG_ENABLE_ARCMT=OFF
-CMAKE_ARGS+=    -DGCC_INSTALL_PREFIX=${_GCC_PREFIX:Q}
+
+.include "../../mk/compiler.mk"
+
 CMAKE_ARGS.Darwin+=	-DCMAKE_LIBTOOL=/usr/bin/libtool
 .if defined(OSX_SDK_PATH)
 CMAKE_ARGS.Darwin+=	-DDEFAULT_SYSROOT=${OSX_SDK_PATH:Q}
@@ -65,10 +66,9 @@ REPLACE_PYTHON+=	utils/analyzer/ubiviz
 REPLACE_PYTHON+=	utils/check_cfc/check_cfc.py
 REPLACE_PYTHON+=	utils/check_cfc/obj_diff.py
 REPLACE_PYTHON+=	utils/check_cfc/test_check_cfc.py
+REPLACE_PYTHON+=	utils/hmaptool/hmaptool
 REPLACE_PYTHON+=	utils/token-delta.py
 REPLACE_PYTHON+=	www/builtins.py
-
-.include "../../mk/compiler.mk"
 
 .if ${OPSYS} == "NetBSD" && !empty(PKGSRC_COMPILER:Mclang)
 # command to check if clang is using libc++ or libstdc++
@@ -89,12 +89,22 @@ SUBST_SED.libcxx=		-e 's,(Major >= 7 || Major == 0),(false),'
 CMAKE_ARGS+=			-DCLANG_DEFAULT_CXX_STDLIB:STRING="libstdc++"
 .endif
 
+# Enable full LLVM suite on SunOS
+.if ${OPSYS} == "SunOS"
+.include "../../lang/compiler-rt/buildlink3.mk"
+.include "../../lang/libcxx/buildlink3.mk"
+.include "../../lang/libcxxabi/buildlink3.mk"
+.include "../../lang/libunwind/buildlink3.mk"
+CMAKE_ARGS+=    -DCLANG_DEFAULT_RTLIB:STRING="compiler-rt"
+CMAKE_ARGS+=    -DCLANG_DEFAULT_CXX_STDLIB:STRING="libc++"
+.endif
+
 # 3.8.0 -> 3.8
 LLVM_MAJOR=	${PKGVERSION_NOREV:C/^([0-9]+\.[0-9]+)\..*$/\1/}
 PLIST_SUBST+=	LLVM_MAJOR=${LLVM_MAJOR}
 
 PLIST_VARS+=	notdylib
-.if ${_OPSYS_SHLIB_TYPE} == "dylib"
+.if ${SHLIB_TYPE} == "dylib"
 SOEXT=		dylib
 .else
 SOEXT=		so
@@ -119,7 +129,7 @@ CMAKE_ARGS+=		-DCLANG_INCLUDE_TESTS=OFF
 .endif
 
 post-extract:
-	${RUN} mkdir -p ${WRKDIR}/build
+	${MKDIR} ${WRKDIR}/build
 
 .include "../../textproc/libxml2/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
@@ -127,4 +137,3 @@ post-extract:
 .include "../../lang/python/tool.mk"
 DEPENDS+=	llvm-${PKGVERSION_NOREV}{,nb*}:../../lang/llvm
 .include "../../lang/llvm/buildlink3.mk"
-.include "../../mk/bsd.pkg.mk"
