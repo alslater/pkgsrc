@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.30 2016/11/30 13:46:14 wiz Exp $
+# $NetBSD: Makefile,v 1.46 2019/11/03 10:39:22 rillig Exp $
 
-DISTNAME=		findlib-1.7.1
+DISTNAME=		findlib-1.8.1
 PKGNAME=		ocaml-${DISTNAME}
 CATEGORIES=		devel
 MASTER_SITES=		http://download.camlcity.org/download/
@@ -10,10 +10,17 @@ HOMEPAGE=		http://www.camlcity.org/
 COMMENT=		Library finder for OCaml
 LICENSE=		mit
 
-OCAML_FINDLIB_DIRS+=	bigarray bytes compiler-libs dynlink findlib graphics \
-			ocamldoc num-top num stdlib str threads unix
+OCAML_FINDLIB_DIRS+=	bigarray bytes compiler-libs dynlink findlib \
+			ocamldoc stdlib str threads unix
 
 .include "../../mk/ocaml.mk"
+
+# spacetime profiling is only available for native code on 64bit platforms
+PLIST_VARS+=		64bit
+.if !empty(LP64PLATFORMS:@.PLAT.@${MACHINE_PLATFORM:M${.PLAT.}}@) || \
+    (defined(ABI) && ${ABI} == "64")
+PLIST.64bit=		yes
+.endif
 
 # Undeclared dependencies between different components
 MAKE_JOBS_SAFE=		no
@@ -27,7 +34,7 @@ CONFIGURE_ARGS+=	-config ${PKG_SYSCONFDIR}/ocamlfind.conf
 CONFIGURE_ARGS+=	-sitelib ${PREFIX}/${OCAML_SITELIBDIR}
 CONFIGURE_ARGS+=	-no-camlp4
 
-BUILD_TARGET=		all
+BUILD_TARGET=	all
 .if ${OCAML_USE_OPT_COMPILER} == "yes"
 BUILD_TARGET+=	opt
 .endif
@@ -43,9 +50,9 @@ FILES_SUBST+=		OCAML_FINDLIB_DIRS="${OCAML_FINDLIB_DIRS}" OCAML_SITELIBDIR="${OC
 SUBST_CLASSES+=		ofr
 SUBST_STAGE.ofr=	pre-configure
 SUBST_FILES.ofr=	ocaml-findlib-register.sh
-SUBST_SED.ofr=		-e 's,@SH@,'${SH:Q}','
-SUBST_SED.ofr+=		-e 's,@PREFIX@,${PREFIX},'
-SUBST_SED.ofr+=		-e 's,@FGREP@,'${FGREP:Q}','
+SUBST_VARS.ofr=		SH
+SUBST_VARS.ofr+=	PREFIX
+SUBST_VARS.ofr+=	FGREP
 
 SUBST_CLASSES+=		pathes
 SUBST_STAGE.pathes=	post-install
