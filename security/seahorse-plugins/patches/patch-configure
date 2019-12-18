@@ -1,6 +1,6 @@
-$NetBSD: patch-configure,v 1.1 2015/07/05 12:43:53 joerg Exp $
+$NetBSD: patch-configure,v 1.2 2017/09/10 14:12:44 joerg Exp $
 
---- configure.orig	2010-04-17 01:01:32.000000000 +0000
+--- configure.orig	2015-07-05 11:11:37.000000000 +0000
 +++ configure
 @@ -15965,7 +15965,7 @@ fi
  

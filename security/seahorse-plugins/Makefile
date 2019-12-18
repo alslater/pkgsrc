@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.63 2016/12/04 05:17:40 ryoon Exp $
+# $NetBSD: Makefile,v 1.86 2019/09/15 13:33:10 nia Exp $
 
 DISTNAME=	seahorse-plugins-2.30.1
-PKGREVISION=	48
+PKGREVISION=	67
 CATEGORIES=	security
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/seahorse-plugins/2.30/}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/projects/seahorse/
+HOMEPAGE=	https://www.gnome.org/projects/seahorse/
 COMMENT=	Plugins for the GnuPG front end and bonobo component for GNOME
 LICENSE=	gnu-gpl-v2 AND gnu-fdl-v1.1
 
@@ -15,7 +15,9 @@ GNU_CONFIGURE=		yes
 USE_TOOLS+=		gmake intltool msgfmt pkg-config
 USE_LIBTOOL=		yes
 USE_PKGLOCALEDIR=	yes
-CONFIGURE_ENV+=		ac_cv_path_GNUPG=${GPGME_GPG}
+CONFIGURE_ENV+=		GNUPG=${GPGME_GPG}
+
+CONFIGURE_ARGS+=	--disable-gedit
 
 GCONF_SCHEMAS=		seahorse-gedit.schemas
 GCONF_SCHEMAS+=		seahorse-plugins.schemas
@@ -23,7 +25,6 @@ GCONF_SCHEMAS+=		seahorse-plugins.schemas
 .include "../../databases/gnome-mime-data/buildlink3.mk"
 .include "../../databases/shared-mime-info/mimedb.mk"
 .include "../../devel/GConf/schemas.mk"
-.include "../../editors/gedit/buildlink3.mk"
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
 .include "../../mail/evolution-data-server/buildlink3.mk"
 .include "../../security/gpgme/buildlink3.mk"
