@@ -1,41 +1,20 @@
-# $NetBSD: Makefile,v 1.49 2016/07/09 13:03:50 wiz Exp $
+# $NetBSD: Makefile,v 1.62 2019/11/06 12:53:10 wiz Exp $
 
-DISTNAME=		py2cairo-1.10.0
-PKGNAME=		${PYPKGPREFIX}-${DISTNAME:S/py2//}
-PKGREVISION=		4
+DISTNAME=		pycairo-1.18.2
+PKGNAME=		${PYPKGPREFIX}-${DISTNAME:S/py//}
 CATEGORIES=		graphics
-MASTER_SITES=		http://cairographics.org/releases/
-EXTRACT_SUFX=		.tar.bz2
+MASTER_SITES=		${MASTER_SITE_GITHUB:=pygobject/}
+GITHUB_PROJECT=		pycairo
+GITHUB_RELEASE=		v${PKGVERSION_NOREV}
 
 MAINTAINER=		leuzi@trash.net
 HOMEPAGE=		http://cairographics.org/pycairo/
-COMMENT=		Python bindings for cairo (python-2.x version)
+COMMENT=		Python bindings for cairo
 LICENSE=		gnu-lgpl-v2.1 OR mpl-1.1
 
-USE_PKGLOCALEDIR=	yes
-USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
-USE_TOOLS+=		aclocal automake pkg-config
-GNU_CONFIGURE=		yes
-CONFIGURE_ENV+=		PYTHON=${PYTHONBIN:Q}
+USE_TOOLS+=		pkg-config
 
-MULTIARCH_DIRS.lib=	# manually defined in PLIST
-
-PKGCONFIG_OVERRIDE+=	pycairo.pc.in
-PY_PATCHPLIST=		yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36
-
-post-extract:
-	cd ${WRKSRC} && touch ChangeLog && aclocal && automake -a
-
-.include "../../mk/compiler.mk"
-
-.if !empty(CC_VERSION:Mgcc-2*) || \
-    ${OPSYS} == "SunOS"
-BUILDLINK_TRANSFORM+=	rm:-std=c99
-.endif
-
-.include "../../lang/python/extension.mk"
-BUILDLINK_API_DEPENDS.cairo+=	cairo>=1.10
+BUILDLINK_API_DEPENDS.cairo+=	cairo>=1.13.1
 .include "../../graphics/cairo/buildlink3.mk"
+.include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"
