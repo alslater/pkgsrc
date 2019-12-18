@@ -2,7 +2,7 @@
 
 DISTNAME=	modsecurity-2.9.2
 PKGNAME=	${APACHE_PKG_PREFIX}-${DISTNAME:S/apache_//}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	www security
 MASTER_SITES=	https://www.modsecurity.org/tarball/${PKGVERSION_NOREV}/
 
@@ -12,7 +12,6 @@ COMMENT=	Intrusion detection and prevention engine for web applications
 LICENSE=	apache-2.0
 
 APACHE_MODULE=		yes
-PKG_APACHE_ACCEPTED=	apache22 apache24
 USE_APR=		yes
 USE_LANGUAGES=		c++ c
 
