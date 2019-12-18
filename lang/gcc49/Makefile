@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.13 2016/09/06 12:37:47 jperkin Exp $
+# $NetBSD: Makefile,v 1.29 2019/11/03 19:03:59 rillig Exp $
 
 GCC_PKGNAME=	gcc49
 .include	"version.mk"
@@ -9,8 +9,7 @@ PKGNAME=	${GCC_PKGNAME}-${GCC49_DIST_VERSION}
 ## When bumping the PKGREVISION of this package the PKGREVISION of
 ## lang/gcc49-libs needs to be bump to be at least 1 more than the
 ## PKGREVISION of this package!
-#PKGREVISION=
-
+PKGREVISION=	8
 CATEGORIES=	lang
 MASTER_SITES=	${MASTER_SITE_GNU:=gcc/gcc-${GCC49_DIST_VERSION}/}
 EXTRACT_SUFX=	.tar.bz2
@@ -25,8 +24,10 @@ EXTRACT_ONLY=		${DEFAULT_DISTFILES}
 
 NOT_FOR_PLATFORM=	Interix-*-*
 
-USE_LANGUAGES=		c c++
+USE_LANGUAGES=		c c++03
 USE_TOOLS+=		gmake makeinfo sed:run
+USE_TOOLS.NetBSD+=	gsed
+
 
 GNU_CONFIGURE=		yes
 ## Build outside ${WRKSRC}
@@ -38,6 +39,7 @@ GCC_PREFIX=		${PREFIX}/${GCC_SUBPREFIX}
 GCC_TARGET_MACHINE?=	${MACHINE_GNU_PLATFORM}
 GNU_CONFIGURE_PREFIX=	${GCC_PREFIX}
 INFO_FILES=		yes
+CONFIGURE_ARGS+=	--disable-libstdcxx-pch
 
 UNLIMIT_RESOURCES+=	datasize
 UNLIMIT_RESOURCES+=	stacksize
@@ -48,23 +50,28 @@ FILES_SUBST+=		MACHINE_GNU_PLATFORM=${MACHINE_GNU_PLATFORM}
 SUBST_CLASSES+=		vars
 SUBST_STAGE.vars=	pre-configure
 SUBST_FILES.vars=	gcc/Makefile.in
-SUBST_FILES.vars+=	gcc/config/sol2-bi.h gcc/config/sol2.h
 SUBST_VARS.vars=	GCC_TARGET_MACHINE
-SUBST_VARS.vars+=	PREFIX
 
 .include "../../mk/bsd.prefs.mk"
 
+# This includes some multiarch configuration but is left in the miscfix branch
+# to ease merging.
+SUBST_CLASSES+=		rpaths
+SUBST_STAGE.rpaths=	pre-configure
+SUBST_FILES.rpaths=	gcc/config/sol2-bi.h gcc/config/sol2.h
+SUBST_VARS.rpaths=	PREFIX
 .if !empty(MULTIARCH:M[Yy][Ee][Ss])
-SUBST_SED.vars+=	-e 's,@MARCH64_SUBDIR@,ARCH64_SUBDIR,g'
+SUBST_SED.rpaths=	-e 's,@MARCH64_SUBDIR@,ARCH64_SUBDIR,g'
 .else
-SUBST_SED.vars+=	-e 's,@MARCH64_SUBDIR@,,g'
+SUBST_SED.rpaths=	-e 's,@MARCH64_SUBDIR@,,g'
 .endif
-
 # For the tools build (i.e. when not using USE_GCC_LOCALBASE_PREFIX) we
-# do not want rpaths to leak into final binaries.
-.if ${USE_GCC_LOCALBASE_PREFIX:Uno:tl} != "yes"
-SUBST_SED.vars+=	-e '/-R/d'
-SUBST_SED.vars+=	-e '/-DLINK_LIBGCC_SPEC=/d'
+# do not want to include any of the PREFIX library paths added by
+# patch-gcc_config_sol2*.h, otherwise they would leak into the non-tools
+# builds.  The SUBST used here relies on SUBST_VARS coming after SUBST_SED.
+.if ${USE_GCC_LOCALBASE_PREFIX:Uno:tl} == "no"
+SUBST_SED.rpaths+=	-e '/-R@PREFIX@/d'
+SUBST_SED.rpaths+=	-e 's/:%R@PREFIX@[^}]*//'
 .endif
 
 LANGS=			c
@@ -88,10 +95,17 @@ CHECK_SHLIBS_SKIP+=	${GCC_PKGNAME}/lib*/libgcj_bc.so*
 ## For target librarys and libjava programs.
 CONFIGURE_ENV+=		LDFLAGS_FOR_TARGET=${LDFLAGS_FOR_TARGET:Q}
 
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-*)                                                                                                                                                                     # use the native SSP code in netbsd libc, gcc libssp conflicts with it.
-CONFIGURE_ARGS+=        --disable-libssp
+.if !empty(MACHINE_PLATFORM:MNetBSD-*-*)
+# native SSP conflicts with gcc's libssp
+CONFIGURE_ARGS+=	--disable-libssp
+# Match base libstdc++ major
+SUBST_CLASSES+=		libstdc
+SUBST_STAGE.libstdc=	pre-configure
+SUBST_FILES.libstdc=	libstdc++-v3/configure
+SUBST_MESSAGE.libstdc=	Bumping libstdc++ major to 7
+SUBST_SED.libstdc=	-e 's,libtool_VERSION=6:,libtool_VERSION=7:,g'
 .else
-CONFIGURE_ARGS+=        --enable-libssp
+CONFIGURE_ARGS+=	--enable-libssp
 .endif
 
 CONFIGURE_ARGS+=	--enable-languages=${LANGS:Q}
@@ -119,12 +133,12 @@ CONFIGURE_ARGS.DragonFly+=	--disable-bootstrap
 CONFIGURE_ARGS.Darwin+=	STRIP_FOR_TARGET=${TOOLS_PLATFORM.strip}
 
 .if !empty(MACHINE_PLATFORM:MDarwin-[0-8].*-*)
-CONFIGURE_ARGS+=       --with-dwarf2
-CONFIGURE_ARGS+=       --disable-libitm
+CONFIGURE_ARGS+=	--with-dwarf2
+CONFIGURE_ARGS+=	--disable-libitm
 .endif
 
 .if !empty(MACHINE_PLATFORM:MDarwin-[0-8].*-powerpc)
-CONFIGURE_ARGS+=       --disable-multilib
+CONFIGURE_ARGS+=	--disable-multilib
 .endif
 
 .if !empty(MACHINE_PLATFORM:MNetBSD-*-i386) || !empty(MACHINE_PLATFORM:MLinux-*-i386)
@@ -132,7 +146,7 @@ CONFIGURE_ARGS+=	--with-arch=i486 --with-tune=i486
 .endif
 
 # Disable fixincludes on SmartOS, header changes result in broken includes
-# being generated, see https://github.com/joyent/pkgsrc/issues/270
+# being generated, see https://github.com/joyent/pkgsrc-legacy/issues/270
 .if ${OS_VARIANT} == "SmartOS"
 SUBST_CLASSES+=		fixinc
 SUBST_STAGE.fixinc=	pre-configure
@@ -150,40 +164,35 @@ MAKE_ENV+=		lt_cv_path_SED=${TOOLS_SED}
 
 .if !empty(MACHINE_PLATFORM:MSunOS-5.1[123456789]-*)
 # Causes multilib build problems with specific compiler combinations
-#MAKE_ENV+=		gcc_cv_ld_as_needed=no
+MAKE_ENV+=		gcc_cv_ld_as_needed=no
 # Determine whether to use binutils
-#.  if exists(/usr/bin/gobjdump)
-#CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
-#.  endif
-#.  if exists(/usr/bin/gld)
-#CONFIGURE_ARGS+=	--with-gnu-ld --with-ld=/usr/bin/gld
-#.  elif exists(/usr/bin/ld)
-#CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/bin/ld
-#.  else
-#CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/ccs/bin/ld
-#.  endif
-#.  if exists(/usr/bin/gas)
-#CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/bin/gas
-#.  elif exists(/usr/sfw/bin/gas)
-#CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/sfw/bin/gas
-#.  elif exists(/usr/ccs/bin/as)
-#CONFIGURE_ARGS+=	--without-gnu-as --with-as=/usr/ccs/bin/as
-#.  else
-#BUILDLINK_DEPMETHOD.binutils=	full
-#.    include "../../devel/binutils/buildlink3.mk"
-#CONFIGURE_ARGS+=	--with-gnu-as --with-as=${PREFIX}/bin/gas
-#.  endif
-#.elif !empty(MACHINE_PLATFORM:MSunOS-5.10-*)
-#.  if exists(/usr/sfw/bin/gobjdump)
-#CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
-#.  endif
+.  if exists(/usr/sfw/bin/gobjdump)
+CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
+.  endif
+.  if exists(/usr/bin/ld)
+CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/bin/ld
+.  else
+CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/ccs/bin/ld
+.  endif
+.  if exists(/usr/sfw/bin/gas)
+CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/sfw/bin/gas
+.  elif exists(/usr/ccs/bin/as)
+CONFIGURE_ARGS+=	--without-gnu-as --with-as=/usr/ccs/bin/as
+.  else
+BUILDLINK_DEPMETHOD.binutils=	full
+.    include "../../devel/binutils/buildlink3.mk"
+CONFIGURE_ARGS+=	--with-gnu-as --with-as=${PREFIX}/bin/gas
+.  endif
+.elif !empty(MACHINE_PLATFORM:MSunOS-5.10-*)
+.  if exists(/usr/sfw/bin/gobjdump)
+CONFIGURE_ENV+=		OBJDUMP=/usr/sfw/bin/gobjdump
+.  endif
 BUILDLINK_API_DEPENDS.binutils+=	binutils>=2.23
 BUILDLINK_DEPMETHOD.binutils=	full
 .  include "../../devel/binutils/buildlink3.mk"
 CONFIGURE_ENV+=		OBJCOPY=${PREFIX}/bin/gobjcopy
 CONFIGURE_ARGS+=	--with-gnu-as --with-as=${PREFIX}/bin/gas
 CONFIGURE_ARGS+=	--without-gnu-ld --with-ld=/usr/ccs/bin/ld
-#CONFIGURE_ARGS+=	--with-gnu-ld --with-ld=$(PREFIX)/bin/gld
 .endif
 
 pre-configure:
