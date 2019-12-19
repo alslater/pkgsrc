@@ -1,31 +1,40 @@
-# $NetBSD: Makefile,v 1.74 2016/12/12 14:50:51 wiz Exp $
+# $NetBSD: Makefile,v 1.122 2019/11/09 19:31:14 jperkin Exp $
 
-DISTNAME=	harfbuzz-1.3.4
-PKGREVISION=	2
+DISTNAME=	harfbuzz-2.6.4
 CATEGORIES=	fonts
-MASTER_SITES=	http://www.freedesktop.org/software/harfbuzz/release/
-EXTRACT_SUFX=	.tar.bz2
+MASTER_SITES=	https://www.freedesktop.org/software/harfbuzz/release/
+EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://harfbuzz.org/
+HOMEPAGE=	https://www.freedesktop.org/wiki/Software/HarfBuzz/
 COMMENT=	OpenType text shaping engine
 LICENSE=	mit
 
-USE_LANGUAGES=		c c++
+GCC_REQD+=		4.9
+
+.include "../../mk/bsd.prefs.mk"
+PLIST_VARS+=		graphite2
+.include "../../graphics/librsvg/available.mk"
+
+USE_LANGUAGES=		c c++11
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		gmake pkg-config
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--with-cairo=no
+.if ${LIBRSVG_TYPE} == "rust"
+CONFIGURE_ARGS+=	--with-graphite2=yes
+PLIST.graphite2=	yes
+.else
+CONFIGURE_ARGS+=	--with-graphite2=no
+.endif
 
 PKGCONFIG_OVERRIDE+=	src/harfbuzz.pc.in
 PKGCONFIG_OVERRIDE+=	src/harfbuzz-icu.pc.in
+PKGCONFIG_OVERRIDE+=	src/harfbuzz-subset.pc.in
 
 LDFLAGS.OpenBSD+=	-lz
 
 .include "options.mk"
-
-.include "../../mk/bsd.prefs.mk"
 
 # gcc too old
 BUILDLINK_TRANSFORM.MirBSD+=	rm:-fvisibility-inlines-hidden
@@ -57,4 +66,8 @@ PLIST.coretext=		yes
 #BUILDLINK_API_DEPENDS.cairo+=	cairo>=1.8.0
 #.include "../../graphics/cairo/buildlink3.mk"
 .include "../../graphics/freetype2/buildlink3.mk"
+.if ${LIBRSVG_TYPE} == "rust"
+# graphite2 support breaks graphics/librsvg-c
+.include "../../graphics/graphite2/buildlink3.mk"
+.endif
 .include "../../mk/bsd.pkg.mk"
