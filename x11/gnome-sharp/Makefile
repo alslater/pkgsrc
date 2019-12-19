@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.63 2016/12/04 05:17:14 ryoon Exp $
+# $NetBSD: Makefile,v 1.82 2019/09/11 11:53:40 nia Exp $
 #
 
 DISTNAME=	gnome-sharp-2.24.2
-PKGREVISION=	43
+PKGREVISION=	58
 CATEGORIES=	x11
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-sharp/2.24/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.mono-project.com/GtkSharp
+HOMEPAGE=	https://www.mono-project.com/GtkSharp
 COMMENT=	C\# bindings for the GNOME platform
 LICENSE=	gnu-lgpl-v2.1
 
@@ -33,7 +33,7 @@ PKGCONFIG_OVERRIDE+=	gnome/gnome-sharp-2.0.pc.in
 PKGCONFIG_OVERRIDE+=	gnomevfs/gnome-vfs-sharp-2.0.pc.in
 
 SUBST_CLASSES=		pc
-SUBST_STAGE.pc=		post-patch
+SUBST_STAGE.pc=		pre-configure
 SUBST_FILES.pc=		${PKGCONFIG_OVERRIDE}
 SUBST_SED.pc=		-e "s|\$${pcfiledir}/../..|@prefix@|g"
 SUBST_MESSAGE.pc=	Fixing hardcoded paths.

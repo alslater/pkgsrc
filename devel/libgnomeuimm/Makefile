@@ -1,17 +1,16 @@
-# $NetBSD: Makefile,v 1.60 2016/08/03 10:22:10 adam Exp $
+# $NetBSD: Makefile,v 1.72 2019/07/21 22:24:01 wiz Exp $
 
 DISTNAME=	libgnomeuimm-2.28.0
-PKGREVISION=	33
+PKGREVISION=	43
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libgnomeuimm/2.28/}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	adam@NetBSD.org
-HOMEPAGE=	http://gtkmm.sourceforge.net/
+#HOMEPAGE=	http://gtkmm.sourceforge.net/
 COMMENT=	C++ bindings for libgnomeui
 
-USE_LANGUAGES=		c c++
-CXXFLAGS+=		-std=c++11
+USE_LANGUAGES=		c c++11
 USE_LIBTOOL=		yes
 USE_PKGLOCALEDIR=	yes
 USE_TOOLS+=		gm4 gmake pkg-config

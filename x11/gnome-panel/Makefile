@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.188 2016/12/04 05:17:14 ryoon Exp $
+# $NetBSD: Makefile,v 1.217 2019/11/03 09:14:08 rillig Exp $
 
 DISTNAME=		gnome-panel-2.32.1
-PKGREVISION=		53
+PKGREVISION=		72
 CATEGORIES=		x11 gnome
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/gnome-panel/2.32/}
 EXTRACT_SUFX=		.tar.bz2
 
-MAINTAINER=		drochner@NetBSD.org
-HOMEPAGE=		http://www.gnome.org/
+MAINTAINER=		pkgsrc-users@NetBSD.org
+HOMEPAGE=		https://www.gnome.org/
 COMMENT=		GNOME2 panel application
 
 # depends on policykit
@@ -15,14 +15,14 @@ COMMENT=		GNOME2 panel application
 #CONF_FILES+=	${PREFIX}/share/examples/gnome-panel/org.gnome.ClockApplet.Mechanism.conf \
 #		${PKG_SYSCONFDIR}/dbus-1/system.d/org.gnome.ClockApplet.Mechanism.conf
 
-GNU_CONFIGURE=		YES
-USE_TOOLS+=		gmake intltool msgfmt perl:run pkg-config
-USE_PKGLOCALEDIR=	YES
-USE_LIBTOOL=		YES
-PKGCONFIG_OVERRIDE+=	bonobo/libpanel-applet/libpanelapplet-2.0.pc.in
-PKGCONFIG_OVERRIDE+=	libpanel-applet/libpanelapplet-3.0.pc.in
-CONFIGURE_ENV+=		PYTHON=${PYTHONBIN}
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # py-ORBit via py-gnome2
+GNU_CONFIGURE=			YES
+USE_TOOLS+=			gmake intltool msgfmt perl:run pkg-config
+USE_PKGLOCALEDIR=		YES
+USE_LIBTOOL=			YES
+PKGCONFIG_OVERRIDE+=		bonobo/libpanel-applet/libpanelapplet-2.0.pc.in
+PKGCONFIG_OVERRIDE+=		libpanel-applet/libpanelapplet-3.0.pc.in
+CONFIGURE_ENV+=			PYTHON=${PYTHONBIN}
+PYTHON_VERSIONS_ACCEPTED=	27 # py-ORBit via py-gnome2
 
 # XXX this pkg installs a gio module to ${PREFIX}/lib/gnome-panel/modules
 # but there are two problems with this:
@@ -44,7 +44,7 @@ GCONF_SCHEMAS+=	panel-object.schemas
 GCONF_SCHEMAS+=	panel-compatibility.schemas
 GCONF_SCHEMAS+=	workspace-switcher.schemas
 GCONF_SCHEMAS+=	window-list.schemas
-GCONF_ENTRIES=		panel-default-setup.entries
+GCONF_ENTRIES=	panel-default-setup.entries
 
 BUILDLINK_API_DEPENDS.gtk2+=		gtk2+>=2.15.1
 BUILDLINK_API_DEPENDS.libgnome+=	libgnome>=2.13.0

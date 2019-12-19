@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.85 2016/08/03 10:22:18 adam Exp $
+# $NetBSD: Makefile,v 1.93 2019/07/21 22:24:11 wiz Exp $
 
 DISTNAME=	gnome-keyring-2.32.1
-PKGREVISION=	20
+PKGREVISION=	27
 CATEGORIES=	security gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-keyring/2.32/}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/
+HOMEPAGE=	https://www.gnome.org/
 COMMENT=	GNOME password and secret manager
 
 USE_TOOLS+=		gmake intltool msgfmt pkg-config

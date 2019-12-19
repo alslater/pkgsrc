@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.54 2016/09/15 21:13:21 wiz Exp $
+# $NetBSD: Makefile,v 1.65 2019/07/21 22:24:37 wiz Exp $
 
-DISTNAME=	guile-gnome-platform-2.16.4
+DISTNAME=	guile-gnome-platform-2.16.5
+PKGREVISION=	4
 CATEGORIES=	devel
 MASTER_SITES=	http://ftp.gnu.org/gnu/guile-gnome/guile-gnome-platform/
 
@@ -43,7 +44,6 @@ BUILDLINK_API_DEPENDS.guile-cairo+=	guile-cairo>=1.4.1nb1
 .include "../../graphics/libgnomecanvas/buildlink3.mk"
 .include "../../lang/guile20/buildlink3.mk"
 .include "../../net/ORBit2/buildlink3.mk"
-.include "../../sysutils/gnome-vfs/buildlink3.mk"
 .include "../../x11/gtk2/buildlink3.mk"
 
 .include "../../mk/bsd.pkg.mk"

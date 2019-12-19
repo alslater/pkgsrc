@@ -1,18 +1,21 @@
-# $NetBSD: Makefile,v 1.5 2016/09/08 17:32:49 richard Exp $
+# $NetBSD: Makefile,v 1.12 2019/11/02 22:37:58 rillig Exp $
 
-DISTNAME=	graphite2-1.3.7
+DISTNAME=	graphite2-1.3.13
 CATEGORIES=	graphics
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=silgraphite/}
 EXTRACT_SUFX=	.tgz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://sourceforge.net/projects/silgraphite/
+HOMEPAGE=	https://sourceforge.net/projects/silgraphite/
 COMMENT=	Cross-platform rendering for complex writing systems
 LICENSE=	gnu-lgpl-v2
 
-USE_LANGUAGES=	c c++
+USE_LANGUAGES=	c c++11
 USE_CMAKE=	yes
 USE_LIBTOOL=	yes
+
+# C++11
+GCC_REQD+=	4.8
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -25,9 +28,9 @@ BUILDLINK_DEPMETHOD.freetype2?=	build
 
 # python and py-fonttools seem to be used only during test
 # uncomment the following to do so
-#TEST_TARGET=	test
+#TEST_TARGET=			test
 #PYTHON_FOR_BUILD_ONLY?=	tool
 #.include "../../lang/python/tool.mk"
-#BUILD_DEPENDS+=	${PYPKGPREFIX}-fonttools-[0-9]*:../../fonts/py-fonttools/
+#BUILD_DEPENDS+=		${PYPKGPREFIX}-fonttools-[0-9]*:../../fonts/py-fonttools/
 
 .include "../../mk/bsd.pkg.mk"

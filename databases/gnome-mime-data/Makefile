@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.45 2016/07/09 06:37:59 wiz Exp $
+# $NetBSD: Makefile,v 1.48 2019/08/11 13:17:48 wiz Exp $
 #
 
 DISTNAME=		gnome-mime-data-2.18.0
-PKGREVISION=		6
+PKGREVISION=		8
 CATEGORIES=		databases gnome
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/gnome-mime-data/2.18/}
 EXTRACT_SUFX=		.tar.bz2
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
-HOMEPAGE=		http://www.gnome.org/
+HOMEPAGE=		https://www.gnome.org/
 COMMENT=		MIME and Application database for GNOME2
 
 CONFLICTS=		gnome-vfs<=1.0.3

@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.66 2016/12/04 05:17:14 ryoon Exp $
+# $NetBSD: Makefile,v 1.91 2019/09/11 11:53:40 nia Exp $
 #
 
 DISTNAME=	gnome-desktop-sharp-2.26.0
-PKGREVISION=	61
+PKGREVISION=	81
 CATEGORIES=	x11
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-desktop-sharp/2.26/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.mono-project.com/GtkSharp
+HOMEPAGE=	https://www.mono-project.com/GtkSharp
 COMMENT=	C\# bindings for the GNOME platform, Desktop part
 
 GNU_CONFIGURE=		yes
@@ -26,7 +26,7 @@ PKGCONFIG_OVERRIDE+=	vte/vte-sharp-0.16.pc.in
 PKGCONFIG_OVERRIDE+=	wnck/wnck-sharp-1.0.pc.in
 
 SUBST_CLASSES=		pc
-SUBST_STAGE.pc=		post-patch
+SUBST_STAGE.pc=		pre-configure
 SUBST_FILES.pc=		${PKGCONFIG_OVERRIDE}
 SUBST_SED.pc=		-e "s|\$${pcfiledir}/../..|@prefix@|g"
 SUBST_MESSAGE.pc=	Fixing hardcoded paths.
@@ -48,6 +48,6 @@ BUILDLINK_API_DEPENDS.gtk-sharp+=	gtk-sharp>=2.12.2
 .include "../../x11/gtk-sharp/buildlink3.mk"
 BUILDLINK_API_DEPENDS.gtksourceview2+=	gtksourceview2>=2.2.2
 .include "../../x11/gtksourceview2/buildlink3.mk"
-BUILDLINK_API_DEPENDS.vte+=		vte>=0.16.14
+BUILDLINK_API_DEPENDS.vte+=		vte>=0.16.14<0.32
 .include "../../x11/vte/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

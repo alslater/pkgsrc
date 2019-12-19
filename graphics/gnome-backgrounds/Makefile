@@ -1,22 +1,18 @@
-# $NetBSD: Makefile,v 1.31 2012/10/06 14:10:55 asau Exp $
+# $NetBSD: Makefile,v 1.35 2019/10/07 09:28:12 prlw1 Exp $
 
-DISTNAME=	gnome-backgrounds-2.32.0
-PKGREVISION=	1
+DISTNAME=	gnome-backgrounds-3.28.0
 CATEGORIES=	graphics gnome
-MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-backgrounds/2.32/}
-EXTRACT_SUFX=	.tar.bz2
+MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-backgrounds/3.28/}
+EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/
+HOMEPAGE=	https://www.gnome.org/
 COMMENT=	Set of background images for the GNOME Desktop
 LICENSE=	gnu-gpl-v2
 
-GNU_CONFIGURE=		YES
 USE_TOOLS+=		gmake intltool msgfmt
-USE_LANGUAGES=		c
-USE_PKGLOCALEDIR=	YES
 
-BUILDLINK_DEPMETHOD.gettext=	build
+_TOOLS_USE_PKGSRC.msgfmt=	yes
 
-.include "../../devel/gettext-lib/buildlink3.mk"
+.include "../../devel/meson/build.mk"
 .include "../../mk/bsd.pkg.mk"
