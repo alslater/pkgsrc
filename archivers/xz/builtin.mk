@@ -1,11 +1,11 @@
-# $NetBSD: builtin.mk,v 1.4 2014/05/22 12:10:52 obache Exp $
+# $NetBSD: builtin.mk,v 1.6 2019/11/02 22:54:28 rillig Exp $
 
 BUILTIN_PKG:=	xz
 
-BUILTIN_FIND_HEADERS_VAR:=	H_LZMA H_LZMA_VERSION
-BUILTIN_FIND_HEADERS.H_LZMA=	lzma.h
-BUILTIN_FIND_HEADERS.H_LZMA_VERSION=lzma/version.h
-BUILTIN_FIND_GREP.H_LZMA=	LZMA_
+BUILTIN_FIND_HEADERS_VAR:=		H_LZMA H_LZMA_VERSION
+BUILTIN_FIND_HEADERS.H_LZMA=		lzma.h
+BUILTIN_FIND_HEADERS.H_LZMA_VERSION=	lzma/version.h
+BUILTIN_FIND_GREP.H_LZMA=		LZMA_
 
 .include "../../mk/buildlink3/bsd.builtin.mk"
 
@@ -14,9 +14,9 @@ BUILTIN_FIND_GREP.H_LZMA=	LZMA_
 ### set IS_BUILTIN.<pkg> appropriately ("yes" or "no").
 ###
 .if !defined(IS_BUILTIN.xz)
-IS_BUILTIN.xz=		no
+IS_BUILTIN.xz=	no
 .  if empty(H_LZMA:M__nonexistent__) && empty(H_LZMA:M${LOCALBASE}/*)
-IS_BUILTIN.xz=		yes
+IS_BUILTIN.xz=	yes
 .  endif
 .endif
 MAKEVARS+=	IS_BUILTIN.xz
@@ -40,7 +40,7 @@ BUILTIN_VERSION.xz!=							\
 		END { printf "%s%s%s%s\n", M, m, p, s}			\
 	' ${H_LZMA_VERSION:Q}
 
-BUILTIN_PKG.xz=		xz-${BUILTIN_VERSION.xz}
+BUILTIN_PKG.xz=	xz-${BUILTIN_VERSION.xz}
 .endif
 MAKEVARS+=	BUILTIN_PKG.xz
 
@@ -96,6 +96,38 @@ CHECK_BUILTIN.xz?=	no
 
 .  if !empty(USE_BUILTIN.xz:M[yY][eE][sS])
 BUILDLINK_FILES.xz+=	lib/pkgconfig/xz.pc
+.  endif
+
+# Fake pkg-config for builtin xz on NetBSD
+
+.  if !empty(USE_BUILTIN.xz:M[yY][eE][sS])
+.    if !empty(USE_TOOLS:C/:.*//:Mpkg-config)
+do-configure-pre-hook: override-liblzma-pkgconfig
+
+BLKDIR_PKGCFG=		${BUILDLINK_DIR}/lib/pkgconfig
+LIBLZMA_PKGCFGF=	liblzma.pc
+
+override-liblzma-pkgconfig: override-message-liblzma-pkgconfig
+override-message-liblzma-pkgconfig:
+	@${STEP_MSG} "Generating pkg-config files for builtin xz package."
+
+override-liblzma-pkgconfig:
+	${RUN}						\
+	${MKDIR} ${BLKDIR_PKGCFG};			\
+	{						\
+	${ECHO} "prefix=${LIBLZMA_PREFIX}";		\
+	${ECHO} "exec_prefix=\$${prefix}";		\
+	${ECHO} "libdir=\$${exec_prefix}/lib";		\
+	${ECHO} "includedir=\$${prefix}/include";	\
+	${ECHO} "";					\
+	${ECHO} "Name: liblzma";			\
+	${ECHO} "Description: Generic purpose data compression library";	\
+	${ECHO} "Version: ${BUILTIN_VERSION.xz}";	\
+	${ECHO} "Libs: ${COMPILER_RPATH_FLAG}\$${libdir} -L\$${libdir} -llzma";	\
+	${ECHO} "Libs.private: -pthread";	\
+	${ECHO} "Cflags: -I\$${includedir}";		\
+	} >> ${BLKDIR_PKGCFG}/${LIBLZMA_PKGCFGF};
+.    endif
 .  endif
 
 .endif	# CHECK_BUILTIN.xz
