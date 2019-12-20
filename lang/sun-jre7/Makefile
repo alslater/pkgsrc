@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.25 2016/05/08 17:23:29 christos Exp $
+# $NetBSD: Makefile,v 1.28 2019/11/03 19:04:09 rillig Exp $
 
 # Note: Regen distinfo with PKG_OPTIONS.sun-jre7+=sun-jre-jce
 # Note: Update DOWNLOAD_NAME when you update the JRE version
@@ -7,7 +7,6 @@
 
 DISTNAME=	jre-7u${UPDATE_NUMBER}-${DIST_OS}-${DIST_ARCH}
 PKGNAME=	sun-jre7-7.0.${UPDATE_NUMBER}
-#PKGREVISION=	1
 MASTER_SITES=	# empty
 
 LICENSE=	oracle-binary-code-license
@@ -29,7 +28,7 @@ CONF_FILES=	# empty
 
 .include "../../lang/sun-jre7/Makefile.common"
 
-SFILES_MK=sfiles-${DIST_OS}-${EMUL_ARCH}.mk
+SFILES_MK=	sfiles-${DIST_OS}-${EMUL_ARCH}.mk
 
 .sinclude "${SFILES_MK}"
 
@@ -68,7 +67,7 @@ FETCH_MESSAGE+=	"As sun-jre-jce is enabled UnlimitedJCEPolicyJDK7.zip is also ne
 .if defined(EMUL_IS_NATIVE) && ${OPSYS} != "SunOS"
 .  if ${X11_TYPE} == "native"
 X11_LIBDIR=	${X11BASE}/lib${LIBABISUFFIX}
-.    if ${_OPSYS_SHLIB_TYPE} == "dylib"
+.    if ${SHLIB_TYPE} == "dylib"
 X11_LIB=${X11_LIBDIR}/libX11.dylib
 .    else
 X11_LIB=${X11_LIBDIR}/libX11.so.6
@@ -78,11 +77,11 @@ PKG_FAIL_REASON+=	"${X11_LIB} does not exist.  Please install the" \
 			"X11 library packages for your system."
 .    endif
 .  else
-.  include "../../x11/libX11/buildlink3.mk"
-.  include "../../x11/libXext/buildlink3.mk"
-.  include "../../x11/libXi/buildlink3.mk"
-.  include "../../x11/libXt/buildlink3.mk"
-.  include "../../x11/libXtst/buildlink3.mk"
+.    include "../../x11/libX11/buildlink3.mk"
+.    include "../../x11/libXext/buildlink3.mk"
+.    include "../../x11/libXi/buildlink3.mk"
+.    include "../../x11/libXt/buildlink3.mk"
+.    include "../../x11/libXtst/buildlink3.mk"
 X11_LIBDIR=	${X11BASE}/lib
 .  endif
 
