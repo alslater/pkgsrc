@@ -1,4 +1,4 @@
-# $NetBSD: builtin.mk,v 1.12 2014/01/14 20:34:49 bsiegert Exp $
+# $NetBSD: builtin.mk,v 1.15 2019/11/03 10:39:32 rillig Exp $
 
 BUILTIN_PKG:=	zlib
 
@@ -8,7 +8,7 @@ BUILTIN_FIND_HEADERS.H_ZLIB=	zlib.h
 .include "../../mk/buildlink3/bsd.builtin.mk"
 
 .if ! empty(MACHINE_PLATFORM:MDarwin-[0-8].*-*)
-USE_BUILTIN.zlib=no
+USE_BUILTIN.zlib=	no
 .endif
 
 ###
@@ -21,7 +21,7 @@ IS_BUILTIN.zlib=	no
 IS_BUILTIN.zlib=	yes
 .  endif
 .endif
-MAKEVARS+=	IS_BUILTIN.zlib
+MAKEVARS+=		IS_BUILTIN.zlib
 
 ###
 ### If there is a built-in implementation, then set BUILTIN_PKG.<pkg> to
@@ -37,7 +37,7 @@ BUILTIN_VERSION.zlib!=							\
 			print vers;					\
 		}							\
 	' ${H_ZLIB:Q}
-BUILTIN_PKG.zlib=      zlib-${BUILTIN_VERSION.zlib:C/-[A-Za-z]*//}
+BUILTIN_PKG.zlib=	zlib-${BUILTIN_VERSION.zlib:C/-[A-Za-z]*//}
 
 .endif
 MAKEVARS+=	BUILTIN_PKG.zlib
@@ -67,7 +67,7 @@ USE_BUILTIN.zlib!=	\
 .    endif
 .  endif  # PREFER.zlib
 .endif
-MAKEVARS+=	USE_BUILTIN.zlib
+MAKEVARS+=		USE_BUILTIN.zlib
 
 # If USE_ZLIB is defined, then force the use of a true zlib
 # implementation.
@@ -82,18 +82,18 @@ USE_BUILTIN.zlib=	no
 ### The section below only applies if we are not including this file
 ### solely to determine whether a built-in implementation exists.
 ###
-CHECK_BUILTIN.zlib?=    no
+CHECK_BUILTIN.zlib?=	no
 .if !empty(CHECK_BUILTIN.zlib:M[nN][oO])
 .  if !empty(USE_BUILTIN.zlib:M[yY][eE][sS])
 
-BUILDLINK_TARGETS+= fake-zlib-pc
+BUILDLINK_TARGETS+=	fake-zlib-pc
 
-_FAKE_ZLIB_PC=${BUILDLINK_DIR}/lib/pkgconfig/zlib.pc
+_FAKE_ZLIB_PC=	${BUILDLINK_DIR}/lib/pkgconfig/zlib.pc
 
 fake-zlib-pc:
 	${RUN}	\
 	sedsrc=../../devel/zlib/files/zlib.pc.in;	\
-	src=${BUILDLINK_PREFIX.zlib}/lib${LIBABISUFFIX}/pkgconfig/zlib.pc;\
+	src=${BUILDLINK_PREFIX.zlib:Q}/lib${LIBABISUFFIX}/pkgconfig/zlib.pc;\
 	dst=${_FAKE_ZLIB_PC};					\
 	${MKDIR} ${BUILDLINK_DIR}/lib/pkgconfig;\
 	if [ ! -f $${dst} ]; then	\
@@ -102,12 +102,12 @@ fake-zlib-pc:
 			${LN} -sf $${src} $${dst};			\
 		else	\
 			${ECHO_BUILDLINK_MSG} "Creating $${dst}";	\
-			${SED}	-e s,@prefix@,${BUILDLINK_PREFIX.zlib},\
-					-e s,@exec_prefix@,${BUILDLINK_PREFIX.zlib},\
-					-e s,@libdir@,${BUILDLINK_PREFIX.zlib}/lib${LIBABISUFFIX},\
+			${SED}	-e s,@prefix@,${BUILDLINK_PREFIX.zlib:Q},\
+					-e s,@exec_prefix@,${BUILDLINK_PREFIX.zlib:Q},\
+					-e s,@libdir@,${BUILDLINK_PREFIX.zlib:Q}/lib${LIBABISUFFIX},\
 					-e s,@VERSION@,${BUILTIN_VERSION.zlib},\
-					-e s,@includedir@,${BUILDLINK_PREFIX.zlib}/include,\
-					-e s,@sharedlibdir@,${BUILDLINK_PREFIX.zlib}/lib,\
+					-e s,@includedir@,${BUILDLINK_PREFIX.zlib:Q}/include,\
+					-e s,@sharedlibdir@,${BUILDLINK_PREFIX.zlib:Q}/lib,\
 				$${sedsrc} > $${dst};			\
 		fi	\
 	fi
