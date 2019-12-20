@@ -10,11 +10,11 @@ HOMEPAGE=	https://www.oracle.com/technetwork/java/index.html
 DOWNLOAD=	https://www.oracle.com/technetwork/java/javase/downloads/index-jsp-138363.html
 ARCHIVE=	https://www.oracle.com/technetwork/java/javase/archive-139210.html
 
-#RESTRICTED=	Redistribution of repackaged binaries not permitted
-#NO_SRC_ON_CDROM=${RESTRICTED}
-#NO_SRC_ON_FTP=	${RESTRICTED}
-#NO_BIN_ON_CDROM=${RESTRICTED}
-#NO_BIN_ON_FTP=	${RESTRICTED}
+RESTRICTED=		Redistribution of repackaged binaries not permitted
+NO_SRC_ON_CDROM=	${RESTRICTED}
+NO_SRC_ON_FTP=		${RESTRICTED}
+NO_BIN_ON_CDROM=	${RESTRICTED}
+NO_BIN_ON_FTP=		${RESTRICTED}
 
 EMUL_PLATFORMS=		darwin-x86_64 linux-i386 linux-x86_64 solaris-x86_64
 
@@ -27,7 +27,7 @@ CHECK_SSP_SUPPORTED=	no
 CTF_SUPPORTED=		no
 
 # JDK8 Update number
-UPDATE_NUMBER=	201
+UPDATE_NUMBER=	202
 
 .include "../../mk/bsd.prefs.mk"
 

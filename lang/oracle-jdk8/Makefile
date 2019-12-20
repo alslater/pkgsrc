@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.4 2016/09/19 06:57:49 ryoon Exp $
+# $NetBSD: Makefile,v 1.9 2019/11/03 19:04:04 rillig Exp $
 
 # Note: This must be kept in sync with the oracle-jre8 package
 # Note: make sure you include sums for both the x86_64 and the x86_32
@@ -16,15 +16,11 @@ DEPENDS+=	${PKGNAME_NOREV:S/jdk/jre/}*:../../lang/oracle-jre8
 
 WRKSRC=		${WRKDIR}/jdk1.8.0_${UPDATE_NUMBER}
 JAVA_WRAPPERS=	appletviewer apt extcheck idlj jar jarsigner \
-		javac javadoc javah javap jcmd jdb rmic serialver jps
+		javac javadoc javah javap jcmd jdb jhat rmic serialver jps
 
 MAKE_JOBS_SAFE=	no
 
 .include "../../lang/oracle-jre8/Makefile.common"
-
-#.if !empty(MACHINE_PLATFORM:MLinux-*-x86_64)
-CHECK_SHLIBS_SUPPORTED=	no
-#.endif
 
 PLIST_SRC=	PLIST.${DIST_OS}-${EMUL_ARCH}
 PLIST_SUBST+=	JAVA_ARCH="${JAVA_ARCH}"
@@ -36,9 +32,9 @@ DISTFILES+=	jdk-8u${UPDATE_NUMBER}-linux-x64.tar.gz
 DISTFILES+=	jdk-8u${UPDATE_NUMBER}-solaris-x64.tar.gz
 FETCH_MESSAGE=	"You must fetch the following files to generate distinfo:"
 FETCH_MESSAGE+=	""
-.for file in ${DISTFILES}
+.  for file in ${DISTFILES}
 FETCH_MESSAGE+=	"	${file}"
-.endfor
+.  endfor
 FETCH_MESSAGE+=	""
 FETCH_MESSAGE+=	"from:"
 FETCH_MESSAGE+=	"	${DOWNLOAD}"
