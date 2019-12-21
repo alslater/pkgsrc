@@ -1,18 +1,18 @@
-# $NetBSD: Makefile,v 1.32 2016/07/09 13:03:33 wiz Exp $
+# $NetBSD: Makefile,v 1.39 2019/09/02 13:19:52 adam Exp $
 
 DISTNAME=	telepathy-idle-0.1.8
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	chat
 MASTER_SITES=	http://telepathy.freedesktop.org/releases/telepathy-idle/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://telepathy.freedesktop.org/wiki/Components
+HOMEPAGE=	https://telepathy.freedesktop.org/wiki/Components
 COMMENT=	Full-featured IRC connection manager for Telepathy
 LICENSE=	gnu-lgpl-v2.1
 
 BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 0.1.8
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 0.1.8
 
 GNU_CONFIGURE=	yes
 USE_LIBTOOL=	yes

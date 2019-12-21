@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.17 2016/07/09 13:03:33 wiz Exp $
+# $NetBSD: Makefile,v 1.24 2019/09/02 13:19:52 adam Exp $
 
 DISTNAME=	telepathy-mission-control-5.7.9
 PKGNAME=	telepathy-mission-control5-5.7.9
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	chat
 #MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=mission-control/}
 MASTER_SITES=	http://telepathy.freedesktop.org/releases/telepathy-mission-control/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://mission-control.sourceforge.net/
+#HOMEPAGE=	http://mission-control.sourceforge.net/
 COMMENT=	Telepathy component providing abstractions for "end-user" applications
 
 GNU_CONFIGURE=	yes
@@ -19,7 +19,7 @@ PKGCONFIG_OVERRIDE+=	mission-control-plugins.pc.in
 #PKGCONFIG_OVERRIDE+=	libmcclient.pc.in
 #PKGCONFIG_OVERRIDE+=	mission-control.pc.in
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 5.7.9
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 5.7.9
 
 #.include "../../lang/python/pyversion.mk"
 CONFIGURE_ENV+=		ac_cv_prog_PYTHON=${PYTHONBIN}
