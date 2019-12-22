@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.57 2015/04/11 18:27:32 bsiegert Exp $
+# $NetBSD: Makefile,v 1.59 2019/11/03 10:39:12 rillig Exp $
 
 .include "../../devel/gettext/Makefile.common"
 
@@ -11,6 +11,7 @@ CONFIGURE_ARGS+=	--disable-csharp
 CONFIGURE_ARGS+=	--disable-c++
 CONFIGURE_ENV+=		PKGLOCALEDIR=${PKGLOCALEDIR}
 MAKE_ENV+=		PKGLOCALEDIR=${PKGLOCALEDIR}
+GNU_CONFIGURE_STRICT=	no # because of gettext-tools/examples
 
 CFLAGS+=		${CFLAGS.${ICONV_TYPE}-iconv}
 CFLAGS.gnu-iconv+=	-DHAVE_GNU_ICONV
@@ -18,7 +19,7 @@ CFLAGS.gnu-iconv+=	-DHAVE_GNU_ICONV
 INSTALL_MAKE_FLAGS=	${MAKE_FLAGS} localedir=${EGDIR}
 INSTALL_MAKE_FLAGS+=	includedir=${PREFIX}/include/gettext
 
-#CONFIGURE_DIRS=		gettext-runtime
+#CONFIGURE_DIRS=	gettext-runtime
 BUILD_DIRS=		gettext-runtime/intl
 EGDIR=			${PREFIX}/share/examples/gettext
 LOCALEDIR=		${PREFIX}/${PKGLOCALEDIR}/locale
