@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.65 2014/10/09 14:06:03 wiz Exp $
+# $NetBSD: Makefile,v 1.67 2019/05/04 15:32:32 rillig Exp $
 
 DISTNAME=	libiconv-1.14
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	converters
 MASTER_SITES=	${MASTER_SITE_GNU:=libiconv/}
 
@@ -12,9 +12,9 @@ LICENSE=	gnu-gpl-v3 AND gnu-lgpl-v2
 
 USE_LANGUAGES+=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
-USE_TOOLS+=	pax
+USE_TOOLS+=		pax
 GNU_CONFIGURE=		yes
+GNU_CONFIGURE_STRICT=	no	# has multiple configure scripts
 
 CONFLICTS=	man-pages-[0-9]*
 
@@ -25,6 +25,16 @@ CONFLICTS=	man-pages-[0-9]*
 CONFIGURE_ARGS+=	--disable-nls
 
 CONFIGURE_ARGS+=	--htmldir=${PREFIX}/share/doc/libiconv
+
+# Explicitly override iconv checks, as GNU libiconv will change its own
+# signature based on whether it finds itself already installed somewhere
+# which then breaks software (e.g. QT) which assumes the native signature.
+#
+# Restricted to SunOS for now, but likely will be useful everywhere.
+#
+CONFIGURE_ENV.SunOS+=	am_cv_func_iconv=yes
+CONFIGURE_ENV.SunOS+=	am_cv_proto_iconv_arg1='const'
+CONFIGURE_ENV.SunOS+=	am_cv_proto_iconv='extern size_t iconv (iconv_t cd, const char * *inbuf, size_t *inbytesleft, char * *outbuf, size_t *outbytesleft);'
 
 TEST_TARGET=		check
 
