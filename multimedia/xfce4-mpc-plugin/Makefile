@@ -1,13 +1,12 @@
-# $NetBSD: Makefile,v 1.33 2016/08/03 10:23:13 adam Exp $
+# $NetBSD: Makefile,v 1.47 2019/08/19 01:13:34 gutteridge Exp $
 
-PKGREVISION= 1
 .include "../../meta-pkgs/xfce4/Makefile.common"
 
-DISTNAME=	xfce4-mpc-plugin-0.4.99
+DISTNAME=	xfce4-mpc-plugin-0.5.2
 CATEGORIES=	multimedia
-MASTER_SITES=	http://archive.xfce.org/src/panel-plugins/xfce4-mpc-plugin/0.4/
+MASTER_SITES=	http://archive.xfce.org/src/panel-plugins/xfce4-mpc-plugin/0.5/
 
-HOMEPAGE=	http://goodies.xfce.org/projects/panel-plugins/xfce4-mpc-plugin
+HOMEPAGE=	https://goodies.xfce.org/projects/panel-plugins/xfce4-mpc-plugin
 COMMENT=	Xfce Music Player Client plugin
 
 LIBS.SunOS+=	-lsocket -lnsl

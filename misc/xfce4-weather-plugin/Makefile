@@ -1,14 +1,13 @@
-# $NetBSD: Makefile,v 1.46 2016/12/04 05:17:34 ryoon Exp $
+# $NetBSD: Makefile,v 1.70 2019/08/19 05:01:06 gutteridge Exp $
 
-PKGREVISION= 4
 .include "../../meta-pkgs/xfce4/Makefile.common"
 
-VERSION=	0.8.7
+VERSION=	0.10.0
 DISTNAME=	xfce4-weather-plugin-${VERSION}
 CATEGORIES=	misc
-MASTER_SITES=	http://archive.xfce.org/src/panel-plugins/xfce4-weather-plugin/0.8/
+MASTER_SITES=	http://archive.xfce.org/src/panel-plugins/xfce4-weather-plugin/${VERSION:R}/
 
-HOMEPAGE=	http://goodies.xfce.org/projects/panel-plugins/xfce4-weather-plugin
+HOMEPAGE=	https://goodies.xfce.org/projects/panel-plugins/xfce4-weather-plugin
 COMMENT=	Xfce weather plugin
 
 LDFLAGS.SunOS+=	-lsocket -lnsl

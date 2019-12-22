@@ -1,9 +1,10 @@
-$NetBSD: patch-configure,v 1.2 2015/07/07 14:04:22 youri Exp $
+$NetBSD: patch-configure,v 1.5 2019/08/17 19:26:19 gutteridge Exp $
 
 Add NetBSD backend detection.
---- configure.orig	2015-03-16 07:29:45.000000000 +0000
+
+--- configure.orig	2019-08-11 20:13:50.000000000 +0000
 +++ configure
-@@ -18208,6 +18208,8 @@ if test x$with_backend = x; then
+@@ -17802,6 +17802,8 @@ if test x$with_backend = x; then
      with_backend=freebsd ;; #(
    *-*dragonfly*) :
      with_backend=freebsd ;; #(
@@ -12,7 +13,7 @@ Add NetBSD backend detection.
    *-openbsd*) :
      with_backend=openbsd ;; #(
    *) :
-@@ -18237,6 +18239,11 @@ if test x$with_backend = xopenbsd; then
+@@ -17831,6 +17833,11 @@ if test x$with_backend = xopenbsd; then
  $as_echo "#define BACKEND_TYPE_OPENBSD 1" >>confdefs.h
  
  fi
@@ -22,5 +23,5 @@ Add NetBSD backend detection.
 +
 +fi
  
- XFCE_GLADE_CATALOG_PATH="`pkg-config --variable glade_catalogdir libxfce4ui-1`"
- XFCE_GLADE_PIXMAP_PATH="`pkg-config --variable glade_pixmapdir libxfce4ui-1`"
+ ac_config_files="$ac_config_files Makefile doc/Makefile icons/Makefile icons/48x48-actions/Makefile icons/48x48/Makefile icons/128x128/Makefile icons/scalable/Makefile libxfsm/Makefile po/Makefile.in settings/Makefile scripts/Makefile scripts/xinitrc.in xfce4-session/Makefile xfce4-session-logout/Makefile xfsm-shutdown-helper/Makefile"
+ 

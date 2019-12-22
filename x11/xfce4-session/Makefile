@@ -1,13 +1,12 @@
-# $NetBSD: Makefile,v 1.56 2016/12/04 13:50:08 martin Exp $
+# $NetBSD: Makefile,v 1.78 2019/08/17 19:26:19 gutteridge Exp $
 
 .include "../../meta-pkgs/xfce4/Makefile.common"
 
-DISTNAME=		xfce4-session-4.12.1
-PKGREVISION=		2
+DISTNAME=		xfce4-session-4.14.0
 CATEGORIES=		x11
-MASTER_SITES+=		http://archive.xfce.org/src/xfce/xfce4-session/4.12/
+MASTER_SITES+=		http://archive.xfce.org/src/xfce/xfce4-session/4.14/
 
-HOMEPAGE=		http://docs.xfce.org/xfce/xfce4-session/start
+HOMEPAGE=		https://docs.xfce.org/xfce/xfce4-session/start
 COMMENT=		Xfce session manager
 
 PKGCONFIG_OVERRIDE+=	libxfsm/xfce4-session-2.0.pc.in
@@ -32,23 +31,25 @@ MAKE_DIRS+=	${PKG_SYSCONFDIR} ${PKG_SYSCONFDIR}/autostart
 MAKE_DIRS+=	${EGDIR} ${EGDIR}/autostart ${EGDIR}/xfconf
 MAKE_DIRS+=	${EGDIR}/xfconf/xfce-perchannel-xml
 
-CONF_FILES=	${EGDIR}/autostart/xscreensaver.desktop \
-		${PKG_SYSCONFDIR}/autostart/xscreensaver.desktop
-CONF_FILES=	${EGDIR}/xfconf/xfce-perchannel-xml/xfce4-session.xml \
-		${PKG_SYSCONFDIR}/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml
-CONF_FILES+=	${EGDIR}/Xft.xrdb \
-		${PKG_SYSCONFDIR}/xfce4/Xft.xrdb
-CONF_FILES+=	${EGDIR}/xinitrc \
+CONF_FILES=	${EGDIR}/autostart/xscreensaver.desktop					\
+		${PKG_SYSCONFDIR}/autostart/xscreensaver.desktop			\
+		${EGDIR}/xfconf/xfce-perchannel-xml/xfce4-session.xml			\
+		${PKG_SYSCONFDIR}/xfce4/xfconf/xfce-perchannel-xml/xfce4-session.xml	\
+		${EGDIR}/Xft.xrdb							\
+		${PKG_SYSCONFDIR}/xfce4/Xft.xrdb					\
+		${EGDIR}/xinitrc							\
 		${PKG_SYSCONFDIR}/xfce4/xinitrc
 
-.if !empty(Darwin-*-*)
+.if ${OPSYS} == Darwin
 .include "../../sysutils/consolekit/buildlink3.mk"
 .endif
 
+.include "options.mk"
+
 .include "../../devel/libglade/buildlink3.mk"
-.include "../../devel/libwnck/buildlink3.mk"
+.include "../../devel/libwnck3/buildlink3.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../x11/libxfce4ui/buildlink3.mk"
+.include "../../x11/xscreensaver/buildlink3.mk"
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
-.include "options.mk"
 .include "../../mk/bsd.pkg.mk"

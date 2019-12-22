@@ -1,7 +1,8 @@
-$NetBSD: patch-ThunarBulkRename.in,v 1.2 2015/06/04 16:04:04 youri Exp $
+$NetBSD: patch-ThunarBulkRename.in,v 1.4 2018/05/15 22:25:31 youri Exp $
 
-Look for the right thunar binary.
---- ThunarBulkRename.in.orig	2015-05-22 13:25:36.000000000 +0000
+Lower-case thunar.
+
+--- ThunarBulkRename.in.orig	2017-09-23 19:56:19.000000000 +0000
 +++ ThunarBulkRename.in
 @@ -20,6 +20,6 @@
  # This is an ugly hack, required because xfdesktop simply

@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.1 2015/04/21 08:56:37 jperkin Exp $
+@comment $NetBSD: PLIST,v 1.6 2019/07/13 00:05:50 gutteridge Exp $
 bin/xfconf-query
 include/xfce4/xfconf-0/xfconf/xfconf-binding.h
 include/xfce4/xfconf-0/xfconf/xfconf-channel.h
@@ -12,9 +12,9 @@ share/dbus-1/services/org.xfce.Xfconf.service
 share/gtk-doc/html/xfconf/ch01.html
 share/gtk-doc/html/xfconf/ch02.html
 share/gtk-doc/html/xfconf/ch03.html
+share/gtk-doc/html/xfconf/ch04.html
 share/gtk-doc/html/xfconf/home.png
 share/gtk-doc/html/xfconf/index.html
-share/gtk-doc/html/xfconf/index.sgml
 share/gtk-doc/html/xfconf/left-insensitive.png
 share/gtk-doc/html/xfconf/left.png
 share/gtk-doc/html/xfconf/right-insensitive.png
@@ -22,15 +22,16 @@ share/gtk-doc/html/xfconf/right.png
 share/gtk-doc/html/xfconf/style.css
 share/gtk-doc/html/xfconf/up-insensitive.png
 share/gtk-doc/html/xfconf/up.png
-share/gtk-doc/html/xfconf/xfconf-xfconf-backend.html
-share/gtk-doc/html/xfconf/xfconf-xfconf-binding.html
-share/gtk-doc/html/xfconf/xfconf-xfconf-channel.html
-share/gtk-doc/html/xfconf/xfconf-xfconf-errors.html
-share/gtk-doc/html/xfconf/xfconf-xfconf-types.html
-share/gtk-doc/html/xfconf/xfconf-xfconf.html
+share/gtk-doc/html/xfconf/xfconf-Error-Reporting.html
+share/gtk-doc/html/xfconf/xfconf-Xfconf-Backend.html
+share/gtk-doc/html/xfconf/xfconf-Xfconf-Channel.html
+share/gtk-doc/html/xfconf/xfconf-Xfconf-GObject-Binding.html
+share/gtk-doc/html/xfconf/xfconf-Xfconf-Library-Core.html
+share/gtk-doc/html/xfconf/xfconf-Xfconf-Types.html
 share/gtk-doc/html/xfconf/xfconf.devhelp2
 share/locale/ar/LC_MESSAGES/xfconf.mo
 share/locale/ast/LC_MESSAGES/xfconf.mo
+share/locale/be/LC_MESSAGES/xfconf.mo
 share/locale/bg/LC_MESSAGES/xfconf.mo
 share/locale/bn/LC_MESSAGES/xfconf.mo
 share/locale/ca/LC_MESSAGES/xfconf.mo
@@ -39,6 +40,7 @@ share/locale/da/LC_MESSAGES/xfconf.mo
 share/locale/de/LC_MESSAGES/xfconf.mo
 share/locale/el/LC_MESSAGES/xfconf.mo
 share/locale/en_AU/LC_MESSAGES/xfconf.mo
+share/locale/en_CA/LC_MESSAGES/xfconf.mo
 share/locale/en_GB/LC_MESSAGES/xfconf.mo
 share/locale/es/LC_MESSAGES/xfconf.mo
 share/locale/eu/LC_MESSAGES/xfconf.mo
@@ -48,6 +50,7 @@ share/locale/gl/LC_MESSAGES/xfconf.mo
 share/locale/he/LC_MESSAGES/xfconf.mo
 share/locale/hr/LC_MESSAGES/xfconf.mo
 share/locale/hu/LC_MESSAGES/xfconf.mo
+share/locale/hy_AM/LC_MESSAGES/xfconf.mo
 share/locale/id/LC_MESSAGES/xfconf.mo
 share/locale/is/LC_MESSAGES/xfconf.mo
 share/locale/it/LC_MESSAGES/xfconf.mo

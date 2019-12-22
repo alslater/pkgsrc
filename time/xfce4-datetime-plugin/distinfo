@@ -1,6 +1,6 @@
-$NetBSD: distinfo,v 1.9 2016/06/09 09:49:45 youri Exp $
+$NetBSD: distinfo,v 1.12 2019/08/18 22:06:08 gutteridge Exp $
 
-SHA1 (xfce4-datetime-plugin-0.6.99.tar.bz2) = ebd63d216537bf48fa194c925a23c27974d8d093
-RMD160 (xfce4-datetime-plugin-0.6.99.tar.bz2) = 9bdf6c69ae076580f9e7d3f89e4d18f3a6e76edc
-SHA512 (xfce4-datetime-plugin-0.6.99.tar.bz2) = 5f19bf31b50bbb3c4f0cb8eaf1c690eabcb0316a2b49b6097ae7a4a4fd36735193a0c8c2e73c50fde0a75c3a21c755ba7e768fa4827cf4e9628fcd8c0620bcbe
-Size (xfce4-datetime-plugin-0.6.99.tar.bz2) = 291976 bytes
+SHA1 (xfce4-datetime-plugin-0.8.0.tar.bz2) = 2d7ed667d6c2f5e8b9f4eb80cb001d2473ae2a60
+RMD160 (xfce4-datetime-plugin-0.8.0.tar.bz2) = 9dddecd8ba9857355a69a0c041bde417501138b0
+SHA512 (xfce4-datetime-plugin-0.8.0.tar.bz2) = 936af402bfd3ef199dc05254c57201b90f9554b2d824d74d2825f16d60e9a4c1a03f25811d80bc666a05dd6b47798ef2119f458b55d612e0803f75fc583fe550
+Size (xfce4-datetime-plugin-0.8.0.tar.bz2) = 334063 bytes

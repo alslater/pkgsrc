@@ -1,6 +1,6 @@
-$NetBSD: distinfo,v 1.3 2016/06/09 08:39:06 youri Exp $
+$NetBSD: distinfo,v 1.5 2019/08/19 04:47:21 gutteridge Exp $
 
-SHA1 (xfce4-smartbookmark-plugin-0.4.99.tar.bz2) = ccfb760e6e7649f624cd53a11c3fb2adf68a3ed0
-RMD160 (xfce4-smartbookmark-plugin-0.4.99.tar.bz2) = 1fc33754556e4aa114542ef4d4f142b0d8f9cf36
-SHA512 (xfce4-smartbookmark-plugin-0.4.99.tar.bz2) = a7dd7284ed9a3c80033dc6ad6ec971f9ab24aec6fbecfc9c55f8727e5d2bbe6859b0577ea3120d35f5c4cf88957e485fe61bd2af7c18ae2619e998638a94dc36
-Size (xfce4-smartbookmark-plugin-0.4.99.tar.bz2) = 293553 bytes
+SHA1 (xfce4-smartbookmark-plugin-0.5.1.tar.bz2) = 0b806fb1ecade453a44b3bc8d1b7bec29026dab0
+RMD160 (xfce4-smartbookmark-plugin-0.5.1.tar.bz2) = b1601aaddb03000e6965e24820943cc2ad92bc48
+SHA512 (xfce4-smartbookmark-plugin-0.5.1.tar.bz2) = fb11d890f11751fd1b6ddd4ac351acde5a8b57cd67c0951ba655d762086be01527fbec59a2b4b7a191a1dcd1d4744929c8cad2b9ab30c83f3341e2ba06dd2596
+Size (xfce4-smartbookmark-plugin-0.5.1.tar.bz2) = 302735 bytes
