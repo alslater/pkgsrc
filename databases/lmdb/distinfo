@@ -1,7 +1,7 @@
-$NetBSD: distinfo,v 1.5 2016/11/25 15:50:13 fhajny Exp $
+$NetBSD: distinfo,v 1.7 2019/08/03 06:46:52 adam Exp $
 
-SHA1 (LMDB-0.9.23.tar.gz) = 801e97190ab68fdceb6daf5fc623f9c3c29d4b4a
-RMD160 (LMDB-0.9.23.tar.gz) = ddaa12f026e86a1b7796a4255ce05fdea03f4d10
-SHA512 (LMDB-0.9.23.tar.gz) = 47466a96ce288d18d489acf1abf811aa973649848a4cac31f71e1f25ea781a055ebd6616d2d630214b2df2f146f12609c82d65be0196f49d6b46a6c96464e120
-Size (LMDB-0.9.23.tar.gz) = 143813 bytes
+SHA1 (openldap-2.4.48.tgz) = c1984e80f6db038b317bf931866adb38e5537dcd
+RMD160 (openldap-2.4.48.tgz) = c91aa87634856d84386d2d8498b647ea2b1b7521
+SHA512 (openldap-2.4.48.tgz) = cf694a415be0bd55cc7f606099da2ed461748efd276561944cd29d7f5a8252a9be799d8778fac2d4fa9f382731eb4ca48c6b85630cb58a3b8249843561ae8feb
+Size (openldap-2.4.48.tgz) = 5704883 bytes
 SHA1 (patch-libraries_liblmdb_Makefile) = 6b2f0bb477b17b073095d499ff4496f3b30dc08f
