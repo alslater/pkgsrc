@@ -1,26 +1,23 @@
-# $NetBSD: Makefile,v 1.51 2019/08/11 13:22:02 wiz Exp $
+# $NetBSD: Makefile,v 1.19 2019/09/18 14:17:13 ryoon Exp $
 
-PKGNAME=	${DISTNAME:S/ffmpeg/ffmpeg2/}
-PKGREVISION=	10
+PKGNAME=	${DISTNAME:S/ffmpeg/ffmpeg4/}
+PKGREVISION=	1
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://ffmpeg.mplayerhq.hu/
-COMMENT=	Decoding, encoding and streaming software (v2.x)
+COMMENT=	Decoding, encoding and streaming software (v4.x)
 
 CONFIGURE_ARGS+=	--enable-avfilter
-#CONFIGURE_ARGS+=	--enable-avfilter-lavf
+CONFIGURE_ARGS+=	--enable-avresample
 CONFIGURE_ARGS+=	--enable-postproc
+CONFIGURE_ARGS+=	--enable-rpath
 CONFIGURE_ARGS+=	--disable-ffplay
 
-INSTALLATION_DIRS=	lib/ffmpeg2 share/doc/ffmpeg2 share/examples/ffmpeg2
-
-CONF_FILES+=	${PREFIX}/share/examples/ffmpeg2/ffserver.conf \
-		${PKG_SYSCONFDIR}/ffserver.conf
+INSTALLATION_DIRS=	lib/ffmpeg4 share/doc/ffmpeg4 share/examples/ffmpeg4
 
 .include "../../mk/bsd.prefs.mk"
 
 .if !empty(USE_CROSS_COMPILE:M[yY][eE][sS])
 CONFIGURE_ARGS+=	--enable-cross-compile
-CONFIGURE_ARGS+=	--arch=${MACHINE_ARCH}
 CONFIGURE_ARGS+=	--host-cc=${NATIVE_CC:Q}
 CONFIGURE_ARGS+=	--host-ld=${NATIVE_CC:Q}
 CONFIGURE_ARGS+=	--target-os=${LOWER_OPSYS}
@@ -33,21 +30,17 @@ TEST_TARGET=	check
 
 post-install:
 	${INSTALL_DATA} ${WRKSRC}/doc/*.txt \
-		${DESTDIR}${PREFIX}/share/doc/ffmpeg2
-	${INSTALL_DATA} ${WRKSRC}/doc/ffserver.conf \
-		${DESTDIR}${PREFIX}/share/examples/ffmpeg2
+		${DESTDIR}${PREFIX}/share/doc/ffmpeg4
 
 .include "options.mk"
 
 .include "../../mk/compiler.mk"
 
-# XXX: Incompatible with our disabling -fomit-frame-pointer
-CONFIGURE_ARGS+=	--disable-asm
-
 # disable asm on i386 for non-gcc and gcc < 4.2
 .if ${MACHINE_ARCH} == "i386"
 .  if !empty(MACHINE_PLATFORM:MDarwin-*-i386) \
    || !empty(MACHINE_PLATFORM:MSunOS-*-i386) \
+   || !empty(MACHINE_PLATFORM:MNetBSD-*-i386) \
    || !empty(CC_VERSION:Mgcc-[123]*) \
    || !empty(CC_VERSION:Mgcc-4.[01].*) \
    || empty(CC_VERSION:Mgcc*)
@@ -55,7 +48,10 @@ CONFIGURE_ARGS+=	--disable-asm
 .  elif !empty(CC_VERSION:Mgcc-[456].*)
 CFLAGS+=		-mstackrealign -mpreferred-stack-boundary=4
 .  endif
-NOT_PAX_MPROTECT_SAFE+=	bin/ffmpeg2
 .endif
 
-.include "../../multimedia/ffmpeg2/Makefile.common"
+# configure script uses uname -m to detect arch, as opposed to uname -p in
+# GNU/configure. Unable to detect NetBSD/macppc hosts correctly.
+CONFIGURE_ARGS+=	--arch=${MACHINE_ARCH}
+
+.include "../../multimedia/ffmpeg4/Makefile.common"

@@ -1,4 +1,4 @@
-$NetBSD: patch-libavutil_common.h,v 1.2 2017/05/17 15:28:51 he Exp $
+$NetBSD: patch-libavutil_common.h,v 1.1 2018/04/26 07:56:57 adam Exp $
 
 Add required int includes on various opensource platforms.
 

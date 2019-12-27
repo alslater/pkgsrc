@@ -1,17 +1,16 @@
-# $NetBSD: options.mk,v 1.16 2019/06/18 14:41:09 nia Exp $
+# $NetBSD: options.mk,v 1.10 2019/06/18 14:41:09 nia Exp $
 
 # Global and legacy options
-
-PKG_OPTIONS_VAR=	PKG_OPTIONS.ffmpeg2
 
 PKG_OPTIONS_OPTIONAL_GROUPS=	ssl
 PKG_OPTIONS_GROUP.ssl=		gnutls openssl
 
-PKG_SUPPORTED_OPTIONS=	ass doc faac fdk-aac fontconfig freetype lame \
-			libvpx opencore-amr rtmp theora vorbis x11 x264 \
-			x265 xvid
-PKG_SUGGESTED_OPTIONS=	lame ass freetype fontconfig libvpx \
-			theora vorbis x11 x264 xvid
+PKG_OPTIONS_VAR=	PKG_OPTIONS.ffmpeg4
+PKG_SUPPORTED_OPTIONS=	ass av1 bluray doc fdk-aac fontconfig freetype \
+			gnutls lame libvpx opencore-amr opus pulseaudio rpi \
+			rtmp tesseract theora vorbis x11 x264 x265 xvid
+PKG_SUGGESTED_OPTIONS=	lame ass av1 bluray freetype fontconfig libvpx \
+			openssl theora vorbis x11 x264 xvid
 
 PKG_OPTIONS_LEGACY_OPTS+=	xcb:x11
 
@@ -35,7 +34,6 @@ PKG_SUGGESTED_OPTIONS+=	vaapi
 
 # Fontconfig
 .if !empty(PKG_OPTIONS:Mfontconfig)
-USE_TOOLS+=		pkg-config
 CONFIGURE_ARGS+=	--enable-fontconfig
 .include "../../fonts/fontconfig/buildlink3.mk"
 .else
@@ -44,7 +42,6 @@ CONFIGURE_ARGS+=	--disable-fontconfig
 
 # freetype option
 .if !empty(PKG_OPTIONS:Mfreetype)
-USE_TOOLS+=		pkg-config
 CONFIGURE_ARGS+=	--enable-libfreetype
 .include "../../graphics/freetype2/buildlink3.mk"
 .else
@@ -53,11 +50,19 @@ CONFIGURE_ARGS+=	--disable-libfreetype
 
 # ass option
 .if !empty(PKG_OPTIONS:Mass)
-USE_TOOLS+=		pkg-config
 CONFIGURE_ARGS+=	--enable-libass
 .include "../../multimedia/libass/buildlink3.mk"
 .else
 CONFIGURE_ARGS+=	--disable-libass
+.endif
+
+# av1 option
+.if !empty(PKG_OPTIONS:Mav1)
+CONFIGURE_ARGS+=	--enable-libaom
+BUILDLINK_API_DEPENDS.libaom+=	libaom>=1.0.0nb1
+.include "../../multimedia/libaom/buildlink3.mk"
+.else
+CONFIGURE_ARGS+=	--disable-libaom
 .endif
 
 # doc option
@@ -67,16 +72,6 @@ USE_TOOLS+=		texi2html
 CONFIGURE_ARGS+=	--enable-htmlpages
 .else
 CONFIGURE_ARGS+=	--disable-htmlpages
-.endif
-
-# faac option
-.if !empty(PKG_OPTIONS:Mfaac)
-RESTRICTED=		This software may require the payment of patent royalties
-NO_BIN_ON_CDROM=	${RESTRICTED}
-NO_BIN_ON_FTP=		${RESTRICTED}
-CONFIGURE_ARGS+=	--enable-libfaac
-CONFIGURE_ARGS+=	--enable-nonfree
-.include "../../audio/faac/buildlink3.mk"
 .endif
 
 # Fraunhofer FDK AAC codec support
@@ -107,7 +102,7 @@ CONFIGURE_ARGS+=	--enable-libopencore-amrwb
 # OpenCORE libraries with FFmpeg, the license version needs to be
 # upgraded by passing --enable-version3 to configure."
 CONFIGURE_ARGS+=	--enable-version3
-# TODO: LICENSE
+ADDITIONAL_LICENSE+=		AND gnu-lgpl-v3
 .include "../../audio/opencore-amr/buildlink3.mk"
 .else
 CONFIGURE_ARGS+=	--disable-libopencore-amrnb
@@ -123,10 +118,26 @@ CONFIGURE_ARGS+=	--enable-openssl
 CONFIGURE_ARGS+=	--disable-openssl
 .endif
 
+# pulseaudio option
+.if !empty(PKG_OPTIONS:Mpulseaudio)
+CONFIGURE_ARGS+=	--enable-libpulse
+.include "../../audio/pulseaudio/buildlink3.mk"
+.else
+CONFIGURE_ARGS+=	--disable-libpulse
+.endif
+
 # RTMP support via librtmp
 .if !empty(PKG_OPTIONS:Mrtmp)
 CONFIGURE_ARGS+=	--enable-librtmp
 .include "../../net/rtmpdump/buildlink3.mk"
+.endif
+
+# OCR filter using Tesseract
+.if !empty(PKG_OPTIONS:Mtesseract)
+CONFIGURE_ARGS+=	--enable-libtesseract
+.include "../../graphics/tesseract/buildlink3.mk"
+.else
+CONFIGURE_ARGS+=	--disable-libtesseract
 .endif
 
 # OGG Theora support
@@ -147,6 +158,26 @@ CONFIGURE_ARGS+=	--enable-libvorbis
 BUILDLINK_ABI_DEPENDS.lame+= lame>=3.98.2nb1
 CONFIGURE_ARGS+=	--enable-libmp3lame
 .include "../../audio/lame/buildlink3.mk"
+.endif
+
+# OPUS support
+.if !empty(PKG_OPTIONS:Mopus)
+CONFIGURE_ARGS+=	--enable-libopus
+.include "../../audio/libopus/buildlink3.mk"
+.endif
+
+# Raspberry Pi support
+.if !empty(PKG_OPTIONS:Mrpi)
+CONFIGURE_ARGS+=	--disable-xvmc
+CONFIGURE_ARGS+=	--enable-omx-rpi
+CONFIGURE_ARGS+=	--enable-mmal
+SUBST_CLASSES+=		vc
+SUBST_STAGE.vc=		pre-configure
+SUBST_MESSAGE.vc=	Fixing path to VideoCore libraries.
+SUBST_FILES.vc=		configure
+SUBST_SED.vc+=		-e 's;-isystem/opt/vc;-I${PREFIX};g'
+SUBST_SED.vc+=		-e 's;/opt/vc;${PREFIX};g'
+.include "../../misc/raspberrypi-userland/buildlink3.mk"
 .endif
 
 # XviD support
@@ -206,4 +237,12 @@ CONFIGURE_ARGS+=	--enable-libxcb-xfixes
 .include "../../x11/libxcb/buildlink3.mk"
 .else
 CONFIGURE_ARGS+=	--disable-libxcb
+.endif
+
+# Bluray support
+.if !empty(PKG_OPTIONS:Mbluray)
+CONFIGURE_ARGS+=	--enable-libbluray
+.include "../../multimedia/libbluray/buildlink3.mk"
+.else
+CONFIGURE_ARGS+=	--disable-libbluray
 .endif

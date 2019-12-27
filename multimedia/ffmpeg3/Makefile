@@ -1,14 +1,15 @@
-# $NetBSD: Makefile,v 1.16 2016/12/08 10:20:08 maya Exp $
+# $NetBSD: Makefile,v 1.44 2019/08/11 13:22:02 wiz Exp $
 
 PKGNAME=	${DISTNAME:S/ffmpeg/ffmpeg3/}
+PKGREVISION=	3
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://ffmpeg.mplayerhq.hu/
 COMMENT=	Decoding, encoding and streaming software (v3.x)
 
 CONFIGURE_ARGS+=	--enable-avfilter
-#CONFIGURE_ARGS+=	--enable-avfilter-lavf
-#CONFIGURE_ARGS+=	--enable-lto
+CONFIGURE_ARGS+=	--enable-avresample
 CONFIGURE_ARGS+=	--enable-postproc
+CONFIGURE_ARGS+=	--enable-rpath
 CONFIGURE_ARGS+=	--disable-ffplay
 
 INSTALLATION_DIRS=	lib/ffmpeg3 share/doc/ffmpeg3 share/examples/ffmpeg3
@@ -20,7 +21,6 @@ CONF_FILES+=	${PREFIX}/share/examples/ffmpeg3/ffserver.conf \
 
 .if !empty(USE_CROSS_COMPILE:M[yY][eE][sS])
 CONFIGURE_ARGS+=	--enable-cross-compile
-CONFIGURE_ARGS+=	--arch=${MACHINE_ARCH}
 CONFIGURE_ARGS+=	--host-cc=${NATIVE_CC:Q}
 CONFIGURE_ARGS+=	--host-ld=${NATIVE_CC:Q}
 CONFIGURE_ARGS+=	--target-os=${LOWER_OPSYS}
@@ -41,10 +41,11 @@ post-install:
 
 .include "../../mk/compiler.mk"
 
-# disable asm on i386 for non-gcc and gcc < 4.2
+# disable asm on i386 for non-gcc and gcc < 4.2, or to avoid text relocations
 .if ${MACHINE_ARCH} == "i386"
 .  if !empty(MACHINE_PLATFORM:MDarwin-*-i386) \
    || !empty(MACHINE_PLATFORM:MSunOS-*-i386) \
+   || !empty(MACHINE_PLATFORM:MNetBSD-*-i386) \
    || !empty(CC_VERSION:Mgcc-[123]*) \
    || !empty(CC_VERSION:Mgcc-4.[01].*) \
    || empty(CC_VERSION:Mgcc*)
@@ -53,5 +54,9 @@ CONFIGURE_ARGS+=	--disable-asm
 CFLAGS+=		-mstackrealign -mpreferred-stack-boundary=4
 .  endif
 .endif
+
+# configure script uses uname -m to detect arch, as opposed to uname -p in
+# GNU/configure. Unable to detect NetBSD/macppc hosts correctly.
+CONFIGURE_ARGS+=	--arch=${MACHINE_ARCH}
 
 .include "../../multimedia/ffmpeg3/Makefile.common"
