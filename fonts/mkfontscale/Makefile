@@ -20,6 +20,5 @@ CONFIGURE_ARGS+=	--with-bzip2
 .include "../../archivers/bzip2/buildlink3.mk"
 .include "../../graphics/freetype2/buildlink3.mk"
 .include "../../fonts/libfontenc/buildlink3.mk"
-.include "../../x11/xproto/buildlink3.mk"
-
+.include "../../x11/xorgproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
