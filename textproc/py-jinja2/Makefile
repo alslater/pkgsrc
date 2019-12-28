@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.20 2016/12/15 10:46:08 adam Exp $
+# $NetBSD: Makefile,v 1.26 2019/10/07 05:34:29 adam Exp $
 
-DISTNAME=	Jinja2-2.8
+DISTNAME=	Jinja2-2.10.3
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
 CATEGORIES=	textproc python
 MASTER_SITES=	${MASTER_SITE_PYPI:=J/Jinja2/}
@@ -10,15 +10,28 @@ HOMEPAGE=	http://jinja.pocoo.org/
 COMMENT=	Small but fast and easy to use stand-alone template engine
 LICENSE=	modified-bsd
 
-USE_LANGUAGES=		# none
+DEPENDS+=	${PYPKGPREFIX}-babel>=0.8:../../devel/py-babel
+DEPENDS+=	${PYPKGPREFIX}-markupsafe>=0.23:../../textproc/py-markupsafe
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
 
-DEPENDS+=	${PYPKGPREFIX}-markupsafe-[0-9]*:../../textproc/py-markupsafe
+USE_LANGUAGES=		# none
 
 SUBST_CLASSES+=		unicode
 SUBST_FILES.unicode=	jinja2/*.py
+SUBST_STAGE.unicode=	pre-install
 SUBST_SED.unicode+=	-e "s,u',',g"
 SUBST_SED.unicode+=	-e 's,u",",g'
-SUBST_STAGE.unicode=	pre-install
+
+.include "../../lang/python/pyversion.mk"
+
+# async byte-compilation fails for Python < 3.6
+# see https://github.com/pallets/jinja/issues/643
+PLIST_VARS+=	async
+.if ${_PYTHON_VERSION} != 27
+PLIST.async=	yes
+.endif
+
+PYSETUPTESTTARGET=	pytest
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

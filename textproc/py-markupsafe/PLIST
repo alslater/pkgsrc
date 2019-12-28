@@ -1,8 +1,7 @@
-@comment $NetBSD: PLIST,v 1.2 2013/05/21 19:30:37 kleink Exp $
+@comment $NetBSD: PLIST,v 1.4 2018/11/16 15:46:17 kleink Exp $
 ${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
 ${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
 ${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
-${PYSITELIB}/${EGG_INFODIR}/not-zip-safe
 ${PYSITELIB}/${EGG_INFODIR}/top_level.txt
 ${PYSITELIB}/markupsafe/__init__.py
 ${PYSITELIB}/markupsafe/__init__.pyc
@@ -18,6 +17,3 @@ ${PYSITELIB}/markupsafe/_native.pyc
 ${PYSITELIB}/markupsafe/_native.pyo
 ${PYSITELIB}/markupsafe/_speedups.c
 ${PYSITELIB}/markupsafe/_speedups.so
-${PYSITELIB}/markupsafe/tests.py
-${PYSITELIB}/markupsafe/tests.pyc
-${PYSITELIB}/markupsafe/tests.pyo
