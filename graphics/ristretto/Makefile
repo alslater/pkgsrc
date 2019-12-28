@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.36 2016/08/03 10:22:56 adam Exp $
+# $NetBSD: Makefile,v 1.51 2019/08/18 05:54:33 gutteridge Exp $
 #
 
-DISTNAME=	ristretto-0.8.0
+VERSION=	0.10.0
+DISTNAME=	ristretto-${VERSION}
 EXTRACT_SUFX=	.tar.bz2
-PKGREVISION=	4
 CATEGORIES=	graphics
-MASTER_SITES=	http://archive.xfce.org/src/apps/ristretto/0.8/
+MASTER_SITES=	http://archive.xfce.org/src/apps/ristretto/${VERSION:R}/
 
-MAINTAINER=	martin@NetBSD.org
-HOMEPAGE=	http://goodies.xfce.org/projects/applications/ristretto
+MAINTAINER=	youri@NetBSD.org
+HOMEPAGE=	https://goodies.xfce.org/projects/applications/ristretto
 COMMENT=	Xfce image viewer
 LICENSE=	gnu-gpl-v2
 
@@ -28,7 +28,7 @@ LDFLAGS.SunOS=		-lX11
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../sysutils/dbus-glib/buildlink3.mk"
-.include "../../x11/gtk2/buildlink3.mk"
+.include "../../x11/gtk3/buildlink3.mk"
 .include "../../devel/glib2/buildlink3.mk"
 .include "../../x11/libX11/buildlink3.mk"
 .include "../../x11/libxfce4util/buildlink3.mk"
