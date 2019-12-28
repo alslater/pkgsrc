@@ -1,20 +1,22 @@
-# $NetBSD: Makefile,v 1.16 2016/11/14 14:08:17 wiz Exp $
+# $NetBSD: Makefile,v 1.24 2019/11/06 12:51:55 wiz Exp $
 
-DISTNAME=	libxkbcommon-0.7.0
+DISTNAME=	libxkbcommon-0.9.1
 CATEGORIES=	x11
-MASTER_SITES=	http://xkbcommon.org/download/
+MASTER_SITES=	https://xkbcommon.org/download/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	ryoon@NetBSD.org
-HOMEPAGE=	http://xkbcommon.org/
+HOMEPAGE=	https://xkbcommon.org/
 COMMENT=	Library to handle keyboard descriptions
 LICENSE=	mit
 
-GNU_CONFIGURE=	yes
 USE_TOOLS+=	bison gmake pkg-config
-USE_LIBTOOL=	yes
 
-PKGCONFIG_OVERRIDE+=	xkbcommon.pc.in
+MESON_ARGS+=	-Denable-wayland=false
+
+PKGCONFIG_OVERRIDE+=		output/meson-private/xkbcommon.pc
+PKGCONFIG_OVERRIDE+=		output/meson-private/xkbcommon-x11.pc
+PKGCONFIG_OVERRIDE_STAGE=       post-configure
 
 .include "options.mk"
 
@@ -27,4 +29,5 @@ BUILDLINK_TRANSFORM+=	rm:-Wl,--version-script=./xkbcommon-x11.map
 BUILDLINK_API_DEPENDS.libxcb+=	libxcb>=1.10
 .include "../../x11/libxcb/buildlink3.mk"
 .include "../../x11/xkeyboard-config/buildlink3.mk"
+.include "../../devel/meson/build.mk"
 .include "../../mk/bsd.pkg.mk"

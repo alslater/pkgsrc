@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.7 2013/10/08 10:45:06 wiz Exp $
+# $NetBSD: Makefile,v 1.9 2019/11/14 11:00:38 wiz Exp $
 
-DISTNAME=	xbacklight-1.2.1
+DISTNAME=	xbacklight-1.2.3
 CATEGORIES=	x11
 MASTER_SITES=	${MASTER_SITE_XORG:=app/}
 EXTRACT_SUFX=	.tar.bz2

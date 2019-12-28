@@ -1,4 +1,4 @@
-# $NetBSD: builtin.mk,v 1.5 2014/03/10 11:56:02 jperkin Exp $
+# $NetBSD: builtin.mk,v 1.7 2019/11/03 09:14:11 rillig Exp $
 
 BUILTIN_PKG:=	libXdmcp
 
@@ -19,7 +19,7 @@ IS_BUILTIN.libXdmcp=	no
 IS_BUILTIN.libXdmcp=	yes
 .  endif
 .endif
-MAKEVARS+=	IS_BUILTIN.libXdmcp
+MAKEVARS+=		IS_BUILTIN.libXdmcp
 
 ###
 ### Determine whether we should use the built-in implementation if it
@@ -46,7 +46,7 @@ USE_BUILTIN.libXdmcp!=							\
 .    endif
 .  endif  # PREFER.libXdmcp
 .endif
-MAKEVARS+=	USE_BUILTIN.libXdmcp
+MAKEVARS+=		USE_BUILTIN.libXdmcp
 
 .include "../../mk/x11.builtin.mk"
 
@@ -71,7 +71,7 @@ xdmcp-fake-pc:
 	else \
 		req=""; \
 		if ${TEST} -f \
-			${BUILDLINK_PREFIX.xproto}/lib/pkgconfig/xproto.pc; then \
+			${BUILDLINK_PREFIX.xorgproto}/lib/pkgconfig/xproto.pc; then \
 			req="xproto"; \
 		fi; \
 		{ ${ECHO} "Name: Xdmcp"; \

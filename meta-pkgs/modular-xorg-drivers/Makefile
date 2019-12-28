@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.39 2017/03/14 13:26:59 jperkin Exp $
+# $NetBSD: Makefile,v 1.42 2017/11/30 15:55:26 wiz Exp $
 
 DISTNAME=	# empty
 PKGNAME=	modular-xorg-drivers-1.19.0
-PKGREVISION=	2
+PKGREVISION=	4
 CATEGORIES=	meta-pkgs x11
 MASTER_SITES=	${MASTER_SITE_XORG:=driver/}
 DISTFILES=	# empty
@@ -31,9 +31,10 @@ DEPENDS+=	xf86-video-amdgpu-[0-9]*:../../x11/xf86-video-amdgpu
 DEPENDS+=	xf86-video-apm-[0-9]*:../../x11/xf86-video-apm
 DEPENDS+=	xf86-video-ark-[0-9]*:../../x11/xf86-video-ark
 DEPENDS+=	xf86-video-ast-[0-9]*:../../x11/xf86-video-ast
-.if !empty(MACHINE_PLATFORM:MNetBSD-7.*-i386) ||	\
-    !empty(MACHINE_PLATFORM:MNetBSD-7.*-x86_64) ||	\
-    ${OPSYS} == "Linux" || ${OPSYS} == "FreeBSD" || ${OPSYS} == "SunOS"
+.if !empty(MACHINE_PLATFORM:MNetBSD-[789].*-i386) ||	\
+    !empty(MACHINE_PLATFORM:MNetBSD-[789].*-x86_64) ||	\
+    ${OPSYS} == "Linux" || ${OPSYS} == "FreeBSD" ||	\
+    ${OPSYS} == "DragonFly" || ${OPSYS} == "SunOS"
 DEPENDS+=	xf86-video-ati-[0-9]*:../../x11/xf86-video-ati
 .else
 DEPENDS+=	xf86-video-ati6-[0-9]*:../../x11/xf86-video-ati6
@@ -76,12 +77,14 @@ DEPENDS+=	xf86-video-suncg14-[0-9]*:../../x11/xf86-video-suncg14
 DEPENDS+=	xf86-video-suncg3-[0-9]*:../../x11/xf86-video-suncg3
 DEPENDS+=	xf86-video-suncg6-[0-9]*:../../x11/xf86-video-suncg6
 DEPENDS+=	xf86-video-sunffb-[0-9]*:../../x11/xf86-video-sunffb
+DEPENDS+=	xf86-video-sunleo-[0-9]*:../../x11/xf86-video-sunleo
 DEPENDS+=	xf86-video-suntcx-[0-9]*:../../x11/xf86-video-suntcx
 DEPENDS+=	xf86-video-tdfx-[0-9]*:../../x11/xf86-video-tdfx
 DEPENDS+=	xf86-video-tga-[0-9]*:../../x11/xf86-video-tga
 DEPENDS+=	xf86-video-trident-[0-9]*:../../x11/xf86-video-trident
 DEPENDS+=	xf86-video-tseng-[0-9]*:../../x11/xf86-video-tseng
 DEPENDS+=	xf86-video-vesa-[0-9]*:../../x11/xf86-video-vesa
+DEPENDS+=	xf86-video-vboxvideo-[0-9]*:../../x11/xf86-video-vboxvideo
 .if ${MACHINE_ARCH} == "i386" || ${MACHINE_ARCH} == "x86_64"
 DEPENDS+=	xf86-video-vmware-[0-9]*:../../x11/xf86-video-vmware
 DEPENDS+=	xf86-video-voodoo-[0-9]*:../../x11/xf86-video-voodoo

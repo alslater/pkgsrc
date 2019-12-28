@@ -1,21 +1,21 @@
-# $NetBSD: Makefile,v 1.67 2016/11/30 12:37:40 wiz Exp $
+# $NetBSD: Makefile,v 1.95 2019/10/18 09:04:16 nia Exp $
 
-DISTNAME=		libdrm-2.4.74
+DISTNAME=		libdrm-2.4.100
 CATEGORIES=		x11 graphics
-MASTER_SITES=		http://dri.freedesktop.org/libdrm/
-EXTRACT_SUFX=		.tar.bz2
+MASTER_SITES=		https://dri.freedesktop.org/libdrm/
 
 MAINTAINER=		joerg@NetBSD.org
-HOMEPAGE=		http://dri.freedesktop.org/wiki/DRM
+HOMEPAGE=		https://dri.freedesktop.org/wiki/DRM
 COMMENT=		Userspace interface to kernel DRM services
+LICENSE=		mit
 
+# Platforms with kernel support for DRM
 ONLY_FOR_PLATFORM=	NetBSD-*-* DragonFly-*-* FreeBSD-*-* OpenBSD-*-* \
 			Linux-*-* SunOS-*-*
 
 USE_PKGLOCALEDIR=	yes
-USE_TOOLS+=		pkg-config
+USE_TOOLS+=		gmake pkg-config
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 PKGCONFIG_OVERRIDE+=	libdrm.pc.in
 GNU_CONFIGURE=		yes
 
@@ -23,7 +23,7 @@ GNU_CONFIGURE=		yes
 
 SUBST_CLASSES+=		atomic
 SUBST_FILES.atomic=	xf86drm.h
-SUBST_MESSAGE.atomic=	Configuring xf86drm.h's atomic operations.
+SUBST_MESSAGE.atomic=	Configuring atomic operations in xf86drm.h
 SUBST_STAGE.atomic=	pre-configure
 SUBST_VARS.atomic=	ATOMIC_OPS_CHECK
 
@@ -40,15 +40,17 @@ CONFIGURE_ARGS+=	PTHREADSTUBS_CFLAGS=-I${PREFIX}/include \
 CONFIGURE_ARGS+=	--disable-manpages
 CONFIGURE_ARGS+=	--disable-valgrind
 
+LDFLAGS.NetBSD+=	-lpci
+
 PLIST_VARS+=	intel arm
-.if !empty(MACHINE_ARCH:Mi386) || !empty(MACHINE_ARCH:Mx86_64)
+.if ${MACHINE_ARCH} == "i386" || ${MACHINE_ARCH} == "x86_64"
 # libpciaccess is needed to build support for the intel KMS API,
 # libdrm_intel.so.
 .include "../../sysutils/libpciaccess/buildlink3.mk"
 PLIST.intel=	yes
 .elif !empty(MACHINE_ARCH:Marm*) || \
       !empty(MACHINE_ARCH:Mearm*) || \
-      !empty(MACHINE_ARCH:Maarch64)
+      ${MACHINE_ARCH} == "aarch64"
 PLIST.arm=	yes
 #.else
 #CONFIGURE_ARGS+=	--disable-intel

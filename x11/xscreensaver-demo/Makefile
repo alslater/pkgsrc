@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.64 2016/10/19 20:11:29 wiz Exp $
+# $NetBSD: Makefile,v 1.78 2019/11/24 21:54:52 wiz Exp $
 
 PKGNAME=	${DISTNAME:S/-/-demo-/}
+PKGREVISION=	6
 COMMENT=	Demo viewer and configuration tool for xscreensaver
 
 CONFLICTS+=	xscreensaver<4.14 xscreensaver-gnome-[0-9]*
@@ -16,13 +17,15 @@ BUILD_DIRS=		utils driver
 INSTALL_DIRS=		driver
 INSTALL_TARGET=		install-gnome
 
-INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1
+INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1 share/applications
 
 post-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/driver/xscreensaver-demo \
 	    ${DESTDIR}${PREFIX}/bin
 	${INSTALL_MAN} ${WRKSRC}/driver/xscreensaver-demo.man \
 	    ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/xscreensaver-demo.1
+	${INSTALL_DATA} ${FILESDIR}/xscreensaver-demo.desktop \
+	    ${DESTDIR}${PREFIX}/share/applications/xscreensaver-demo.desktop
 
 .include "../../devel/glib2/buildlink3.mk"
 .include "../../devel/libglade/buildlink3.mk"
@@ -31,5 +34,4 @@ post-install:
 .include "../../graphics/gdk-pixbuf2/buildlink3.mk"
 .include "../../graphics/gdk-pixbuf2-xlib/buildlink3.mk"
 .include "../../x11/xscreensaver/buildlink3.mk"
-.include "../../x11/xf86miscproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

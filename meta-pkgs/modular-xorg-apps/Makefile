@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.35 2015/10/23 10:58:28 tnn Exp $
+# $NetBSD: Makefile,v 1.42 2019/11/19 14:31:22 wiz Exp $
 
 DISTNAME=	# empty
-PKGNAME=	modular-xorg-apps-1.14.1.7
+PKGNAME=	modular-xorg-apps-1.14.1.14
 CATEGORIES=	meta-pkgs x11
 MASTER_SITES=	${MASTER_SITE_XORG:=app/}
 DISTFILES=	# empty
@@ -32,9 +32,6 @@ DEPENDS+=	mkcomposecache-[0-9]*:../../x11/mkcomposecache
 DEPENDS+=	modular-xorg-xephyr-[0-9]*:../../x11/modular-xorg-xephyr
 .endif
 DEPENDS+=	oclock-[0-9]*:../../time/oclock
-DEPENDS+=	lbxproxy-[0-9]*:../../x11/lbxproxy
-DEPENDS+=	proxymngr-[0-9]*:../../x11/proxymngr
-DEPENDS+=	rstart-[0-9]*:../../x11/rstart
 DEPENDS+=	setxkbmap-[0-9]*:../../x11/setxkbmap
 DEPENDS+=	transset-[0-9]*:../../x11/transset
 DEPENDS+=	viewres-[0-9]*:../../x11/viewres
@@ -47,6 +44,7 @@ DEPENDS+=	xclock-[0-9]*:../../time/xclock
 DEPENDS+=	xcmsdb-[0-9]*:../../x11/xcmsdb
 DEPENDS+=	xconsole-[0-9]*:../../x11/xconsole
 DEPENDS+=	xcursorgen-[0-9]*:../../x11/xcursorgen
+DEPENDS+=	xcursor-themes-[0-9]*:../../x11/xcursor-themes
 DEPENDS+=	xdbedizzy-[0-9]*:../../x11/xdbedizzy
 DEPENDS+=	xditview-[0-9]*:../../x11/xditview
 DEPENDS+=	xdm-[0-9]*:../../x11/xdm
@@ -56,10 +54,8 @@ DEPENDS+=	xev-[0-9]*:../../x11/xev
 DEPENDS+=	xeyes-[0-9]*:../../x11/xeyes
 DEPENDS+=	xf86dga-[0-9]*:../../x11/xf86dga
 DEPENDS+=	xfd-[0-9]*:../../x11/xfd
-DEPENDS+=	xfindproxy-[0-9]*:../../net/xfindproxy
 DEPENDS+=	xfontsel-[0-9]*:../../x11/xfontsel
 DEPENDS+=	xfsinfo-[0-9]*:../../x11/xfsinfo
-DEPENDS+=	xfwp-[0-9]*:../../x11/xfwp
 DEPENDS+=	xgamma-[0-9]*:../../x11/xgamma
 DEPENDS+=	xgc-[0-9]*:../../graphics/xgc
 DEPENDS+=	xhost-[0-9]*:../../x11/xhost
@@ -79,14 +75,11 @@ DEPENDS+=	xmessage-[0-9]*:../../x11/xmessage
 DEPENDS+=	xmh-[0-9]*:../../x11/xmh
 DEPENDS+=	xmodmap-[0-9]*:../../x11/xmodmap
 DEPENDS+=	xmore-[0-9]*:../../x11/xmore
-DEPENDS+=	xplsprinters-[0-9]*:../../x11/xplsprinters
-DEPENDS+=	xprehashprinterlist-[0-9]*:../../x11/xprehashprinterlist
 DEPENDS+=	xpr-[0-9]*:../../x11/xpr
 DEPENDS+=	xprop-[0-9]*:../../x11/xprop
 DEPENDS+=	xrandr-[0-9]*:../../x11/xrandr
 DEPENDS+=	xrdb-[0-9]*:../../x11/xrdb
 DEPENDS+=	xrefresh-[0-9]*:../../x11/xrefresh
-DEPENDS+=	xrx-[0-9]*:../../x11/xrx
 DEPENDS+=	xscope-[0-9]*:../../x11/xscope
 DEPENDS+=	xset-[0-9]*:../../x11/xset
 DEPENDS+=	xsetroot-[0-9]*:../../x11/xsetroot
@@ -94,7 +87,6 @@ DEPENDS+=	xsm-[0-9]*:../../x11/xsm
 DEPENDS+=	xstdcmap-[0-9]*:../../x11/xstdcmap
 DEPENDS+=	xterm-[0-9]*:../../x11/xterm
 DEPENDS+=	xtrans-[0-9]*:../../x11/xtrans
-DEPENDS+=	xtrap-[0-9]*:../../x11/xtrap
 DEPENDS+=	xvinfo-[0-9]*:../../x11/xvinfo
 DEPENDS+=	xwininfo-[0-9]*:../../x11/xwininfo
 DEPENDS+=	xwd-[0-9]*:../../x11/xwd

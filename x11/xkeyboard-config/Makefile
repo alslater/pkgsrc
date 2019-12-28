@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.31 2016/09/30 10:35:08 wiz Exp $
+# $NetBSD: Makefile,v 1.40 2019/11/13 22:07:02 wiz Exp $
 
-DISTNAME=		xkeyboard-config-2.19
+DISTNAME=		xkeyboard-config-2.28
 CATEGORIES=		x11
 MASTER_SITES=		${MASTER_SITE_XORG:=data/${PKGBASE}/}
 EXTRACT_SUFX=		.tar.bz2
@@ -17,7 +17,7 @@ MAKE_JOBS_SAFE=		no
 
 GNU_CONFIGURE=		yes
 USE_LIBTOOL=		yes
-USE_TOOLS+=		gmake intltool msgfmt pkg-config
+USE_TOOLS+=		gmake msgfmt perl pkg-config
 PKGCONFIG_OVERRIDE+=	xkeyboard-config.pc.in
 
 BUILD_DEFS+=		VARBASE
@@ -57,6 +57,5 @@ BUILDLINK_DEPMETHOD.gettext=	build	# for the configure only
 
 BUILDLINK_API_DEPENDS.libX11+=	libX11>=1.4.3
 .include "../../x11/libX11/buildlink3.mk"
-BUILDLINK_API_DEPENDS.xproto+=	xproto>=7.0.20
-.include "../../x11/xproto/buildlink3.mk"
+.include "../../x11/xorgproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

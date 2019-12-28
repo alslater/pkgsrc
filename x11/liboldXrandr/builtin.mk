@@ -1,4 +1,4 @@
-# $NetBSD: builtin.mk,v 1.3 2012/03/19 12:34:21 joerg Exp $
+# $NetBSD: builtin.mk,v 1.5 2019/11/03 09:14:13 rillig Exp $
 
 BUILTIN_PKG:=	Xrandr
 
@@ -18,7 +18,7 @@ IS_BUILTIN.Xrandr=	yes
 IS_BUILTIN.Xrandr=	no
 .  endif
 .endif
-MAKEVARS+=	IS_BUILTIN.Xrandr
+MAKEVARS+=		IS_BUILTIN.Xrandr
 
 ###
 ### If there is a built-in implementation, then set BUILTIN_PKG.<pkg> to
@@ -47,10 +47,10 @@ BUILTIN_VERSION.Xrandr?=	${_version_}
 .    endfor
 .  endfor
 .  if defined(BUILTIN_VERSION.Xrandr)
-BUILTIN_PKG.Xrandr=	Xrandr-${BUILTIN_VERSION.Xrandr}
+BUILTIN_PKG.Xrandr=		Xrandr-${BUILTIN_VERSION.Xrandr}
 .  endif
 .endif
-MAKEVARS+=	BUILTIN_PKG.Xrandr
+MAKEVARS+=			BUILTIN_PKG.Xrandr
 
 ###
 ### Determine whether we should use the built-in implementation if it
@@ -63,9 +63,6 @@ MAKEVARS+=	BUILTIN_PKG.Xrandr
 #
 .if defined(USE_BUILTIN.Xrender) && !empty(USE_BUILTIN.Xrender:M[nN][oO])
 USE_BUILTIN.Xrender=	no
-.endif
-.if defined(USE_BUILTIN.randrproto) && !empty(USE_BUILTIN.randrproto:M[nN][oO])
-USE_BUILTIN.randrproto=	no
 .endif
 
 .if !defined(USE_BUILTIN.Xrandr)
@@ -89,7 +86,7 @@ USE_BUILTIN.Xrandr!=							\
 .    endif
 .  endif  # PREFER.Xrandr
 .endif
-MAKEVARS+=	USE_BUILTIN.Xrandr
+MAKEVARS+=		USE_BUILTIN.Xrandr
 
 ###
 ### The section below only applies if we are not including this file
@@ -109,7 +106,6 @@ BUILDLINK_API_DEPENDS.Xrender+=	Xrender>=0.8
 .  if !empty(USE_BUILTIN.Xrandr:M[yY][eE][sS])
 BUILDLINK_PREFIX.Xrandr=	${X11BASE}
 USE_BUILTIN.Xrender=		yes
-USE_BUILTIN.randrproto=		yes
 .  endif
 
 .endif	# CHECK_BUILTIN.Xrandr

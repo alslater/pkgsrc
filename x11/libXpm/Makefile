@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.17 2016/12/15 23:02:51 wiz Exp $
+# $NetBSD: Makefile,v 1.19 2019/12/13 10:42:36 wiz Exp $
 
-DISTNAME=		libXpm-3.5.12
+DISTNAME=		libXpm-3.5.13
 CATEGORIES=		graphics x11
 MASTER_SITES=		${MASTER_SITE_XORG:=lib/}
 EXTRACT_SUFX=		.tar.bz2
@@ -12,7 +12,6 @@ COMMENT=		X PixMap Library from modular Xorg X11
 CONFLICTS+=		xpm-[0-9]*
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		pkg-config xgettext
 PKGCONFIG_OVERRIDE+=	xpm.pc.in
 GNU_CONFIGURE=		yes
@@ -30,10 +29,10 @@ MAKE_ENV+=		INTLLIBS=${BUILDLINK_LDADD.gettext:Q}
 
 .if ${X11_TYPE} == "native"
 XPM_CFLAGS=	-I${X11BASE}/include
-XPM_LIBS=	-Wl,-rpath,${X11BASE}/lib -L${X11BASE}/lib -lX11
+XPM_LIBS=	${COMPILER_RPATH_FLAG}${X11BASE}/lib -L${X11BASE}/lib -lX11
 
 SXPM_CFLAGS=	-I${X11BASE}/include
-SXPM_LIBS=	-Wl,-rpath,${X11BASE}/lib -L${X11BASE}/lib -lXt -lXext
+SXPM_LIBS=	${COMPILER_RPATH_FLAG}${X11BASE}/lib -L${X11BASE}/lib -lXt -lXext
 
 CONFIGURE_ARGS+=	XPM_CFLAGS=${XPM_CFLAGS:Q} \
 			XPM_LIBS=${XPM_LIBS:Q} \
@@ -47,6 +46,5 @@ CONFIGURE_ARGS+=	XPM_CFLAGS=${XPM_CFLAGS:Q} \
 .include "../../x11/libX11/buildlink3.mk"
 .include "../../x11/libXext/buildlink3.mk"
 .include "../../x11/libXt/buildlink3.mk"
-.include "../../x11/xproto/buildlink3.mk"
-
+.include "../../x11/xorgproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
