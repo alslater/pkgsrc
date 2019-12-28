@@ -1,27 +1,26 @@
-# $NetBSD: Makefile,v 1.86 2016/11/25 13:14:03 prlw1 Exp $
+# $NetBSD: Makefile,v 1.137 2019/11/06 14:51:19 wiz Exp $
 
-DISTNAME=	gtk+-3.22.4
+DISTNAME=	gtk+-3.24.12
 PKGNAME=	${DISTNAME:S/gtk/gtk3/}
 CATEGORIES=	x11 gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gtk+/${PKGVERSION_NOREV:R}/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gtk.org/
+HOMEPAGE=	https://www.gtk.org/
 COMMENT=	GIMP Toolkit v3 - libraries for building X11 user interfaces
 LICENSE=	gnu-lgpl-v2.1
 
-USE_PKGLOCALEDIR=	yes
-USE_TOOLS+=		gmake perl pkg-config bash xgettext msgmerge
-USE_LANGUAGES=		c c++
-USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
-PTHREAD_AUTO_VARS=	yes
-BUILD_DEPENDS+=		gdbus-codegen-[0-9]*:../../devel/gdbus-codegen
-TOOL_DEPENDS+=		gettext-tools>=0.19.4nb1:../../devel/gettext-tools
+USE_PKGLOCALEDIR=		yes
+USE_TOOLS+=			ggrep gmake perl pkg-config bash xgettext msgmerge
+USE_LANGUAGES=			c c++
+USE_LIBTOOL=			yes
+PTHREAD_AUTO_VARS=		yes
+TOOL_DEPENDS+=			gdbus-codegen-[0-9]*:../../devel/gdbus-codegen
+TOOL_DEPENDS+=			gettext-tools>=0.19.4nb1:../../devel/gettext-tools
 # There is no logic in gettext.mk to detect the native version of xgettext,
 # and we do need it to be compiled with Glade support.
-_TOOLS_USE_PKGSRC.xgettext=yes
+_TOOLS_USE_PKGSRC.xgettext=	yes
 
 GNU_CONFIGURE=		yes
 # XXX there is a subtle bashism in "configure" or a bug in NetBSD's sh
@@ -43,18 +42,10 @@ INSTALLATION_DIRS+=	lib/gtk-3.0/immodules
 INSTALLATION_DIRS+=	lib/gtk-3.0/modules
 INSTALLATION_DIRS+=	lib/gtk-3.0/3.0.0/filesystems
 
-#REQD_DIRS+=		${PREFIX}/libdata/gtk-2.0
-
 BUILD_DIRS=		. demos/gtk-demo
 
 .include "../../mk/bsd.prefs.mk"
 
-# gtk/Makefile.am hardcodes 'grep -o' so require GNU grep on platforms
-# which do not have it.
-.if ${OPSYS} == "SunOS"
-BUILD_DEPENDS+=		grep-[0-9]*:../../textproc/grep
-TOOLS_PATH.grep=	${LOCALBASE}/bin/ggrep
-.endif
 # isnan and isinf are part of libc, not libm on DragonFly
 # conf tests fail detection due to conflicting definitions, just skip them
 CONFIGURE_ENV.DragonFly+=	ac_cv_func_isinf=yes
@@ -70,6 +61,10 @@ CPPFLAGS+=		-DPREFIX="\"${PREFIX}\""
 post-install:
 	${RM} -f ${DESTDIR}${GTK3_IMMODULES_DB}
 
+FILES_SUBST+=		GTK_UPDATE_ICON_CACHE="${PREFIX}/bin/gtk-update-icon-cache"
+FILES_SUBST+=		ICON_THEME_DIR="${PREFIX}/share/icons"
+INSTALL_TEMPLATES+=	../../x11/gtk2/files/icon-cache.tmpl
+
 _BUILDING_GTK3=	yes
 .include "modules.mk"
 
@@ -77,7 +72,7 @@ _BUILDING_GTK3=	yes
 BUILDLINK_API_DEPENDS.atk+=	atk>=2.15.1
 .include "../../devel/atk/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
-BUILDLINK_API_DEPENDS.glib2+=	glib2>=2.49.4
+BUILDLINK_API_DEPENDS.glib2+=	glib2>=2.57.2
 .include "../../devel/glib2/buildlink3.mk"
 BUILDLINK_API_DEPENDS.gdk-pixbuf2+=	gdk-pixbuf2>=2.30.0
 .include "../../graphics/gdk-pixbuf2/buildlink3.mk"
@@ -89,14 +84,15 @@ BUILDLINK_API_DEPENDS.gobject-introspection+=	gobject-introspection>=1.39.0
 
 .include "../../devel/glib2/schemas.mk"
 
-BUILDLINK_API_DEPENDS.pango+=	pango>=1.37.3
+BUILDLINK_API_DEPENDS.pango+=	pango>=1.41
 .include "../../devel/pango/buildlink3.mk"
+BUILDLINK_API_DEPENDS.fontconfig+=	fontconfig>=2.11.91
 .include "../../fonts/fontconfig/buildlink3.mk"
 BUILDLINK_API_DEPENDS.cairo+=	cairo>=1.14.0
 .include "../../graphics/cairo/buildlink3.mk"
 .include "../../graphics/cairo-gobject/buildlink3.mk"
 .include "../../graphics/freetype2/buildlink3.mk"
-BUILDLINK_API_DEPENDS.libepoxy+=	libepoxy>=1.2nb2
+BUILDLINK_API_DEPENDS.libepoxy+=	libepoxy>=1.4
 .include "../../graphics/libepoxy/buildlink3.mk"
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
