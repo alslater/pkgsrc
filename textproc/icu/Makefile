@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.114 2017/12/14 21:28:32 adam Exp $
+# $NetBSD: Makefile,v 1.127 2019/11/04 21:43:37 rillig Exp $
 
-DISTNAME=	icu4c-63_1-src
+DISTNAME=	icu4c-64_2-src
 PKGNAME=	${DISTNAME:S/4c//:S/-src//:S/_/./g}
-PKGREVISION=	2
+PKGREVISION=	1
 CATEGORIES=	textproc
 MASTER_SITES=	http://download.icu-project.org/files/icu4c/${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tgz
@@ -14,7 +14,6 @@ LICENSE=	mit
 
 WRKSRC=			${WRKDIR}/icu/source
 USE_LANGUAGES=		c99 c++
-USE_MULTIARCH=		lib
 USE_TOOLS+=		gmake
 GCC_REQD+=		4.8
 TEST_TARGET=		check
@@ -22,6 +21,8 @@ UNLIMIT_RESOURCES+=	datasize
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-static
 CONFIGURE_ENV+=		U_MAKE=${TOOLS_GMAKE}
+
+CHECK_SSP_SKIP=		lib/libicudata.so*
 
 .include "../../mk/pthread.buildlink3.mk"
 
@@ -92,13 +93,17 @@ PLIST_SUBST+=		MH_NAME=mh-qnx
 PLIST_SUBST+=		MH_NAME=mh-unknown
 .endif
 
-PKGCONFIG_OVERRIDE+=	config/icu-i18n.pc
-PKGCONFIG_OVERRIDE+=	config/icu-io.pc
-PKGCONFIG_OVERRIDE+=	config/icu-le.pc
-PKGCONFIG_OVERRIDE+=	config/icu-lx.pc
-PKGCONFIG_OVERRIDE+=	config/icu-uc.pc
-PKGCONFIG_OVERRIDE+=	config/icu.pc
+PKGCONFIG_OVERRIDE+=		config/icu-i18n.pc
+PKGCONFIG_OVERRIDE+=		config/icu-io.pc
+PKGCONFIG_OVERRIDE+=		config/icu-le.pc
+PKGCONFIG_OVERRIDE+=		config/icu-lx.pc
+PKGCONFIG_OVERRIDE+=		config/icu-uc.pc
+PKGCONFIG_OVERRIDE+=		config/icu.pc
 PKGCONFIG_OVERRIDE_STAGE=	post-build
+
+# work around ICU-20533 (build failure on big endian machines)
+post-configure:
+	${MKDIR} ${WRKSRC}/data/out
 
 # expect builtin gcc atomic functions for gcc>=4.1
 # (source/common/putilimp.h)
@@ -129,7 +134,7 @@ SUBST_FILES.icu-config=	${DESTDIR}${PREFIX}/bin/icu-config
 SUBST_SED.icu-config+=	-e '/^ICUUC_FILE=/ s/libdir/bindir/'
 SUBST_SED.icu-config+=	-e 's/l$${LIBICU}/l$${ICUPREFIX}/g'
 SUBST_SED.icu-config+=	-e '/l$${ICUPREFIX}/ s/$${ICULIBSUFFIX_VERSION}//g'
-
 .endif
 
+.include "../../lang/python/tool.mk"
 .include "../../mk/bsd.pkg.mk"
