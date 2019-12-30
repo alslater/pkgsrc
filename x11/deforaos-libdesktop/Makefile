@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.23 2016/08/03 10:22:20 adam Exp $
+# $NetBSD: Makefile,v 1.33 2019/07/21 22:24:14 wiz Exp $
 #
 
-DISTNAME=	libDesktop-0.2.1
-PKGNAME=	deforaos-libdesktop-0.2.1
-PKGREVISION=	2
+DISTNAME=	libDesktop-0.2.2
+PKGNAME=	deforaos-libdesktop-0.2.2
+PKGREVISION=	6
 CATEGORIES=	x11
-MASTER_SITES=	http://www.defora.org/os/download/download/4394/
+MASTER_SITES=	https://www.defora.org/os/download/download/4447/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS desktop library
 
 LICENSE=	2-clause-bsd

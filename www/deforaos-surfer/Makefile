@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.35 2016/12/04 05:17:43 ryoon Exp $
+# $NetBSD: Makefile,v 1.52 2019/07/21 22:25:53 wiz Exp $
 
 DISTNAME=	Surfer-0.2.10
 PKGNAME=	deforaos-surfer-0.2.10
-PKGREVISION=	6
+PKGREVISION=	20
 CATEGORIES=	www
-MASTER_SITES=	http://www.defora.org/os/download/download/4430/
+MASTER_SITES=	https://www.defora.org/os/download/download/4430/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS desktop web browser
 LICENSE=	gnu-gpl-v3
 

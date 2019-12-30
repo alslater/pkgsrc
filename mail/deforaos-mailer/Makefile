@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.25 2016/08/03 10:22:16 adam Exp $
+# $NetBSD: Makefile,v 1.33 2019/07/21 22:24:07 wiz Exp $
 
 DISTNAME=	Mailer-0.1.8
 PKGNAME=	deforaos-mailer-0.1.8
-PKGREVISION=	1
+PKGREVISION=	8
 CATEGORIES=	mail
-MASTER_SITES=	http://www.defora.org/os/download/download/4439/
+MASTER_SITES=	https://www.defora.org/os/download/download/4439/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS desktop e-mail client
 LICENSE=	modified-bsd
 

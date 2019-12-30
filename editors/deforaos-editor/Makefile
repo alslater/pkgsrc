@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.16 2016/08/03 10:22:40 adam Exp $
+# $NetBSD: Makefile,v 1.24 2019/07/21 22:24:41 wiz Exp $
 #
 
 DISTNAME=	Editor-0.4.0
 PKGNAME=	deforaos-editor-0.4.0
-PKGREVISION=	1
+PKGREVISION=	8
 CATEGORIES=	editors
-MASTER_SITES=	http://www.defora.org/os/download/download/4398/
+MASTER_SITES=	https://www.defora.org/os/download/download/4398/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS desktop text editor
 
 LICENSE=	2-clause-bsd

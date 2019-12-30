@@ -1,15 +1,18 @@
-# $NetBSD: Makefile,v 1.17 2016/12/22 12:51:16 maya Exp $
+# $NetBSD: Makefile,v 1.23 2019/12/19 22:11:51 joerg Exp $
 #
 
-DISTNAME=	libSystem-0.3.0
-PKGNAME=	deforaos-libsystem-0.3.0
+DISTNAME=	libSystem-0.4.2
+PKGNAME=	deforaos-libsystem-0.4.2
 CATEGORIES=	devel
-MASTER_SITES=	http://www.defora.org/os/download/download/4392/
+MASTER_SITES=	https://ftp.defora.org/pub/DeforaOS/System/src/libSystem/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS core system library
-LICENSE=	gnu-lgpl-v3
+LICENSE=	2-clause-bsd
+
+TOOL_DEPENDS+=	libxslt-[0-9]*:../../textproc/libxslt
+BUILD_DEPENDS+=	docbook-xsl-[0-9]*:../../textproc/docbook-xsl
 
 MAKE_FLAGS+=	PREFIX=${PREFIX}
 MAKE_FLAGS+=	DESTDIR=${DESTDIR}
@@ -17,6 +20,8 @@ MAKE_FLAGS+=	CFLAGS=${CFLAGS:Q}
 MAKE_FLAGS+=	LDFLAGS=${LDFLAGS:Q}
 MAKE_FLAGS+=	INSTALL=${INSTALL:Q}
 AUTO_MKDIRS=	yes
+
+#TEST_TARGET=	tests
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -33,6 +38,4 @@ REPLACE_SH=	tests/tests.sh
 
 DL_AUTO_VARS=	yes
 .include "../../mk/dlopen.buildlink3.mk"
-BUILDLINK_API_DEPENDS.gtk-doc+=	gtk-doc>=1.20
-.include "../../textproc/gtk-doc/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
