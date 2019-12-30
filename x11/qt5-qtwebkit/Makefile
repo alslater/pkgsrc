@@ -1,20 +1,73 @@
-# $NetBSD: Makefile,v 1.37 2016/12/04 05:17:17 ryoon Exp $
+# $NetBSD: Makefile,v 1.68 2019/11/05 14:58:46 adam Exp $
 
-DISTNAME=	qtwebkit-opensource-src-${QTVERSION}
-PKGNAME=	qt5-qtwebkit-${QTVERSION}
-PKGREVISION=	8
+DISTNAME=	qtwebkit-${QTWKVERSION}
+PKGNAME=	qt5-qtwebkit-${QTWKVERSION:S/-/./}
+PKGREVISION=	2
+MASTER_SITES=	${MASTER_SITE_GITHUB:=qtwebkit/}
+GITHUB_PROJECT=	qtwebkit
+GITHUB_RELEASE=	${DISTNAME}
+CATEGORIES=	x11
+
+MAINTAINER=	pkgsrc-users@NetBSD.org
+HOMEPAGE=	https://github.com/qtwebkit/qtwebkit/wiki
 COMMENT=	Qt5 WebView module
+LICENSE=	gnu-lgpl-v2.1 AND gnu-gpl-v3
+EXTRACT_SUFX=	.tar.xz
+
+QTWKVERSION=	5.212.0-alpha3
+
+PYTHON_VERSIONS_ACCEPTED=	27 # as of 5.212.0-alpha2
+
+.include "../../mk/dlopen.buildlink3.mk"
+BUILDLINK_TRANSFORM+=   opt:-ldl:${BUILDLINK_LDADD.dl:M*}
+
+USE_LANGUAGES=		c c++11
+USE_TOOLS+=		gmake perl:build pkg-config bison flex sed
+USE_CMAKE=		yes
+CMAKE_ARG_PATH=		..
+CONFIGURE_DIRS=		_build
+CMAKE_INSTALL_PREFIX=	${PREFIX}/qt5
+TEST_TARGET=		test
+
+CMAKE_ARGS+=		-DPORT=Qt
+CMAKE_ARGS+=		-DENABLE_TOOLS=OFF
+CMAKE_ARGS+=		-DCMAKE_BUILD_TYPE=Release
+CMAKE_ARGS+=		-DSHARED_CORE:BOOL=ON
+CMAKE_ARGS+=		-DUSE_SYSTEM_MALLOC:BOOL=ON
+CMAKE_ARGS+=		-DUSE_LD_GOLD:BOOL=OFF
+CMAKE_ARGS+=		-DENABLE_API_TESTS=OFF
+
+CMAKE_ARGS+=		-DKDE_INSTALL_LIBEXECDIR=${CMAKE_INSTALL_PREFIX}/libexec
+#CMAKE_ARGS+=		-DLIBEXEC_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/libexec
+
+GCC_REQD+=	4.9
+
+pre-configure:
+	${MKDIR} ${WRKSRC}/_build
+
+# wcstof(3) etc. is used in C++ code.
+CFLAGS.NetBSD+=		-D_NETBSD_SOURCE
+
+## for GL_GLEXT_LEGACY with GL/gl.h error, GL_ARB_shader_objects is not defined.
+#BUILDLINK_TRANSFORM+=	rm:-Wundef
+
+PLIST_VARS+=		mac unix
+.if ${OPSYS} == "Darwin"
+PLIST.mac=		yes
+.else
+PLIST.unix=		yes
+.endif
+
+# avoid creating a .qt directory in the users home directory
+SCRIPTS_ENV+=		HOME=${WRKDIR}
 
 BUILD_DEPENDS+=		gperf-[0-9]*:../../devel/gperf
 
-USE_TOOLS+=		bison flex pkg-config sed
 REPLACE_PERL+=		Source/WebKit2/Scripts/generate-forwarding-headers.pl
 
-MAKE_ENV+=		QTDIR=${QTDIR}
+#MAKE_ENV+=		QTDIR=${QTDIR}
 INSTALL_ENV+=		INSTALL_ROOT=${DESTDIR}
 INSTALLATION_DIRS+=	lib/pkgconfig
-
-.include "../../x11/qt5-qtbase/Makefile.common"
 
 .if ${_USE_CWRAPPERS} == "yes"
 BUILDLINK_TRANSFORM+=	R:${WRKSRC}/lib:${QTDIR}/lib
@@ -26,10 +79,15 @@ BUILDLINK_TRANSFORM+=	rpath:${WRKSRC}/lib:${QTDIR}/lib
 LDFLAGS+=	-Wl,-no-keep-memory -Wl-reduce-memory
 .endif
 
+# 64-bit atomic ops are required
+.if ${MACHINE_ARCH} == "i386"
+CXXFLAGS+=	-march=i586
+.endif
+
 post-install:
 .for i in Qt5WebKit.pc Qt5WebKitWidgets.pc
 	cd ${DESTDIR}${PREFIX}/lib/pkgconfig && \
-	ln -f -s ${QTPREFIX}/lib/pkgconfig/${i} ${i}
+	ln -f -s ${QTDIR}/lib/pkgconfig/${i} ${i}
 .endfor
 
 .include "../../databases/sqlite3/buildlink3.mk"
@@ -38,10 +96,13 @@ post-install:
 .endif
 .include "../../graphics/libwebp/buildlink3.mk"
 .include "../../mk/curses.buildlink3.mk"
+.include "../../textproc/hyphen/buildlink3.mk"
 .include "../../textproc/icu/buildlink3.mk"
 .include "../../textproc/libxslt/buildlink3.mk"
 .if ${OPSYS} != "Darwin"
-.include "../../multimedia/gst-plugins0.10-base/buildlink3.mk"
+# https://github.com/GStreamer/gst-plugins-bad/commit/b9e15fddb14b2cde6470255794ef130523885e9f
+BUILDLINK_API_DEPENDS.gst-plugins1-base+=	gst-plugins1-base>=1.15.1
+.include "../../multimedia/gst-plugins1-base/buildlink3.mk"
 .include "../../x11/libXcomposite/buildlink3.mk"
 .endif
 .include "../../x11/qt5-qtdeclarative/buildlink3.mk"

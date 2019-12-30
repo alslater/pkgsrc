@@ -1,29 +1,39 @@
-# $NetBSD: Makefile,v 1.25 2016/12/04 05:17:16 ryoon Exp $
+# $NetBSD: Makefile,v 1.56 2019/11/05 14:58:46 adam Exp $
 
-DISTNAME=	qttools-opensource-src-${QTVERSION}
+DISTNAME=	qttools-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-qttools-${QTVERSION}
-PKGREVISION=	8
 COMMENT=	Qt5 tools
 
 DEPENDS+=		xdg-utils-[0-9]*:../../misc/xdg-utils
 
 MAKE_ENV+=		QTDIR=${QTDIR}
-
 INSTALL_ENV+=		INSTALL_ROOT=${DESTDIR}
 INSTALLATION_DIRS+=	lib/pkgconfig
 
+PKG_SUPPORTED_OPTIONS+=	llvm
+PKG_SUGGESTED_OPTIONS+=	llvm
+PLIST_VARS+=		llvm
+
 .include "../../x11/qt5-qtbase/Makefile.common"
 
-QTPKGCONFIGPC=		Qt5CLucene.pc Qt5DesignerComponents.pc Qt5UiTools.pc \
-			Qt5Designer.pc Qt5Help.pc
+.if !empty(PKG_OPTIONS:Mllvm)
+PLIST.llvm=		yes
+MAKE_ENV+=		LLVM_INSTALL_DIR=${BUILDLINK_PREFIX.clang}
+.include "../../lang/clang/buildlink3.mk"
+.endif
+
+QTPKGCONFIGPC=		Qt5Designer.pc Qt5Help.pc Qt5UiTools.pc
 
 post-install:
 .for i in ${QTPKGCONFIGPC}
 	cd ${DESTDIR}${PREFIX}/lib/pkgconfig && \
-	ln -f -s ${QTPREFIX}/lib/pkgconfig/${i} ${i}
+	${LN} -f -s ${QTPREFIX}/lib/pkgconfig/${i} ${i}
 .endfor
 
+.include "../../x11/qt5-qtdeclarative/buildlink3.mk"
+.include "../../x11/qt5-qtlocation/buildlink3.mk"
+.include "../../x11/qt5-qtmultimedia/buildlink3.mk"
+.include "../../x11/qt5-qtsensors/buildlink3.mk"
+.include "../../x11/qt5-qtwebchannel/buildlink3.mk"
 .include "../../x11/qt5-qtxmlpatterns/buildlink3.mk"
-.include "../../x11/qt5-qtwebkit/buildlink3.mk"
-.include "../../x11/qt5-sqlite3/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
