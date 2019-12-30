@@ -1,4 +1,4 @@
-# $NetBSD: plugins.mk,v 1.12 2016/02/25 15:49:43 jperkin Exp $
+# $NetBSD: plugins.mk,v 1.17 2019/11/03 17:12:01 rillig Exp $
 #
 # This file is shared across the gst-plugins-{base,good} packages to
 # simplify their code.  It provides a framework to write simple packages
@@ -9,11 +9,11 @@
 DISTNAME=	gst-plugins-${GST_PLUGINS0.10_TYPE}-${GST_PLUGINS0.10_VER}
 PKGNAME=	${DISTNAME:S/plugins/plugins0.10/}
 CATEGORIES=	multimedia gnome
-MASTER_SITES=	http://gstreamer.freedesktop.org/src/gst-plugins-${GST_PLUGINS0.10_TYPE}/
+MASTER_SITES=	https://gstreamer.freedesktop.org/src/gst-plugins-${GST_PLUGINS0.10_TYPE}/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gstreamer.net/
+HOMEPAGE=	https://gstreamer.freedesktop.org/
 COMMENT=	Open source multimedia framework -
 
 DISTINFO_FILE=	${.CURDIR}/../../multimedia/gst-plugins0.10-${GST_PLUGINS0.10_TYPE}/distinfo
@@ -23,7 +23,6 @@ PATCHDIR=	${.CURDIR}/../../multimedia/gst-plugins0.10-${GST_PLUGINS0.10_TYPE}/pa
 GNU_CONFIGURE=		yes
 USE_TOOLS+=		gmake pkg-config
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_PKGLOCALEDIR=	yes
 
 CONFIGURE_ARGS+=	--disable-examples
@@ -57,9 +56,9 @@ COMMENT+=		${GST_PLUGINS0.10_NAME} plugin
 GST_PLUGINS0.10_FLAGS?=	${GST_PLUGINS0.10_NAME}
 GST_PLUGINS0.10_DIRS?=	non-existent
 
-.for _f_ in ${GST_PLUGINS0.10_FLAGS}
+.  for _f_ in ${GST_PLUGINS0.10_FLAGS}
 CONFIGURE_ARGS:=	${CONFIGURE_ARGS:S/--disable-${_f_}/--enable-${_f_}/}
-.endfor
+.  endfor
 
 BUILD_DIRS=		${GST_PLUGINS0.10_DIRS}
 INSTALL_DIRS=		${GST_PLUGINS0.10_DIRS}
@@ -69,9 +68,9 @@ SUBST_CLASSES+=		libs
 SUBST_MESSAGE.libs=	Fixing path to dependent libraries.
 SUBST_STAGE.libs=	pre-configure
 SUBST_FILES.libs=
-.for _d_ in ${GST_PLUGINS0.10_DIRS}
+.  for _d_ in ${GST_PLUGINS0.10_DIRS}
 SUBST_FILES.libs+=	${_d_}/Makefile.in
-.endfor
+.  endfor
 SUBST_SED.libs=		-e 's|$$(top_builddir)/gst-libs/gst/.*/libgst|${BUILDLINK_PREFIX.gst-plugins0.10-${GST_PLUGINS0.10_TYPE}}/lib/libgst|g'
 
 .include "../../multimedia/gst-plugins0.10-${GST_PLUGINS0.10_TYPE}/buildlink3.mk"

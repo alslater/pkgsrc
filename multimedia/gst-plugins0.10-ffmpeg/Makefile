@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.34 2016/08/17 00:06:43 ryoon Exp $
+# $NetBSD: Makefile,v 1.39 2019/08/11 13:22:02 wiz Exp $
 #
 
 DISTNAME=	gst-ffmpeg-0.10.13
-PKGREVISION=	14
+PKGREVISION=	18
 CATEGORIES=	multimedia
-MASTER_SITES=	http://gstreamer.freedesktop.org/src/gst-ffmpeg/
+MASTER_SITES=	https://gstreamer.freedesktop.org/src/gst-ffmpeg/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://gstreamer.freedesktop.org/src/gst-ffmpeg/
+HOMEPAGE=	https://gstreamer.freedesktop.org/src/gst-ffmpeg/
 COMMENT=	GStreamer ffmpeg plugin
 
 USE_PKGLOCALEDIR=	yes
