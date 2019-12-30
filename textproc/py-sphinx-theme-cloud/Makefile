@@ -1,20 +1,19 @@
-# $NetBSD: Makefile,v 1.6 2016/06/08 17:43:41 wiz Exp $
+# $NetBSD: Makefile,v 1.9 2019/11/25 10:44:11 adam Exp $
 
-DISTNAME=	cloud_sptheme-${VERSION}
-PKGNAME=	${PYPKGPREFIX}-sphinx-theme-cloud-${VERSION}
-VERSION=	1.7.1
+DISTNAME=	cloud_sptheme-1.10.0
+PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/cloud_sptheme/sphinx-theme-cloud/}
 CATEGORIES=	textproc python
 MASTER_SITES=	${MASTER_SITE_PYPI:=c/cloud_sptheme/}
 
 MAINTAINER=	darcy@NetBSD.org
-HOMEPAGE=	http://packages.python.org/cloud_sptheme/
+HOMEPAGE=	https://bitbucket.org/ecollins/cloud_sptheme
 COMMENT=	Sphinx cloud theme
 LICENSE=	modified-bsd
 
-DEPENDS+=	${PYPKGPREFIX}-sphinx-[0-9]*:../../textproc/py-sphinx
+PYTHON_VERSIONED_DEPENDENCIES=	sphinx
 
-USE_LANGUAGES=	#none
+USE_LANGUAGES=	# none
 
-.include "../../lang/python/application.mk"
 .include "../../lang/python/egg.mk"
+.include "../../lang/python/versioned_dependencies.mk"
 .include "../../mk/bsd.pkg.mk"
