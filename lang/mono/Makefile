@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.171 2016/12/04 05:17:07 ryoon Exp $
+# $NetBSD: Makefile,v 1.187 2019/09/11 11:53:39 nia Exp $
 
 DISTNAME=	mono-4.0.4.1
-PKGREVISION=	7
+PKGREVISION=	17
 CATEGORIES=	lang
-MASTER_SITES=	http://download.mono-project.com/sources/mono/
+MASTER_SITES=	https://download.mono-project.com/sources/mono/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.mono-project.com/
+HOMEPAGE=	https://www.mono-project.com/
 COMMENT=	Open source implementation of the .NET Development Framework
 LICENSE=	mit AND gnu-gpl-v2 AND gnu-lgpl-v2 AND apache-2.0
 
@@ -24,7 +24,9 @@ EXTRACT_USING=	gtar
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--sysconfdir=${PKG_SYSCONFDIR:Q} --with-icu=yes
 CONFIGURE_ARGS+=	--with-preview=yes --with-libgdiplus=installed
-CONFIGURE_ARGS+=	--disable-dtrace --with-gc=none
+CONFIGURE_ARGS+=	--disable-dtrace
+
+CTF_SUPPORTED=	no	# https://smartos.org/bugview/OS-6510
 
 .include "options.mk"
 
@@ -111,19 +113,19 @@ INSTALLATION_DIRS+=	share/examples/mono/4.5
 TEST_TARGET=	check
 
 SUBST_CLASSES+=			fix-prefix
-SUBST_STAGE.fix-prefix=		post-patch
+SUBST_STAGE.fix-prefix=		pre-configure
 SUBST_MESSAGE.fix-prefix=	Fixing relative prefix
 SUBST_FILES.fix-prefix=		${PKGCONFIG_OVERRIDE}
 SUBST_SED.fix-prefix=		-e 's,$${pcfiledir}/../..,\@prefix\@,g'
 
 SUBST_CLASSES+=			fix-mcs
-SUBST_STAGE.fix-mcs=		post-patch
+SUBST_STAGE.fix-mcs=		pre-configure
 SUBST_MESSAGE.fix-mcs=		Fixing mcs default prefix
 SUBST_FILES.fix-mcs=		mcs/build/config-default.make
 SUBST_VARS.fix-mcs=		PREFIX PKGMANDIR
 
 SUBST_CLASSES+=			fix-cfgdir
-SUBST_STAGE.fix-cfgdir=		post-patch
+SUBST_STAGE.fix-cfgdir=		pre-configure
 SUBST_MESSAGE.fix-cfgdir=	Fixing configuration files install dir
 SUBST_FILES.fix-cfgdir=		mcs/tools/mconfig/Makefile
 SUBST_SED.fix-cfgdir=		-e 's,$$(sysconfdir)/mono,${EGDIR},g'
@@ -132,19 +134,36 @@ SUBST_CLASSES+=			fix-libx11
 SUBST_STAGE.fix-libx11=		pre-configure
 SUBST_MESSAGE.fix-libx11=	Fixing libX11 search path configuration
 SUBST_FILES.fix-libx11=		configure
-SUBST_SED.fix-libx11=		-e 's,@X11BASE@,${X11BASE},g'
+SUBST_VARS.fix-libx11=		X11BASE
 
-PLIST_VARS=	monodoc
+PLIST_VARS=	libgc monodoc
 
 .include "../../mk/bsd.prefs.mk"
+
+SUBST_CLASSES+=			fix-domlib
+SUBST_STAGE.fix-domlib=		pre-configure
+SUBST_FILES.fix-domlib=		mcs/class/System/System.Net.NetworkInformation/IPGlobalProperties.cs
+.if ${OPSYS} == "SunOS"
+SUBST_SED.fix-domlib=		-e 's,@DOMAINLIB@,libnsl,g'
+.else
+SUBST_SED.fix-domlib=		-e 's,@DOMAINLIB@,libc,g'
+.endif
+
+# The builtin boehm-gc fails on SunOS with newer GCC, just use the pkgsrc
+# version in any case as it is optimised.
+.if ${OPSYS} == "SunOS"
+.include "../../devel/boehm-gc/buildlink3.mk"
+CONFIGURE_ARGS+=	--with-gc=boehm
+.else
+CONFIGURE_ARGS+=	--with-gc=included
+PLIST.libgc=		yes
+.endif
 
 .if ${OPSYS} == "SunOS"
 CFLAGS+=		-D_XOPEN_SOURCE=600
 CONFIGURE_ARGS+=	--with-mcs-docs=no
 CONFIGURE_ARGS+=	--with-sgen=no
 CONFIGURE_ARGS+=	--with-sigaltstack=no
-CONFIGURE_ENV+=		ac_cv_func_getdomainname=no
-CONFIGURE_ENV+=		ac_cv_func_setdomainname=no
 ULIMIT_CMD_datasize=	ulimit -d 524288
 ULIMIT_CMD_stacksize=	ulimit -s 10240
 .elif ${OPSYS} == "NetBSD" && ${MACHINE_ARCH:M*arm*}
