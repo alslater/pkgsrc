@@ -1,4 +1,4 @@
-# $NetBSD: test.mk,v 1.18 2012/05/27 14:32:29 cheusov Exp $
+# $NetBSD: test.mk,v 1.23 2019/10/13 11:08:10 rillig Exp $
 #
 # After the "build" phase, many packages provide some sort of self-test
 # that can be run on the not-yet installed package. To enable these
@@ -40,7 +40,12 @@
 
 _VARGROUPS+=		test
 _USER_VARS.test=	PKGSRC_RUN_TEST
-_PKG_VARS.test=		TEST_DIRS TEST_ENV TEST_MAKE_FLAGS MAKE_FILE TEST_TARGET
+_PKG_VARS.test=		TEST_TARGET TEST_DIRS TEST_ENV TEST_MAKE_FLAGS
+_USE_VARS.test=		BUILD_DIRS MAKE_ENV MAKE_FLAGS MAKEFLAGS MAKE_FILE \
+			RECURSIVE_MAKE INTERACTIVE_STAGE BATCH WRKSRC
+_IGN_VARS.test=		_* PKGNAME .CURDIR
+_SORTED_VARS.test=	*_ENV
+_LISTED_VARS.test=	*_DIRS *_FLAGS
 
 TEST_DIRS?=		${BUILD_DIRS}
 TEST_ENV+=		${MAKE_ENV}
@@ -58,13 +63,14 @@ TEST_MAKE_CMD= \
 ###
 _TEST_TARGETS+=	check-vulnerable
 _TEST_TARGETS+=	build
+_TEST_TARGETS+=	test-depends
 _TEST_TARGETS+=	acquire-test-lock
 _TEST_TARGETS+=	${_COOKIE.test}
 _TEST_TARGETS+=	release-test-lock
 
 .PHONY: test
 .if !target(test)
-.  if exists(${_COOKIE.test})
+.  if exists(${_COOKIE.test}) && !${_CLEANING}
 test:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -78,7 +84,7 @@ test: barrier
 acquire-test-lock: acquire-lock
 release-test-lock: release-lock
 
-.if exists(${_COOKIE.test})
+.if exists(${_COOKIE.test}) && !${_CLEANING}
 ${_COOKIE.test}:
 	@${DO_NADA}
 .else
@@ -121,7 +127,7 @@ test-message:
 ### test-check-interactive checks whether we must do an interactive
 ### test or not.
 ###
-test-check-interactive:
+test-check-interactive: .PHONY
 .if !empty(INTERACTIVE_STAGE:Mtest) && defined(BATCH)
 	@${ERROR_MSG} "The test stage of this package requires user interaction"
 	@${ERROR_MSG} "Please test manually with:"
@@ -142,10 +148,9 @@ test-check-interactive:
 .if !target(do-test)
 .  if defined(TEST_TARGET) && !empty(TEST_TARGET)
 do-test:
-.    for _dir_ in ${TEST_DIRS}
-	${RUN}${_ULIMIT_CMD}			\
-	cd ${WRKSRC} && cd ${_dir_} &&					\
-	${TEST_MAKE_CMD} ${TEST_TARGET}
+.    for dir in ${TEST_DIRS}
+	${RUN}${_ULIMIT_CMD} cd ${WRKSRC} && cd ${dir} \
+	&& ${TEST_MAKE_CMD} ${TEST_TARGET}
 .    endfor
 .  else
 do-test:

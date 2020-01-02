@@ -1,4 +1,4 @@
-# $NetBSD: bsd.prefs.mk,v 1.388 2016/10/27 10:31:05 jperkin Exp $
+# $NetBSD: bsd.prefs.mk,v 1.405 2019/11/09 21:24:24 maya Exp $
 #
 # This file includes the mk.conf file, which contains the user settings.
 #
@@ -60,6 +60,11 @@ MAKEFLAGS+=	_MAKE=${_MAKE:Q}
 .  endif
 .endif
 MAKE:=	${_MAKE}
+
+# Whether bmake has been called with one of the "clean" targets followed by
+# another non-cleaning target like "depends" or "build". This is to make
+# the call "bmake clean depends" equivalent to "bmake clean && bmake depends".
+_CLEANING:=	${"${.TARGETS:C,( [[:alnum:]-]*clean[[:alnum:]-]*)+$,,W:M*clean*}":?yes:}
 
 .if exists(/usr/bin/uname)
 UNAME=/usr/bin/uname
@@ -207,6 +212,9 @@ LOWER_VENDOR?=		sgi
 .elif ${OPSYS} == "Linux"
 OS_VERSION:=		${OS_VERSION:C/-.*$//}
 LOWER_OPSYS?=		linux
+.  if exists(/etc/lsb-release)
+CHROMEOS_RELEASE_NAME!=	awk -F = '$$1 == "CHROMEOS_RELEASE_NAME" { print $$2 }' /etc/lsb-release
+.  endif
 .  if exists(/etc/debian_version)
 LOWER_VENDOR?=		debian
 .  elif exists(/etc/mandrake-release)
@@ -217,10 +225,17 @@ LOWER_VENDOR?=		redhat
 LOWER_VENDOR?=		slackware
 .  elif exists(/etc/ssdlinux_version)
 LOWER_VENDOR?=		ssd
+.  elif !empty(CHROMEOS_RELEASE_NAME)
+LOWER_VENDOR?=		chromeos
 .  elif ${MACHINE_ARCH} == "i386"
 LOWER_VENDOR?=          pc
 .  endif
 LOWER_VENDOR?=          unknown
+OS_VARIANT!=		${UNAME} -r
+OS_VARIANT:=		${OS_VARIANT:C/^.*-//}
+.  if ${OS_VARIANT} != "Microsoft"
+OS_VARIANT=		${LOWER_VENDOR}
+.  endif
 .  if !defined(HOST_MACHINE_ARCH)
 HOST_MACHINE_ARCH!=	${UNAME} -m
 MAKEFLAGS+=		HOST_MACHINE_ARCH=${HOST_MACHINE_ARCH:Q}
@@ -245,11 +260,6 @@ LOWER_VENDOR?=		hp
 LOWER_VENDOR?=		sun
 LOWER_OPSYS?=		solaris
 LOWER_OPSYS_VERSUFFIX=	2.${OS_VERSION:C/5.//}
-# XXX: Required for multiarch, there's no good workaround.  Building bmake as
-# multiarch causes circular dependencies due to abiexec.
-MACHINE_ARCH.32=	i386
-MACHINE_ARCH.64=	x86_64
-MACHINE_ARCH=		${MACHINE_ARCH.${ABI}}
 _UNAME_V!=		${UNAME} -v
 .  if !empty(_UNAME_V:Mjoyent_*)
 OS_VARIANT=		SmartOS
@@ -276,9 +286,8 @@ OS_VARIANT=		SCOOSR6
 .  endif
 
 .elif ${OPSYS} == "Minix"
-LOWER_VENDOR?=		pc
+LOWER_VENDOR?=		unknown
 LOWER_OPSYS:=		${OPSYS:tl}
-LDFLAGS+=		-lcompat_minix -lminlib
 
 .elif !defined(LOWER_OPSYS)
 LOWER_OPSYS:=		${OPSYS:tl}
@@ -329,6 +338,8 @@ OBJECT_FMT?=	a.out
 OBJECT_FMT?=	ELF
 .elif ${OPSYS} == "DragonFly"
 OBJECT_FMT=	ELF
+.elif ${OPSYS} == "Minix"
+OBJECT_FMT=	ELF
 .elif ${OPSYS} == "MirBSD"
 OBJECT_FMT=	ELF
 MKPROFILE=	no
@@ -349,6 +360,8 @@ OBJECT_FMT=	SOM
 .  endif
 .elif ${OPSYS} == "Cygwin"
 OBJECT_FMT=	PE
+.elif ${OPSYS} == "SCO_SV"
+OBJECT_FMT=	ELF
 .endif
 
 # Calculate depth
@@ -382,6 +395,9 @@ SHAREMODE?=		${DOCMODE}
 .  include "${_PKGSRC_TOPDIR}/mk/platform/NetBSD.mk"
 PKG_FAIL_REASON+=	"missing mk/platform/${OPSYS}.mk"
 .endif
+
+# Set default SHLIB_TYPE to the ${OPSYS}-specific shared library type.
+SHLIB_TYPE?=		${_OPSYS_SHLIB_TYPE}
 
 PKGDIRMODE?=		755
 
@@ -688,33 +704,91 @@ PREPEND_PATH+=		${X11BASE}/bin
 .endif
 PREPEND_PATH+=		${LOCALBASE}/bin
 
+.if ${_USE_NEW_PKGINSTALL:Uno} == "no"
 # Support alternative init systems.
 #
 INIT_SYSTEM?=		rc.d
 _BUILD_DEFS+=		INIT_SYSTEM
+.endif
 
+# Build Position Independent Executables if supported
+# Allows the security mitigation of ASLR to be used.
+# Impact: very small performance drop.
+#
 _PKGSRC_MKPIE=	no
-.if (${PKGSRC_MKPIE:tl} == "yes") && \
-    (${_OPSYS_SUPPORTS_MKPIE:Uno} == "yes")
+.if ${PKGSRC_MKPIE:tl} == "yes" && \
+    ${MKPIE_SUPPORTED:Uyes:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_MKPIE:Uno} == "yes"
 _PKGSRC_MKPIE=	yes
 .endif
 
+# Enable reproducible build flags
+# Adjusts debug symbols to omit workdir references
+#
+_PKGSRC_MKREPRO=	no
+.if ${PKGSRC_MKREPRO:tl} == "yes" && \
+    ${MKREPRO_SUPPORTED:Uyes:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_MKREPRO:Uno} == "yes"
+_PKGSRC_MKREPRO=	yes
+.endif
+
+# Enable FORTIFY
+# Security mitigation: compile and run-time checks for buffer overflows.
+# Impact: performance drop
+#
 _PKGSRC_USE_FORTIFY=	no
-.if (${PKGSRC_USE_FORTIFY:tl} == "yes") && \
-    (${_OPSYS_SUPPORTS_FORTIFY:Uno} == "yes")
+.if ${PKGSRC_USE_FORTIFY:tl} != "no" && \
+    ${FORTIFY_SUPPORTED:Uyes:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_FORTIFY:Uno} == "yes"
 _PKGSRC_USE_FORTIFY=	yes
 .endif
 
+# Use read-only relocations
+# Security mitigation: some ELF sections are mapped read-only.
+# Impact: increases program startup time as it disables lazy-binding
+#
 _PKGSRC_USE_RELRO=	no
-.if (${PKGSRC_USE_RELRO:tl} == "yes") && \
-    (${_OPSYS_SUPPORTS_RELRO:Uno} == "yes")
+.if ${PKGSRC_USE_RELRO:tl} != "no" && \
+    ${RELRO_SUPPORTED:Uyes:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_RELRO:Uno} == "yes"
 _PKGSRC_USE_RELRO=	yes
 .endif
 
+# Enable Stack-Smashing Protection
+# Security mitigation: add and check canaries on the stack at runtime
+# to find buffer overruns.
+# Impact: performance drop
+#
 _PKGSRC_USE_SSP=	no
-.if (${PKGSRC_USE_SSP:tl} != "no") && \
-    (${_OPSYS_SUPPORTS_SSP:Uno} == "yes")
+.if ${PKGSRC_USE_SSP:tl} != "no" && \
+    ${SSP_SUPPORTED:Uyes:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_SSP:Uno} == "yes"
 _PKGSRC_USE_SSP=	yes
+.endif
+
+# Enable stack check
+# Generate code to ensure we don't exceed our given stack.
+# Impact: performance drop
+#
+_PKGSRC_USE_STACK_CHECK=no
+.if ${PKGSRC_USE_STACK_CHECK:tl} != "no" && \
+    ${STACK_CHECK_SUPPORTED:Uyes:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_STACK_CHECK:Uno} == "yes"
+_PKGSRC_USE_STACK_CHECK=yes
+.endif
+
+# Enable CTF conversion if the user requested it, the OPSYS supports it, there
+# is a tool for it, and the package supports it.  We also need to explicitly
+# turn on _INSTALL_UNSTRIPPED as conversion is impossible on stripped files.
+#
+.if ${PKGSRC_USE_CTF:Uno:tl} == "yes" && \
+    ${_OPSYS_SUPPORTS_CTF:Uno:tl} == "yes" && \
+    defined(TOOLS_PLATFORM.ctfconvert) && \
+    ${CTF_SUPPORTED:Uyes:tl} == "yes"
+_PKGSRC_USE_CTF=	yes
+_INSTALL_UNSTRIPPED=	# defined
+.else
+_PKGSRC_USE_CTF=	no
 .endif
 
 # Enable cwrappers if not building the wrappers themselves, and if the user has
@@ -740,6 +814,11 @@ _USE_CWRAPPERS=		no
 # System features framework
 .include "features/features-vars.mk"
 
+.if ${_USE_NEW_PKGINSTALL:Uno} != "no"
+# Init services framework
+.include "init/bsd.init-vars.mk"
+.endif
+
 # Package system format definitions
 .include "pkgformat/bsd.pkgformat-vars.mk"
 
@@ -764,8 +843,7 @@ _SYS_VARS.dirs=		WRKDIR DESTDIR PKG_SYSCONFBASEDIR
 # Keywords: BROKEN_ON_PLATFORM 64bit
 #
 LP64PLATFORMS=		*-*-aarch64 *-*-aarch64eb *-*-alpha *-*-ia64 \
-			*-*-mips64eb *-*-mips64el *-*-powerpc64 *-*-riscv64 \
-			*-*-sparc64 *-*-x86_64
+			*-*-powerpc64 *-*-riscv64 *-*-sparc64 *-*-x86_64
 
 # Lists of big-endian and little-endian platforms, to be used with
 # BROKEN_ON_PLATFORM.
@@ -774,8 +852,8 @@ LP64PLATFORMS=		*-*-aarch64 *-*-aarch64eb *-*-alpha *-*-ia64 \
 #
 _BIGENDIANCPUS=		coldfire hppa m68000 m68k mips64eb mipseb or1k \
 			powerpc powerpc64 sh3eb sparc sparc64
-_LITTLEENDIANCPUS=	alpha i386 ia64 mips64el mipsel riscv32 riscv64 \
-			sh3el vax x86_64
+_LITTLEENDIANCPUS=	alpha i386 ia64 mips64el mipsel powerpc64le riscv32 \
+			riscv64 sh3el vax x86_64
 
 # piles of ARM variants
 _ARMCPUS+=		arm earm earmhf earmv4 earmv5 earmv6 earmv6hf

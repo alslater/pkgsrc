@@ -1,4 +1,4 @@
-#	$NetBSD: bsd.pkg.mk,v 1.2021 2016/08/26 16:51:56 joerg Exp $
+#	$NetBSD: bsd.pkg.mk,v 1.2033 2019/11/04 17:47:30 rillig Exp $
 #
 # This file is in the public domain.
 #
@@ -45,6 +45,9 @@ PKGNAME_NOREV=		${PKGNAME}
 .endif
 PKGVERSION_NOREV=	${PKGNAME_NOREV:C/^.*-//}
 
+_VARGROUPS+=		pkgname
+_DEF_VARS.pkgname=	PKGBASE PKGVERSION PKGNAME_NOREV PKGNAME PKGVERSION_NOREV
+
 # Fail-safe in the case of circular dependencies
 .if defined(_PKGSRC_DEPS) && defined(PKGNAME) && !empty(_PKGSRC_DEPS:M${PKGNAME})
 PKG_FAIL_REASON+=	"Circular dependency detected"
@@ -80,8 +83,6 @@ PKG_FAIL_REASON+=	"Circular dependency detected"
 # Transform package Makefile variables and set defaults
 ############################################################################
 
-MKCRYPTO?=		YES	# build crypto packages by default
-
 ##### Others
 
 BUILD_DEPENDS?=		# empty
@@ -95,25 +96,12 @@ MAINTAINER=${OWNER}
 MAINTAINER?=		pkgsrc-users@NetBSD.org
 .endif
 PKGWILDCARD?=		${PKGBASE}-[0-9]*
+TEST_DEPENDS?=		# empty
 TOOL_DEPENDS?=		# empty
 .if defined(GITHUB_TAG)
 WRKSRC?=		${WRKDIR}/${GITHUB_PROJECT}-${GITHUB_TAG:C/^v//}
 .else
 WRKSRC?=		${WRKDIR}/${DISTNAME:U${PKGNAME_NOREV}}
-.endif
-
-# Multi-architecture support
-.if !empty(MULTIARCH:M[Yy][Ee][Ss]) && defined(USE_MULTIARCH)
-_MULTIARCH=     	YES
-BINARCHSUFFIX=		${BINARCHSUFFIX.${ABI}}
-INCARCHSUFFIX=		${INCARCHSUFFIX.${ABI}}
-LIBARCHSUFFIX=		${LIBARCHSUFFIX.${ABI}}
-.  if ${OPSYS} == "SunOS" && !empty(USE_MULTIARCH:Mbin)
-DEPENDS+=		abiexec-[0-9]*:../../pkgtools/abiexec
-.  endif
-MULTIARCH_DIRS.bin?=	bin sbin
-MULTIARCH_DIRS.lib?=	lib
-MULTIARCH_SKIP_DIRS.lib+=	lib/systemd
 .endif
 
 # Override for SU_CMD user check
@@ -172,7 +160,6 @@ CPPFLAGS+=	${CPP_PRECOMP_FLAGS}
 # to dependence builds.
 PKGSRC_SETENV?=	${SETENV}
 
-ALL_ENV+=	BINARCHSUFFIX=${BINARCHSUFFIX:Q}
 ALL_ENV+=	CC=${CC:Q}
 ALL_ENV+=	CFLAGS=${CFLAGS:M*:Q}
 ALL_ENV+=	CPPFLAGS=${CPPFLAGS:M*:Q}
@@ -191,7 +178,6 @@ ALL_ENV+=	LC_MONETARY=C
 ALL_ENV+=	LC_NUMERIC=C
 ALL_ENV+=	LC_TIME=C
 ALL_ENV+=	LDFLAGS=${LDFLAGS:M*:Q}
-ALL_ENV+=	LIBARCHSUFFIX=${LIBARCHSUFFIX:Q}
 ALL_ENV+=	LINKER_RPATH_FLAG=${LINKER_RPATH_FLAG:Q}
 ALL_ENV+=	PATH=${PATH:Q}:${LOCALBASE}/bin:${X11BASE}/bin
 ALL_ENV+=	PREFIX=${PREFIX}
@@ -206,9 +192,9 @@ BSD_MAKE_ENV+=	MANOWN=${MANOWN} MANGRP=${MANGRP}
 BSD_MAKE_ENV+=	SHAREOWN=${SHAREOWN} SHAREGRP=${SHAREGRP}
 BSD_MAKE_ENV+=	DOCOWN=${DOCOWN} DOCGRP=${DOCGRP}
 BSD_MAKE_ENV+=	BINMODE=${BINMODE} NONBINMODE=${NONBINMODE}
-BSD_MAKE_ENV+=	BINDIR=${PREFIX}/bin${BINARCHSUFFIX}
+BSD_MAKE_ENV+=	BINDIR=${PREFIX}/bin
 BSD_MAKE_ENV+=	INCSDIR=${PREFIX}/include
-BSD_MAKE_ENV+=	LIBDIR=${PREFIX}/lib${LIBARCHSUFFIX}
+BSD_MAKE_ENV+=	LIBDIR=${PREFIX}/lib
 BSD_MAKE_ENV+=	MANDIR=${PREFIX}/${PKGMANDIR}
 BSD_MAKE_ENV+=	STRIPFLAG=${_STRIPFLAG_INSTALL:Q}
 BSD_MAKE_ENV+=	MANINSTALL=${MANINSTALL:Q}
@@ -253,11 +239,6 @@ _NULL_COOKIE=		${WRKDIR}/.null
 SHCOMMENT?=		${ECHO_MSG} >/dev/null '***'
 
 LIBABISUFFIX?=
-
-# Multi-architecture builds
-BINARCHSUFFIX?=
-INCARCHSUFFIX?=
-LIBARCHSUFFIX?=
 
 TOUCH_FLAGS?=		-f
 
@@ -330,9 +311,15 @@ OVERRIDE_DIRDEPTH?=	2
 
 # Handle alternative init systems
 #
+.if ${_USE_NEW_PKGINSTALL:Uno} == "no"
 .if ${INIT_SYSTEM} == "smf"
 .  include "smf.mk"
 .endif
+.endif
+
+# Handle Reproducible Builds
+#
+.include "repro/repro.mk"
 
 # Define SMART_MESSAGES in /etc/mk.conf for messages giving the tree
 # of dependencies for building, and the current target.
@@ -392,13 +379,16 @@ USE_TOOLS+=								\
 # bsd.wrapper.mk
 USE_TOOLS+=	expr
 
-# scripts/shlib-type
-.if ${_OPSYS_SHLIB_TYPE} == "ELF/a.out"
-USE_TOOLS+=	file
-.endif
+.if ${_USE_NEW_PKGINSTALL:Uno} != "no"
+# Init services framework
+.include "init/bsd.init.mk"
 
+# Package tasks framework
+.include "pkgtasks/bsd.pkgtasks.mk"
+.else
 # INSTALL/DEINSTALL script framework
 .include "pkginstall/bsd.pkginstall.mk"
+.endif
 
 # Locking
 .include "internal/locking.mk"
@@ -452,16 +442,8 @@ _PATH_ORIG:=		${PATH}
 MAKEFLAGS+=		_PATH_ORIG=${_PATH_ORIG:Q}
 .endif
 
-.if !empty(PREPEND_PATH:M*)
-# This is very Special.  Because PREPEND_PATH is set with += in reverse order,
-# this command reverses the order again (since bootstrap bmake doesn't
-# yet support the :[-1..1] construct).
-_PATH_CMD= \
-	path=${_PATH_ORIG:Q};						\
-	for i in ${PREPEND_PATH}; do path="$$i:$$path"; done;		\
-	${ECHO} "$$path"
-PATH=	${_PATH_CMD:sh} # DOES NOT use :=, to defer evaluation
-.endif
+_PATH_COMPONENTS=	${PREPEND_PATH:[-1..1]} ${_PATH_ORIG:C,:, ,}
+PATH=	${_PATH_COMPONENTS:ts:}
 
 ################################################################
 # Many ways to disable a package.
@@ -470,9 +452,6 @@ PATH=	${_PATH_CMD:sh} # DOES NOT use :=, to defer evaluation
 #
 # Don't build a package if it's restricted and we don't want to
 # get into that.
-#
-# Don't build any package that utilizes strong cryptography, for
-# when the law of the land forbids it.
 #
 # Don't attempt to build packages against X if we don't have X.
 #
@@ -498,16 +477,12 @@ PKG_SKIP_REASON+= "${PKGNAME} may not be placed in source form on a CDROM:" \
 PKG_SKIP_REASON+= "${PKGNAME} is restricted:" \
 	 "    "${RESTRICTED:Q}
 .  endif
-.  if !(${MKCRYPTO} == "YES" || ${MKCRYPTO} == yes)
-.    if defined(CRYPTO)
-PKG_SKIP_REASON+= "${PKGNAME} may not be built, because it utilizes strong cryptography"
-.    endif
-.  endif
 .  if defined(USE_X11) && (${X11_TYPE} == "native") && !exists(${X11BASE})
 PKG_FAIL_REASON+= "${PKGNAME} uses X11, but ${X11BASE} not found"
 .  endif
-.  if defined(BROKEN)
-PKG_FAIL_REASON+= "${PKGNAME} is marked as broken:" ${BROKEN:Q}
+.  if ${BROKEN:U:M*}
+PKG_FAIL_REASON+=	"${PKGNAME} is marked as broken:"
+PKG_FAIL_REASON+=	${BROKEN}
 .  endif
 
 .include "license.mk"
@@ -599,7 +574,7 @@ all: ${_PKGSRC_BUILD_TARGETS}
 .endif
 
 .PHONY: makedirs
-makedirs: ${WRKDIR} ${FAKEHOMEDIR}
+makedirs: ${WRKDIR} ${FAKEHOMEDIR} _check-wrkdir-canonical
 
 ${WRKDIR}:
 .if !defined(KEEP_WRKDIR)
@@ -609,9 +584,23 @@ ${WRKDIR}:
 .endif
 	${RUN} umask 077 && ${MKDIR} ${WRKDIR}
 
+# If the WRKDIR is not canonical (such as when it contains a symlink),
+# various packages such as databases/mysql57-client will not find their
+# include files. See also checkarg_sane_absolute_path in bootstrap/bootstrap.
+.PHONY: _check-wrkdir-canonical
+_check-wrkdir-canonical: ${WRKDIR}
+	${RUN} cd ${WRKDIR}; d=`exec pwd`; ${TEST} "$$d" = ${WRKDIR}	\
+	|| ${FAIL_MSG} "[bsd.pkg.mk] The path to WRKDIR ${WRKDIR} must be canonical ($$d)."
+
 # Create a symlink from ${WRKDIR} to the package directory if
 # CREATE_WRKDIR_SYMLINK is "yes".
 #
+# This symlink is not used by pkgsrc and is only created for convenience.
+# Most other pkgsrc pathnames must not contain symlinks, to prevent
+# spurious build failures (see checkarg_sane_absolute_path in
+# bootstrap/bootstrap).
+#
+# Keywords: work wrkdir symlink
 CREATE_WRKDIR_SYMLINK?=	no
 
 .if defined(WRKOBJDIR) && !empty(CREATE_WRKDIR_SYMLINK:M[Yy][Ee][Ss])
@@ -649,6 +638,12 @@ ${.CURDIR}/${WRKDIR_BASENAME}:
 # MAKEFLAGS.su-${.TARGET}
 #	The additional flags that are passed to the make process.
 #
+# PRE_CMD.su-${.TARGET}
+#	Shell command executed before running the command that requires
+#	root privileges.  This may "exit 0" to short-circuit the command
+#	list and skip executing the command that requires the root
+#	privileges.
+#
 
 _ROOT_CMD=	cd ${.CURDIR} &&					\
 		${PKGSRC_SETENV} ${PKGSRC_MAKE_ENV}				\
@@ -660,11 +655,7 @@ _ROOT_CMD=	cd ${.CURDIR} &&					\
 
 .PHONY: su-target
 su-target: .USE
-	${RUN} \
-	case ${PRE_CMD.su-${.TARGET}:Q}"" in				\
-	"")	;;							\
-	*)	${PRE_CMD.su-${.TARGET}} ;;				\
-	esac;								\
+	${RUN}${PRE_CMD.su-${.TARGET}:U${TRUE}};			\
 	if ${_IS_ROOT_CMD}; then					\
 		${_ROOT_CMD};						\
 	else								\
@@ -850,7 +841,4 @@ ${_MAKEVARS_MK.${_phase_}}: ${WRKDIR}
 .  include "bsd.pkg.debug.mk"
 .endif
 .include "misc/warnings.mk"
-.if make(import)
-.include "misc/import.mk"
-.endif
 .include "misc/can-be-built-here.mk"

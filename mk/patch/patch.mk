@@ -1,4 +1,4 @@
-# $NetBSD: patch.mk,v 1.18 2009/03/17 21:43:54 rillig Exp $
+# $NetBSD: patch.mk,v 1.19 2019/05/07 19:36:44 rillig Exp $
 #
 # The following variables may be set in a package Makefile and control
 # how pkgsrc patches are applied.
@@ -66,7 +66,7 @@ _PATCH_TARGETS+=	release-patch-lock
 
 .PHONY: patch
 .if !target(patch)
-.  if exists(${_COOKIE.patch})
+.  if exists(${_COOKIE.patch}) && !${_CLEANING}
 patch:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -80,7 +80,7 @@ patch: barrier
 acquire-patch-lock: acquire-lock
 release-patch-lock: release-lock
 
-.if exists(${_COOKIE.patch})
+.if exists(${_COOKIE.patch}) && !${_CLEANING}
 ${_COOKIE.patch}:
 	@${DO_NADA}
 .else
@@ -94,17 +94,10 @@ ${_COOKIE.patch}: real-patch
 ### targets that do the actual patching work.
 ###
 _REAL_PATCH_TARGETS+=	patch-message
-.if defined(_MULTIARCH)
-_REAL_PATCH_TARGETS+=	patch-vars-multi
-_REAL_PATCH_TARGETS+=	pre-patch-multi
-_REAL_PATCH_TARGETS+=	do-patch-multi
-_REAL_PATCH_TARGETS+=	post-patch-multi
-.else
 _REAL_PATCH_TARGETS+=	patch-vars
 _REAL_PATCH_TARGETS+=	pre-patch
 _REAL_PATCH_TARGETS+=	do-patch
 _REAL_PATCH_TARGETS+=	post-patch
-.endif
 _REAL_PATCH_TARGETS+=	patch-cookie
 _REAL_PATCH_TARGETS+=	error-check
 
@@ -161,16 +154,6 @@ pre-patch:
 .if !target(post-patch)
 post-patch:
 	@${DO_NADA}
-.endif
-
-.if defined(_MULTIARCH)
-.  for tgt in patch-vars pre-patch do-patch post-patch
-.PHONY: ${tgt}-multi
-${tgt}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} WRKSRC=${WRKSRC}-${_abi_} ${tgt}
-.    endfor
-.  endfor
 .endif
 
 ######################################################################

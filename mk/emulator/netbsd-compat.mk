@@ -1,4 +1,4 @@
-# $NetBSD: netbsd-compat.mk,v 1.5 2015/05/03 15:01:11 spz Exp $
+# $NetBSD: netbsd-compat.mk,v 1.7 2019/10/15 11:15:49 he Exp $
 #
 # COMPAT_* for NetBSD -- see options(4).
 #
@@ -11,9 +11,7 @@
 #       The executable format of the native operating system.
 #
 
-NATIVE_EXEC_FMT=	${_NATIVE_EXEC_FMT_cmd:sh}
-_NATIVE_EXEC_FMT_cmd=	sh ${.CURDIR}/../../mk/scripts/shlib-type	\
-				${_OPSYS_SHLIB_TYPE:Q} ${MAKE:Q}
+NATIVE_EXEC_FMT=	${SHLIB_TYPE}
 
 # Most NetBSD (i386) software need netbsd>=1.6
 .for _version_ in ${EMUL_REQD:Mnetbsd>=*:S/netbsd>=//}
@@ -43,6 +41,7 @@ _EMUL_PKG.compat-5.0=	compat50
 _EMUL_PKG.compat-5.1=	compat51
 _EMUL_PKG.compat-6.0=	compat60
 _EMUL_PKG.compat-6.1=	compat61
+_EMUL_PKG.compat-8.0=	compat80
 _EMUL_PKG.compat=	# defined, but empty
 
 # EMUL_TYPE.netbsd can be "compat" or "compat-[0-9]*".  If a particular
@@ -88,6 +87,9 @@ _EMUL_PKG.compat=	# defined, but empty
 
 .  elif !empty(NETBSD_VERSION_REQD:M6.1.*)
 .    include "${PKGSRCDIR}/emulators/${_EMUL_PKG.compat-6.1}/emulator.mk"
+
+.  elif !empty(NETBSD_VERSION_REQD:M8.0.*)
+.    include "${PKGSRCDIR}/emulators/${_EMUL_PKG.compat-8.0}/emulator.mk"
 
 .  endif
 

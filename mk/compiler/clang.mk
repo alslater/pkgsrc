@@ -1,4 +1,4 @@
-# $NetBSD: clang.mk,v 1.15 2015/03/02 19:59:07 joerg Exp $
+# $NetBSD: clang.mk,v 1.21 2019/07/15 16:06:19 ryoon Exp $
 #
 # This is the compiler definition for the clang compiler.
 #
@@ -53,6 +53,29 @@ _COMPILER_LD_FLAG=	-Wl,
 _LINKER_RPATH_FLAG=	-R
 _COMPILER_RPATH_FLAG=	${_COMPILER_LD_FLAG}${_LINKER_RPATH_FLAG}
 
+_CTF_CFLAGS=		-gdwarf-2
+
+# The user can choose the level of RELRO.
+.if ${PKGSRC_USE_RELRO} == "partial"
+_RELRO_LDFLAGS=		-Wl,-z,relro
+.else
+_RELRO_LDFLAGS=		-Wl,-z,relro -Wl,-z,now
+.endif
+
+# The user can choose the level of stack smashing protection.
+.if ${PKGSRC_USE_SSP} == "all"
+_SSP_CFLAGS=		-fstack-protector-all
+.else
+_SSP_CFLAGS=		-fstack-protector
+.endif
+
+.if ${_PKGSRC_USE_RELRO} == "yes"
+_CLANG_LDFLAGS+=	${_RELRO_LDFLAGS}
+CWRAPPERS_APPEND.ld+=	${_RELRO_LDFLAGS}
+.endif
+
+LDFLAGS+=	${_CLANG_LDFLAGS}
+
 # _LANGUAGES.<compiler> is ${LANGUAGES.<compiler>} restricted to the
 # ones requested by the package in USE_LANGUAGES.
 #
@@ -72,6 +95,8 @@ CWRAPPERS_APPEND.cc+=	-Qunused-arguments
 _WRAP_EXTRA_ARGS.CXX+=	-Qunused-arguments
 CWRAPPERS_APPEND.cxx+=	-Qunused-arguments
 
-CLANG_NO_VALUE_PROPAGATION_PASS=	-O0
+.for _version_ in ${_CXX_STD_VERSIONS}
+_CXX_STD_FLAG.${_version_}?=	-std=${_version_}
+.endfor
 
 .endif	# COMPILER_CLANG_MK

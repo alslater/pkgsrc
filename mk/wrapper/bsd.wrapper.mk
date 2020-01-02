@@ -1,4 +1,4 @@
-# $NetBSD: bsd.wrapper.mk,v 1.97 2016/03/11 23:03:31 khorben Exp $
+# $NetBSD: bsd.wrapper.mk,v 1.101 2019/05/07 19:36:44 rillig Exp $
 #
 # Copyright (c) 2005 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -61,7 +54,7 @@ PREPEND_PATH+=		${WRAPPER_BINDIR}
 ###
 ### BEGIN: after the barrier
 ###
-.if exists(${_COOKIE.barrier})
+.if exists(${_COOKIE.barrier}) && !${_CLEANING}
 
 _WRAPPER_DEBUG?=	no
 CONFIGURE_ENV+=		WRAPPER_DEBUG=${_WRAPPER_DEBUG:Q}
@@ -314,6 +307,12 @@ _WRAP_TRANSFORM.CC=	${WRAPPER_TMPDIR}/transform-gcc
 _WRAP_TRANSFORM.CXX=	${_WRAP_TRANSFORM.CC}
 . if ${_PKGSRC_MKPIE} != "no"
 _WRAP_CMD_SINK.CC=	${WRAPPER_TMPDIR}/cmd-sink-mkpie-gcc
+_WRAP_CMD_SINK.CXX=	${_WRAP_CMD_SINK.CC}
+_WRAP_CMD_SINK.LD=	${WRAPPER_TMPDIR}/cmd-sink-mkpie-ld
+MKPIE_CFLAGS=		${_MKPIE_CFLAGS.gcc}
+.export MKPIE_CFLAGS
+MKPIE_LDFLAGS=		${_MKPIE_LDFLAGS.gcc}
+.export MKPIE_LDFLAGS
 . endif
 .endif
 
@@ -520,6 +519,7 @@ generate-wrappers: ${_target_}
 	cmd-sink-interix-gcc \
 	cmd-sink-ld \
 	cmd-sink-mkpie-gcc \
+	cmd-sink-mkpie-ld \
 	cmd-sink-osf1-cc \
 	cmd-sink-osf1-ld \
 	cmd-sink-hpux-cc \
@@ -710,7 +710,7 @@ _COOKIE.wrapper=	${WRKDIR}/.wrapper_done
 
 .PHONY: wrapper
 .if !target(wrapper)
-.  if exists(${_COOKIE.wrapper})
+.  if exists(${_COOKIE.wrapper}) && !${_CLEANING}
 wrapper:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -724,7 +724,7 @@ wrapper: barrier
 acquire-wrapper-lock: acquire-lock
 release-wrapper-lock: release-lock
 
-.if exists(${_COOKIE.wrapper})
+.if exists(${_COOKIE.wrapper}) && !${_CLEANING}
 ${_COOKIE.wrapper}:
 	@${DO_NADA}
 .else
@@ -732,11 +732,7 @@ ${_COOKIE.wrapper}: real-wrapper
 .endif
 
 .PHONY: real-wrapper
-.if defined(_MULTIARCH)
-real-wrapper: wrapper-message wrapper-vars-multi pre-wrapper do-wrapper-multi post-wrapper wrapper-cookie error-check
-.else
 real-wrapper: wrapper-message wrapper-vars pre-wrapper do-wrapper post-wrapper wrapper-cookie error-check
-.endif
 
 .PHONY: wrapper-message
 wrapper-message:
@@ -749,16 +745,6 @@ do-wrapper: generate-wrappers
 .if !target(do-wrapper)
 do-wrapper:
 	@${DO_NADA}
-.endif
-
-.if defined(_MULTIARCH)
-.  for _tgt_ in wrapper-vars do-wrapper
-.PHONY: ${_tgt_}-multi
-${_tgt_}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} WRKSRC=${WRKSRC}-${_abi_} ${_tgt_}
-.    endfor
-.  endfor
 .endif
 
 .if !target(pre-wrapper)

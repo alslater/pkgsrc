@@ -1,4 +1,4 @@
-# $NetBSD: flex.mk,v 1.1 2011/11/26 14:58:45 hans Exp $
+# $NetBSD: flex.mk,v 1.3 2018/08/22 20:48:37 maya Exp $
 #
 # Copyright (c) 2005 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -47,7 +40,7 @@ FLEX_REQD?=		2.5.4
 .  if !defined(_TOOLS_USE_PKGSRC.flex)
 _TOOLS_VERSION.flex!=							\
 	${TOOLS_PLATFORM.flex} --version |				\
-	${SED} -e 's/\(.*\) \(.*\)$$/\2/'
+	${SED} -e 's/^[[:blank:]]*\([^[:blank:]]\{1,\}\)[[:blank:]]\{1,\}\([^[:blank:]]\{1,\}\).*$$/\2/'
 _TOOLS_PKG.flex=		flex-${_TOOLS_VERSION.flex}
 _TOOLS_USE_PKGSRC.flex=	no
 .    for _dep_ in flex>=${FLEX_REQD}

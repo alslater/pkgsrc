@@ -1,11 +1,35 @@
-# $NetBSD: bsd.depends.mk,v 1.26 2016/07/09 16:32:54 rillig Exp $
+# $NetBSD: bsd.depends.mk,v 1.30 2019/05/07 19:36:44 rillig Exp $
 #
 # This Makefile fragment is included by bsd.pkg.mk and provides all
 # variables and targets related to dependencies.
 #
 # The following are the "public" targets provided by this module:
 #
-#    depends, bootstrap-depends, install-depends
+#    depends, bootstrap-depends, install-depends, show-depends
+#
+# The following variables may be set in a package Makefile:
+#
+# DEPENDS
+#	List of dependencies of the form "pattern:dir" needed by the
+#	package at run-time.
+#
+# BUILD_DEPENDS
+#	List of build dependencies of the form "pattern:dir" needed by the
+#	package at build-time.  When cross-compiling, build dependencies
+#	are `target' packages, i.e. architecture for which the package is
+#	built.
+#
+# TEST_DEPENDS
+#	List of test dependencies of the form "pattern:dir" needed by the
+#	package at test-time.  When cross-compiling, test dependencies
+#	are `native' packages, i.e. architecture where the package is
+#	built.
+#
+# TOOL_DEPENDS
+#	List of tool dependencies of the form "pattern:dir" needed by the
+#	package at build-time.  When cross-compiling, tool dependencies
+#	are `native' packages, i.e. architecture where the package is
+#	built.
 #
 # The following variables may be set by the pkgsrc user:
 #
@@ -48,7 +72,7 @@ DEPENDS_TARGET=		reinstall
 .if ${SKIP_DEPENDS:M[Nn][Oo]} != ""
 .  include "depends.mk"
 .elif !target(depends)
-.  if exists(${_COOKIE.depends})
+.  if exists(${_COOKIE.depends}) && !${_CLEANING}
 depends:
 	@${DO_NADA}
 .  else
@@ -110,6 +134,7 @@ depends-cookie:
 #	Command line variables:
 #
 #	VARNAME
-#		DEPENDS, BUILD_DEPENDS, or TOOL_DEPENDS.
+#		DEPENDS, BUILD_DEPENDS, TEST_DEPENDS, or TOOL_DEPENDS.
 #
+# Keywords: depends dependencies
 show-depends: .PHONY _pkgformat-show-depends

@@ -1,4 +1,4 @@
-# $NetBSD: plist.mk,v 1.49 2015/07/04 16:18:38 joerg Exp $
+# $NetBSD: plist.mk,v 1.52 2019/01/16 04:43:42 gutteridge Exp $
 #
 # This Makefile fragment handles the creation of PLISTs for use by
 # pkg_create(8).
@@ -28,8 +28,8 @@
 #
 #	PLIST.common
 #	PLIST.${OPSYS}			(e.g., PLIST.NetBSD)
-#	PLIST.${MACHINE_ARCH}		(e.g,, PLIST.macppc)
-#	PLIST.${OPSYS}-${MACHINE_ARCH}	(e.g., PLIST.NetBSD-macppc)
+#	PLIST.${MACHINE_ARCH}		(e.g., PLIST.powerpc)
+#	PLIST.${OPSYS}-${MACHINE_ARCH}	(e.g., PLIST.NetBSD-powerpc)
 #	PLIST
 #	PLIST.common_end
 #
@@ -45,6 +45,8 @@ _VARGROUPS+=		plist
 _USER_VARS.plist=	# none
 _PKG_VARS.plist=	PLIST_SUBST PLIST_VARS PLIST_SRC GENERATE_PLIST
 _SYS_VARS.plist=	PLIST_TYPE PLIST
+_SORTED_VARS.plist=	*_SUBST *_VARS
+_LISTED_VARS.plist=	*_SRC GENERATE_PLIST
 
 PLIST_VARS?=		# empty
 PLIST_AWK?=		# empty
@@ -143,21 +145,6 @@ _PLIST_AWK_ENV+=	PREFIX=${DESTDIR:Q}${PREFIX:Q}
 _PLIST_AWK_ENV+=	TEST=${TOOLS_TEST:Q}
 _PLIST_AWK_ENV+=	${PLIST_AWK_ENV}
 
-.if defined(_MULTIARCH)
-_PLIST_AWK_ENV+=	_MULTIARCH=${_MULTIARCH:Q}
-_PLIST_AWK_ENV+=	MULTIARCH_ABIS=${MULTIARCH_ABIS:Q}
-_PLIST_AWK_ENV+=	USE_MULTIARCH=${USE_MULTIARCH:Q}
-.  for _abi_ in ${MULTIARCH_ABIS}
-_PLIST_AWK_ENV+=	BINARCHSUFFIX_${_abi_}=${BINARCHSUFFIX.${_abi_}}
-_PLIST_AWK_ENV+=	INCARCHSUFFIX_${_abi_}=${INCARCHSUFFIX.${_abi_}}
-_PLIST_AWK_ENV+=	LIBARCHSUFFIX_${_abi_}=${LIBARCHSUFFIX.${_abi_}}
-.  endfor
-_PLIST_AWK_ENV+=	MULTIARCH_DIRS_bin=${MULTIARCH_DIRS.bin:Q}
-_PLIST_AWK_ENV+=	MULTIARCH_DIRS_lib=${MULTIARCH_DIRS.lib:Q}
-_PLIST_AWK_ENV+=	MULTIARCH_SKIP_DIRS_bin=${MULTIARCH_SKIP_DIRS.bin:Q}
-_PLIST_AWK_ENV+=	MULTIARCH_SKIP_DIRS_lib=${MULTIARCH_SKIP_DIRS.lib:Q}
-.endif
-
 # PLIST_SUBST contains package-settable "${variable}" to "value"
 # substitutions for PLISTs
 #
@@ -199,7 +186,6 @@ _PLIST_AWK_ENV+=	PLIST_SUBST_VARS=${PLIST_SUBST:S/^/PLIST_/:C/=.*//:M*:Q}
 
 _PLIST_1_AWK+=		-f ${PKGSRCDIR}/mk/plist/plist-functions.awk
 _PLIST_1_AWK+=		-f ${PKGSRCDIR}/mk/plist/plist-subst.awk
-_PLIST_1_AWK+=		-f ${PKGSRCDIR}/mk/plist/plist-multiarch.awk
 _PLIST_1_AWK+=		-f ${PKGSRCDIR}/mk/plist/plist-macros.awk
 
 _PLIST_AWK+=		-f ${.CURDIR}/../../mk/plist/plist-functions.awk
@@ -298,6 +284,12 @@ INFO_FILES_cmd=								\
 	${PKGSRC_SETENV} ${_PLIST_AWK_ENV} ${AWK} ${_PLIST_INFO_AWK} |	\
 	${AWK} '($$0 !~ "-[0-9]*(\\.gz)?$$") { print }'
 .endif
+
+ICON_THEMES_cmd=							\
+	${CAT} ${PLIST} |						\
+	${PKGSRC_SETENV} ${_PLIST_AWK_ENV} ${AWK} -F /			\
+	'$$0 ~ "^share/icons/[^/]+/.*$$" { print $$3 }' |		\
+	${SORT} -u
 
 ######################################################################
 ### plist-clean (PRIVATE)

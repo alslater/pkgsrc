@@ -1,4 +1,4 @@
-# $NetBSD: Darwin.mk,v 1.85 2016/11/13 11:06:40 jdolecek Exp $
+# $NetBSD: Darwin.mk,v 1.96 2019/07/11 15:16:12 sevan Exp $
 #
 # Variable definitions for the Darwin operating system.
 
@@ -21,6 +21,9 @@
 # Mavericks	10.9.x	13.x.y	6 (llvm clang 6.0)
 # Yosemite	10.10.x	14.x.y	6 (llvm clang 6.0)
 # El Capitan	10.11.x	15.x.y	7 (llvm clang 7.0)
+# Sierra	10.12.x	16.x.y	8.3 (llvm clang 8.0)
+# High Sierra	10.13.x	17.x.y	9.3 (llvm clang 9.0)
+# Mojave	10.14.x	18.x.y	10.2 (llvm clang 10.0)
 
 # Tiger (and earlier) use Xfree 4.4.0 (and earlier)
 .if empty(MACHINE_PLATFORM:MDarwin-[0-8].*-*)
@@ -81,11 +84,13 @@ _OPSYS_EMULDIR.darwin=	# empty
 _OPSYS_SYSTEM_RPATH?=	/usr/lib
 _OPSYS_LIB_DIRS?=	/usr/lib
 
+.if !defined(OSX_VERSION)
 OSX_VERSION!=		sw_vers -productVersion
 .  if ${OSX_VERSION:R:R} != ${OSX_VERSION:R}
 OSX_VERSION:=		${OSX_VERSION:R}
 .  endif
 MAKEFLAGS+=		OSX_VERSION=${OSX_VERSION:Q}
+.endif
 
 #
 # From Xcode 5 onwards system headers are no longer installed by default
@@ -97,10 +102,16 @@ MAKEFLAGS+=		OSX_VERSION=${OSX_VERSION:Q}
 .if exists(/usr/include/stdio.h)
 _OPSYS_INCLUDE_DIRS?=	/usr/include
 .elif exists(/usr/bin/xcrun)
+.  if !defined(OSX_SDK_PATH)
 OSX_SDK_PATH!=	/usr/bin/xcrun --sdk macosx${OSX_VERSION} --show-sdk-path 2>/dev/null || echo /nonexistent
+OSX_TOLERATE_SDK_SKEW?=	no
+.    if ${OSX_SDK_PATH} == "/nonexistent" && !empty(OSX_TOLERATE_SDK_SKEW:M[Yy][Ee][Ss])
+OSX_SDK_PATH!=	/usr/bin/xcrun --sdk macosx --show-sdk-path 2>/dev/null || echo /nonexistent
+.    endif
+MAKEFLAGS+=	OSX_SDK_PATH=${OSX_SDK_PATH:Q}
+.  endif
 .  if exists(${OSX_SDK_PATH}/usr/include/stdio.h)
 _OPSYS_INCLUDE_DIRS?=	${OSX_SDK_PATH}/usr/include
-MAKEFLAGS+=		OSX_SDK_PATH=${OSX_SDK_PATH:Q}
 .  else
 PKG_FAIL_REASON+=	"No suitable Xcode SDK or Command Line Tools installed."
 .  endif
@@ -141,6 +152,7 @@ _OPSYS_PREFER.openssl?=		pkgsrc	# builtin deprecated from 10.7 onwards
 
 # Remove common GNU ld arguments incompatible with the Darwin linker.
 BUILDLINK_TRANSFORM+=	rm:-Wl,-O1
+BUILDLINK_TRANSFORM+=	rm:-Wl,-O2
 BUILDLINK_TRANSFORM+=	rm:-Wl,-Bdynamic
 BUILDLINK_TRANSFORM+=	rm:-Wl,-Bsymbolic
 BUILDLINK_TRANSFORM+=	rm:-Wl,-export-dynamic
@@ -177,6 +189,11 @@ CONFIGURE_ENV+=		ac_cv_func_poll=no
 .  endif
 .endif
 
+# check for kqueue(2) support
+.if exists(${_OPSYS_INCLUDE_DIRS}/sys/event.h)
+PKG_HAVE_KQUEUE=	# defined
+.endif
+
 # If the deployment target is not set explicitly, the linker in Tiger and prior
 # versions running on PowerPC hosts defaults to a target of 10.1.
 # Set the target for Tiger systems to be 10.4.
@@ -196,4 +213,10 @@ CONFIGURE_ENV+=		gl_cv_func_getcwd_abort_bug=no
      !empty(OS_VERSION:M1[4-9].*)) && \
     exists(/bin/ksh)
 WRAPPER_BIN_SH?=	/bin/ksh
+.endif
+
+# strnlen(3) wasn't included until Lion, pull it in from libnbcompat on prior
+# releases.
+.if ${OS_VERSION:R} < 11
+_OPSYS_MISSING_FEATURES+= 	strnlen
 .endif

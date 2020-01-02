@@ -1,4 +1,4 @@
-# $NetBSD: build.mk,v 1.21 2012/05/27 14:32:29 cheusov Exp $
+# $NetBSD: build.mk,v 1.28 2019/09/02 02:59:47 rillig Exp $
 #
 # This file defines what happens in the build phase, excluding the
 # self-test, which is defined in test.mk.
@@ -41,6 +41,8 @@ _VARGROUPS+=		build
 _USER_VARS.build=	MAKE_JOBS BUILD_ENV_SHELL
 _PKG_VARS.build=	MAKE_ENV MAKE_FLAGS BUILD_MAKE_FLAGS BUILD_TARGET MAKE_JOBS_SAFE
 _SYS_VARS.build=	BUILD_MAKE_CMD
+_SORTED_VARS.build=	*_ENV
+_LISTED_VARS.build=	*_FLAGS *_CMD
 
 BUILD_MAKE_FLAGS?=	# none
 BUILD_TARGET?=		all
@@ -53,6 +55,8 @@ BUILD_MAKE_CMD= \
 
 .if defined(MAKE_JOBS_SAFE) && !empty(MAKE_JOBS_SAFE:M[nN][oO])
 _MAKE_JOBS=	# nothing
+.elif defined(MAKE_JOBS.${PKGPATH})
+_MAKE_JOBS=	-j${MAKE_JOBS.${PKGPATH}}
 .elif defined(MAKE_JOBS)
 _MAKE_JOBS=	-j${MAKE_JOBS}
 .endif
@@ -67,11 +71,13 @@ _BUILD_TARGETS+=	configure
 _BUILD_TARGETS+=	acquire-build-lock
 _BUILD_TARGETS+=	${_COOKIE.build}
 _BUILD_TARGETS+=	release-build-lock
+.if ${_USE_NEW_PKGINSTALL:Uno} == "no"
 _BUILD_TARGETS+=	pkginstall
+.endif
 
 .PHONY: build
 .if !target(build)
-.  if exists(${_COOKIE.build})
+.  if exists(${_COOKIE.build}) && !${_CLEANING}
 build:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -85,7 +91,7 @@ build: barrier
 acquire-build-lock: acquire-lock
 release-build-lock: release-lock
 
-.if exists(${_COOKIE.build})
+.if exists(${_COOKIE.build}) && !${_CLEANING}
 ${_COOKIE.build}:
 	@${DO_NADA}
 .else
@@ -120,21 +126,11 @@ build-clean: install-clean _package-clean
 ###
 _REAL_BUILD_TARGETS+=	build-check-interactive
 _REAL_BUILD_TARGETS+=	build-message
-.if defined(_MULTIARCH)
-_REAL_BUILD_TARGETS+=	build-vars-multi
-.else
 _REAL_BUILD_TARGETS+=	build-vars
-.endif
 _REAL_BUILD_TARGETS+=	pre-build-checks-hook
-.if defined(_MULTIARCH)
-_REAL_BUILD_TARGETS+=	pre-build-multi
-_REAL_BUILD_TARGETS+=	do-build-multi
-_REAL_BUILD_TARGETS+=	post-build-multi
-.else
 _REAL_BUILD_TARGETS+=	pre-build
 _REAL_BUILD_TARGETS+=	do-build
 _REAL_BUILD_TARGETS+=	post-build
-.endif
 _REAL_BUILD_TARGETS+=	build-cookie
 _REAL_BUILD_TARGETS+=	error-check
 
@@ -188,22 +184,28 @@ post-build:
 	@${DO_NADA}
 .endif
 
-.if defined(_MULTIARCH)
-.  for _tgt_ in build-vars pre-build do-build post-build
-.PHONY: ${_tgt_}-multi
-${_tgt_}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} WRKSRC=${WRKSRC}-${_abi_} ${_tgt_}
-.    endfor
-.  endfor
-.endif
+# build-env:
+#	Starts an interactive shell in WRKSRC.
+#
+#	This is only used during development and testing of a package
+#	to work in the same environment as the actual build.
+#
+# User-settable variables:
+#
+# BUILD_ENV_SHELL
+#	The shell to start.
+#
+#	Default: ${SH}
+#
+# Keywords: debug build
 
 BUILD_ENV_SHELL?=	${SH}
-.if defined(_PKGSRC_BARRIER)
-build-env: .PHONY configure
+build-env: .PHONY ${_PKGSRC_BARRIER:Ubarrier:D_build-env}
+_build-env: .PHONY configure
 	@${STEP_MSG} "Entering the build environment for ${PKGNAME}"
+.if ${BUILD_DIRS:[#]} > 1 || ${BUILD_DIRS} != ${WRKSRC}
+	@${ECHO_MSG} "The BUILD_DIRS are:" \
+		${BUILD_DIRS:S,^${WRKSRC}$,.,:S,^${WRKSRC}/,,:Q}
+.endif
 	${RUN}${_ULIMIT_CMD}						\
 	cd ${WRKSRC} && ${PKGSRC_SETENV} ${MAKE_ENV} ${BUILD_ENV_SHELL}
-.else
-build-env: barrier
-.endif

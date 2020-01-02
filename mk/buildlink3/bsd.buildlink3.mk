@@ -1,4 +1,4 @@
-# $NetBSD: bsd.buildlink3.mk,v 1.238 2016/06/09 02:38:34 markd Exp $
+# $NetBSD: bsd.buildlink3.mk,v 1.243 2019/08/18 21:00:10 rillig Exp $
 #
 # Copyright (c) 2004 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -146,18 +139,23 @@ _ignore_:=${IGNORE_PKG.${_pkg_:S/^-//}:M[Yy][Ee][Ss]}
      # leaving a package (in the buildlink tree)
 .    if !empty(_use_)
        # this package is going to use the builtin version
-.      if ${_ok_} == no
+.      if ${_ok_} != yes
          # not ok for it to be builtin; force it to pkgsrc
          USE_BUILTIN.${_pkg_:S/^-//}:=no
          FORCED_PKGSRC+=${_pkg_:S/^-//}
-         #.say "${_stack_:C/.*/  /} ${_pkg_:S/^-//} pkgsrc FORCED"
+         # using += here fails to evaluate ${_ok_} until after the loop
+         FORCED_PKGSRC_REASONS:=${FORCED_PKGSRC_REASONS} ${_pkg_:S/^-//}:${_ok_:S/^no,//}
+         #.say "${_stack_:C/.*/  /} ${_pkg_:S/^-//} pkgsrc FORCED by ${_ok_:S/^no,//}"
 .      else
          #.say "${_stack_:C/.*/  /} ${_pkg_:S/^-//} built-in"
 .      endif
 .    elif empty(_ignore_)
        # no builtin version or not using it
        #.say "${_stack_:C/.*/  /} ${_pkg_:S/^-//} pkgsrc"
-       _ok_:=no
+.      if ${_ok_} == yes
+         _ok_:=no
+.      endif
+       _ok_:=${_ok_},${_pkg_:S/^-//}
 .    endif
      # pop the stack
 .    if ${_ok_} == yes
@@ -168,6 +166,11 @@ _ignore_:=${IGNORE_PKG.${_pkg_:S/^-//}:M[Yy][Ee][Ss]}
 .endfor
 .if ${_stack_} != "bot"
 .error "The above loop through BUILDLINK_TREE failed to balance"
+.endif
+
+# This comes out with a stray leading space currently.
+.if defined(FORCED_PKGSRC_REASONS)
+FORCED_PKGSRC_REASONS:=${FORCED_PKGSRC_REASONS:S/^ //}
 .endif
 
 # Sorted and unified version of BUILDLINK_TREE without recursion
@@ -201,7 +204,9 @@ _BLNK_PACKAGES+=	${_pkg_}
 .endfor
 
 _VARGROUPS+=		bl3
-.for v in BINDIR CFLAGS CPPFLAGS DEPENDS LDFLAGS LIBS
+_DEF_VARS.bl3+=		_BLNK_PACKAGES _BLNK_DEPENDS
+_LISTED_VARS.bl3+=	_BLNK_PACKAGES _BLNK_DEPENDS
+.for v in BINDIR CFLAGS CPPFLAGS DEPENDS LDADD LDFLAGS LIBS
 _SYS_VARS.bl3+=		BUILDLINK_${v}
 .endfor
 .for p in ${_BUILDLINK_TREE}
@@ -406,7 +411,7 @@ BUILDLINK_LDFLAGS.${_pkg_}?=	# empty
 BUILDLINK_LIBS.${_pkg_}?=	# empty
 BUILDLINK_AUTO_DIRS.${_pkg_}?=	yes
 BUILDLINK_INCDIRS.${_pkg_}?=	include
-BUILDLINK_LIBDIRS.${_pkg_}?=	lib${LIBARCHSUFFIX}
+BUILDLINK_LIBDIRS.${_pkg_}?=	lib
 .  if !empty(BUILDLINK_DEPMETHOD.${_pkg_}:Mfull)
 BUILDLINK_RPATHDIRS.${_pkg_}?=	${BUILDLINK_LIBDIRS.${_pkg_}}
 .  else
@@ -499,8 +504,8 @@ BUILDLINK_LDFLAGS+=	${COMPILER_RPATH_FLAG}${_dir_}
 #
 # Ensure that ${LOCALBASE}/lib is in the runtime library search path.
 #
-.if empty(BUILDLINK_LDFLAGS:M${COMPILER_RPATH_FLAG}${LOCALBASE}/lib${LIBARCHSUFFIX})
-BUILDLINK_LDFLAGS+=	${COMPILER_RPATH_FLAG}${LOCALBASE}/lib${LIBARCHSUFFIX}
+.if empty(BUILDLINK_LDFLAGS:M${COMPILER_RPATH_FLAG}${LOCALBASE}/lib)
+BUILDLINK_LDFLAGS+=	${COMPILER_RPATH_FLAG}${LOCALBASE}/lib
 .endif
 #
 # Add the X11 library directory to the library search paths if the package
@@ -657,7 +662,8 @@ ${_BLNK_COOKIE.${_pkg_}}:
 	${X11BASE})     buildlink_dir="${BUILDLINK_X11_DIR}" ;;		\
 	*)              buildlink_dir="${BUILDLINK_DIR}" ;;		\
 	esac;								\
-	cd ${BUILDLINK_PREFIX.${_pkg_}};				\
+	[ -z "${BUILDLINK_PREFIX.${_pkg_}:Q}" ] ||			\
+	cd ${BUILDLINK_PREFIX.${_pkg_}} &&				\
 	${_BLNK_FILES_CMD.${_pkg_}} |					\
 	while read file; do						\
 		src="${_CROSS_DESTDIR}${BUILDLINK_PREFIX.${_pkg_}}/$$file";		\
@@ -838,7 +844,7 @@ _BLNK_PASSTHRU_RPATHDIRS+=	${BUILDLINK_PREFIX.${_pkg_}}/${_dir_}
 # that wildcard dependencies work correctly when installing from binary
 # packages.
 #
-_BLNK_PASSTHRU_RPATHDIRS+=	${LOCALBASE}/lib${LIBARCHSUFFIX}
+_BLNK_PASSTHRU_RPATHDIRS+=	${LOCALBASE}/lib
 #
 # Allow ${X11BASE}/lib in the runtime library search path for USE_X11
 # packages so that X11 libraries can be found.
@@ -1111,7 +1117,7 @@ _WRAP_TRANSFORM.SHLIBTOOL=	${_WRAP_TRANSFORM.LIBTOOL}
 # before the system headers and libraries.
 #
 _BLNK_CPPFLAGS=			-I${BUILDLINK_DIR}/include
-_BLNK_LDFLAGS=			-L${BUILDLINK_DIR}/lib${LIBARCHSUFFIX}
+_BLNK_LDFLAGS=			-L${BUILDLINK_DIR}/lib
 _WRAP_EXTRA_ARGS.CC+=		${_BLNK_CPPFLAGS} ${_BLNK_LDFLAGS}
 _WRAP_EXTRA_ARGS.CXX+=		${_BLNK_CPPFLAGS} ${_BLNK_LDFLAGS}
 _WRAP_EXTRA_ARGS.CPP+=		${_BLNK_CPPFLAGS}

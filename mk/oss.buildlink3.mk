@@ -1,4 +1,4 @@
-# $NetBSD: oss.buildlink3.mk,v 1.11 2014/02/10 12:21:44 richard Exp $
+# $NetBSD: oss.buildlink3.mk,v 1.13 2019/06/30 21:28:28 rillig Exp $
 #
 # This Makefile fragment is included by packages that require an Open Sound
 # System (OSS) implementation.  After inclusion of this file, the following
@@ -11,12 +11,12 @@
 #
 OSS_BUILDLINK3_MK:=	${OSS_BUILDLINK3_MK}+
 
-.include "../../mk/bsd.prefs.mk"
+.include "bsd.prefs.mk"
 
 .if !defined(_OSS_TYPE)
 _OSS_TYPE=		none
 CHECK_BUILTIN.oss:=	yes
-.  include "../../mk/oss.builtin.mk"
+.  include "oss.builtin.mk"
 CHECK_BUILTIN.oss:=	no
 .  if defined(IS_BUILTIN.oss) && !empty(IS_BUILTIN.oss:M[yY][eE][sS])
 _OSS_TYPE=		native
@@ -40,13 +40,8 @@ DEVOSSSOUND?=		/dev/dsp
 DEVOSSAUDIO?=		/dev/dsp
 DEVOSSSOUND?=		/dev/dsp
 .  elif ${OPSYS} == "FreeBSD"
-.    if !empty(OS_VERSION:M4.*) || !empty(OS_VERSION:M5.[12]*)
 DEVOSSAUDIO?=		/dev/dsp
 DEVOSSSOUND?=		/dev/dsp
-.    else
-DEVOSSAUDIO?=		/dev/dsp0.0
-DEVOSSSOUND?=		/dev/dsp0.0
-.    endif
 .  elif !empty(MACHINE_PLATFORM:MSunOS-5.11-*) && exists(/dev/dsp)
 DEVOSSAUDIO?=		/dev/dsp
 DEVOSSSOUND?=		/dev/dsp

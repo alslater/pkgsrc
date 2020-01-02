@@ -1,4 +1,4 @@
-# $NetBSD: autoconf.mk,v 1.18 2015/11/25 13:05:47 jperkin Exp $
+# $NetBSD: autoconf.mk,v 1.21 2019/05/15 10:49:28 leot Exp $
 #
 # Copyright (c) 2005 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -64,8 +57,14 @@
 #
 #	AUTOMAKE_OVERRIDE=	no
 #
-# Keywords: autoconf autoreconf
+# Keywords: autoconf
+
+# If a package requires autoreconf, the package Makefile should contain
+# this line:
 #
+#	USE_TOOLS+=	autoreconf autoconf automake
+#
+# Keywords: autoreconf
 
 # Only allow one of "autoconf" and "autoconf213" in USE_TOOLS.
 .if !empty(USE_TOOLS:C/:.*//:Mautoconf) && \
@@ -96,6 +95,8 @@ AUTOCONF_REQD?=		2.50
 
 .    if !empty(USE_TOOLS:Mautoconf\:run)
 _TOOLS_DEPMETHOD.autoconf=	DEPENDS
+.    elif !empty(USE_TOOLS:Mautoconf\:test)
+_TOOLS_DEPMETHOD.autoconf=	TEST_DEPENDS
 .    else
 _TOOLS_DEPMETHOD.autoconf=	TOOL_DEPENDS
 .    endif
@@ -135,6 +136,8 @@ AUTOCONF_REQD?=		2.13
 
 .    if !empty(USE_TOOLS:Mautoconf213\:run)
 _TOOLS_DEPMETHOD.autoconf213=	DEPENDS
+.    elif !empty(USE_TOOLS:Mautoconf213\:test)
+_TOOLS_DEPMETHOD.autoconf=	TEST_DEPENDS
 .    else
 _TOOLS_DEPMETHOD.autoconf213=	TOOL_DEPENDS
 .    endif

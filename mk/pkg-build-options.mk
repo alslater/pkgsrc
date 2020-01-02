@@ -1,4 +1,4 @@
-# $NetBSD: pkg-build-options.mk,v 1.11 2016/12/17 23:41:51 joerg Exp $
+# $NetBSD: pkg-build-options.mk,v 1.12 2017/03/08 16:16:40 jperkin Exp $
 #
 # This procedure determines the PKG_OPTIONS that have been in effect
 # when the package ${pkgbase} has been built. When the package is not

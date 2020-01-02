@@ -1,4 +1,4 @@
-# $NetBSD: Linux.mk,v 1.69 2016/10/27 10:31:06 jperkin Exp $
+# $NetBSD: Linux.mk,v 1.80 2019/01/24 18:40:56 tnn Exp $
 #
 # Variable definitions for the Linux operating system.
 
@@ -50,33 +50,43 @@ _OPSYS_EMULDIR.linux32=	# empty
 
 # Support Debian/Ubuntu's multiarch hierarchy.
 .if exists(/etc/debian_version)
-.if !empty(MACHINE_ARCH:Mx86_64)
+.  if !empty(MACHINE_ARCH:Mx86_64)
 _OPSYS_SYSTEM_RPATH=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu
 _OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX} /lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu
-.endif
-.if !empty(MACHINE_ARCH:Mi386)
+.  endif
+.  if !empty(MACHINE_ARCH:Mi386)
 _OPSYS_SYSTEM_RPATH=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}:/lib/i386-linux-gnu:/usr/lib/i386-linux-gnu
 _OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX} /lib/i386-linux-gnu /usr/lib/i386-linux-gnu
-.endif
-.if !empty(MACHINE_ARCH:Marm*)
-.if exists(/etc/ld.so.conf.d/arm-linux-gnueabihf.conf)
+.  endif
+.  if !empty(MACHINE_ARCH:Marm*)
+.    if exists(/etc/ld.so.conf.d/arm-linux-gnueabihf.conf)
 _OPSYS_SYSTEM_RPATH=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}:/lib/arm-linux-gnueabihf:/usr/lib/arm-linux-gnueabihf
 _OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX} /lib/arm-linux-gnueabihf /usr/lib/arm-linux-gnueabihf
-.else
+.    else
 _OPSYS_SYSTEM_RPATH=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}:/lib/arm-linux-gnueabi:/usr/lib/arm-linux-gnueabi
 _OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX} /lib/arm-linux-gnueabi /usr/lib/arm-linux-gnueabi
-.endif
-.endif
-.if !empty(MACHINE_ARCH:Maarch64)
+.    endif
+.  endif
+.  if !empty(MACHINE_ARCH:Maarch64)
 LIBABISUFFIX?=		/aarch64-linux-gnu
 _OPSYS_SYSTEM_RPATH=	/lib:/usr/lib:/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}
 _OPSYS_LIB_DIRS?=	/lib /usr/lib /lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX}
-.endif
+.  endif
+.  if !empty(MACHINE_ARCH:Mpowerpc64le)
+LIBABISUFFIX?=		/powerpc64le-linux-gnu
+_OPSYS_SYSTEM_RPATH=	/lib:/usr/lib:/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}
+_OPSYS_LIB_DIRS?=	/lib /usr/lib /lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX}
+.  endif
 .else
 _OPSYS_SYSTEM_RPATH=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}
 _OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX}
 .endif
 _OPSYS_INCLUDE_DIRS?=	/usr/include
+
+.if !empty(OS_VARIANT:Mchromeos)
+_OPSYS_LIB_DIRS+=	/usr/local/lib
+_OPSYS_INCLUDE_DIRS+=	/usr/local/include
+.endif
 
 # These are libc builtins
 _OPSYS_PREFER.getopt?=		native
@@ -107,11 +117,30 @@ _STRIPFLAG_INSTALL?=	${_INSTALL_UNSTRIPPED:D:U-s}	# install(1) option to strip
 _OPSYS_SUPPORTS_CWRAPPERS=	yes
 
 _OPSYS_CAN_CHECK_SHLIBS=	yes # use readelf in check/bsd.check-vars.mk
+_OPSYS_CAN_CHECK_SSP=		no  # only supports libssp at this time
 
 # check for maximum command line length and set it in configure's environment,
 # to avoid a test required by the libtool script that takes forever.
 .if exists(/usr/bin/getconf)
 _OPSYS_MAX_CMDLEN_CMD?=	/usr/bin/getconf ARG_MAX
+.endif
+
+# Register support for FORTIFY (with GCC).  Linux only supports FORTIFY
+# when optimisation is enabled, otherwise warnings are issued.
+.if !empty(CFLAGS:M-O*)
+_OPSYS_SUPPORTS_FORTIFY=yes
+.endif
+
+# Register support for RELRO on supported architectures
+.if (${MACHINE_ARCH} == "i386") || \
+    (${MACHINE_ARCH} == "x86_64")
+_OPSYS_SUPPORTS_RELRO=	yes
+.endif
+
+# Register support for SSP on x86 architectures
+.if (${MACHINE_ARCH} == "i386") || \
+    (${MACHINE_ARCH} == "x86_64")
+_OPSYS_SUPPORTS_SSP=	yes
 .endif
 
 .if ${MACHINE_ARCH} == "x86_64"
@@ -121,6 +150,12 @@ LIBABISUFFIX?=	64
 
 .if ${MACHINE_ARCH} == "powerpc64le"
 ABI?=		64
+LIBABISUFFIX?=	64
+.endif
+
+.if ${MACHINE_ARCH} == "aarch64"
+# No toolchain multilib support yet?
+# ABI?=		64
 LIBABISUFFIX?=	64
 .endif
 

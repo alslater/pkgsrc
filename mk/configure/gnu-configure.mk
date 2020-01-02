@@ -1,8 +1,38 @@
-# $NetBSD: gnu-configure.mk,v 1.17 2014/08/23 03:00:18 obache Exp $
+# $NetBSD: gnu-configure.mk,v 1.22 2019/10/06 09:44:41 rillig Exp $
+#
+# Package-settable variables:
+#
+# GNU_CONFIGURE
+#	Whether the package has a GNU-style configure script as the
+#	primary means of configuring itself to the platform.
+#
+#	Possible: yes no
+#	Default: undefined
+#
+# GNU_CONFIGURE_STRICT
+#	Whether unknown --enable/--disable/--with/--without options make
+#	the package fail immediately.
+#
+#	Command line options that are unknown for all configure scripts
+#	of a package are effectively ignored and should be replaced with
+#	their current equivalent (in case they have been renamed), or
+#	otherwise be removed.
+#
+#	This check may incorrectly report unknown options for packages
+#	that have multiple configure scripts, when one of these scripts
+#	recognizes the option and some other doesn't. To check this, run
+#	"bmake show-unknown-configure-options" after the package failed.
+#
+#	Possible: yes no warn
+#	Default: no
+#	See also: configure-help show-unknown-configure-options
+#
+# Keywords: configure configure_args gnu strict enable disable
 
 _VARGROUPS+=			gnu-configure
 _USER_VARS.gnu-configure=	# none
-_PKG_VARS.gnu-configure=	GNU_CONFIGURE GNU_CONFIGURE_PREFIX \
+_PKG_VARS.gnu-configure=	\
+	GNU_CONFIGURE GNU_CONFIGURE_STRICT GNU_CONFIGURE_PREFIX \
 	SET_LIBDIR GNU_CONFIGURE_LIBSUBDIR \
 	GNU_CONFIGURE_LIBDIR GNU_CONFIGURE_INFODIR GNU_CONFIGURE_MANDIR \
 	CONFIGURE_HAS_LIBDIR CONFIGURE_HAS_MANDIR CONFIGURE_HAS_INFODIR \
@@ -31,32 +61,18 @@ CONFIGURE_ARGS+=	--prefix=${GNU_CONFIGURE_PREFIX:Q}
 
 .if (defined(SET_LIBDIR) && !empty(SET_LIBDIR)) || \
 	(defined(GNU_CONFIGURE_LIBDIR) && !empty(GNU_CONFIGURE_LIBDIR)) || \
-	(defined(GNU_CONFIGURE_LIBSUBDIR) && !empty(GNU_CONFIGURE_LIBSUBDIR)) || \
-	(defined(_MULTIARCH) && !empty(USE_MULTIARCH:Mlib) && !defined(NO_MULTIARCH_LIBDIR))
+	(defined(GNU_CONFIGURE_LIBSUBDIR) && !empty(GNU_CONFIGURE_LIBSUBDIR))
 CONFIGURE_HAS_LIBDIR=	yes
 .else
 CONFIGURE_HAS_LIBDIR?=	no
 .endif
 .if defined(GNU_CONFIGURE_LIBSUBDIR) && !empty(GNU_CONFIGURE_LIBSUBDIR)
-.  if defined(_MULTIARCH) && !empty(USE_MULTIARCH:Mlib) && !defined(NO_MULTIARCH_LIBDIR)
-GNU_CONFIGURE_LIBDIR?=	${GNU_CONFIGURE_PREFIX}/lib${LIBARCHSUFFIX}/${GNU_CONFIGURE_LIBSUBDIR}
-.  else
 GNU_CONFIGURE_LIBDIR?=	${GNU_CONFIGURE_PREFIX}/lib/${GNU_CONFIGURE_LIBSUBDIR}
-.  endif
 .else
-.  if defined(_MULTIARCH) && !empty(USE_MULTIARCH:Mlib) && !defined(NO_MULTIARCH_LIBDIR)
-GNU_CONFIGURE_LIBDIR?=	${GNU_CONFIGURE_PREFIX}/lib${LIBARCHSUFFIX}
-.  else
 GNU_CONFIGURE_LIBDIR?=	${GNU_CONFIGURE_PREFIX}/lib
-.  endif
 .endif
 .if !empty(CONFIGURE_HAS_LIBDIR:M[Yy][Ee][Ss])
 CONFIGURE_ARGS+=	--libdir=${GNU_CONFIGURE_LIBDIR}
-.endif
-
-.if defined(_MULTIARCH) && !empty(USE_MULTIARCH:Mbin)
-CONFIGURE_ARGS+=	--bindir=${GNU_CONFIGURE_PREFIX}/bin${BINARCHSUFFIX}
-CONFIGURE_ARGS+=	--sbindir=${GNU_CONFIGURE_PREFIX}/sbin${BINARCHSUFFIX}
 .endif
 
 USE_GNU_CONFIGURE_HOST?=	yes
@@ -167,7 +183,7 @@ _SCRIPT.configure-scripts-osdep=					\
 				found = 0;				\
 			}						\
 		}							\
-		{ print $0 }' $$file >$$file.override;			\
+		{ print $$0 }' $$file >$$file.override;			\
 	${CHMOD} +x $$file.override;					\
 	${TOUCH} -r $$file $$file.override;				\
 	${MV} -f $$file.override $$file
@@ -187,3 +203,28 @@ configure-scripts-osdep:
 		depth=`${EXPR} $$depth + 1`; pattern="*/$$pattern";	\
 	done
 .endif
+
+GNU_CONFIGURE_STRICT?=	warn
+.if ${GNU_CONFIGURE_STRICT:M[yY][eE][sS]}
+CONFIGURE_ARGS+=	--enable-option-checking=fatal
+.elif ${GNU_CONFIGURE_STRICT} == warn
+CONFIGURE_ARGS+=	--enable-option-checking=yes
+.endif
+
+# Inspects the configure scripts of a package to see whether there are
+# multiple configure scripts, and one of them reports an option as
+# unrecognized while some other still needs it.
+#
+# This target is expected to be called manually, after a package failed
+# to configure because of the GNU_CONFIGURE_STRICT check.
+#
+# See also: GNU_CONFIGURE_STRICT configure-help
+#
+# Keywords: GNU_CONFIGURE_STRICT configure-help
+show-unknown-configure-options: .PHONY
+	${RUN} ${MAKE} patch
+	${RUN} ${RM} -f ${_COOKIE.configure}
+	@${STEP_MSG} "Running configure scripts silently"
+	${RUN} ${MAKE} configure GNU_CONFIGURE_STRICT=warn 2>&1		\
+	| ${AWK} -f ${PKGSRCDIR}/mk/configure/gnu-configure-unknown.awk
+	${RUN} ${RM} -f ${_COOKIE.configure}
