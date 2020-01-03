@@ -1,4 +1,4 @@
-$NetBSD: distinfo,v 1.112 2016/12/16 10:21:00 joerg Exp $
+$NetBSD: distinfo,v 1.117 2019/12/01 13:28:09 adam Exp $
 
 SHA1 (qt-everywhere-opensource-src-4.8.7.tar.gz) = 76aef40335c0701e5be7bb3a9101df5d22fe3666
 RMD160 (qt-everywhere-opensource-src-4.8.7.tar.gz) = afb5e5a99388e6429faca59cb5000054feffd166
