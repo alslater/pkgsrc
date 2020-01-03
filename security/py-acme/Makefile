@@ -1,27 +1,24 @@
-# $NetBSD: Makefile,v 1.2 2016/10/11 09:23:35 fhajny Exp $
-
-PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/certbot/acme/}
-CATEGORIES=	security
-
-COMMENT=	ACME protocol implementation in Python
-MAINTAINER=	filip@joyent.com
-LICENSE=	apache-2.0
+# $NetBSD: Makefile,v 1.20 2019/10/02 17:36:43 adam Exp $
 
 .include "../../security/py-certbot/Makefile.common"
 
-DEPENDS+=	${PYPKGPREFIX}-asn1-[0-9]*:../../security/py-asn1
-DEPENDS+=	${PYPKGPREFIX}-cryptography>=0.8:../../security/py-cryptography
-DEPENDS+=	${PYPKGPREFIX}-dns>=1.12:../../net/py-dns
-DEPENDS+=	${PYPKGPREFIX}-ndg_httpsclient-[0-9]*:../../security/py-ndg_httpsclient
+DISTNAME=	acme-${CERTBOT_VERSION}
+MASTER_SITES=	${MASTER_SITE_PYPI:=a/acme/}
+
+COMMENT=	ACME protocol implementation in Python
+
 DEPENDS+=	${PYPKGPREFIX}-OpenSSL>=0.15:../../security/py-OpenSSL
+DEPENDS+=	${PYPKGPREFIX}-cryptography>=1.2.3:../../security/py-cryptography
+DEPENDS+=	${PYPKGPREFIX}-josepy>=1.1.0:../../security/py-josepy
+DEPENDS+=	${PYPKGPREFIX}-mock-[0-9]*:../../devel/py-mock
 DEPENDS+=	${PYPKGPREFIX}-pytz-[0-9]*:../../time/py-pytz
-DEPENDS+=	${PYPKGPREFIX}-requests-[0-9]*:../../devel/py-requests
+DEPENDS+=	${PYPKGPREFIX}-requests>2.10:../../devel/py-requests
+DEPENDS+=	${PYPKGPREFIX}-requests-toolbelt>=0.3.0:../../devel/py-requests-toolbelt
 DEPENDS+=	${PYPKGPREFIX}-rfc3339-[0-9]*:../../time/py-rfc3339
-DEPENDS+=	${PYPKGPREFIX}-six-[0-9]*:../../lang/py-six
-
-EGG_NAME=	${DISTNAME:S/certbot/acme/}
-
-PYSETUPSUBDIR=	acme
+DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:../../devel/py-setuptools
+DEPENDS+=	${PYPKGPREFIX}-six>=1.9.0:../../lang/py-six
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-xdist-[0-9]*:../../devel/py-test-xdist
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"
