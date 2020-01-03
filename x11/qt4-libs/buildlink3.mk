@@ -7,10 +7,10 @@ QT4_LIBS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.qt4-libs+=	qt4-libs>=4.6.1nb2
 BUILDLINK_ABI_DEPENDS.qt4-libs+=	qt4-libs>=4.8.7nb12
-BUILDLINK_PKGSRCDIR.qt4-libs?=	../../x11/qt4-libs
+BUILDLINK_PKGSRCDIR.qt4-libs?=		../../x11/qt4-libs
 
 BUILDLINK_INCDIRS.qt4-libs+=	qt4/include
-BUILDLINK_LIBDIRS.qt4-libs+=	qt4/lib${LIBARCHSUFFIX}
+BUILDLINK_LIBDIRS.qt4-libs+=	qt4/lib
 
 QTDIR=	${BUILDLINK_PREFIX.qt4-libs}/qt4
 
@@ -31,7 +31,7 @@ PTHREAD_OPTS+=	require
 .include "../../x11/libXmu/buildlink3.mk"
 .include "../../x11/libXrandr/buildlink3.mk"
 .  if ${X11_TYPE} == "modular"
-.  include "../../x11/libXinerama/buildlink3.mk"
+.    include "../../x11/libXinerama/buildlink3.mk"
 .  endif
 .endif
 .include "../../security/openssl/buildlink3.mk"
