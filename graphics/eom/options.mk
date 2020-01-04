@@ -1,8 +1,8 @@
-# $NetBSD: options.mk,v 1.2 2016/07/09 13:03:50 wiz Exp $
+# $NetBSD: options.mk,v 1.7 2019/09/02 13:20:18 adam Exp $
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.eog
-PKG_SUPPORTED_OPTIONS=	dbus exif jpeg lcms python rsvg xmp
-PKG_SUGGESTED_OPTIONS=	dbus exif jpeg lcms python rsvg xmp
+PKG_SUPPORTED_OPTIONS=	dbus exif jpeg lcms rsvg xmp
+PKG_SUGGESTED_OPTIONS=	dbus exif jpeg lcms rsvg xmp
 
 .include "../../mk/bsd.options.mk"
 
@@ -35,8 +35,11 @@ CONFIGURE_ARGS+=	--with-cms
 CONFIGURE_ARGS+=	--without-cms
 .endif
 
+# The python option is logically impossible right now.  This option sets python
+# 3.x as being incompatible, yet eom depends on libpeas which itself sets 2.x
+# as being incompatible, leaving us with no remaining choices.
 .if !empty(PKG_OPTIONS:Mpython)
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # py-gtk2
+PYTHON_VERSIONS_ACCEPTED=	 27 # py-gtk2
 .include "../../lang/python/extension.mk"
 .include "../../x11/py-gtk2/buildlink3.mk"
 .include "../../devel/py-gobject/buildlink3.mk"
