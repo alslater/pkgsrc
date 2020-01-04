@@ -1,9 +1,9 @@
-# $NetBSD: Makefile,v 1.3 2016/12/04 05:17:41 ryoon Exp $
+# $NetBSD: Makefile,v 1.23 2019/07/21 22:25:41 wiz Exp $
 
-PKGREVISION= 4
+PKGREVISION= 3
 .include "../../meta-pkgs/mate/Makefile.common"
 
-DISTNAME=	caja-extensions-${MATE_VERSION}
+DISTNAME=	caja-extensions-${VERSION}
 CATEGORIES=	sysutils
 
 COMMENT=	Set of extensions for Caja
@@ -14,7 +14,6 @@ PKGCONFIG_OVERRIDE+=	sendto/caja-sendto.pc.in
 
 .include "../../sysutils/caja/buildlink3.mk"
 .include "../../x11/mate-desktop/buildlink3.mk"
-.include "../../devel/glib2/buildlink3.mk"
 .include "../../net/gupnp/buildlink3.mk"
 .include "../../sysutils/dbus-glib/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

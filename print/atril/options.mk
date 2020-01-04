@@ -1,8 +1,8 @@
-# $NetBSD: options.mk,v 1.2 2016/06/13 22:32:31 youri Exp $
+# $NetBSD: options.mk,v 1.4 2019/10/28 21:49:22 maya Exp $
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.atril
 PKG_SUPPORTED_OPTIONS=	dbus pdf ps xps dvi djvu tiff gdk-pixbuf keyring introspection
-PKG_SUGGESTED_OPTIONS=	dbus pdf ps xps dvi djvu tiff gdk-pixbuf keyring
+PKG_SUGGESTED_OPTIONS=	dbus pdf ps xps djvu tiff gdk-pixbuf keyring
 
 .include "../../mk/bsd.options.mk"
 
@@ -78,7 +78,6 @@ CONFIGURE_ARGS+=	--disable-pixbuf
 .if !empty(PKG_OPTIONS:Mkeyring)
 .include "../../security/libsecret/buildlink3.mk"
 CONFIGURE_ARGS+=	--with-keyring
-PLIST.keyring=yes
 .else
 CONFIGURE_ARGS+=	--without-keyring
 .endif
