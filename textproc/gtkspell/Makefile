@@ -1,23 +1,23 @@
-# $NetBSD: Makefile,v 1.61 2016/08/03 10:22:19 adam Exp $
+# $NetBSD: Makefile,v 1.71 2019/07/21 22:24:12 wiz Exp $
 
 DISTNAME=	gtkspell-2.0.16
-PKGREVISION=	22
+PKGREVISION=	31
 CATEGORIES=	textproc devel
 MASTER_SITES=	http://gtkspell.sourceforge.net/download/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://gtkspell.sourceforge.net/
-COMMENT=	Spell checking GtkTextView widget
+COMMENT=	Spell checking GtkTextView widget (v2)
+LICENSE=	gnu-gpl-v2
 
 USE_TOOLS+=		gmake intltool msgfmt pkg-config
 USE_LIBTOOL=		yes
 USE_PKGLOCALEDIR=	yes
 GNU_CONFIGURE=		yes
 PKGCONFIG_OVERRIDE=	gtkspell-2.0.pc.in
+CONFIGURE_ARGS+=	--disable-gtk-doc
 
 .include "../../devel/pango/buildlink3.mk"
-.include "../../textproc/enchant/buildlink3.mk"
-BUILDLINK_API_DEPENDS.gtk-doc+=	gtk-doc>=1.20
-.include "../../textproc/gtk-doc/buildlink3.mk"
+.include "../../textproc/enchant2/buildlink3.mk"
 .include "../../x11/gtk2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
