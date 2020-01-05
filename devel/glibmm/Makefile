@@ -1,20 +1,20 @@
-# $NetBSD: Makefile,v 1.70 2016/11/25 17:11:50 prlw1 Exp $
+# $NetBSD: Makefile,v 1.82 2019/11/14 11:49:38 wiz Exp $
 
-DISTNAME=	glibmm-2.50.0
+DISTNAME=	glibmm-2.62.0
 CATEGORIES=	devel gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/glibmm/${PKGVERSION_NOREV:R}/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	adam@NetBSD.org
-HOMEPAGE=	http://www.gtkmm.org/
+HOMEPAGE=	https://www.gtkmm.org/
 COMMENT=	C++ bindings for glib
 LICENSE=	gnu-gpl-v2 AND gnu-lgpl-v2.1
 
-GCC_REQD+=		4.8
-USE_LANGUAGES=		c c++
-CXXFLAGS+=		-std=c++11
+# With 4.8, one gets the following:
+#   error: no matching function for call to 'regex_replace(const char*&, std::regex, const char [3])'
+GCC_REQD+=		4.9
+USE_LANGUAGES=		c c++11
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_PKGLOCALEDIR=	yes
 USE_TOOLS+=		gmake pkg-config perl:run
 GNU_CONFIGURE=		yes
@@ -32,7 +32,15 @@ post-install:
 		${DESTDIR}${PREFIX}/share/glibmm-2.4/doctool/${tool}
 .endfor
 
-BUILDLINK_API_DEPENDS.glib2+=		glib2>=2.50.0
+.include "../../mk/bsd.prefs.mk"
+
+PLIST_VARS+=	notmac
+
+.if ${OPSYS} != "Darwin"
+PLIST.notmac=	yes
+.endif
+
+BUILDLINK_API_DEPENDS.glib2+=		glib2>=2.62.0
 .include "../../devel/glib2/buildlink3.mk"
 BUILDLINK_API_DEPENDS.libsigcpp+=	libsigc++>=2.9.1
 .include "../../devel/libsigc++/buildlink3.mk"
