@@ -1,22 +1,21 @@
-# $NetBSD: Makefile,v 1.12 2016/08/03 10:22:23 adam Exp $
+# $NetBSD: Makefile,v 1.25 2019/08/11 13:25:13 wiz Exp $
 #
 
 DISTNAME=	gtksourceviewmm-3.2.0
-PKGREVISION=	10
+PKGREVISION=	20
 CATEGORIES=	x11
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gtksourceviewmm/3.2/}
 EXTRACT_SUFX=	.tar.xz
 
-MAINTAINER=	rodent@NetBSD.org
-HOMEPAGE=	http://developer.gnome.org/gtksourceviewmm/stable/
+MAINTAINER=	pkgsrc-users@NetBSD.org
+HOMEPAGE=	https://developer.gnome.org/gtksourceviewmm/stable/
 COMMENT=	C++ wrapper for the gtksourceview widget library
 LICENSE=	gnu-gpl-v2
 
 WRKSRC=		${WRKDIR}/gtksourceviewmm-3.2.0
 GNU_CONFIGURE=	yes
 USE_TOOLS+=	gmake perl pkg-config
-USE_LANGUAGES=	c c++
-CXXFLAGS+=	-std=c++11
+USE_LANGUAGES=	c c++11
 USE_LIBTOOL=	yes
 
 PKGCONFIG_OVERRIDE+=	gtksourceview/gtksourceviewmm-uninstalled.pc.in
