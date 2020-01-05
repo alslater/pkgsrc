@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.7 2017/10/06 21:00:44 adam Exp $
 bin/opj_compress
 bin/opj_decompress
 bin/opj_dump
