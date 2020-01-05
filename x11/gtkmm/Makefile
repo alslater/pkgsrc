@@ -1,17 +1,17 @@
-# $NetBSD: Makefile,v 1.107 2016/09/16 21:47:47 prlw1 Exp $
+# $NetBSD: Makefile,v 1.118 2019/08/11 13:25:12 wiz Exp $
 
 DISTNAME=	gtkmm-2.24.5
+PKGREVISION=	9
 CATEGORIES=	x11 gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gtkmm/${PKGVERSION_NOREV:R}/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	adam@NetBSD.org
-HOMEPAGE=	http://www.gtkmm.org/
+HOMEPAGE=	https://www.gtkmm.org/
 COMMENT=	C++ interface to Gtk+ v2
 LICENSE=	gnu-lgpl-v2.1
 
-USE_LANGUAGES=		c c++
-CXXFLAGS+=		-std=c++11
+USE_LANGUAGES=		c c++11
 USE_LIBTOOL=		yes
 USE_TOOLS+=		gmake perl:run pkg-config
 GNU_CONFIGURE=		yes
