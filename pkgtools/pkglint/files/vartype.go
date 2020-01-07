@@ -1,30 +1,149 @@
-package main
+package pkglint
 
 import (
 	"path"
+	"sort"
 	"strings"
 )
 
 // Vartype is a combination of a data type and a permission specification.
 // See vardefs.go for examples, and vartypecheck.go for the implementation.
 type Vartype struct {
-	kindOfList KindOfList
 	basicType  *BasicType
+	options    vartypeOptions
 	aclEntries []ACLEntry
-	guessed    bool
 }
 
-type KindOfList uint8
+func NewVartype(basicType *BasicType, options vartypeOptions, aclEntries ...ACLEntry) *Vartype {
+	return &Vartype{basicType, options, aclEntries}
+}
+
+type vartypeOptions uint16
 
 const (
-	lkNone  KindOfList = iota // Plain data type
-	lkSpace                   // List entries are separated by whitespace; used in .for loops.
-	lkShell                   // List entries are shell words; used in the :M, :S modifiers.
+	// List is a compound type, consisting of several space-separated elements.
+	// Elements can have embedded spaces by enclosing them in double or single
+	// quotes, like in the shell.
+	//
+	// These lists are used in the :M, :S modifiers, in .for loops,
+	// and as lists of arbitrary things.
+	List vartypeOptions = 1 << iota
+
+	// The variable is not defined by the pkgsrc infrastructure.
+	// It follows the common naming convention, therefore its type can be guessed.
+	// Sometimes, with files and paths, this leads to wrong decisions.
+	Guessed
+
+	// The variable can, or in some cases must, be defined by the package.
+	// For several of these variables, the pkgsrc infrastructure provides
+	// a reasonable default value, either in bsd.prefs.mk or in bsd.pkg.mk.
+	PackageSettable
+
+	// The variable can be defined by the pkgsrc user in mk.conf.
+	// Its value is available at load time after bsd.prefs.mk has been included.
+	UserSettable
+
+	// This variable is provided by either the pkgsrc infrastructure in
+	// mk/*, or by <sys.mk>, which is included at the very beginning.
+	//
+	// TODO: Clearly distinguish between:
+	//  * sys.mk
+	//  * bsd.prefs.mk
+	//  * bsd.pkg.mk
+	//  * other parts of the pkgsrc infrastructure
+	//  * environment variables
+	//  Having all these possibilities as boolean flags is probably not
+	//  expressive enough. This is related to the scope and lifetime of
+	//  variables and should be modelled separately.
+	//
+	// See DefinedInSysMk.
+	SystemProvided
+
+	// This variable may be provided in the command line by the pkgsrc
+	// user when building a package.
+	//
+	// Since the values of these variables are not written down in any
+	// file, they must not influence the generated binary packages.
+	//
+	// See UserSettable.
+	CommandLineProvided
+
+	// NeedsRationale marks variables that should always contain a comment
+	// describing why they are set. Typical examples are NOT_FOR_* variables.
+	NeedsRationale
+
+	// When something is appended to this variable, each additional
+	// value should be on a line of its own.
+	OnePerLine
+
+	// AlwaysInScope is true when the variable is always available.
+	//
+	// One possibility is that the variable is defined in <sys.mk>,
+	// which means that its value is loaded even before the package
+	// Makefile is parsed.
+	//
+	// Another possibility is that the variable is local to a target,
+	// such as .TARGET or .IMPSRC.
+	//
+	// These variables may be used at load time in .if and .for
+	// directives even before bsd.prefs.mk is included.
+	//
+	// XXX: This option is related to the lifetime of the variable.
+	//  Other aspects of the lifetime are handled by ACLPermissions,
+	//  see aclpUseLoadtime.
+	AlwaysInScope
+
+	// DefinedIfInScope is true if the variable is guaranteed to be
+	// defined, provided that it is in scope.
+	//
+	// This means the variable can be used in expressions like ${VAR}
+	// without having to add the :U modifier like in ${VAR:U}.
+	//
+	// This option is independent of the lifetime of the variable,
+	// it merely expresses "if the variable is in scope, it is defined".
+	// As of December 2019, the lifetime of variables is managed by
+	// the ACLPermissions, but is incomplete.
+	//
+	// TODO: Model the lifetime and scope separately, see SystemProvided.
+	//
+	// Examples:
+	//  MACHINE_PLATFORM (from sys.mk)
+	//  PKGPATH (from bsd.prefs.mk)
+	//  PREFIX (from bsd.pkg.mk)
+	DefinedIfInScope
+
+	// NonemptyIfDefined is true if the variable is guaranteed to be
+	// nonempty, provided that the variable is in scope and defined.
+	//
+	// This is typical for system-provided variables like PKGPATH or
+	// MACHINE_PLATFORM, as well as package-settable variables like
+	// PKGNAME.
+	//
+	// This option is independent of the lifetime of the variable,
+	// it merely expresses "if the variable is in scope, it is defined".
+	// As of December 2019, the lifetime of variables is managed by
+	// the ACLPermissions, but is incomplete.
+	//
+	// TODO: Model the lifetime and scope separately, see SystemProvided.
+	//
+	// Examples:
+	//  MACHINE_PLATFORM (from sys.mk)
+	//  PKGPATH (from bsd.prefs.mk)
+	//  PREFIX (from bsd.pkg.mk)
+	//  PKGNAME (package-settable)
+	//  X11_TYPE (user-settable)
+	NonemptyIfDefined
+
+	NoVartypeOptions = 0
 )
 
 type ACLEntry struct {
-	glob        string // Examples: "Makefile", "*.mk"
+	matcher     *pathMatcher
 	permissions ACLPermissions
+}
+
+func NewACLEntry(glob string, permissions ACLPermissions) ACLEntry {
+	return ACLEntry{newPathMatcher(glob), permissions}
 }
 
 type ACLPermissions uint8
@@ -35,13 +154,17 @@ const (
 	aclpAppend                                 // VAR += value
 	aclpUseLoadtime                            // OTHER := ${VAR}, OTHER != ${VAR}
 	aclpUse                                    // OTHER = ${VAR}
-	aclpUnknown
-	aclpAll        = aclpAppend | aclpSetDefault | aclpSet | aclpUseLoadtime | aclpUse
-	aclpAllRuntime = aclpAppend | aclpSetDefault | aclpSet | aclpUse
+
+	aclpNone ACLPermissions = 0
+
 	aclpAllWrite   = aclpSet | aclpSetDefault | aclpAppend
 	aclpAllRead    = aclpUseLoadtime | aclpUse
+	aclpAll        = aclpAllWrite | aclpAllRead
+	aclpAllRuntime = aclpAll &^ aclpUseLoadtime
 )
 
+// Contains returns whether each permission of the given subset is
+// contained in this permission set.
 func (perms ACLPermissions) Contains(subset ACLPermissions) bool {
 	return perms&subset == subset
 }
@@ -50,38 +173,47 @@ func (perms ACLPermissions) String() string {
 	if perms == 0 {
 		return "none"
 	}
-	result := "" +
-		ifelseStr(perms.Contains(aclpSet), "set, ", "") +
-		ifelseStr(perms.Contains(aclpSetDefault), "set-default, ", "") +
-		ifelseStr(perms.Contains(aclpAppend), "append, ", "") +
-		ifelseStr(perms.Contains(aclpUseLoadtime), "use-loadtime, ", "") +
-		ifelseStr(perms.Contains(aclpUse), "use, ", "") +
-		ifelseStr(perms.Contains(aclpUnknown), "unknown, ", "")
-	return strings.TrimRight(result, ", ")
+	return joinSkipEmpty(", ",
+		condStr(perms.Contains(aclpSet), "set", ""),
+		condStr(perms.Contains(aclpSetDefault), "set-default", ""),
+		condStr(perms.Contains(aclpAppend), "append", ""),
+		condStr(perms.Contains(aclpUseLoadtime), "use-loadtime", ""),
+		condStr(perms.Contains(aclpUse), "use", ""))
 }
 
 func (perms ACLPermissions) HumanString() string {
-	result := "" +
-		ifelseStr(perms.Contains(aclpSet), "set, ", "") +
-		ifelseStr(perms.Contains(aclpSetDefault), "given a default value, ", "") +
-		ifelseStr(perms.Contains(aclpAppend), "appended to, ", "") +
-		ifelseStr(perms.Contains(aclpUseLoadtime), "used at load time, ", "") +
-		ifelseStr(perms.Contains(aclpUse), "used, ", "")
-	return strings.TrimRight(result, ", ")
+	return joinSkipEmptyOxford("or",
+		condStr(perms.Contains(aclpSet), "set", ""),
+		condStr(perms.Contains(aclpSetDefault), "given a default value", ""),
+		condStr(perms.Contains(aclpAppend), "appended to", ""),
+		condStr(perms.Contains(aclpUseLoadtime), "used at load time", ""),
+		condStr(perms.Contains(aclpUse), "used", ""))
 }
 
-func (vt *Vartype) EffectivePermissions(fname string) ACLPermissions {
+func (vt *Vartype) IsList() bool                { return vt.options&List != 0 }
+func (vt *Vartype) IsGuessed() bool             { return vt.options&Guessed != 0 }
+func (vt *Vartype) IsPackageSettable() bool     { return vt.options&PackageSettable != 0 }
+func (vt *Vartype) IsUserSettable() bool        { return vt.options&UserSettable != 0 }
+func (vt *Vartype) IsSystemProvided() bool      { return vt.options&SystemProvided != 0 }
+func (vt *Vartype) IsCommandLineProvided() bool { return vt.options&CommandLineProvided != 0 }
+func (vt *Vartype) NeedsRationale() bool        { return vt.options&NeedsRationale != 0 }
+func (vt *Vartype) IsOnePerLine() bool          { return vt.options&OnePerLine != 0 }
+func (vt *Vartype) IsAlwaysInScope() bool       { return vt.options&AlwaysInScope != 0 }
+func (vt *Vartype) IsDefinedIfInScope() bool    { return vt.options&DefinedIfInScope != 0 }
+func (vt *Vartype) IsNonemptyIfDefined() bool   { return vt.options&NonemptyIfDefined != 0 }
+
+func (vt *Vartype) EffectivePermissions(basename string) ACLPermissions {
 	for _, aclEntry := range vt.aclEntries {
-		if m, _ := path.Match(aclEntry.glob, path.Base(fname)); m {
+		if aclEntry.matcher.matches(basename) {
 			return aclEntry.permissions
 		}
 	}
-	return aclpUnknown
+	return aclpNone
 }
 
-// Returns the union of all possible permissions. This can be used to
-// check whether a variable may be defined or used at all, or if it is
-// read-only.
+// Union returns the union of all possible permissions.
+// This can be used to check whether a variable may be defined or used
+// at all, or if it is read-only.
 func (vt *Vartype) Union() ACLPermissions {
 	var permissions ACLPermissions
 	for _, aclEntry := range vt.aclEntries {
@@ -90,48 +222,107 @@ func (vt *Vartype) Union() ACLPermissions {
 	return permissions
 }
 
-func (vt *Vartype) AllowedFiles(perms ACLPermissions) string {
-	files := make([]string, 0, len(vt.aclEntries))
+// AlternativeFiles lists the file patterns in which all of the given
+// permissions are allowed, readily formatted to be used in a diagnostic.
+//
+// If the permission is allowed nowhere, an empty string is returned.
+func (vt *Vartype) AlternativeFiles(perms ACLPermissions) string {
+	var pos []string
+	var neg []string
+
+	merge := func(slice []string) []string {
+		di := 0
+		for si, early := range slice {
+			redundant := false
+			for _, late := range slice[si+1:] {
+				matched, err := path.Match(late, early)
+				assertNil(err, "path.Match")
+				if matched {
+					redundant = true
+					break
+				}
+			}
+			if !redundant {
+				slice[di] = early
+				di++
+			}
+		}
+		return slice[:di]
+	}
+
 	for _, aclEntry := range vt.aclEntries {
 		if aclEntry.permissions.Contains(perms) {
-			files = append(files, aclEntry.glob)
+			pos = append(pos, aclEntry.matcher.originalPattern)
+		} else {
+			neg = append(neg, aclEntry.matcher.originalPattern)
 		}
 	}
-	return strings.Join(files, ", ")
+
+	if len(neg) == 0 {
+		pos = merge(pos)
+	}
+	if len(pos) == 0 {
+		neg = merge(neg)
+	}
+
+	positive := joinSkipEmptyCambridge("or", pos...)
+	if positive == "" {
+		return ""
+	}
+
+	negative := joinSkipEmptyCambridge("or", neg...)
+	if negative == "" {
+		return positive
+	}
+
+	if negative == "*" {
+		return positive + " only"
+	}
+
+	return positive + ", but not " + negative
 }
 
-// Returns whether the type is considered a shell list.
-// This distinction between "real lists" and "considered a list" makes
-// the implementation of checklineMkVartype easier.
-func (vt *Vartype) IsConsideredList() bool {
-	switch vt.kindOfList {
-	case lkShell:
+func (vt *Vartype) MayBeAppendedTo() bool {
+	if vt.IsList() {
 		return true
-	case lkSpace:
-		return false
 	}
+
 	switch vt.basicType {
-	case BtAwkCommand, BtSedCommands, BtShellCommand, BtShellCommands, BtLicense, BtConfFiles:
+	case BtAwkCommand, BtSedCommands, BtShellCommand, BtShellCommands, BtConfFiles:
+		return true
+	case BtComment, BtLicense:
 		return true
 	}
 	return false
 }
 
-func (vt *Vartype) MayBeAppendedTo() bool {
-	return vt.kindOfList != lkNone || vt.IsConsideredList()
-}
-
 func (vt *Vartype) String() string {
-	switch vt.kindOfList {
-	case lkNone:
-		return vt.basicType.name
-	case lkSpace:
-		return "SpaceList of " + vt.basicType.name
-	case lkShell:
-		return "ShellList of " + vt.basicType.name
-	default:
-		panic("Unknown list type")
+	var opts []string
+	if vt.IsList() {
+		opts = append(opts, "list")
 	}
+	if vt.IsGuessed() {
+		opts = append(opts, "guessed")
+	}
+	if vt.IsPackageSettable() {
+		opts = append(opts, "package-settable")
+	}
+	if vt.IsUserSettable() {
+		opts = append(opts, "user-settable")
+	}
+	if vt.IsSystemProvided() {
+		opts = append(opts, "system-provided")
+	}
+	if vt.IsCommandLineProvided() {
+		opts = append(opts, "command-line-provided")
+	}
+
+	optsSuffix := ""
+	if len(opts) > 0 {
+		optsSuffix = " (" + strings.Join(opts, ", ") + ")"
+	}
+
+	return vt.basicType.name + optsSuffix
 }
 
 func (vt *Vartype) IsShell() bool {
@@ -147,29 +338,35 @@ func (vt *Vartype) IsShell() bool {
 	return false
 }
 
-// IsBasicSafe returns whether the basic vartype consists only of
-// characters that don't need escaping in most contexts, like A-Za-z0-9-_.
-func (vt *Vartype) IsBasicSafe() bool {
-	switch vt.basicType {
+// NeedsQ returns whether variables of this type need the :Q
+// modifier to be safely embedded in other variables or shell programs.
+//
+// Variables that can consist only of characters like A-Za-z0-9-._
+// don't need the :Q modifier. All others do, for safety reasons.
+func (bt *BasicType) NeedsQ() bool {
+	switch bt {
 	case BtBuildlinkDepmethod,
 		BtCategory,
 		BtDistSuffix,
 		BtEmulPlatform,
 		BtFileMode,
 		BtFilename,
-		BtIdentifier,
+		BtIdentifierDirect,
+		BtIdentifierIndirect,
 		BtInteger,
 		BtMachineGnuPlatform,
 		BtMachinePlatform,
 		BtOption,
 		BtPathname,
 		BtPerl5Packlist,
-		BtPkgName,
+		BtPkgname,
 		BtPkgOptionsVar,
-		BtPkgPath,
-		BtPkgRevision,
+		BtPkgpath,
+		BtPkgrevision,
 		BtPrefixPathname,
 		BtPythonDependency,
+		BtRPkgName,
+		BtRPkgVer,
 		BtRelativePkgDir,
 		BtRelativePkgPath,
 		BtStage,
@@ -179,17 +376,9 @@ func (vt *Vartype) IsBasicSafe() bool {
 		BtWrkdirSubdirectory,
 		BtYesNo,
 		BtYesNoIndirectly:
-		return true
+		return false
 	}
-	return false
-}
-
-func (vt *Vartype) IsPlainString() bool {
-	switch vt.basicType {
-	case BtComment, BtMessage, BtUnknown:
-		return true
-	}
-	return false
+	return !bt.IsEnum()
 }
 
 type BasicType struct {
@@ -200,12 +389,18 @@ type BasicType struct {
 func (bt *BasicType) IsEnum() bool {
 	return hasPrefix(bt.name, "enum: ")
 }
+
 func (bt *BasicType) HasEnum(value string) bool {
 	return !contains(value, " ") && contains(bt.name, " "+value+" ")
 }
+
 func (bt *BasicType) AllowedEnums() string {
 	return bt.name[6 : len(bt.name)-1]
 }
+
+// TODO: Try to implement BasicType.PossibleChars()
+// TODO: Try to implement BasicType.CanBeEmpty()
+// TODO: Try to implement BasicType.PossibleWords() / PossibleValues()
 
 var (
 	BtAwkCommand             = &BasicType{"AwkCommand", (*VartypeCheck).AwkCommand}
@@ -221,10 +416,12 @@ var (
 	BtEmulPlatform           = &BasicType{"EmulPlatform", (*VartypeCheck).EmulPlatform}
 	BtFetchURL               = &BasicType{"FetchURL", (*VartypeCheck).FetchURL}
 	BtFilename               = &BasicType{"Filename", (*VartypeCheck).Filename}
-	BtFilemask               = &BasicType{"Filemask", (*VartypeCheck).Filemask}
+	BtFilePattern            = &BasicType{"FilePattern", (*VartypeCheck).FilePattern}
 	BtFileMode               = &BasicType{"FileMode", (*VartypeCheck).FileMode}
+	BtGccReqd                = &BasicType{"GccReqd", (*VartypeCheck).GccReqd}
 	BtHomepage               = &BasicType{"Homepage", (*VartypeCheck).Homepage}
-	BtIdentifier             = &BasicType{"Identifier", (*VartypeCheck).Identifier}
+	BtIdentifierDirect       = &BasicType{"Identifier", (*VartypeCheck).IdentifierDirect}
+	BtIdentifierIndirect     = &BasicType{"Identifier", (*VartypeCheck).IdentifierIndirect}
 	BtInteger                = &BasicType{"Integer", (*VartypeCheck).Integer}
 	BtLdFlag                 = &BasicType{"LdFlag", (*VartypeCheck).LdFlag}
 	BtLicense                = &BasicType{"License", (*VartypeCheck).License}
@@ -235,30 +432,32 @@ var (
 	BtMessage                = &BasicType{"Message", (*VartypeCheck).Message}
 	BtOption                 = &BasicType{"Option", (*VartypeCheck).Option}
 	BtPathlist               = &BasicType{"Pathlist", (*VartypeCheck).Pathlist}
-	BtPathmask               = &BasicType{"Pathmask", (*VartypeCheck).Pathmask}
+	BtPathPattern            = &BasicType{"PathPattern", (*VartypeCheck).PathPattern}
 	BtPathname               = &BasicType{"Pathname", (*VartypeCheck).Pathname}
 	BtPerl5Packlist          = &BasicType{"Perl5Packlist", (*VartypeCheck).Perl5Packlist}
 	BtPerms                  = &BasicType{"Perms", (*VartypeCheck).Perms}
-	BtPkgName                = &BasicType{"PkgName", (*VartypeCheck).PkgName}
-	BtPkgPath                = &BasicType{"PkgPath", (*VartypeCheck).PkgPath}
+	BtPkgname                = &BasicType{"Pkgname", (*VartypeCheck).Pkgname}
+	BtPkgpath                = &BasicType{"Pkgpath", (*VartypeCheck).Pkgpath}
 	BtPkgOptionsVar          = &BasicType{"PkgOptionsVar", (*VartypeCheck).PkgOptionsVar}
-	BtPkgRevision            = &BasicType{"PkgRevision", (*VartypeCheck).PkgRevision}
+	BtPkgrevision            = &BasicType{"Pkgrevision", (*VartypeCheck).Pkgrevision}
 	BtPrefixPathname         = &BasicType{"PrefixPathname", (*VartypeCheck).PrefixPathname}
 	BtPythonDependency       = &BasicType{"PythonDependency", (*VartypeCheck).PythonDependency}
+	BtRPkgName               = &BasicType{"RPkgName", (*VartypeCheck).RPkgName}
+	BtRPkgVer                = &BasicType{"RPkgVer", (*VartypeCheck).RPkgVer}
 	BtRelativePkgDir         = &BasicType{"RelativePkgDir", (*VartypeCheck).RelativePkgDir}
 	BtRelativePkgPath        = &BasicType{"RelativePkgPath", (*VartypeCheck).RelativePkgPath}
 	BtRestricted             = &BasicType{"Restricted", (*VartypeCheck).Restricted}
-	BtSedCommand             = &BasicType{"SedCommand", (*VartypeCheck).SedCommand}
 	BtSedCommands            = &BasicType{"SedCommands", (*VartypeCheck).SedCommands}
-	BtShellCommand           = &BasicType{"ShellCommand", nil}
-	BtShellCommands          = &BasicType{"ShellCommands", nil}
-	BtShellWord              = &BasicType{"ShellWord", nil}
+	BtShellCommand           = &BasicType{"ShellCommand", nil}  // see func init below
+	BtShellCommands          = &BasicType{"ShellCommands", nil} // see func init below
+	BtShellWord              = &BasicType{"ShellWord", nil}     // see func init below
 	BtStage                  = &BasicType{"Stage", (*VartypeCheck).Stage}
 	BtTool                   = &BasicType{"Tool", (*VartypeCheck).Tool}
 	BtUnknown                = &BasicType{"Unknown", (*VartypeCheck).Unknown}
 	BtURL                    = &BasicType{"URL", (*VartypeCheck).URL}
 	BtUserGroupName          = &BasicType{"UserGroupName", (*VartypeCheck).UserGroupName}
 	BtVariableName           = &BasicType{"VariableName", (*VartypeCheck).VariableName}
+	BtVariableNamePattern    = &BasicType{"VariableNamePattern", (*VartypeCheck).VariableNamePattern}
 	BtVersion                = &BasicType{"Version", (*VartypeCheck).Version}
 	BtWrapperReorder         = &BasicType{"WrapperReorder", (*VartypeCheck).WrapperReorder}
 	BtWrapperTransform       = &BasicType{"WrapperTransform", (*VartypeCheck).WrapperTransform}
@@ -267,10 +466,66 @@ var (
 	BtYes                    = &BasicType{"Yes", (*VartypeCheck).Yes}
 	BtYesNo                  = &BasicType{"YesNo", (*VartypeCheck).YesNo}
 	BtYesNoIndirectly        = &BasicType{"YesNoIndirectly", (*VartypeCheck).YesNoIndirectly}
+
+	BtMachineArch             = enumFromValues(machineArchValues)
+	BtMachineGnuArch          = enumFromValues(machineGnuArchValues)
+	BtEmulOpsys               = enumFromValues(emulOpsysValues)
+	BtEmulArch                = enumFromValues(machineArchValues) // Just a wild guess.
+	BtMachineGnuPlatformOpsys = BtEmulOpsys
+
+	btForLoop = &BasicType{".for loop", nil /* never called */}
 )
 
-func init() { // Necessary due to circular dependency
+// Necessary due to circular dependencies between the checkers.
+//
+// The Go compiler is stricter than absolutely necessary for this particular case.
+// The following methods are only referred to but not invoked during initialization.
+func init() {
 	BtShellCommand.checker = (*VartypeCheck).ShellCommand
 	BtShellCommands.checker = (*VartypeCheck).ShellCommands
 	BtShellWord.checker = (*VartypeCheck).ShellWord
+}
+
+// TODO: Move these values to VarTypeRegistry.Init and read them from the
+//  pkgsrc infrastructure files, as far as possible.
+const (
+	// See mk/emulator/emulator-vars.mk.
+	emulOpsysValues = "" +
+		"bitrig bsdos cygwin darwin dragonfly freebsd " +
+		"haiku hpux interix irix linux mirbsd netbsd openbsd osf1 solaris sunos"
+
+	// Hardware architectures having the same name in bsd.own.mk and the GNU world.
+	// These are best-effort guesses, since they depend on the operating system.
+	archValues = "" +
+		"aarch64 alpha amd64 arc arm cobalt convex dreamcast i386 " +
+		"hpcmips hpcsh hppa hppa64 ia64 " +
+		"m68k m88k mips mips64 mips64el mipseb mipsel mipsn32 mlrisc " +
+		"ns32k pc532 pmax powerpc powerpc64 rs6000 s390 sparc sparc64 vax x86_64"
+
+	// See mk/bsd.prefs.mk:/^GNU_ARCH\./
+	machineArchValues = "" +
+		archValues + " " +
+		"aarch64eb amd64 arm26 arm32 coldfire earm earmeb earmhf earmhfeb earmv4 earmv4eb earmv5 " +
+		"earmv5eb earmv6 earmv6eb earmv6hf earmv6hfeb earmv7 earmv7eb earmv7hf earmv7hfeb evbarm " +
+		"i386 i586 i686 m68000 mips mips64eb sh3eb sh3el"
+
+	// See mk/bsd.prefs.mk:/^GNU_ARCH\./
+	machineGnuArchValues = "" +
+		archValues + " " +
+		"aarch64_be arm armeb armv4 armv4eb armv6 armv6eb armv7 armv7eb " +
+		"i486 m5407 m68010 mips64 mipsel sh shle x86_64"
+)
+
+func enumFromValues(spaceSeparated string) *BasicType {
+	values := strings.Fields(spaceSeparated)
+	sort.Strings(values)
+	seen := make(map[string]bool)
+	var unique []string
+	for _, value := range values {
+		if !seen[value] {
+			seen[value] = true
+			unique = append(unique, value)
+		}
+	}
+	return enum(strings.Join(unique, " "))
 }
