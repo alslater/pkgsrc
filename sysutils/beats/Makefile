@@ -1,30 +1,39 @@
-# $NetBSD: Makefile,v 1.1 2017/01/05 16:43:09 fhajny Exp $
-#
+# $NetBSD: Makefile,v 1.47 2019/12/13 07:44:03 bsiegert Exp $
 
-DISTNAME=		beats-6.3.0
-PKGREVISION= 2
+DISTNAME=		beats-6.6.2
+PKGREVISION=		7
 CATEGORIES=		sysutils
 MASTER_SITES=		${MASTER_SITE_GITHUB:=elastic/}
 GITHUB_PROJECT=		beats
 GITHUB_TAG=		v${PKGVERSION_NOREV}
 
-MAINTAINER=		filip@joyent.com
+MAINTAINER=		fhajny@NetBSD.org
 HOMEPAGE=		https://www.elastic.co/products/beats
 COMMENT=		Data Shippers for Elasticsearch
 LICENSE=		apache-2.0
 
-.include "../../lang/go/version.mk"
-BUILD_DEPENDS+=		go-${GO_VERSION}*:../../lang/go
-
 EXTRACT_USING=		bsdtar
 USE_TOOLS+=		gmake
 
-WRKSRC=			${WRKDIR}/src/github.com/elastic/beats
+GO_DIST_BASE=		${PKGBASE}-${GITHUB_TAG:S/v//}
+GO_SRCPATH=		github.com/elastic/beats
+
+.include "../../lang/go/go-vars.mk"
+.include "../../mk/bsd.prefs.mk"
+
+PLIST_VARS+=		audit
 
 # Components to build/install
 BEATS=			filebeat heartbeat metricbeat packetbeat
 
+# No SunOS compatible event reading supported
+.if ${OPSYS} != "SunOS"
+BEATS+=			auditbeat
+PLIST.audit=		yes
+.endif
+
 .for beat in ${BEATS}
+CHECK_RELRO_SKIP+=	bin/${beat}
 CONF_FILES+=		share/examples/beats/${beat}.yml			\
 				${PKG_SYSCONFDIR}/${beat}.yml
 .endfor
@@ -42,14 +51,19 @@ SMF_INSTANCES+=		${BEATS}
 OWN_DIRS+=		${BEATS_DIR} ${BEATS_LOGDIR}
 
 MAKE_ENV+=		GOPATH=${WRKDIR}:${PREFIX}/gopkg
-BUILD_DIRS=		${BEATS}
+MAKE_ENV+=		CGO_LDFLAGS="-L${BUILDLINK_PREFIX.libpcap}/lib ${COMPILER_RPATH_FLAG}${BUILDLINK_PREFIX.libpcap}/lib"
+
+# The build system defaults to -i which modifies system files!
+MAKE_ENV+=		GOBUILD_FLAGS=
+
 BUILD_TARGET=		#
 
 INSTALLATION_DIRS+=	bin share/examples/beats
 
-post-extract:
-	${MKDIR} ${WRKSRC}
-	${MV} ${WRKDIR}/${DISTNAME}/* ${WRKSRC}
+do-build:
+.for beat in ${BEATS}
+	cd ${WRKSRC}/${beat} && ${BUILD_MAKE_CMD}
+.endfor
 
 do-install:
 .for beat in ${BEATS}
@@ -60,5 +74,6 @@ do-install:
 		${DESTDIR}${PREFIX}/share/examples/beats
 .endfor
 
+.include "../../lang/go/go-package.mk"
 .include "../../net/libpcap/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

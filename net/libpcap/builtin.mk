@@ -1,12 +1,12 @@
-# $NetBSD: builtin.mk,v 1.17 2011/01/29 21:17:48 markd Exp $
+# $NetBSD: builtin.mk,v 1.19 2019/11/03 11:45:40 rillig Exp $
 
 BUILTIN_PKG:=	libpcap
 
 .include "../../mk/bsd.fast.prefs.mk"
 
-BUILTIN_FIND_FILES_VAR:=	H_LIBPCAP
-BUILTIN_FIND_FILES.H_LIBPCAP=	/usr/include/pcap/pcap.h
-BUILTIN_FIND_FILES.H_LIBPCAP+=	/usr/include/pcap.h
+BUILTIN_FIND_HEADERS_VAR:=		H_LIBPCAP
+BUILTIN_FIND_HEADERS.H_LIBPCAP=		pcap/pcap.h
+BUILTIN_FIND_HEADERS.H_LIBPCAP+=	pcap.h
 
 .include "../../mk/buildlink3/bsd.builtin.mk"
 
@@ -20,7 +20,7 @@ IS_BUILTIN.libpcap=	no
 IS_BUILTIN.libpcap=	yes
 .  endif
 .endif
-MAKEVARS+=	IS_BUILTIN.libpcap
+MAKEVARS+=		IS_BUILTIN.libpcap
 
 ###
 ### If there is a built-in implementation, then set BUILTIN_PKG.<pkg> to
@@ -77,9 +77,9 @@ BUILTIN_VERSION.libpcap=	0.5.0
 .  else
 BUILTIN_VERSION.libpcap=	0.4.0
 .  endif
-BUILTIN_PKG.libpcap=	libpcap-${BUILTIN_VERSION.libpcap}
+BUILTIN_PKG.libpcap=		libpcap-${BUILTIN_VERSION.libpcap}
 .endif
-MAKEVARS+=	BUILTIN_PKG.libpcap
+MAKEVARS+=			BUILTIN_PKG.libpcap
 
 ###
 ### Determine whether we should use the built-in implementation if it
@@ -106,4 +106,4 @@ USE_BUILTIN.libpcap!=							\
 .    endif
 .  endif  # PREFER.libpcap
 .endif
-MAKEVARS+=	USE_BUILTIN.libpcap
+MAKEVARS+=		USE_BUILTIN.libpcap

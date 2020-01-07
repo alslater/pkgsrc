@@ -1,11 +1,10 @@
-# $NetBSD: Makefile,v 1.15 2018/12/09 18:52:34 adam Exp $
+# $NetBSD: Makefile,v 1.22 2019/12/16 15:58:18 taca Exp $
 
 #
 # We can't omit PKGNAME here to handle PKG_OPTIONS.
 #
 PKGNAME=		php-${PHP_VERSION:S/RC/rc/}
 
-HOMEPAGE=		http://www.php.net/
 COMMENT=		PHP Hypertext Preprocessor version 7.2
 LICENSE=		php
 
@@ -29,14 +28,16 @@ MAKE_ENV+=		INSTALL_ROOT=${DESTDIR}
 CONF_FILES=		${EGDIR}/php.ini-production ${PKG_SYSCONFDIR}/php.ini
 PLIST_SUBST+=		PHPEXTDIR="${PHP_EXTENSION_DIR}"
 
+REPLACE_PHP=		ext/phar/phar/phar.php run-tests.php
+
 SUBST_CLASSES+=		path
 SUBST_MESSAGE.path=	Fixing common paths.
 SUBST_STAGE.path=	pre-configure
 SUBST_FILES.path=	ext/phar/phar/phar.php
 SUBST_FILES.path+=	php.ini-development php.ini-production run-tests.php
 SUBST_FILES.path+=	sapi/cgi/Makefile.frag
-SUBST_SED.path=		-e 's,@CGIDIR@,${CGIDIR},g'
-SUBST_SED.path+=	-e 's,@PREFIX@,${PREFIX},g'
+SUBST_VARS.path=	CGIDIR
+SUBST_VARS.path+=	PREFIX
 
 INSTALLATION_DIRS+=	${CGIDIR} ${PHP_EXTENSION_DIR} ${EGDIR} share/php
 
@@ -60,4 +61,5 @@ post-install:
 		${DESTDIR}${EGDIR}
 	${INSTALL_DATA} ${WRKSRC}/php.gif ${DESTDIR}${PREFIX}/share/php
 
+.include "../../lang/php/replace.mk"
 .include "../../mk/bsd.pkg.mk"

@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.62 2016/03/08 12:53:34 adam Exp $
+# $NetBSD: Makefile,v 1.65 2019/10/14 20:10:19 triaxx Exp $
 
-DISTNAME=	libpcap-1.7.4
+DISTNAME=	libpcap-1.9.1
 CATEGORIES=	net
 MASTER_SITES=	http://www.tcpdump.org/release/
 
@@ -13,9 +13,9 @@ NOT_FOR_PLATFORM+=	Interix-*-* # no raw interface access
 
 USE_LIBTOOL=		yes
 USE_TOOLS+=		bison flex gm4
-USE_MULTIARCH=		bin lib
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS.Darwin+=	--disable-universal
+PKGCONFIG_OVERRIDE=	libpcap.pc.in
 
 # Versions of SunOS which include getifaddrs confuse the configure script,
 # and result in dlpi stubs not being enabled.

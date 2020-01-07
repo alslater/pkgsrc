@@ -25,7 +25,7 @@ _SYS_VARS.pgsql=	PG_LIB_EXT PGSQL_TYPE PGPKGSRCDIR
 .include "../../mk/bsd.prefs.mk"
 
 PGSQL_VERSION_DEFAULT?=		95
-PGSQL_VERSIONS_ACCEPTED?=	96 95 94
+PGSQL_VERSIONS_ACCEPTED?=	12 11 10 96 95 94
 
 # transform the list into individual variables
 .for pv in ${PGSQL_VERSIONS_ACCEPTED}
