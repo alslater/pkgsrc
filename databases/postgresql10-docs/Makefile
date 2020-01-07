@@ -1,9 +1,9 @@
-# $NetBSD: Makefile,v 1.3 2018/11/09 18:12:27 adam Exp $
+# $NetBSD: Makefile,v 1.3 2018/11/09 18:12:24 adam Exp $
 
-PKGNAME=	${DISTNAME:C/-/96-docs-/}
+PKGNAME=	${DISTNAME:C/-/10-docs-/}
 COMMENT=	PostgreSQL database documentation
 
-.include "../../databases/postgresql96/Makefile.common"
+.include "../../databases/postgresql10/Makefile.common"
 
 BUILD_DEPENDS+=	docbook-xml>=4.5:../../textproc/docbook-xml
 BUILD_DEPENDS+=	docbook-xsl>=1.75.2:../../textproc/docbook-xsl

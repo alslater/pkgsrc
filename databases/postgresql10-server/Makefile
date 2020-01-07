@@ -1,25 +1,24 @@
-# $NetBSD: Makefile,v 1.5 2019/02/17 08:26:13 adam Exp $
+# $NetBSD: Makefile,v 1.7 2019/10/25 12:01:19 triaxx Exp $
 
-PKGNAME=	${DISTNAME:C/-/96-server-/}
+PKGNAME=	${DISTNAME:C/-/10-server-/}
 COMMENT=	PostgreSQL database server programs
 
 # mips has no TAS implementation
 BROKEN_ON_PLATFORM=	*-*-mips
 
-.include "../../databases/postgresql96/Makefile.common"
+.include "../../databases/postgresql10/Makefile.common"
 
 CONFIGURE_ARGS+=	--with-openssl
 
 INSTALL_DIRS=	src/backend
 INSTALL_DIRS+=	src/backend/replication/libpqwalreceiver
+INSTALL_DIRS+=	src/backend/replication/pgoutput
 INSTALL_DIRS+=	src/backend/utils/mb/conversion_procs
 INSTALL_DIRS+=	src/backend/snowball
 INSTALL_DIRS+=	src/timezone
 INSTALL_DIRS+=	src/pl
 BUILD_DIRS=	src/port
 BUILD_DIRS+=	${INSTALL_DIRS}
-
-LIBS.SunOS+=	-lintl
 
 # PostgreSQL has loadable server-side language modules.
 #
@@ -63,7 +62,7 @@ RCD_SCRIPTS=		pgsql
 SMF_METHODS=		postgresql
 SMF_NAME=		postgresql
 
-.include "../../databases/postgresql96-client/buildlink3.mk"
+.include "../../databases/postgresql10-client/buildlink3.mk"
 .include "../../security/openssl/buildlink3.mk"
 
 # Avoid conflict between "${SSLBASE}/include/openssl/des.h" and

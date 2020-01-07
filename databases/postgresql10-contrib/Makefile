@@ -1,11 +1,11 @@
-# $NetBSD: Makefile,v 1.6 2019/11/02 15:38:08 rillig Exp $
+# $NetBSD: Makefile,v 1.5 2019/11/02 15:38:07 rillig Exp $
 
-PKGNAME=	${DISTNAME:C/-/96-contrib-/}
+PKGNAME=	${DISTNAME:C/-/10-contrib-/}
 COMMENT=	Contrib subtree of tools and plug-ins
 
-.include "../../databases/postgresql96/Makefile.common"
+.include "../../databases/postgresql10/Makefile.common"
 
-DEPENDS+=	postgresql96-server>=${PKGVERSION_NOREV}:../../databases/postgresql96-server
+DEPENDS+=	postgresql10-server>=${PKGVERSION_NOREV}:../../databases/postgresql10-server
 
 BUILD_MAKE_FLAGS=	USE_PGXS=1
 
@@ -48,7 +48,6 @@ BUILD_DIRS+=		contrib/sslinfo
 BUILD_DIRS+=		contrib/tablefunc
 BUILD_DIRS+=		contrib/tcn
 BUILD_DIRS+=		contrib/test_decoding
-BUILD_DIRS+=		contrib/tsearch2
 BUILD_DIRS+=		contrib/tsm_system_rows
 BUILD_DIRS+=		contrib/tsm_system_time
 BUILD_DIRS+=		contrib/unaccent
@@ -64,7 +63,7 @@ BUILD_DIRS+=		contrib/uuid-ossp
 BUILD_MAKE_FLAGS+=	PG_CPPFLAGS="-DHAVE_UUID_H -DHAVE_UUID_BSD -DSHA1_RESULTLEN=20"
 CONFIGURE_ARGS+=	--with-uuid=bsd
 .  elif ${OPSYS} == "Linux"
-BUILD_MAKE_FLAGS+=	PG_CPPFLAGS="-DHAVE_UUID_UUID_H -DHAVE_UUID_E2FS"
+BUILD_MAKE_FLAGS+=	PG_CPPFLAGS="-DHAVE_UUID_UUID_H -DHAVE_UUID_E2FS -I${WRKSRC}/contrib/pgcrypto"
 CONFIGURE_ARGS+=	--with-uuid=e2fs
 .  elif ${OPSYS} == "SunOS"
 BUILD_MAKE_FLAGS+=	PG_CPPFLAGS="-DHAVE_UUID_H -DHAVE_UUID_OSSP"
@@ -76,5 +75,5 @@ BUILD_MAKE_FLAGS+=	UUID_LIBS=-lossp-uuid
 
 PRINT_PLIST_AWK+=	{if ($$0 ~ /uuid-ossp/) {$$0 = "$${PLIST.uuid}" $$0;}}
 
-.include "../../databases/postgresql96-client/buildlink3.mk"
+.include "../../databases/postgresql10-client/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
