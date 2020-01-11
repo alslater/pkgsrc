@@ -1,204 +1,279 @@
-package main
+package pkglint
 
 import (
 	"netbsd.org/pkglint/pkgver"
-	"netbsd.org/pkglint/trace"
 	"strings"
 )
 
-func ChecklinesBuildlink3Mk(mklines *MkLines) {
+type Buildlink3Checker struct {
+	mklines          *MkLines
+	pkgbase          string
+	pkgbaseLine      *MkLine
+	abiLine, apiLine *MkLine
+	abi, api         *DependencyPattern
+}
+
+func CheckLinesBuildlink3Mk(mklines *MkLines) {
+	(&Buildlink3Checker{mklines: mklines}).Check()
+}
+
+func (ck *Buildlink3Checker) Check() {
+	mklines := ck.mklines
 	if trace.Tracing {
-		defer trace.Call1(mklines.lines[0].Filename)()
+		defer trace.Call(mklines.lines.Filename)()
 	}
 
 	mklines.Check()
 
-	exp := NewExpecter(mklines.lines)
+	llex := NewMkLinesLexer(mklines)
 
-	for exp.AdvanceIfPrefix("#") {
-		line := exp.PreviousLine()
+	for llex.SkipIf((*MkLine).IsComment) {
+		line := llex.PreviousLine()
 		// See pkgtools/createbuildlink/files/createbuildlink
 		if hasPrefix(line.Text, "# XXX This file was created automatically") {
 			line.Errorf("This comment indicates unfinished work (url2pkg).")
 		}
 	}
 
-	exp.ExpectEmptyLine(G.opts.WarnSpace)
+	llex.SkipEmptyOrNote()
 
-	if exp.AdvanceIfMatches(`^BUILDLINK_DEPMETHOD\.(\S+)\?=.*$`) {
-		exp.PreviousLine().Warnf("This line belongs inside the .ifdef block.")
-		for exp.AdvanceIfEquals("") {
+	if llex.SkipRegexp(`^BUILDLINK_DEPMETHOD\.([^\t ]+)\?=.*$`) {
+		llex.PreviousLine().Warnf("This line belongs inside the .ifdef block.")
+		for llex.SkipText("") {
 		}
 	}
 
-	pkgbaseLine, pkgbase := exp.CurrentLine(), ""
-	var abiLine, apiLine Line
-	var abi, api *DependencyPattern
+	if !ck.checkFirstParagraph(llex) {
+		return
+	}
+	if !ck.checkSecondParagraph(llex) {
+		return
+	}
+	if !ck.checkMainPart(llex) {
+		return
+	}
+
+	// Fourth paragraph: Cleanup, corresponding to the first paragraph.
+	if !llex.SkipContainsOrWarn("BUILDLINK_TREE+=\t-" + ck.pkgbase) {
+		return
+	}
+
+	if !llex.EOF() {
+		llex.CurrentLine().Warnf("The file should end here.")
+	}
+
+	if G.Pkg != nil {
+		G.Pkg.checkLinesBuildlink3Inclusion(mklines)
+	}
+
+	mklines.SaveAutofixChanges()
+}
+
+func (ck *Buildlink3Checker) checkFirstParagraph(mlex *MkLinesLexer) bool {
 
 	// First paragraph: Introduction of the package identifier
-	if !exp.AdvanceIfMatches(`^BUILDLINK_TREE\+=\s*(\S+)$`) {
-		exp.CurrentLine().Warnf("Expected a BUILDLINK_TREE line.")
-		return
+	m := mlex.NextRegexp(`^BUILDLINK_TREE\+=[\t ]*([^\t ]+)$`)
+	if m == nil {
+		mlex.CurrentLine().Warnf("Expected a BUILDLINK_TREE line.")
+		return false
 	}
-	pkgbase = exp.Group(1)
+
+	pkgbase := m[1]
+	pkgbaseLine := mlex.PreviousMkLine()
+
 	if containsVarRef(pkgbase) {
-		warned := false
-		for _, pair := range [...]struct{ varuse, simple string }{
-			{"${PYPKGPREFIX}", "py"},
-			{"${RUBY_BASE}", "ruby"},
-			{"${RUBY_PKGPREFIX}", "ruby"},
-			{"${PHP_PKG_PREFIX}", "php"},
-		} {
-			if contains(pkgbase, pair.varuse) {
-				pkgbaseLine.Warnf("Please use %q instead of %q (also in other variables in this file).", pair.simple, pair.varuse)
-				warned = true
-			}
-		}
-		if !warned {
-			if m, varuse := match1(pkgbase, `(\$\{\w+\})`); m {
-				pkgbaseLine.Warnf("Please replace %q with a simple string (also in other variables in this file).", varuse)
-				warned = true
-			}
-		}
-		if warned {
-			Explain(
-				"Having variable package names in the BUILDLINK_TREE is not",
-				"necessary, since other packages depend on this package only for",
-				"a specific version of Python, Ruby or PHP.  Since these",
-				"package identifiers are only used at build time, they should",
-				"not include the specific version of the language interpreter.")
-		}
+		ck.checkVaruseInPkgbase(pkgbase, pkgbaseLine)
 	}
 
-	exp.ExpectEmptyLine(G.opts.WarnSpace)
+	ck.checkUniquePkgbase(pkgbase, pkgbaseLine)
 
-	// Second paragraph: multiple inclusion protection and introduction
-	// of the uppercase package identifier.
-	if !exp.AdvanceIfMatches(`^\.if !defined\((\S+)_BUILDLINK3_MK\)$`) {
+	mlex.SkipEmptyOrNote()
+	ck.pkgbase = pkgbase
+	ck.pkgbaseLine = pkgbaseLine
+	return true
+}
+
+func (ck *Buildlink3Checker) checkUniquePkgbase(pkgbase string, mkline *MkLine) {
+	prev := G.InterPackage.Bl3(pkgbase, &mkline.Location)
+	if prev == nil {
 		return
 	}
-	pkgupperLine, pkgupper := exp.PreviousLine(), exp.Group(1)
 
-	if !exp.ExpectText(pkgupper + "_BUILDLINK3_MK:=") {
+	dirname := G.Pkgsrc.Rel(mkline.Filename.DirNoClean()).Base()
+	base, name := trimCommon(pkgbase, dirname)
+	if base == "" && matches(name, `^(\d*|-cvs|-fossil|-git|-hg|-svn|-devel|-snapshot)$`) {
 		return
 	}
-	exp.ExpectEmptyLine(G.opts.WarnSpace)
+
+	mkline.Errorf("Duplicate package identifier %q already appeared in %s.",
+		pkgbase, mkline.RelLocation(*prev))
+	mkline.Explain(
+		"Each buildlink3.mk file must have a unique identifier.",
+		"These identifiers are used for multiple-inclusion guards,",
+		"and using the same identifier for different packages",
+		"(often by copy-and-paste) may change the dependencies",
+		"of a package in subtle and unexpected ways.")
+}
+
+// checkSecondParagraph checks the multiple inclusion protection and
+// introduces the uppercase package identifier.
+func (ck *Buildlink3Checker) checkSecondParagraph(mlex *MkLinesLexer) bool {
+	pkgbase := ck.pkgbase
+	m := mlex.NextRegexp(`^\.if !defined\(([^\t ]+)_BUILDLINK3_MK\)$`)
+	if m == nil {
+		return false
+	}
+	pkgupperLine, pkgupper := mlex.PreviousMkLine(), m[1]
+
+	if !mlex.SkipContainsOrWarn(pkgupper + "_BUILDLINK3_MK:=") {
+		return false
+	}
+	mlex.SkipEmptyOrNote()
 
 	// See pkgtools/createbuildlink/files/createbuildlink, keyword PKGUPPER
 	ucPkgbase := strings.ToUpper(strings.Replace(pkgbase, "-", "_", -1))
 	if ucPkgbase != pkgupper && !containsVarRef(pkgbase) {
 		pkgupperLine.Errorf("Package name mismatch between multiple-inclusion guard %q (expected %q) and package name %q (from %s).",
-			pkgupper, ucPkgbase, pkgbase, pkgbaseLine.ReferenceFrom(pkgupperLine))
+			pkgupper, ucPkgbase, pkgbase, pkgupperLine.RelMkLine(ck.pkgbaseLine))
 	}
-	if G.Pkg != nil {
-		if mkbase := G.Pkg.EffectivePkgbase; mkbase != "" && mkbase != pkgbase {
-			pkgbaseLine.Errorf("Package name mismatch between %q in this file and %q from %s.",
-				pkgbase, mkbase, G.Pkg.EffectivePkgnameLine.ReferenceFrom(pkgbaseLine))
-		}
-	}
+	ck.checkPkgbaseMismatch(pkgbase)
 
-	// Third paragraph: Package information.
-	indentLevel := 1 // The first .if is from the second paragraph.
-	for {
-		if exp.EOF() {
-			exp.CurrentLine().Warnf("Expected .endif")
-			return
-		}
+	return true
+}
 
-		line := exp.CurrentLine()
-		mkline := mklines.mklines[exp.Index()]
-
-		if mkline.IsVarassign() {
-			exp.Advance()
-			varname, value := mkline.Varname(), mkline.Value()
-			doCheck := false
-
-			const (
-				reDependencyCmp      = `^((?:\$\{[\w_]+\}|[\w_\.+]|-[^\d])+)[<>]=?(\d[^-*?\[\]]*)$`
-				reDependencyWildcard = `^(-(?:\[0-9\]\*|\d[^-]*)$`
-			)
-
-			if varname == "BUILDLINK_ABI_DEPENDS."+pkgbase {
-				abiLine = line
-				parser := NewParser(line, value, false)
-				if dp := parser.Dependency(); dp != nil && parser.EOF() {
-					abi = dp
-				}
-				doCheck = true
-			}
-			if varname == "BUILDLINK_API_DEPENDS."+pkgbase {
-				apiLine = line
-				parser := NewParser(line, value, false)
-				if dp := parser.Dependency(); dp != nil && parser.EOF() {
-					api = dp
-				}
-				doCheck = true
-			}
-			if doCheck && abi != nil && api != nil && abi.Pkgbase != api.Pkgbase && !hasPrefix(api.Pkgbase, "{") {
-				abiLine.Warnf("Package name mismatch between ABI %q and API %q (from %s).",
-					abi.Pkgbase, api.Pkgbase, apiLine.ReferenceFrom(abiLine))
-			}
-			if doCheck {
-				if abi != nil && abi.Lower != "" && !containsVarRef(abi.Lower) {
-					if api != nil && api.Lower != "" && !containsVarRef(api.Lower) {
-						if pkgver.Compare(abi.Lower, api.Lower) < 0 {
-							abiLine.Warnf("ABI version %q should be at least API version %q (see %s).",
-								abi.Lower, api.Lower, apiLine.ReferenceFrom(abiLine))
-						}
-					}
-				}
-			}
-
-			if varparam := mkline.Varparam(); varparam != "" && varparam != pkgbase {
-				if hasPrefix(varname, "BUILDLINK_") && mkline.Varcanon() != "BUILDLINK_API_DEPENDS.*" {
-					line.Warnf("Only buildlink variables for %q, not %q may be set in this file.", pkgbase, varparam)
-				}
-			}
-
-			if varname == "pkgbase" {
-				exp.AdvanceIfMatches(`^\.\s*include "../../mk/pkg-build-options\.mk"$`)
-			}
-
-		} else if exp.AdvanceIfEquals("") || exp.AdvanceIfPrefix("#") {
-			// Comments and empty lines are fine here.
-
-		} else if exp.AdvanceIfMatches(`^\.\s*include "\.\./\.\./([^/]+/[^/]+)/buildlink3\.mk"$`) ||
-			exp.AdvanceIfMatches(`^\.\s*include "\.\./\.\./mk/(\S+)\.buildlink3\.mk"$`) {
-			// TODO: Maybe check dependency lines.
-
-		} else if exp.AdvanceIfMatches(`^\.if\s`) {
-			indentLevel++
-
-		} else if exp.AdvanceIfMatches(`^\.endif.*$`) {
-			indentLevel--
-			if indentLevel == 0 {
-				break
-			}
-
-		} else {
-			if trace.Tracing {
-				trace.Step1("Unchecked line %s in third paragraph.", exp.CurrentLine().Linenos())
-			}
-			exp.Advance()
-		}
-	}
-	if apiLine == nil {
-		exp.CurrentLine().Warnf("Definition of BUILDLINK_API_DEPENDS is missing.")
-	}
-	exp.ExpectEmptyLine(G.opts.WarnSpace)
-
-	// Fourth paragraph: Cleanup, corresponding to the first paragraph.
-	if !exp.ExpectText("BUILDLINK_TREE+=\t-" + pkgbase) {
+func (ck *Buildlink3Checker) checkPkgbaseMismatch(bl3base string) {
+	if G.Pkg == nil {
 		return
 	}
 
-	if !exp.EOF() {
-		exp.CurrentLine().Warnf("The file should end here.")
+	mkbase := G.Pkg.EffectivePkgbase
+	if mkbase == "" || mkbase == bl3base || strings.TrimPrefix(mkbase, "lib") == bl3base {
+		return
 	}
 
-	if G.Pkg != nil {
-		G.Pkg.checklinesBuildlink3Inclusion(mklines)
+	if hasPrefix(mkbase, bl3base) && matches(mkbase[len(bl3base):], `^\d+$`) {
+		return
 	}
 
-	SaveAutofixChanges(mklines.lines)
+	ck.pkgbaseLine.Errorf("Package name mismatch between %q in this file and %q from %s.",
+		bl3base, mkbase, ck.pkgbaseLine.RelMkLine(G.Pkg.EffectivePkgnameLine))
+}
+
+// Third paragraph: Package information.
+func (ck *Buildlink3Checker) checkMainPart(mlex *MkLinesLexer) bool {
+	pkgbase := ck.pkgbase
+
+	// The first .if is from the second paragraph.
+	indentLevel := 1
+
+	for !mlex.EOF() && indentLevel > 0 {
+		mkline := mlex.CurrentMkLine()
+		mlex.Skip()
+
+		switch {
+		case mkline.IsVarassign():
+			ck.checkVarassign(mlex, mkline, pkgbase)
+
+		case mkline.IsDirective() && mkline.Directive() == "if":
+			indentLevel++
+
+		case mkline.IsDirective() && mkline.Directive() == "endif":
+			indentLevel--
+		}
+	}
+
+	if indentLevel > 0 {
+		return false
+	}
+
+	if ck.apiLine == nil {
+		mlex.CurrentLine().Warnf("Definition of BUILDLINK_API_DEPENDS is missing.")
+	}
+	mlex.SkipEmptyOrNote()
+	return true
+}
+
+func (ck *Buildlink3Checker) checkVarassign(mlex *MkLinesLexer, mkline *MkLine, pkgbase string) {
+	varname, value := mkline.Varname(), mkline.Value()
+	doCheck := false
+
+	if varname == "BUILDLINK_ABI_DEPENDS."+pkgbase {
+		ck.abiLine = mkline
+		parser := NewMkParser(nil, value)
+		if dp := parser.Dependency(); dp != nil && parser.EOF() {
+			ck.abi = dp
+		}
+		doCheck = true
+	}
+
+	if varname == "BUILDLINK_API_DEPENDS."+pkgbase {
+		ck.apiLine = mkline
+		parser := NewMkParser(nil, value)
+		if dp := parser.Dependency(); dp != nil && parser.EOF() {
+			ck.api = dp
+		}
+		doCheck = true
+	}
+
+	if doCheck && ck.abi != nil && ck.api != nil && ck.abi.Pkgbase != ck.api.Pkgbase {
+		if !hasPrefix(ck.api.Pkgbase, "{") {
+			ck.abiLine.Warnf("Package name mismatch between ABI %q and API %q (from %s).",
+				ck.abi.Pkgbase, ck.api.Pkgbase, ck.abiLine.RelMkLine(ck.apiLine))
+		}
+	}
+
+	if doCheck {
+		if ck.abi != nil && ck.abi.Lower != "" && !containsVarRef(ck.abi.Lower) {
+			if ck.api != nil && ck.api.Lower != "" && !containsVarRef(ck.api.Lower) {
+				if pkgver.Compare(ck.abi.Lower, ck.api.Lower) < 0 {
+					ck.abiLine.Warnf("ABI version %q should be at least API version %q (see %s).",
+						ck.abi.Lower, ck.api.Lower, ck.abiLine.RelMkLine(ck.apiLine))
+				}
+			}
+		}
+	}
+
+	if varparam := mkline.Varparam(); varparam != "" && varparam != pkgbase {
+		if hasPrefix(varname, "BUILDLINK_") && mkline.Varcanon() != "BUILDLINK_API_DEPENDS.*" {
+			mkline.Warnf("Only buildlink variables for %q, not %q may be set in this file.", pkgbase, varparam)
+		}
+	}
+}
+
+func (ck *Buildlink3Checker) checkVaruseInPkgbase(pkgbase string, pkgbaseLine *MkLine) {
+	tokens, _ := pkgbaseLine.ValueTokens()
+	for _, token := range tokens {
+		if token.Varuse == nil {
+			continue
+		}
+
+		replacement := ""
+		switch token.Varuse.varname {
+		case "PYPKGPREFIX":
+			replacement = "py"
+		case "RUBY_BASE", "RUBY_PKGPREFIX":
+			replacement = "ruby"
+		case "PHP_PKG_PREFIX":
+			replacement = "php"
+		}
+
+		if replacement != "" {
+			pkgbaseLine.Warnf("Please use %q instead of %q (also in other variables in this file).",
+				replacement, token.Text)
+		} else {
+			pkgbaseLine.Warnf(
+				"Please replace %q with a simple string (also in other variables in this file).",
+				token.Text)
+		}
+
+		pkgbaseLine.Explain(
+			"The identifiers in the BUILDLINK_TREE variable should be plain",
+			"strings that do not refer to any variable.",
+			"",
+			"Even for packages that depend on a specific version of a",
+			"programming language, the plain name is enough since",
+			"the version number of the programming language is stored elsewhere.",
+			"Furthermore, these package identifiers are only used at build time,",
+			"after the specific version has been decided.")
+	}
 }

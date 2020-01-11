@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.php,v 1.1 2014/11/24 15:37:08 taca Exp $
+# $NetBSD: Makefile.php,v 1.7 2019/03/31 20:48:18 wiz Exp $
 # used by lang/php56/Makefile
 # used by www/ap-php/Makefile
 # used by www/php-fpm/Makefile
@@ -28,10 +28,10 @@ CONFIGURE_ARGS+=	--with-regex=system
 CONFIGURE_ARGS+=	--without-mysql
 CONFIGURE_ARGS+=	--without-iconv
 CONFIGURE_ARGS+=	--without-pear
+CONFIGURE_ARGS+=	--without-sqlite3
 #CONFIGURE_ARGS+=	--without-intl
 
 CONFIGURE_ARGS+=	--disable-posix
-CONFIGURE_ARGS+=	--disable-dom
 CONFIGURE_ARGS+=	--disable-opcache
 CONFIGURE_ARGS+=	--disable-pdo
 CONFIGURE_ARGS+=	--disable-json
@@ -43,7 +43,7 @@ CONFIGURE_ARGS+=	--with-libxml-dir=${PREFIX}
 .include "../../textproc/libxml2/buildlink3.mk"
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.${PHP_PKG_PREFIX}
-PKG_SUPPORTED_OPTIONS+=	inet6 ssl maintainer-zts readline
+PKG_SUPPORTED_OPTIONS+=	inet6 ssl maintainer-zts readline disable-filter-url
 PKG_SUGGESTED_OPTIONS+=	inet6 ssl
 
 .if ${OPSYS} == "SunOS" || ${OPSYS} == "Darwin" || ${OPSYS} == "FreeBSD"
@@ -91,6 +91,10 @@ CONFIGURE_ARGS+=	--enable-dtrace
 
 # See https://bugs.php.net/bug.php?id=61268
 INSTALL_MAKE_FLAGS+=	-r
+.endif
+
+.if !empty(PKG_OPTIONS:Mdisable-filter-url)
+CFLAGS+=		-DDISABLE_FILTER_URL
 .endif
 
 DL_AUTO_VARS=		yes

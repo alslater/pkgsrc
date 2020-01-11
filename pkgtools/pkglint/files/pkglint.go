@@ -1,15 +1,17 @@
-package main
+package pkglint
 
 import (
 	"fmt"
+	"io"
 	"netbsd.org/pkglint/getopt"
 	"netbsd.org/pkglint/histogram"
 	"netbsd.org/pkglint/regex"
-	"netbsd.org/pkglint/trace"
+	tracePkg "netbsd.org/pkglint/trace"
 	"os"
 	"os/user"
 	"path"
-	"path/filepath"
+	"runtime"
+	"runtime/debug"
 	"runtime/pprof"
 	"strings"
 )
@@ -17,82 +19,69 @@ import (
 const confMake = "@BMAKE@"
 const confVersion = "@VERSION@"
 
-// Pkglint contains all global variables of this Go package.
-// The rest of the global state is in the other packages:
-//  regex.Profiling    (not thread-local)
-//  regex.res          (and related variables; not thread-safe)
-//  textproc.Testing   (not thread-local; harmless)
-//  tracing.Tracing    (not thread-safe)
-//  tracing.Out        (not thread-safe)
-//  tracing.traceDepth (not thread-safe)
+// Pkglint is a container for all global variables of this Go package.
 type Pkglint struct {
-	opts   CmdOpts  // Command line options.
-	Pkgsrc *Pkgsrc  // Global data, mostly extracted from mk/*.
-	Pkg    *Package // The package that is currently checked.
-	Mk     *MkLines // The Makefile (or fragment) that is currently checked.
+	Opts   CmdOpts  // Command line options.
+	Pkgsrc Pkgsrc   // Global data, mostly extracted from mk/*.
+	Pkg    *Package // The package that is currently checked, or nil.
 
-	Todo            []string // The files or directories that still need to be checked.
-	CurrentDir      string   // The currently checked directory, relative to the cwd
-	CurPkgsrcdir    string   // The pkgsrc directory, relative to currentDir
-	Wip             bool     // Is the currently checked directory from pkgsrc-wip?
-	Infrastructure  bool     // Is the currently checked item from the pkgsrc infrastructure?
-	Testing         bool     // Is pkglint in self-testing mode (only during development)?
-	CurrentUsername string   // For checking against OWNER and MAINTAINER
-	CvsEntriesDir   string   // Cached to avoid I/O
-	CvsEntriesLines []Line
+	Todo CurrPathQueue // The files or directories that still need to be checked.
 
-	errors                int
-	warnings              int
-	explainNext           bool
-	logged                map[string]bool
-	explanationsAvailable bool
-	explanationsGiven     map[string]bool
-	autofixAvailable      bool
-	logOut                *SeparatorWriter
-	logErr                *SeparatorWriter
+	Wip            bool   // Is the currently checked file or package from pkgsrc-wip?
+	Infrastructure bool   // Is the currently checked file from the pkgsrc infrastructure?
+	Testing        bool   // Is pkglint in self-testing mode (only during development)?
+	Experimental   bool   // For experimental features, only enabled individually in tests
+	Username       string // For checking against OWNER and MAINTAINER
 
-	loghisto *histogram.Histogram
+	cvsEntriesDir CurrPath // Cached to avoid I/O
+	cvsEntries    map[string]CvsEntry
+
+	Logger Logger
+
+	loaded    *histogram.Histogram
+	res       regex.Registry
+	fileCache *FileCache
+	interner  StringInterner
+
+	// cwd is the absolute path to the current working
+	// directory. It is used for speeding up Relpath and abspath.
+	// There is no other use for it.
+	cwd CurrPath
+
+	InterPackage InterPackage
 }
 
+func NewPkglint(stdout io.Writer, stderr io.Writer) Pkglint {
+	cwd, err := os.Getwd()
+	assertNil(err, "os.Getwd")
+
+	p := Pkglint{
+		res:       regex.NewRegistry(),
+		fileCache: NewFileCache(200),
+		cwd:       NewCurrPathSlash(cwd),
+		interner:  NewStringInterner()}
+	p.Logger.out = NewSeparatorWriter(stdout)
+	p.Logger.err = NewSeparatorWriter(stderr)
+	return p
+}
+
+// unusablePkglint returns a pkglint object that crashes as early as possible.
+// This is to ensure that tests are properly initialized and shut down.
+func unusablePkglint() Pkglint { return Pkglint{} }
+
 type CmdOpts struct {
-	CheckAlternatives,
-	CheckBuildlink3,
-	CheckDescr,
-	CheckDistinfo,
-	CheckExtra,
-	CheckGlobal,
-	CheckInstall,
-	CheckMakefile,
-	CheckMessage,
-	CheckMk,
-	CheckPatches,
-	CheckPlist bool
+	CheckGlobal bool
 
-	WarnAbsname,
-	WarnDirectcmd,
 	WarnExtra,
-	WarnOrder,
 	WarnPerm,
-	WarnPlistDepr,
-	WarnPlistSort,
-	WarnQuoting,
-	WarnSpace,
-	WarnStyle,
-	WarnTypes bool
+	WarnQuoting bool
 
-	Explain,
-	Autofix,
-	GccOutput,
-	PrintHelp,
+	Profiling,
+	ShowHelp,
 	DumpMakefile,
 	Import,
-	LogVerbose,
-	Profiling,
-	Quiet,
 	Recursive,
-	PrintAutofix,
-	PrintSource,
-	PrintVersion bool
+	ShowVersion bool
 
 	LogOnly []string
 
@@ -100,526 +89,755 @@ type CmdOpts struct {
 }
 
 type Hash struct {
-	hash string
-	line Line
+	hash     []byte
+	location Location
 }
+
+type pkglintFatal struct{}
 
 // G is the abbreviation for "global state";
-// it is the only global variable in this Go package
-var G Pkglint
-
-func main() {
-	G.logOut = NewSeparatorWriter(os.Stdout)
-	G.logErr = NewSeparatorWriter(os.Stderr)
-	trace.Out = os.Stdout
-	os.Exit(G.Main(os.Args...))
-}
+// this and the tracer are the only global variables in this Go package.
+var (
+	G     = NewPkglint(os.Stdout, os.Stderr)
+	trace tracePkg.Tracer
+)
 
 // Main runs the main program with the given arguments.
-// argv[0] is the program name.
-func (pkglint *Pkglint) Main(argv ...string) (exitcode int) {
+// args[0] is the program name.
+//
+// Note: during tests, calling this method disables tracing
+// because the getopt parser resets all options before the actual parsing.
+// One of these options is trace.Tracing, which is connected to --debug.
+//
+// It also discards the -Wall option that is used by default in other tests.
+func (pkglint *Pkglint) Main(stdout io.Writer, stderr io.Writer, args []string) (exitCode int) {
+	G.Logger.out = NewSeparatorWriter(stdout)
+	G.Logger.err = NewSeparatorWriter(stderr)
+	trace.Out = stdout
+
 	defer func() {
 		if r := recover(); r != nil {
-			if _, ok := r.(pkglintFatal); ok {
-				exitcode = 1
-			} else {
-				panic(r)
-			}
+			_ = r.(pkglintFatal)
+			exitCode = 1
 		}
 	}()
 
-	if exitcode := pkglint.ParseCommandLine(argv); exitcode != nil {
-		return *exitcode
+	if exitcode := pkglint.ParseCommandLine(args); exitcode != -1 {
+		return exitcode
 	}
 
-	if pkglint.opts.Profiling {
-		f, err := os.Create("pkglint.pprof")
-		if err != nil {
-			dummyLine.Fatalf("Cannot create profiling file: %s", err)
-		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-
-		regex.Profiling = true
-		pkglint.loghisto = histogram.New()
-		defer func() {
-			pkglint.logOut.Write("")
-			pkglint.loghisto.PrintStats("loghisto", pkglint.logOut.out, 0)
-			regex.PrintStats()
-		}()
+	if pkglint.Opts.Profiling {
+		defer pkglint.setUpProfiling()()
 	}
 
-	for _, arg := range pkglint.opts.args {
-		pkglint.Todo = append(pkglint.Todo, filepath.ToSlash(arg))
-	}
-	if len(pkglint.Todo) == 0 {
-		pkglint.Todo = []string{"."}
+	pkglint.prepareMainLoop()
+
+	for !pkglint.Todo.IsEmpty() {
+		pkglint.Check(pkglint.Todo.Pop())
 	}
 
-	firstArg := G.Todo[0]
-	if fileExists(firstArg) {
-		firstArg = path.Dir(firstArg)
-	}
-	relTopdir := findPkgsrcTopdir(firstArg)
-	if relTopdir == "" {
-		dummyLine.Fatalf("%q is not inside a pkgsrc tree.", firstArg)
-	}
+	pkglint.Pkgsrc.checkToplevelUnusedLicenses()
 
-	pkglint.Pkgsrc = NewPkgsrc(firstArg + "/" + relTopdir)
-	pkglint.Pkgsrc.Load()
-
-	currentUser, err := user.Current()
-	if err == nil {
-		// On Windows, this is `Computername\Username`.
-		pkglint.CurrentUsername = regex.Compile(`^.*\\`).ReplaceAllString(currentUser.Username, "")
-	}
-
-	for len(pkglint.Todo) != 0 {
-		item := pkglint.Todo[0]
-		pkglint.Todo = pkglint.Todo[1:]
-		pkglint.CheckDirent(item)
-	}
-
-	checkToplevelUnusedLicenses()
-	pkglint.PrintSummary()
-	if pkglint.errors != 0 {
+	pkglint.Logger.ShowSummary(args)
+	if pkglint.Logger.errors != 0 {
 		return 1
 	}
 	return 0
 }
 
-func (pkglint *Pkglint) ParseCommandLine(args []string) *int {
-	gopts := &pkglint.opts
+func (pkglint *Pkglint) setUpProfiling() func() {
+
+	var cleanups []func()
+	atExit := func(cleanup func()) {
+		cleanups = append(cleanups, cleanup)
+	}
+
+	atExit(func() {
+		pkglint.fileCache.table = nil
+		pkglint.fileCache.mapping = nil
+		runtime.GC()
+
+		fd, err := os.Create("pkglint.heapdump")
+		assertNil(err, "heapDump.create")
+
+		debug.WriteHeapDump(fd.Fd())
+
+		err = fd.Close()
+		assertNil(err, "heapDump.close")
+
+		G = unusablePkglint() // Free all memory.
+		runtime.GC()          // For detecting possible memory leaks; see qa-pkglint.
+	})
+
+	f, err := os.Create("pkglint.pprof")
+	if err != nil {
+		pkglint.Logger.TechErrorf("pkglint.pprof", "Cannot create profiling file: %s", err)
+		panic(pkglintFatal{})
+	}
+	atExit(func() { assertNil(f.Close(), "") })
+
+	err = pprof.StartCPUProfile(f)
+	assertNil(err, "Cannot start profiling")
+	atExit(pprof.StopCPUProfile)
+
+	pkglint.res.Profiling()
+	pkglint.Logger.histo = histogram.New()
+	pkglint.loaded = histogram.New()
+	atExit(func() {
+		pkglint.Logger.out.Write("")
+		pkglint.Logger.histo.PrintStats(pkglint.Logger.out.out, "loghisto", -1)
+		pkglint.res.PrintStats(pkglint.Logger.out.out)
+		pkglint.loaded.PrintStats(pkglint.Logger.out.out, "loaded", 10)
+		pkglint.Logger.out.WriteLine(sprintf("fileCache: %d hits, %d misses", pkglint.fileCache.hits, pkglint.fileCache.misses))
+	})
+
+	return func() {
+		for i := range cleanups {
+			cleanups[len(cleanups)-1-i]()
+		}
+	}
+}
+
+func (pkglint *Pkglint) prepareMainLoop() {
+	firstDir := pkglint.Todo.Front()
+	if firstDir.IsFile() {
+		firstDir = firstDir.DirNoClean()
+	}
+
+	relTopdir := findPkgsrcTopdir(firstDir)
+	if relTopdir.IsEmpty() {
+		// If the first argument to pkglint is not inside a pkgsrc tree,
+		// pkglint doesn't know where to load the infrastructure files from,
+		// and these are needed for virtually every single check.
+		// Therefore, the only sensible thing to do is to quit immediately.
+		NewLineWhole(firstDir).Fatalf("Must be inside a pkgsrc tree.")
+	}
+
+	pkglint.Pkgsrc = NewPkgsrc(firstDir.JoinNoClean(relTopdir))
+	pkglint.Wip = pkglint.Pkgsrc.IsWip(firstDir) // See Pkglint.checkMode.
+	pkglint.Pkgsrc.LoadInfrastructure()
+
+	currentUser, err := user.Current()
+	assertNil(err, "user.Current")
+	// On Windows, this is `Computername\Username`.
+	pkglint.Username = replaceAll(currentUser.Username, `^.*\\`, "")
+}
+
+func (pkglint *Pkglint) ParseCommandLine(args []string) int {
+	gopts := &pkglint.Opts
+	lopts := &pkglint.Logger.Opts
 	opts := getopt.NewOptions()
 
 	check := opts.AddFlagGroup('C', "check", "check,...", "enable or disable specific checks")
 	opts.AddFlagVar('d', "debug", &trace.Tracing, false, "log verbose call traces for debugging")
-	opts.AddFlagVar('e', "explain", &gopts.Explain, false, "explain the diagnostics or give further help")
-	opts.AddFlagVar('f', "show-autofix", &gopts.PrintAutofix, false, "show what pkglint can fix automatically")
-	opts.AddFlagVar('F', "autofix", &gopts.Autofix, false, "try to automatically fix some errors (experimental)")
-	opts.AddFlagVar('g', "gcc-output-format", &gopts.GccOutput, false, "mimic the gcc output format")
-	opts.AddFlagVar('h', "help", &gopts.PrintHelp, false, "print a detailed usage message")
+	opts.AddFlagVar('e', "explain", &lopts.Explain, false, "explain the diagnostics or give further help")
+	opts.AddFlagVar('f', "show-autofix", &lopts.ShowAutofix, false, "show what pkglint can fix automatically")
+	opts.AddFlagVar('F', "autofix", &lopts.Autofix, false, "try to automatically fix some errors")
+	opts.AddFlagVar('g', "gcc-output-format", &lopts.GccOutput, false, "mimic the gcc output format")
+	opts.AddFlagVar('h', "help", &gopts.ShowHelp, false, "show a detailed usage message")
 	opts.AddFlagVar('I', "dumpmakefile", &gopts.DumpMakefile, false, "dump the Makefile after parsing")
 	opts.AddFlagVar('i', "import", &gopts.Import, false, "prepare the import of a wip package")
-	opts.AddFlagVar('m', "log-verbose", &gopts.LogVerbose, false, "allow the same log message more than once")
-	opts.AddStrList('o', "only", &gopts.LogOnly, "only log messages containing the given text")
+	opts.AddStrList('o', "only", &gopts.LogOnly, "only log diagnostics containing the given text")
 	opts.AddFlagVar('p', "profiling", &gopts.Profiling, false, "profile the executing program")
-	opts.AddFlagVar('q', "quiet", &gopts.Quiet, false, "don't print a summary line when finishing")
+	opts.AddFlagVar('q', "quiet", &lopts.Quiet, false, "don't show a summary line when finishing")
 	opts.AddFlagVar('r', "recursive", &gopts.Recursive, false, "check subdirectories, too")
-	opts.AddFlagVar('s', "source", &gopts.PrintSource, false, "show the source lines together with diagnostics")
-	opts.AddFlagVar('V', "version", &gopts.PrintVersion, false, "print the version number of pkglint")
+	opts.AddFlagVar('s', "source", &lopts.ShowSource, false, "show the source lines together with diagnostics")
+	opts.AddFlagVar('V', "version", &gopts.ShowVersion, false, "show the version number of pkglint")
 	warn := opts.AddFlagGroup('W', "warning", "warning,...", "enable or disable groups of warnings")
 
-	check.AddFlagVar("ALTERNATIVES", &gopts.CheckAlternatives, true, "check ALTERNATIVES files")
-	check.AddFlagVar("bl3", &gopts.CheckBuildlink3, true, "check buildlink3.mk files")
-	check.AddFlagVar("DESCR", &gopts.CheckDescr, true, "check DESCR file")
-	check.AddFlagVar("distinfo", &gopts.CheckDistinfo, true, "check distinfo file")
-	check.AddFlagVar("extra", &gopts.CheckExtra, false, "check various additional files")
 	check.AddFlagVar("global", &gopts.CheckGlobal, false, "inter-package checks")
-	check.AddFlagVar("INSTALL", &gopts.CheckInstall, true, "check INSTALL and DEINSTALL scripts")
-	check.AddFlagVar("Makefile", &gopts.CheckMakefile, true, "check Makefiles")
-	check.AddFlagVar("MESSAGE", &gopts.CheckMessage, true, "check MESSAGE file")
-	check.AddFlagVar("mk", &gopts.CheckMk, true, "check other .mk files")
-	check.AddFlagVar("patches", &gopts.CheckPatches, true, "check patches")
-	check.AddFlagVar("PLIST", &gopts.CheckPlist, true, "check PLIST files")
 
-	warn.AddFlagVar("absname", &gopts.WarnAbsname, true, "warn about use of absolute file names")
-	warn.AddFlagVar("directcmd", &gopts.WarnDirectcmd, true, "warn about use of direct command names instead of Make variables")
 	warn.AddFlagVar("extra", &gopts.WarnExtra, false, "enable some extra warnings")
-	warn.AddFlagVar("order", &gopts.WarnOrder, true, "warn if Makefile entries are unordered")
 	warn.AddFlagVar("perm", &gopts.WarnPerm, false, "warn about unforeseen variable definition and use")
-	warn.AddFlagVar("plist-depr", &gopts.WarnPlistDepr, false, "warn about deprecated paths in PLISTs")
-	warn.AddFlagVar("plist-sort", &gopts.WarnPlistSort, false, "warn about unsorted entries in PLISTs")
 	warn.AddFlagVar("quoting", &gopts.WarnQuoting, false, "warn about quoting issues")
-	warn.AddFlagVar("space", &gopts.WarnSpace, false, "warn about inconsistent use of white-space")
-	warn.AddFlagVar("style", &gopts.WarnStyle, false, "warn about stylistic issues")
-	warn.AddFlagVar("types", &gopts.WarnTypes, true, "do some simple type checking in Makefiles")
 
 	remainingArgs, err := opts.Parse(args)
 	if err != nil {
-		fmt.Fprintf(pkglint.logErr.out, "%s\n\n", err)
-		opts.Help(pkglint.logErr.out, "pkglint [options] dir...")
-		exitcode := 1
-		return &exitcode
+		errOut := pkglint.Logger.err.out
+		_, _ = fmt.Fprintln(errOut, err)
+		_, _ = fmt.Fprintln(errOut, "")
+		opts.Help(errOut, "pkglint [options] dir...")
+		return 1
 	}
 	gopts.args = remainingArgs
 
-	if gopts.PrintHelp {
-		opts.Help(pkglint.logOut.out, "pkglint [options] dir...")
-		exitcode := 0
-		return &exitcode
+	if gopts.ShowHelp {
+		opts.Help(pkglint.Logger.out.out, "pkglint [options] dir...")
+		return 0
 	}
 
-	if pkglint.opts.PrintVersion {
-		fmt.Fprintf(pkglint.logOut.out, "%s\n", confVersion)
-		exitcode := 0
-		return &exitcode
+	if pkglint.Opts.ShowVersion {
+		_, _ = fmt.Fprintf(pkglint.Logger.out.out, "%s\n", confVersion)
+		return 0
 	}
 
-	return nil
+	for _, arg := range pkglint.Opts.args {
+		pkglint.Todo.Push(NewCurrPathSlash(arg))
+	}
+	if pkglint.Todo.IsEmpty() {
+		pkglint.Todo.Push(".")
+	}
+
+	return -1
 }
 
-func (pkglint *Pkglint) PrintSummary() {
-	if !pkglint.opts.Quiet && !pkglint.opts.Autofix {
-		if pkglint.errors != 0 || pkglint.warnings != 0 {
-			pkglint.logOut.Printf("%d %s and %d %s found.\n",
-				pkglint.errors, ifelseStr(pkglint.errors == 1, "error", "errors"),
-				pkglint.warnings, ifelseStr(pkglint.warnings == 1, "warning", "warnings"))
-		} else {
-			pkglint.logOut.WriteLine("Looks fine.")
-		}
-		if pkglint.explanationsAvailable && !pkglint.opts.Explain {
-			pkglint.logOut.WriteLine("(Run \"pkglint -e\" to show explanations.)")
-		}
-		if pkglint.autofixAvailable && !pkglint.opts.PrintAutofix {
-			pkglint.logOut.WriteLine("(Run \"pkglint -fs\" to show what can be fixed automatically.)")
-		}
-		if pkglint.autofixAvailable && !pkglint.opts.Autofix {
-			pkglint.logOut.WriteLine("(Run \"pkglint -F\" to automatically fix some issues.)")
-		}
-	}
-}
-
-func (pkglint *Pkglint) CheckDirent(fname string) {
+// Check checks a directory entry, which can be a regular file,
+// a directory or a symlink (only allowed for the working directory).
+//
+// This is the method that is called for each command line argument.
+//
+// It sets up all the global state (infrastructure, wip) for accurately
+// classifying the entry.
+func (pkglint *Pkglint) Check(dirent CurrPath) {
 	if trace.Tracing {
-		defer trace.Call1(fname)()
+		defer trace.Call(dirent)()
 	}
 
-	st, err := os.Lstat(fname)
-	if err != nil || !st.Mode().IsDir() && !st.Mode().IsRegular() {
-		NewLineWhole(fname).Errorf("No such file or directory.")
-		return
-	}
-	isDir := st.Mode().IsDir()
-	isReg := st.Mode().IsRegular()
-
-	currentDir := ifelseStr(isReg, path.Dir(fname), fname)
-	pkglint.CurrentDir = currentDir
-	absCurrentDir := abspath(currentDir)
-	pkglint.Wip = !pkglint.opts.Import && matches(absCurrentDir, `/wip/|/wip$`)
-	pkglint.Infrastructure = matches(absCurrentDir, `/mk/|/mk$`)
-	pkglint.CurPkgsrcdir = findPkgsrcTopdir(currentDir)
-	if pkglint.CurPkgsrcdir == "" {
-		NewLineWhole(fname).Errorf("Cannot determine the pkgsrc root directory for %q.", currentDir)
+	st, err := dirent.Lstat()
+	if err != nil {
+		NewLineWhole(dirent).Errorf("No such file or directory.")
 		return
 	}
 
-	switch {
-	case isDir && isEmptyDir(fname):
-		return
-	case isReg:
-		pkglint.Checkfile(fname)
+	pkglint.checkMode(dirent, st.Mode())
+}
+
+func (pkglint *Pkglint) checkMode(dirent CurrPath, mode os.FileMode) {
+	// TODO: merge duplicate code in Package.checkDirent
+	isDir := mode.IsDir()
+	isReg := mode.IsRegular()
+	if !isDir && !isReg {
+		NewLineWhole(dirent).Errorf("No such file or directory.")
 		return
 	}
 
-	switch pkglint.CurPkgsrcdir {
+	dir := dirent
+	if !isDir {
+		dir = dirent.DirNoClean()
+	}
+
+	basename := dirent.Base()
+	pkgsrcRel := pkglint.Pkgsrc.Rel(dirent)
+
+	pkglint.Wip = pkgsrcRel.HasPrefixPath("wip")
+	pkglint.Infrastructure = pkgsrcRel.HasPrefixPath("mk")
+	pkgsrcdir := findPkgsrcTopdir(dir)
+	if pkgsrcdir.IsEmpty() {
+		G.Logger.TechErrorf("",
+			"Cannot determine the pkgsrc root directory for %q.",
+			dirent)
+		return
+	}
+
+	if isReg {
+		pkglint.checkExecutable(dirent, mode)
+		pkglint.checkReg(dirent, basename, pkgsrcRel.Count())
+		return
+	}
+
+	if isEmptyDir(dirent) {
+		return
+	}
+
+	switch pkgsrcdir {
 	case "../..":
-		pkglint.checkdirPackage(pkglint.Pkgsrc.ToRel(currentDir))
+		pkglint.checkdirPackage(dir)
 	case "..":
-		CheckdirCategory()
+		CheckdirCategory(dir)
 	case ".":
-		CheckdirToplevel()
+		CheckdirToplevel(dir)
 	default:
-		NewLineWhole(fname).Errorf("Cannot check directories outside a pkgsrc tree.")
+		NewLineWhole(dirent).Errorf("Cannot check directories outside a pkgsrc tree.")
 	}
 }
 
-// Returns the pkgsrc top-level directory, relative to the given file or directory.
-func findPkgsrcTopdir(fname string) string {
-	for _, dir := range [...]string{".", "..", "../..", "../../.."} {
-		if fileExists(fname + "/" + dir + "/mk/bsd.pkg.mk") {
+// checkdirPackage checks a complete pkgsrc package, including each
+// of the files individually, and also when seen in combination.
+func (pkglint *Pkglint) checkdirPackage(dir CurrPath) {
+	if trace.Tracing {
+		defer trace.Call(dir)()
+	}
+
+	pkglint.Pkg = NewPackage(dir)
+	defer func() { pkglint.Pkg = nil }()
+	pkglint.Pkg.Check()
+}
+
+// Returns the pkgsrc top-level directory, relative to the given directory.
+func findPkgsrcTopdir(dirname CurrPath) RelPath {
+	for _, dir := range [...]RelPath{".", "..", "../..", "../../.."} {
+		if dirname.JoinNoClean(dir).JoinNoClean("mk/bsd.pkg.mk").IsFile() {
 			return dir
 		}
 	}
 	return ""
 }
 
-func resolveVariableRefs(text string) string {
-	if trace.Tracing {
-		defer trace.Call1(text)()
+func resolveVariableRefs(mklines *MkLines, text string) (resolved string) {
+	// TODO: How does this fit into the Scope type, which is newer than this function?
+
+	if !containsVarRef(text) {
+		return text
 	}
 
 	visited := make(map[string]bool) // To prevent endless loops
 
-	str := text
-	for {
-		replaced := regex.Compile(`\$\{([\w.]+)\}`).ReplaceAllStringFunc(str, func(m string) string {
-			varname := m[2 : len(m)-1]
-			if !visited[varname] {
-				visited[varname] = true
-				if G.Pkg != nil {
-					if value, ok := G.Pkg.varValue(varname); ok {
-						return value
-					}
-				}
-				if G.Mk != nil {
-					if value, ok := G.Mk.VarValue(varname); ok {
-						return value
-					}
+	replacer := func(m string) string {
+		varname := m[2 : len(m)-1]
+		if !visited[varname] {
+			visited[varname] = true
+			if G.Pkg != nil {
+				if value, ok := G.Pkg.vars.LastValueFound(varname); ok {
+					return value
 				}
 			}
-			return "${" + varname + "}"
-		})
+			if mklines != nil {
+				// TODO: At load time, use mklines.loadVars instead.
+				if value, ok := mklines.allVars.LastValueFound(varname); ok {
+					return value
+				}
+			}
+		}
+		return "${" + varname + "}"
+	}
+
+	str := text
+	for {
+		// TODO: Replace regular expression with full parser.
+		replaced := replaceAllFunc(str, `\$\{([\w.]+)\}`, replacer)
 		if replaced == str {
+			if trace.Tracing && str != text {
+				trace.Stepf("resolveVariableRefs %q => %q", text, replaced)
+			}
 			return replaced
 		}
 		str = replaced
 	}
 }
 
-func CheckfileExtra(fname string) {
+func CheckFileOther(filename CurrPath) {
 	if trace.Tracing {
-		defer trace.Call1(fname)()
+		defer trace.Call(filename)()
 	}
 
-	if lines := LoadNonemptyLines(fname, false); lines != nil {
-		ChecklinesTrailingEmptyLines(lines)
+	if lines := Load(filename, NotEmpty|LogErrors); lines != nil {
+		CheckLinesTrailingEmptyLines(lines)
 	}
 }
 
-func ChecklinesDescr(lines []Line) {
+func CheckLinesDescr(lines *Lines) {
 	if trace.Tracing {
-		defer trace.Call1(lines[0].Filename)()
+		defer trace.Call(lines.Filename)()
 	}
 
-	for _, line := range lines {
-		CheckLineLength(line, 80)
-		CheckLineTrailingWhitespace(line)
-		CheckLineValidCharacters(line, `[\t -~]`)
-		if contains(line.Text, "${") {
-			line.Notef("Variables are not expanded in the DESCR file.")
+	checkVarRefs := func(line *Line) {
+		tokens, _ := NewMkLexer(line.Text, nil).MkTokens()
+		for _, token := range tokens {
+			switch {
+			case token.Varuse == nil,
+				!hasPrefix(token.Text, "${"),
+				G.Pkgsrc.VariableType(nil, token.Varuse.varname) == nil:
+			default:
+				line.Notef("Variables like %q are not expanded in the DESCR file.",
+					token.Text)
+			}
 		}
 	}
-	ChecklinesTrailingEmptyLines(lines)
 
-	if maxlines := 24; len(lines) > maxlines {
-		line := lines[maxlines]
+	for _, line := range lines.Lines {
+		ck := LineChecker{line}
+		ck.CheckLength(80)
+		ck.CheckTrailingWhitespace()
+		ck.CheckValidCharacters()
+		checkVarRefs(line)
+	}
 
-		line.Warnf("File too long (should be no more than %d lines).", maxlines)
-		Explain(
-			"The DESCR file should fit on a traditional terminal of 80x25",
-			"characters.  It is also intended to give a _brief_ summary about",
-			"the package's contents.")
+	CheckLinesTrailingEmptyLines(lines)
+
+	if maxLines := 24; lines.Len() > maxLines {
+		line := lines.Lines[maxLines]
+
+		line.Warnf("File too long (should be no more than %d lines).", maxLines)
+		line.Explain(
+			"The DESCR file should fit on a traditional terminal of 80x25 characters.",
+			"It is also intended to give a _brief_ summary about the package's contents.")
 	}
 
 	SaveAutofixChanges(lines)
 }
 
-func ChecklinesMessage(lines []Line) {
+func CheckLinesMessage(lines *Lines) {
 	if trace.Tracing {
-		defer trace.Call1(lines[0].Filename)()
+		defer trace.Call(lines.Filename)()
 	}
 
-	explanation := []string{
-		"A MESSAGE file should consist of a header line, having 75 \"=\"",
-		"characters, followed by a line containing only the RCS Id, then an",
-		"empty line, your text and finally the footer line, which is the",
-		"same as the header line."}
-
-	if len(lines) < 3 {
-		lastLine := lines[len(lines)-1]
-		lastLine.Warnf("File too short.")
-		Explain(explanation...)
+	// For now, skip all checks when the MESSAGE may be built from multiple
+	// files.
+	//
+	// If the need arises, some of the checks may be activated again, but
+	// that requires more sophisticated code.
+	if G.Pkg != nil && G.Pkg.vars.IsDefined("MESSAGE_SRC") {
 		return
 	}
 
-	hline := strings.Repeat("=", 75)
-	if line := lines[0]; line.Text != hline {
+	explanation := func() []string {
+		return []string{
+			"A MESSAGE file should consist of a header line, having 75 \"=\"",
+			"characters, followed by a line containing only the CVS Id, then an",
+			"empty line, your text and finally the footer line, which is the",
+			"same as the header line."}
+	}
+
+	if lines.Len() < 3 {
+		line := lines.LastLine()
+		line.Warnf("File too short.")
+		line.Explain(explanation()...)
+		return
+	}
+
+	hline := "==========================================================================="
+	if line := lines.Lines[0]; line.Text != hline {
 		fix := line.Autofix()
 		fix.Warnf("Expected a line of exactly 75 \"=\" characters.")
-		fix.Explain(explanation...)
+		fix.Explain(explanation()...)
 		fix.InsertBefore(hline)
 		fix.Apply()
-		CheckLineRcsid(lines[0], ``, "")
-	} else if 1 < len(lines) {
-		CheckLineRcsid(lines[1], ``, "")
+		lines.CheckCvsID(0, ``, "")
+	} else {
+		lines.CheckCvsID(1, ``, "")
 	}
-	for _, line := range lines {
-		CheckLineLength(line, 80)
-		CheckLineTrailingWhitespace(line)
-		CheckLineValidCharacters(line, `[\t -~]`)
+	for _, line := range lines.Lines {
+		ck := LineChecker{line}
+		ck.CheckLength(80)
+		ck.CheckTrailingWhitespace()
+		ck.CheckValidCharacters()
 	}
-	if lastLine := lines[len(lines)-1]; lastLine.Text != hline {
+	if lastLine := lines.LastLine(); lastLine.Text != hline {
 		fix := lastLine.Autofix()
 		fix.Warnf("Expected a line of exactly 75 \"=\" characters.")
-		fix.Explain(explanation...)
+		fix.Explain(explanation()...)
 		fix.InsertAfter(hline)
 		fix.Apply()
 	}
-	ChecklinesTrailingEmptyLines(lines)
+	CheckLinesTrailingEmptyLines(lines)
 
 	SaveAutofixChanges(lines)
 }
 
-func CheckfileMk(fname string) {
+func CheckFileMk(filename CurrPath) {
 	if trace.Tracing {
-		defer trace.Call1(fname)()
+		defer trace.Call(filename)()
 	}
 
-	lines := LoadNonemptyLines(fname, true)
-	if lines == nil {
+	mklines := LoadMk(filename, NotEmpty|LogErrors)
+	if mklines == nil {
 		return
 	}
 
-	NewMkLines(lines).Check()
-	SaveAutofixChanges(lines)
-}
-
-func (pkglint *Pkglint) Checkfile(fname string) {
-	if trace.Tracing {
-		defer trace.Call1(fname)()
+	if G.Pkg != nil {
+		G.Pkg.checkFileMakefileExt(filename)
 	}
 
-	basename := path.Base(fname)
-	if hasPrefix(basename, "work") || hasSuffix(basename, "~") || hasSuffix(basename, ".orig") || hasSuffix(basename, ".rej") {
-		if pkglint.opts.Import {
-			NewLineWhole(fname).Errorf("Must be cleaned up before committing the package.")
+	mklines.Check()
+	mklines.SaveAutofixChanges()
+}
+
+// checkReg checks the given regular file.
+// depth is 3 for files in the package directory, and 4 or more for files
+// deeper in the directory hierarchy, such as in files/ or patches/.
+func (pkglint *Pkglint) checkReg(filename CurrPath, basename string, depth int) {
+
+	if depth == 3 && !pkglint.Wip {
+		if contains(basename, "TODO") {
+			NewLineWhole(filename).Errorf("Packages in main pkgsrc must not have a %s file.", basename)
+			// TODO: Add a convincing explanation.
+			return
 		}
-		return
 	}
-
-	st, err := os.Lstat(fname)
-	if err != nil {
-		NewLineWhole(fname).Errorf("%s", err)
-		return
-	}
-
-	pkglint.checkExecutable(st, fname)
 
 	switch {
-	case st.Mode().IsDir():
-		switch {
-		case basename == "files" || basename == "patches" || isIgnoredFilename(basename):
-			// Ok
-		case matches(fname, `(?:^|/)files/[^/]*$`):
-			// Ok
-		case !isEmptyDir(fname):
-			NewLineWhole(fname).Warnf("Unknown directory name.")
+	case hasSuffix(basename, "~"),
+		hasSuffix(basename, ".orig"),
+		hasSuffix(basename, ".rej"),
+		contains(basename, "TODO") && depth == 3:
+		if pkglint.Opts.Import {
+			NewLineWhole(filename).Errorf("Must be cleaned up before committing the package.")
 		}
+		return
+	}
 
-	case st.Mode()&os.ModeSymlink != 0:
-		if !hasPrefix(basename, "work") {
-			NewLineWhole(fname).Warnf("Unknown symlink name.")
-		}
-
-	case !st.Mode().IsRegular():
-		NewLineWhole(fname).Errorf("Only files and directories are allowed in pkgsrc.")
-
+	switch {
 	case basename == "ALTERNATIVES":
-		if pkglint.opts.CheckAlternatives {
-			CheckfileExtra(fname)
-		}
+		CheckFileAlternatives(filename)
 
 	case basename == "buildlink3.mk":
-		if pkglint.opts.CheckBuildlink3 {
-			if lines := LoadNonemptyLines(fname, true); lines != nil {
-				ChecklinesBuildlink3Mk(NewMkLines(lines))
-			}
+		if mklines := LoadMk(filename, NotEmpty|LogErrors); mklines != nil {
+			CheckLinesBuildlink3Mk(mklines)
 		}
 
 	case hasPrefix(basename, "DESCR"):
-		if pkglint.opts.CheckDescr {
-			if lines := LoadNonemptyLines(fname, false); lines != nil {
-				ChecklinesDescr(lines)
-			}
+		if lines := Load(filename, NotEmpty|LogErrors); lines != nil {
+			CheckLinesDescr(lines)
 		}
 
 	case basename == "distinfo":
-		if pkglint.opts.CheckDistinfo {
-			if lines := LoadNonemptyLines(fname, false); lines != nil {
-				ChecklinesDistinfo(lines)
-			}
+		if lines := Load(filename, NotEmpty|LogErrors); lines != nil {
+			CheckLinesDistinfo(G.Pkg, lines)
 		}
 
 	case basename == "DEINSTALL" || basename == "INSTALL":
-		if pkglint.opts.CheckInstall {
-			CheckfileExtra(fname)
-		}
+		CheckFileOther(filename)
 
 	case hasPrefix(basename, "MESSAGE"):
-		if pkglint.opts.CheckMessage {
-			if lines := LoadNonemptyLines(fname, false); lines != nil {
-				ChecklinesMessage(lines)
-			}
+		if lines := Load(filename, NotEmpty|LogErrors); lines != nil {
+			CheckLinesMessage(lines)
 		}
 
-	case matches(basename, `^patch-[-A-Za-z0-9_.~+]*[A-Za-z0-9_]$`):
-		if pkglint.opts.CheckPatches {
-			if lines := LoadNonemptyLines(fname, false); lines != nil {
-				ChecklinesPatch(lines)
-			}
+	case basename == "options.mk":
+		if mklines := LoadMk(filename, NotEmpty|LogErrors); mklines != nil {
+			CheckLinesOptionsMk(mklines)
 		}
 
-	case matches(fname, `(?:^|/)patches/manual[^/]*$`):
+	case matches(basename, `^patch-[-\w.~+]*\w$`):
+		if lines := Load(filename, NotEmpty|LogErrors); lines != nil {
+			CheckLinesPatch(lines)
+		}
+
+	case filename.DirNoClean().Base() == "patches" && matches(filename.Base(), `^manual[^/]*$`):
 		if trace.Tracing {
-			trace.Step1("Unchecked file %q.", fname)
+			trace.Stepf("Unchecked file %q.", filename)
 		}
 
-	case matches(fname, `(?:^|/)patches/[^/]*$`):
-		NewLineWhole(fname).Warnf("Patch files should be named \"patch-\", followed by letters, '-', '_', '.', and digits only.")
+	case filename.DirNoClean().Base() == "patches":
+		NewLineWhole(filename).Warnf("Patch files should be named \"patch-\", followed by letters, '-', '_', '.', and digits only.")
 
-	case matches(basename, `^(?:.*\.mk|Makefile.*)$`) && !matches(fname, `files/`) && !matches(fname, `patches/`):
-		if pkglint.opts.CheckMk {
-			CheckfileMk(fname)
-		}
+	case (hasPrefix(basename, "Makefile") || hasSuffix(basename, ".mk")) &&
+		!G.Pkgsrc.Rel(filename).AsPath().ContainsPath("files"):
+		CheckFileMk(filename)
 
 	case hasPrefix(basename, "PLIST"):
-		if pkglint.opts.CheckPlist {
-			if lines := LoadNonemptyLines(fname, false); lines != nil {
-				ChecklinesPlist(lines)
-			}
+		if lines := Load(filename, NotEmpty|LogErrors); lines != nil {
+			CheckLinesPlist(G.Pkg, lines)
 		}
 
-	case basename == "TODO" || basename == "README":
-		// Ok
+	case contains(basename, "README"):
+		break
 
 	case hasPrefix(basename, "CHANGES-"):
-		// This only checks the file, but doesn't register the changes globally.
-		_ = pkglint.Pkgsrc.loadDocChangesFromFile(fname)
+		// This only checks the file but doesn't register the changes globally.
+		_ = pkglint.Pkgsrc.loadDocChangesFromFile(filename)
 
-	case matches(fname, `(?:^|/)files/[^/]*$`):
-		// Skip
+	case filename.DirNoClean().Base() == "files":
+		// Skip files directly in the files/ directory, but not those further down.
 
 	case basename == "spec":
-		// Ok in regression tests
+		if !pkglint.Pkgsrc.Rel(filename).HasPrefixPath("regress") {
+			NewLineWhole(filename).Warnf("Only packages in regress/ may have spec files.")
+		}
+
+	case pkglint.matchesLicenseFile(basename):
+		break
 
 	default:
-		NewLineWhole(fname).Warnf("Unexpected file found.")
-		if pkglint.opts.CheckExtra {
-			CheckfileExtra(fname)
-		}
+		NewLineWhole(filename).Warnf("Unexpected file found.")
 	}
 }
 
-func (pkglint *Pkglint) checkExecutable(st os.FileInfo, fname string) {
-	if st.Mode().IsRegular() && st.Mode().Perm()&0111 != 0 && !isCommitted(fname) {
-		line := NewLine(fname, 0, "", nil)
-		fix := line.Autofix()
-		fix.Warnf("Should not be executable.")
-		fix.Explain(
-			"No package file should ever be executable.  Even the INSTALL and",
-			"DEINSTALL scripts are usually not usable in the form they have in",
-			"the package, as the pathnames get adjusted during installation.",
-			"So there is no need to have any file executable.")
-		fix.Custom(func(printAutofix, autofix bool) {
-			fix.Describef(0, "Clearing executable bits")
-			if autofix {
-				if err := os.Chmod(line.Filename, st.Mode()&^0111); err != nil {
-					line.Errorf("Cannot clear executable bits: %s", err)
-				}
+func (pkglint *Pkglint) matchesLicenseFile(basename string) bool {
+	if pkglint.Pkg == nil {
+		return false
+	}
+
+	licenseFile := pkglint.Pkg.vars.LastValue("LICENSE_FILE")
+	return basename == path.Base(licenseFile)
+}
+
+func (pkglint *Pkglint) checkExecutable(filename CurrPath, mode os.FileMode) {
+	if mode.Perm()&0111 == 0 {
+		// Not executable at all.
+		return
+	}
+
+	if isCommitted(filename) {
+		// Too late to be fixed by the package developer, since
+		// CVS remembers the executable bit in the repo file.
+		// At this point, it can only be reset by the CVS admins.
+		return
+	}
+
+	line := NewLineWhole(filename)
+	fix := line.Autofix()
+	fix.Warnf("Should not be executable.")
+	fix.Explain(
+		"No package file should ever be executable.",
+		"Even the INSTALL and DEINSTALL scripts are usually not usable",
+		"in the form they have in the package,",
+		"as the pathnames get adjusted during installation.",
+		"So there is no need to have any file executable.")
+	fix.Custom(func(showAutofix, autofix bool) {
+		fix.Describef(0, "Clearing executable bits")
+		if autofix {
+			if err := filename.Chmod(mode &^ 0111); err != nil {
+				G.Logger.TechErrorf(filename.CleanPath(), "Cannot clear executable bits: %s", err)
 			}
-		})
-		fix.Apply()
-	}
+		}
+	})
+	fix.Apply()
 }
 
-func ChecklinesTrailingEmptyLines(lines []Line) {
-	max := len(lines)
+func CheckLinesTrailingEmptyLines(lines *Lines) {
+	max := lines.Len()
+
 	last := max
-	for last > 1 && lines[last-1].Text == "" {
+	for last > 1 && lines.Lines[last-1].Text == "" {
 		last--
 	}
+
 	if last != max {
-		lines[last].Notef("Trailing empty lines.")
+		lines.Lines[last].Notef("Trailing empty lines.")
 	}
+}
+
+// Tool returns the tool definition from the closest scope (file, global), or nil.
+// The command can be "sed" or "gsed" or "${SED}".
+// If a tool is returned, usable tells whether that tool has been added
+// to USE_TOOLS in the current scope (file or package).
+func (pkglint *Pkglint) Tool(mklines *MkLines, command string, time ToolTime) (tool *Tool, usable bool) {
+	tools := pkglint.tools(mklines)
+
+	if varUse := ToVarUse(command); varUse != nil {
+		tool = tools.ByVarname(varUse.varname)
+	} else {
+		tool = tools.ByName(command)
+	}
+
+	return tool, tool != nil && tools.Usable(tool, time)
+}
+
+// ToolByVarname looks up the tool by its variable name, e.g. "SED".
+//
+// The returned tool may come either from the current file or the current package.
+// It is not guaranteed to be usable (added to USE_TOOLS), only defined;
+// that must be checked by the calling code,
+// see Tool.UsableAtLoadTime and Tool.UsableAtRunTime.
+func (pkglint *Pkglint) ToolByVarname(mklines *MkLines, varname string) *Tool {
+	return pkglint.tools(mklines).ByVarname(varname)
+}
+
+func (pkglint *Pkglint) tools(mklines *MkLines) *Tools {
+	if mklines != nil {
+		return mklines.Tools
+	} else {
+		return pkglint.Pkgsrc.Tools
+	}
+}
+
+func (pkglint *Pkglint) loadCvsEntries(filename CurrPath) map[string]CvsEntry {
+	dir := filename.DirClean()
+	if dir == pkglint.cvsEntriesDir {
+		return pkglint.cvsEntries
+	}
+
+	var entries map[string]CvsEntry
+
+	handle := func(line *Line, add bool, text string) {
+		if !hasPrefix(text, "/") {
+			return
+		}
+
+		fields := strings.Split(text, "/")
+		if len(fields) != 6 {
+			line.Errorf("Invalid line: %s", line.Text)
+			return
+		}
+
+		if add {
+			entries[fields[1]] = CvsEntry{fields[1], fields[2], fields[3], fields[4], fields[5]}
+		} else {
+			delete(entries, fields[1])
+		}
+	}
+
+	lines := Load(dir.JoinNoClean("CVS/Entries"), 0)
+	if lines != nil {
+		entries = make(map[string]CvsEntry)
+		for _, line := range lines.Lines {
+			handle(line, true, line.Text)
+		}
+
+		logLines := Load(dir.JoinNoClean("CVS/Entries.Log"), 0)
+		if logLines != nil {
+			for _, line := range logLines.Lines {
+				text := line.Text
+				if hasPrefix(text, "A ") {
+					handle(line, true, text[2:])
+				} else if hasPrefix(text, "R ") {
+					handle(line, false, text[2:])
+				}
+			}
+		}
+	}
+
+	pkglint.cvsEntriesDir = dir
+	pkglint.cvsEntries = entries
+	return entries
+}
+
+func (pkglint *Pkglint) Abs(filename CurrPath) CurrPath {
+	if !filename.IsAbs() {
+		return pkglint.cwd.JoinNoClean(NewRelPath(filename.AsPath())).Clean()
+	}
+	return filename.Clean()
+}
+
+type InterPackage struct {
+	hashes       map[string]*Hash    // Maps "alg:filename" => hash (inter-package check).
+	usedLicenses map[string]struct{} // Maps "license name" => true (inter-package check).
+	bl3Names     map[string]Location // Maps buildlink3 identifiers to their first occurrence.
+}
+
+func (ip *InterPackage) Enable() {
+	*ip = InterPackage{
+		make(map[string]*Hash),
+		make(map[string]struct{}),
+		make(map[string]Location)}
+}
+
+func (ip *InterPackage) Enabled() bool { return ip.hashes != nil }
+
+func (ip *InterPackage) Hash(alg string, filename RelPath, hashBytes []byte, loc *Location) *Hash {
+	key := alg + ":" + filename.String()
+	if otherHash := ip.hashes[key]; otherHash != nil {
+		return otherHash
+	}
+
+	ip.hashes[key] = &Hash{hashBytes, *loc}
+	return nil
+}
+
+func (ip *InterPackage) UseLicense(name string) {
+	if ip.usedLicenses != nil {
+		ip.usedLicenses[intern(name)] = struct{}{}
+	}
+}
+
+func (ip *InterPackage) IsLicenseUsed(name string) bool {
+	_, used := ip.usedLicenses[name]
+	return used
+}
+
+// Bl3 remembers that the given buildlink3 name is used at the given location.
+// Since these names must be unique, there should be no other location where
+// the same name is used.
+func (ip *InterPackage) Bl3(name string, loc *Location) *Location {
+	if ip.bl3Names == nil {
+		return nil
+	}
+
+	if prev, found := ip.bl3Names[name]; found {
+		return &prev
+	}
+
+	ip.bl3Names[name] = *loc
+	return nil
 }
