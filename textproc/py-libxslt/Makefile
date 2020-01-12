@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.47 2016/07/09 13:04:10 wiz Exp $
+# $NetBSD: Makefile,v 1.56 2019/11/06 13:24:03 wiz Exp $
 
 .include "../../textproc/libxslt/Makefile.common"
 
@@ -11,12 +11,14 @@ COMMENT=	Python wrapper for libxslt
 DEPENDS+=	${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 DEPENDS+=	${PYPKGPREFIX}-libxml2>=2.6.8:../../textproc/py-libxml2
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # not yet ported as of 1.1.28
+PYTHON_VERSIONS_ACCEPTED=	27
 
 PYSETUPSUBDIR=	python
 NO_CONFIGURE=	yes
 
 MAKE_ENV+=		PYLIBXSLTVERSION=${PKGVERSION}
+
+PYSITEDIR=		${PREFIX}/lib/python${PYVERSSUFFIX}/site-packages
 
 SUBST_CLASSES+=		setup
 SUBST_MESSAGE.setup=	Fixing hardcoded paths.
@@ -25,13 +27,20 @@ SUBST_FILES.setup=	python/setup.py
 SUBST_SED.setup=	-e "s,@LIBICONVDIR@,${BUILDLINK_PREFIX.iconv},g"
 SUBST_SED.setup+=	-e "s,@LIBXML2DIR@,${BUILDLINK_PREFIX.libxml2},g"
 SUBST_SED.setup+=	-e "s,@LIBXSLTDIR@,${BUILDLINK_PREFIX.libxslt},g"
+SUBST_SED.setup+=	-e "s,@PYSHLIBDIR@,${PYSITEDIR},g"
+
+# BUILDLINK_TRANSFORM.Darwin+=	opt:-bundle:-dynamiclib
 
 post-extract: setuppy
 .PHONY: setuppy
 setuppy:
 	${CP} ${FILESDIR}/setup.py ${WRKSRC}/python
 
-BUILDLINK_API_DEPENDS.libxslt+=	libxslt>=${PKGVERSION}
+# this must come before py-libxml2's bl3 or the direct dependence is lost
+.include "../../lang/python/pyversion.mk"
+
+.include "../../textproc/py-libxml2/buildlink3.mk"
+BUILDLINK_API_DEPENDS.libxslt+=	libxslt>=${PKGVERSION_NOREV}
 .include "../../textproc/libxslt/buildlink3.mk"
 .include "../../lang/python/extension.mk"
 .include "../../lang/python/distutils.mk"
