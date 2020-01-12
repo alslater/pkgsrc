@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.18 2014/10/09 14:06:10 wiz Exp $
+# $NetBSD: Makefile,v 1.21 2019/11/03 10:39:18 rillig Exp $
 #
 
 DISTNAME=	slang-2.2.4
 PKGNAME=	lib${DISTNAME:slang%=slang2%}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	devel
-MASTER_SITES=	ftp://space.mit.edu/pub/davis/slang/v2.2/ \
-		ftp://ftp.ntua.gr/pub/lang/slang/slang/v2.2/
+MASTER_SITES=	ftp://space.mit.edu/pub/davis/slang/v2.2/
+MASTER_SITES+=	ftp://ftp.ntua.gr/pub/lang/slang/slang/v2.2/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -25,9 +25,9 @@ CONFIGURE_ARGS+=	--with-iconv=${BUILDLINK_PREFIX.iconv}
 CONFIGURE_ARGS+=	--without-x
 CONFIGURE_ARGS+=	--with-z=${BUILDLINK_PREFIX.zlib}
 
-DLOPEN_REQUIRE_PTHREADS=no
+DLOPEN_REQUIRE_PTHREADS=	no
 
-EGDIR=			${PREFIX}/share/examples/libslang2
+EGDIR=		${PREFIX}/share/examples/libslang2
 CONF_FILES+=	${EGDIR}/slsh.rc ${PKG_SYSCONFDIR}/slsh.rc
 
 INSTALL_MAKE_FLAGS+=	DEST_SLSH_CONF_DIR=${DESTDIR}/${EGDIR}
