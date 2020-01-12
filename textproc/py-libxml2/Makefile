@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.57 2017/10/31 13:15:44 fhajny Exp $
+# $NetBSD: Makefile,v 1.64 2019/01/09 19:09:03 adam Exp $
 
 .include "../../textproc/libxml2/Makefile.common"
 
@@ -8,7 +8,6 @@ COMMENT=	Python wrapper for libxml2
 LICENSE=	modified-bsd
 
 USE_GCC_RUNTIME=	yes
-USE_MULTIARCH=		lib
 
 PYSETUPSUBDIR=	python
 NO_CONFIGURE=	YES
@@ -23,13 +22,21 @@ SUBST_SED.setup+=	-e "/^\"/s,/usr/local/include,${BUILDLINK_PREFIX.iconv}/includ
 
 BUILDLINK_TRANSFORM.Darwin+=	opt:-bundle:-dynamiclib
 
+.include "../../mk/bsd.prefs.mk"
+
+.if ${OPSYS} == "Darwin"
+post-install: fix-darwin-install-name
+fix-darwin-install-name:
+	install_name_tool -id ${PREFIX}/${PYSITELIB}/libxml2mod.so \
+	    ${DESTDIR}${PREFIX}/${PYSITELIB}/libxml2mod.so
+.endif
+
 EGG_NAME=	${DISTNAME:S/-/_python-/}
 
 BUILD_DEPENDS+=	${PYPKGPREFIX}-expat>=0:../../textproc/py-expat
 
-BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=${PKGVERSION}
-.include "../../textproc/libxml2/buildlink3.mk"
-
 .include "../../lang/python/distutils.mk"
 .include "../../converters/libiconv/buildlink3.mk"
+BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=${PKGVERSION_NOREV}
+.include "../../textproc/libxml2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
