@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.13 2019/08/20 13:00:02 adam Exp $
 man/man1/git-add.1
 man/man1/git-am.1
 man/man1/git-annotate.1
@@ -104,13 +104,13 @@ man/man1/git-receive-pack.1
 man/man1/git-reflog.1
 man/man1/git-remote-ext.1
 man/man1/git-remote-fd.1
-man/man1/git-remote-testgit.1
 man/man1/git-remote.1
 man/man1/git-repack.1
 man/man1/git-replace.1
 man/man1/git-request-pull.1
 man/man1/git-rerere.1
 man/man1/git-reset.1
+man/man1/git-restore.1
 man/man1/git-rev-list.1
 man/man1/git-rev-parse.1
 man/man1/git-revert.1
@@ -132,6 +132,7 @@ man/man1/git-status.1
 man/man1/git-stripspace.1
 man/man1/git-submodule.1
 man/man1/git-svn.1
+man/man1/git-switch.1
 man/man1/git-symbolic-ref.1
 man/man1/git-tag.1
 man/man1/git-unpack-file.1
@@ -151,7 +152,6 @@ man/man1/git-worktree.1
 man/man1/git-write-tree.1
 man/man1/git.1
 man/man1/gitk.1
-man/man1/gitremote-helpers.1
 man/man1/gitweb.1
 man/man3/Git.3pm
 man/man5/gitattributes.5
@@ -168,6 +168,7 @@ man/man7/gitdiffcore.7
 man/man7/giteveryday.7
 man/man7/gitglossary.7
 man/man7/gitnamespaces.7
+man/man7/gitremote-helpers.7
 man/man7/gitrevisions.7
 man/man7/gitsubmodules.7
 man/man7/gittutorial-2.7
