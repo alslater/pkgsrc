@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.12 2016/07/09 13:03:42 wiz Exp $
+# $NetBSD: Makefile,v 1.19 2019/11/03 10:18:28 rillig Exp $
 
 DISTNAME=	newt-0.52.16
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	devel
-MASTER_SITES=	https://fedorahosted.org/releases/n/e/newt/
+MASTER_SITES=	https://releases.pagure.org/newt/
 
 MAINTAINER=	ryoon@NetBSD.org
-HOMEPAGE=	https://fedorahosted.org/newt/
+HOMEPAGE=	https://pagure.io/newt
 COMMENT=	Windowing toolkit based on libslang2
 LICENSE=	gnu-lgpl-v2
 
@@ -19,7 +19,7 @@ USE_LIBTOOL=		yes
 PKGCONFIG_OVERRIDE+=	libnewt.pc.in
 
 PY_PATCHPLIST=		yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36
+PYTHON_VERSIONS_ACCEPTED= 27
 
 pre-configure:
 	cd ${WRKSRC}; \
