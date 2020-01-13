@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.71 2014/10/09 14:06:10 wiz Exp $
+# $NetBSD: Makefile,v 1.73 2019/11/03 10:39:18 rillig Exp $
 #
 
 DISTNAME=	slang-1.4.9
 PKGNAME=	lib${DISTNAME}
 PKGREVISION=	7
 CATEGORIES=	devel
-MASTER_SITES=	ftp://space.mit.edu/pub/davis/slang/v1.4/ \
-		ftp://ftp.ntua.gr/pub/lang/slang/slang/v1.4/
+MASTER_SITES=	ftp://space.mit.edu/pub/davis/slang/v1.4/
+MASTER_SITES+=	ftp://ftp.ntua.gr/pub/lang/slang/slang/v1.4/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -17,9 +17,8 @@ MAKE_JOBS_SAFE=		no
 
 USE_TOOLS+=		gmake
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 GNU_CONFIGURE=		yes
-DLOPEN_REQUIRE_PTHREADS=no
+DLOPEN_REQUIRE_PTHREADS= no
 
 .include "../../mk/termcap.buildlink3.mk"
 

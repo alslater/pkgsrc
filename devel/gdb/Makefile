@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.55 2016/07/09 06:38:07 wiz Exp $
+# $NetBSD: Makefile,v 1.64 2019/11/03 10:39:11 rillig Exp $
 
-DISTNAME=	gdb-7.11
-PKGREVISION=	3
+DISTNAME=	gdb-8.1
+PKGREVISION=	4
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_GNU:=gdb/}
 
@@ -10,29 +10,45 @@ HOMEPAGE=	http://www.gnu.org/software/gdb/gdb.html
 COMMENT=	Symbolic debugger for multiple language frontends
 LICENSE=	gnu-gpl-v3
 
+USE_LANGUAGES=		c c++11
+
 BROKEN_GETTEXT_DETECTION=	yes
-GNU_CONFIGURE=		YES
-USE_PKGLOCALEDIR=	YES
-USE_LIBTOOL=		YES
-USE_TOOLS+=		gmake msgfmt makeinfo perl:build
+GNU_CONFIGURE=			YES
+USE_PKGLOCALEDIR=		YES
+USE_LIBTOOL=			YES
+USE_TOOLS+=			gmake msgfmt makeinfo perl:build
 REPLACE_LOCALEDIR_PATTERNS+=	Make-in
-INSTALL_TARGET=		install install-info
-TEST_TARGET=		check
-INFO_FILES=		yes
-CONFIGURE_ENV+=		CONFIG_LDFLAGS=${LDFLAGS:M*:Q}
+INSTALL_TARGET=			install install-info
+TEST_TARGET=			check
+INFO_FILES=			yes
+CONFIGURE_ENV+=			CONFIG_LDFLAGS=${LDFLAGS:M*:Q}
 
 # In gdb/configure, depcomp is parsed with sed.
 SUBST_CLASSES+=			fix-depcomp
 SUBST_STAGE.fix-depcomp+=	pre-configure
 SUBST_MESSAGE.fix-depcomp+=	Read depcomp directly
 SUBST_FILES.fix-depcomp+=	gdb/configure
-SUBST_SED.fix-depcomp+=		-e 's,< ./depcomp,${PREFIX}/share/libtool/config/depcomp,'
+SUBST_SED.fix-depcomp+=		-e 's,< ./depcomp,${_OVERRIDE_PATH.depcomp},'
+
+CONFIGURE_ARGS+=	--disable-binutils
+CONFIGURE_ARGS+=	--disable-gprof
+CONFIGURE_ARGS+=	--disable-gold
+CONFIGURE_ARGS+=	--disable-gas
+CONFIGURE_ARGS+=	--disable-ld
+
+CONFIGURE_ARGS+=	--enable-targets=all
 
 AUTO_MKDIRS=		yes
 
 .include "options.mk"
 
 .include "../../mk/bsd.prefs.mk"
+
+PLIST_VARS+=	gcore
+.if (${OPSYS} == "SunOS" || ${OPSYS} == "NetBSD" \
+    || ${OPSYS} == "Linux" || ${OPSYS} == "FreeBSD")
+PLIST.gcore=	yes
+.endif
 
 .if ${OPSYS} == "SunOS"
 # Work around a bug in gdb's configure
@@ -45,16 +61,18 @@ MAKE_ENV+= gdb_cv_var_elf=yes
 CONFIGURE_ENV+= gdb_cv_struct_lwp=yes
 MAKE_ENV+= gdb_cv_struct_lwp=yes
 
+CONFIGURE_ARGS+=	--with-separate-debug-dir=/usr/libdata/debug
 .elif ${OPSYS} == "DragonFly"
 TARGET_STR=		${MACHINE_ARCH}--dragonfly
 BUILD_DEFS+=		${TARGET_STR}
 ## Remove "-pc" string, without this, getting following message:
 ##	   *** Gdb does not support native target i386-pc-dragonfly"
-CONFIGURE_ARGS+=		--target=${TARGET_STR}
+CONFIGURE_ARGS+=	--target=${TARGET_STR}
 TEST_ENV=		DEJAGNU=${WRKDIR}/../files/dragonfly-default.exp
 .endif
 
 post-install:
+	${RM} -f ${DESTDIR}/${PREFIX}/lib/charset.alias
 .if ${OPSYS} == "DragonFly"
 # Following are installed by binutils
 #. for f in ansidecl.h bfdlink.h dis-asm.h symcat.h

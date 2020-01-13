@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.12 2016/07/09 13:04:06 wiz Exp $
+# $NetBSD: Makefile,v 1.19 2019/11/13 15:26:22 wiz Exp $
 
-DISTNAME=	dbus-python-1.2.4
+DISTNAME=	dbus-python-1.2.12
 PKGNAME=	${DISTNAME:S/python/python-common/}
 CATEGORIES=	sysutils
 MASTER_SITES=	http://dbus.freedesktop.org/releases/dbus-python/
@@ -12,28 +12,28 @@ LICENSE=	mit
 
 CONFLICTS+=	py[0-9]*-dbus<1.1.1
 
-PYTHON_FOR_BUILD_ONLY=	yes
-#BUILD_DEPENDS+= ${PYPKGPREFIX}-docutils>=0:../../textproc/py-docutils
-#DEPENDS+=	${PYPKGPREFIX}-pyrex>=0.9.3:../../lang/py-pyrex
-#PYTHON_VERSIONS_INCOMPATIBLE=34 35 # py-pyrex
+PYTHON_FOR_BUILD_ONLY=		yes
+#BUILD_DEPENDS+=		${PYPKGPREFIX}-docutils>=0:../../textproc/py-docutils
+#DEPENDS+=			${PYPKGPREFIX}-pyrex>=0.9.3:../../lang/py-pyrex
+#PYTHON_VERSIONS_INCOMPATIBLE=	36 # py-pyrex
 
-USE_TOOLS+=	pkg-config gmake
-GNU_CONFIGURE=	yes
-CONFIGURE_ARGS+= --disable-html-docs --disable-api-docs
+USE_TOOLS+=		pkg-config gmake
+GNU_CONFIGURE=		yes
+CONFIGURE_ARGS+=	--disable-html-docs --disable-api-docs
 
 BUILDLINK_TRANSFORM.SunOS+=	rm:-std=c9x
 
+INSTALLATION_DIRS+=	include/dbus-1.0/dbus
+INSTALLATION_DIRS+=	lib/pkgconfig
+
 do-install:
-	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/include/dbus-1.0/dbus
 	${INSTALL_DATA} ${WRKSRC}/include/dbus/dbus-python.h \
 		${DESTDIR}${PREFIX}/include/dbus-1.0/dbus
-	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/lib/pkgconfig
 	${INSTALL_DATA} ${WRKSRC}/dbus-python.pc \
 		${DESTDIR}${PREFIX}/lib/pkgconfig
 
 .include "../../lang/python/application.mk"
 BUILDLINK_API_DEPENDS.dbus+=	dbus>=1.0
 .include "../../sysutils/dbus/buildlink3.mk"
-BUILDLINK_DEPMETHOD.dbus-glib=	build
-.include "../../sysutils/dbus-glib/buildlink3.mk"
+.include "../../devel/glib2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
