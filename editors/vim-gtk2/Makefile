@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.69 2016/11/16 10:38:35 wiz Exp $
+# $NetBSD: Makefile,v 1.86 2019/10/23 07:32:58 morr Exp $
 
 PKGNAME=	vim-gtk2-${VIM_VERSION}.${VIM_PATCHLEVEL}
 
@@ -24,12 +24,12 @@ CONFIGURE_ARGS+=	--enable-gui=gtk2
 USE_TOOLS+=		pkg-config
 
 BUILD_TARGET=		vim
-INSTALL_TARGET=		installvimbin
+INSTALL_TARGET=		installvimbin installvimdiff installtutorbin
 
 INSTALLATION_DIRS+=	${PKGMANDIR}/man1
 
-CHECK_INTERPRETER_SKIP+=${PKGMANDIR}/man1/gvim.1 ${PKGMANDIR}/man1/gview.1
-CHECK_INTERPRETER_SKIP+=${PKGMANDIR}/man1/rgvim.1 ${PKGMANDIR}/man1/rgview.1
+CHECK_INTERPRETER_SKIP+=	${PKGMANDIR}/man1/gvim.1 ${PKGMANDIR}/man1/gview.1
+CHECK_INTERPRETER_SKIP+=	${PKGMANDIR}/man1/rgvim.1 ${PKGMANDIR}/man1/rgview.1
 
 post-install:
 .for f in gvim.1 gview.1 rgvim.1 rgview.1
