@@ -1,4 +1,4 @@
-$NetBSD: patch-configure.ac,v 1.4 2018/11/03 12:47:16 leot Exp $
+$NetBSD: patch-util.c,v 1.2 2018/11/03 12:47:16 leot Exp $
 
 Defining _GNU_SOURCE, _BSD_SOURCE etc. in C sources is problematic,
 because the result of the configure command may be inconsistent with it.
@@ -11,13 +11,14 @@ Part of pull request 1458, commit id `df9a0963f8fa6fca773b059dce22c598152f3edb':
 
 Also shared via PR pkg/52460.
 
---- configure.ac.orig	2018-11-02 14:52:43.000000000 +0000
-+++ configure.ac
-@@ -11,6 +11,7 @@ AC_PREREQ([2.64])
- AC_CONFIG_AUX_DIR([config])
- AM_INIT_AUTOMAKE([1.11.2 subdir-objects parallel-tests foreign -Wall])
- AM_SILENT_RULES([yes])
-+AC_USE_SYSTEM_EXTENSIONS
- AM_PROG_AR
- AM_MAINTAINER_MODE([enable])
- AC_PROG_CC
+--- src/util.c.orig	2015-08-18 04:25:04.000000000 +0000
++++ src/util.c
+@@ -1,8 +1,3 @@
+-
+-#ifdef HAVE_MEMMEM
+-#define _GNU_SOURCE
+-#endif
+-
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <assert.h>

@@ -1,6 +1,9 @@
-# $NetBSD: Makefile,v 1.75 2015/05/28 06:39:32 wiz Exp $
+# $NetBSD: Makefile,v 1.80 2019/04/12 13:02:44 wiz Exp $
+#
+# Take care, changelogs often include "PR 12345" strings
+# which cause GNATS indigestion.
 
-DISTNAME=	apr-1.6.5
+DISTNAME=	apr-1.7.0
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_APACHE:=apr/}
 EXTRACT_SUFX=	.tar.bz2
@@ -11,25 +14,19 @@ COMMENT=	Apache Portable Runtime
 LICENSE=	apache-2.0
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		bin lib
 USE_TOOLS+=		pkg-config
 PKGCONFIG_OVERRIDE+=	apr.pc.in
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--with-devrandom=/dev/urandom
-CONFIGURE_ARGS+=	--with-installbuilddir=${PREFIX}/libexec${LIBARCHSUFFIX}/apr
+CONFIGURE_ARGS+=	--with-installbuilddir=${PREFIX}/libexec/apr
 CONFIGURE_ENV+=		LIBS=${LIBS:M*:Q}
 LIBS.SunOS+=		-lnsl
-
-MULTIARCH_DIRS.lib=	lib libexec
-
-# XXX: why is this required for multiarch?
-CHECK_INTERPRETER_SKIP+=	lib/*.exp
 
 TEST_TARGET=		check
 
 post-install:
-	${RM} ${DESTDIR}${PREFIX}/libexec${LIBARCHSUFFIX}/apr/libtool
-	${INSTALL_SCRIPT} ${PKG_LIBTOOL} ${DESTDIR}${PREFIX}/libexec${LIBARCHSUFFIX}/apr/libtool
+	${RM} ${DESTDIR}${PREFIX}/libexec/apr/libtool
+	${INSTALL_SCRIPT} ${PKG_LIBTOOL} ${DESTDIR}${PREFIX}/libexec/apr/libtool
 
 .include "../../mk/bsd.prefs.mk"
 .if ${OPSYS} == "Linux" || ${OPSYS} == "SunOS"
