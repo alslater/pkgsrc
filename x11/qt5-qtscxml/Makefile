@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.1 2019/11/05 14:58:45 adam Exp $
+# $NetBSD: Makefile,v 1.3 2020/01/21 20:25:39 adam Exp $
 
 DISTNAME=	qtscxml-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-qtscxml-${QTVERSION}

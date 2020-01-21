@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.43 2019/09/16 19:24:53 adam Exp $
+# $NetBSD: Makefile,v 1.45 2020/01/21 20:25:37 adam Exp $
 
 DISTNAME=	qtdeclarative-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-qtdeclarative-${QTVERSION}

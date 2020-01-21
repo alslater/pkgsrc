@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.3 2019/11/14 23:07:20 nia Exp $
+# $NetBSD: Makefile,v 1.5 2020/01/21 20:25:40 adam Exp $
 
 DISTNAME=	qtwayland-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-qtwayland-${QTVERSION}

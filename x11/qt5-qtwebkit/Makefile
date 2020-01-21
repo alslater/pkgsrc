@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.68 2019/11/05 14:58:46 adam Exp $
+# $NetBSD: Makefile,v 1.70 2020/01/21 20:25:40 adam Exp $
 
 DISTNAME=	qtwebkit-${QTWKVERSION}
 PKGNAME=	qt5-qtwebkit-${QTWKVERSION:S/-/./}
@@ -50,13 +50,6 @@ CFLAGS.NetBSD+=		-D_NETBSD_SOURCE
 
 ## for GL_GLEXT_LEGACY with GL/gl.h error, GL_ARB_shader_objects is not defined.
 #BUILDLINK_TRANSFORM+=	rm:-Wundef
-
-PLIST_VARS+=		mac unix
-.if ${OPSYS} == "Darwin"
-PLIST.mac=		yes
-.else
-PLIST.unix=		yes
-.endif
 
 # avoid creating a .qt directory in the users home directory
 SCRIPTS_ENV+=		HOME=${WRKDIR}

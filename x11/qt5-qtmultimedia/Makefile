@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.56 2019/11/05 14:58:45 adam Exp $
+# $NetBSD: Makefile,v 1.58 2020/01/21 20:25:38 adam Exp $
 
 DISTNAME=	qtmultimedia-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-qtmultimedia-${QTVERSION}
