@@ -1,6 +1,8 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.1 2020/01/04 10:57:18 taca Exp $
 bin/purge
 bin/squidclient
+libexec/basic_db_auth
+libexec/basic_fake_auth
 ${PLIST.ba_getpwnam}libexec/basic_getpwnam_auth
 ${PLIST.ba_LDAP}libexec/basic_ldap_auth
 ${PLIST.ba_NCSA}libexec/basic_ncsa_auth
@@ -29,6 +31,7 @@ libexec/url_fake_rewrite.sh
 libexec/url_lfs_rewrite
 man/man1/purge.1
 man/man1/squidclient.1
+man/man8/basic_db_auth.8
 ${PLIST.ba_getpwnam}man/man8/basic_getpwnam_auth.8
 ${PLIST.ba_LDAP}man/man8/basic_ldap_auth.8
 ${PLIST.ba_NCSA}man/man8/basic_ncsa_auth.8
@@ -2206,4 +2209,3 @@ share/squid/icons/silk/script.png
 share/squid/icons/silk/script_gear.png
 share/squid/icons/silk/script_palette.png
 share/squid/mib.txt
-@pkgdir var/squid/run/squid

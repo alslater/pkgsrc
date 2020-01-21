@@ -1,10 +1,10 @@
-$NetBSD: patch-compat_compat.h,v 1.1 2015/01/17 10:20:58 adam Exp $
+$NetBSD: patch-compat_compat.h,v 1.1 2020/01/04 10:57:18 taca Exp $
 
 Fix building.
 
---- compat/compat.h.orig	2015-01-17 10:10:23.000000000 +0000
+--- compat/compat.h.orig	2018-07-02 03:26:07.000000000 +0000
 +++ compat/compat.h
-@@ -38,7 +38,7 @@
+@@ -33,7 +33,7 @@
   * We must pre-define before doing anything with OS headers so the OS
   * do not. Then un-define it before using the IPFilter *_compat.h headers.
   */

@@ -1,27 +1,25 @@
-# $NetBSD$
+# $NetBSD: Makefile,v 1.2 2020/01/18 21:51:12 jperkin Exp $
 
 DISTNAME=	squid-4.9
 PKGREVISION=	1
 CATEGORIES=	www
 MASTER_SITES=	http://www.squid-cache.org/Versions/v4/
+MASTER_SITES+=	ftp://ftp.squid-cache.org/pub/squid/
+MASTER_SITES+=	ftp://ftp.squid-cache.org/pub/archive/4/
 EXTRACT_SUFX=	.tar.xz
 
-MAINTAINER=	al.slater@essiell.com
+MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://www.squid-cache.org/
 COMMENT=	Post-Harvest_cached WWW proxy cache and accelerator
 LICENSE=	gnu-gpl-v2
 
-GNU_CONFIGURE=	yes
-USE_LANGUAGES=	c c++
-
-USE_LANGUAGES=		c c++
+USE_LANGUAGES=		c c++11
 USE_TOOLS+=		perl:run gmake
+GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--sysconfdir=${PKG_SYSCONFDIR}
 CONFIGURE_ARGS+=	--localstatedir=${SQUID_DATADIR}
 CONFIGURE_ARGS+=	--datarootdir=${PREFIX}/share/squid
 CONFIGURE_ARGS+=	--disable-arch-native
-CONFIGURE_ARGS+=	--disable-strict-error-checking
-CONFIGURE_ARGS+=	--enable-auth
 CONFIGURE_ARGS+=	--enable-cachemgr-hostname=localhost
 CONFIGURE_ARGS+=	--enable-delay-pools
 CONFIGURE_ARGS+=	--enable-icap-client
@@ -32,8 +30,6 @@ CONFIGURE_ARGS+=	--enable-storeio=${SQUID_BACKENDS:Q}
 CONFIGURE_ARGS+=	--with-aio
 CONFIGURE_ARGS+=	--with-default-user=${SQUID_USER}
 CONFIGURE_ARGS+=	--with-pidfile=${VARBASE}/run/squid.pid
-CONFIGURE_ARGS+=	--with-openssl=${SSLBASE:Q}
-CONFIGURE_ARGS+=	--enable-ssl-crtd
 
 # Let 'purge' find correct config file by default.
 CPPFLAGS+=		-DDEFAULT_SQUID_CONF=\"${PKG_SYSCONFDIR}/squid.conf\"
@@ -41,8 +37,16 @@ CPPFLAGS+=		-DDEFAULT_SQUID_CONF=\"${PKG_SYSCONFDIR}/squid.conf\"
 BUILD_DEFS+=		VARBASE
 MAKE_ENV+=		INSTALL_SCRIPT=${INSTALL_SCRIPT:Q}
 MAKE_ENV+=		PKG_PREFIX=${PREFIX} VARBASE=${VARBASE}
-REPLACE_PERL+=		tools/helper-mux/helper-mux
-
+REPLACE_PERL+=		contrib/url-normalizer.pl contrib/user-agents.pl \
+			scripts/AnnounceCache.pl scripts/access-log-matrix.pl \
+			scripts/cache-compare.pl scripts/cachetrace.pl \
+			scripts/calc-must-ids.pl scripts/check_cache.pl \
+			scripts/fileno-to-pathname.pl scripts/find-alive.pl \
+			scripts/flag_truncs.pl scripts/icp-test.pl \
+			scripts/icpserver.pl scripts/tcp-banger.pl \
+			scripts/trace-job.pl scripts/trace-master.pl \
+			scripts/udp-banger.pl scripts/upgrade-1.0-store.pl \
+			tools/helper-ok-dying.pl tools/helper-ok.pl
 EGFILES=		src/mime.conf.default src/squid.conf.default \
 			errors/errorpage.css tools/cachemgr.conf
 EGDIR=			share/examples/squid
@@ -82,6 +86,4 @@ post-install:
 .endfor
 
 .include "../../devel/libltdl/buildlink3.mk"
-.include "../../security/openssl/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
-

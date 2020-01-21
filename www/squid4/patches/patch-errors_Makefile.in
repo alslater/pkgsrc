@@ -1,17 +1,19 @@
-$NetBSD$
+$NetBSD: patch-errors_Makefile.in,v 1.1 2020/01/04 10:57:18 taca Exp $
 
---- errors/Makefile.in.orig	2019-11-05 19:19:01.000000000 +0000
+Don't install erropage.css.
+
+--- errors/Makefile.in.orig	2018-07-02 03:32:01.000000000 +0000
 +++ errors/Makefile.in
-@@ -653,7 +653,7 @@ install-dvi: install-dvi-am
+@@ -648,7 +648,7 @@ install-dvi: install-dvi-am
  
  install-dvi-am:
  
 -install-exec-am: install-exec-local
-+install-exec-am: 
++install-exec-am:
  
  install-html: install-html-am
  
-@@ -772,7 +772,6 @@ install-data-local: translate
+@@ -767,7 +767,6 @@ install-data-local: translate
  	done; \
  	$(INSTALL_DATA) $(srcdir)/TRANSLATORS $(DESTDIR)$(DEFAULT_ERROR_DIR)/TRANSLATORS; \
  	$(INSTALL_DATA) $(srcdir)/COPYRIGHT $(DESTDIR)$(DEFAULT_ERROR_DIR)/COPYRIGHT; \
