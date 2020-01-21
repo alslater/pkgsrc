@@ -1,0 +1,21 @@
+$NetBSD$
+
+--- src/Makefile.in.orig	2019-11-05 19:19:02.000000000 +0000
++++ src/Makefile.in
+@@ -7990,14 +7990,14 @@ info: info-recursive
+ 
+ info-am:
+ 
+-install-data-am: install-data-local install-dataDATA install-man
++install-data-am: install-dataDATA install-man
+ 
+ install-dvi: install-dvi-recursive
+ 
+ install-dvi-am:
+ 
+ install-exec-am: install-binPROGRAMS install-libexecPROGRAMS \
+-	install-sbinPROGRAMS install-sysconfDATA
++	install-sbinPROGRAMS
+ 
+ install-html: install-html-recursive
+ 
