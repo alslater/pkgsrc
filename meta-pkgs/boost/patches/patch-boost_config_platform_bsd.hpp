@@ -1,4 +1,4 @@
-$NetBSD: patch-ab,v 1.6 2014/05/13 18:48:49 ryoon Exp $
+$NetBSD: patch-boost_config_platform_bsd.hpp,v 1.1 2017/08/24 19:31:32 adam Exp $
 
 --- boost/config/platform/bsd.hpp.orig	2011-03-07 13:07:30.000000000 +0000
 +++ boost/config/platform/bsd.hpp
@@ -25,7 +25,7 @@ $NetBSD: patch-ab,v 1.6 2014/05/13 18:48:49 ryoon Exp $
  // The BSD <ctype.h> has macros only, no functions:
  //
 -#if !defined(__OpenBSD__) || defined(__DragonFly__)
-+#if !defined(__OpenBSD__) && !defined(__DragonFly__)
++#if defined(__FreeBSD__) || defined(__DragonFly__)
  #  define BOOST_NO_CTYPE_FUNCTIONS
  #endif
  

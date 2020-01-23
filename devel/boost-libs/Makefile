@@ -1,17 +1,16 @@
-# $NetBSD: Makefile,v 1.49 2016/12/18 22:08:07 tnn Exp $
+# $NetBSD: Makefile,v 1.77 2019/11/03 10:39:06 rillig Exp $
 
 BOOST_PACKAGE=		libs
 BOOST_COMMENT=		(binary libraries)
 BOOST_CONFIG=		installed
 BOOST_INSTALL_LIBS=	yes
 
-PKGREVISION= 4
 .include "../../meta-pkgs/boost/Makefile.common"
 
-INSTALLATION_DIRS+=	lib${LIBARCHSUFFIX}
+INSTALLATION_DIRS+=	lib
 
 BJAM_ARGS+=		--without-python
-PLIST_VARS+=		context fiber log long_double_math
+PLIST_VARS+=		backtrace context fiber log longdbl
 
 .if ${OPSYS} == "NetBSD" && ((${MACHINE_ARCH} == "i386") || (!empty(MACHINE_ARCH:Mearm*) && !empty(PKGSRC_COMPILER:Mgcc)))
 BJAM_ARGS+=		pch=off
@@ -20,9 +19,13 @@ BJAM_ARGS+=		pch=off
 .if !empty(MACHINE_ARCH:Malpha) || !empty(MACHINE_ARCH:Mm68k) || !empty(MACHINE_ARCH:Msparc64)
 BJAM_ARGS+=		--without-context
 BJAM_ARGS+=		--without-coroutine
-BJAM_ARGS+=		--without-coroutine2
+BJAM_ARGS+=		--without-fiber
 .else
 PLIST.context=		yes
+.  if !(${OPSYS} == "NetBSD" && !empty(PKGSRC_COMPILER:Mgcc)) && \
+    empty(MACHINE_PLATFORM:MDarwin-1[0-4].*-*)
+PLIST.fiber=		yes
+.  endif
 .endif
 
 # Darwin GCC is unable to build Boost.Log
@@ -32,25 +35,17 @@ BJAM_ARGS+=		--without-log
 PLIST.log=		yes
 .endif
 
-# fiber requires thread_local support, unavailable in older compilers
-# (old darwin, netbsd <6). if fiber becomes necessary, set GCC_REQD
-# on other boost-* packages, too.
-# fiber requires context, so also disable it where context cannot be built
-.if ((${OPSYS} == "Darwin" && ${OS_VERSION:R} < 14) || \
-    !empty(MACHINE_PLATFORM:MNetBSD-[0-6]*-*)) || \
-    !empty(MACHINE_ARCH:Malpha) || !empty(MACHINE_ARCH:Mm68k) || \
-    !empty(MACHINE_ARCH:Msparc64) || \
-    (${OPSYS} == "NetBSD" && !empty(PKGSRC_COMPILER:Mclang))
-BJAM_ARGS+=		--without-fiber
-.else
-PLIST.fiber=		yes
+# FIXME: other systems might also not support 'long double'
+# see patch-boost_math_tools_config.hpp
+.if ${OPSYS} != "FreeBSD"
+PLIST.longdbl=		yes
 .endif
 
-# Long double math functions are not available on Darwin. See
-# boost/math/tools/config.hpp:53
-.if ${OPSYS} != "NetBSD" && ${OPSYS} != "FreeBSD" && \
-   (${OPSYS} != "Darwin" || !empty(MACHINE_PLATFORM:MDarwin-1[3-9].*))
-PLIST.long_double_math=	yes
+# libboost_stacktrace_backtrace requires libbacktrace.
+# FIXME: The condition needs to be refined for non-Debian/Ubuntu
+# platforms shipped with libbacktrace.
+.if ${OPSYS} == "Linux" && exists(/etc/debian_version)
+PLIST.backtrace=	yes
 .endif
 
 UNLIMIT_RESOURCES+=	stacksize
