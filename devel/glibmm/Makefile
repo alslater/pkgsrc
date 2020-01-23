@@ -12,7 +12,7 @@ LICENSE=	gnu-gpl-v2 AND gnu-lgpl-v2.1
 
 # With 4.8, one gets the following:
 #   error: no matching function for call to 'regex_replace(const char*&, std::regex, const char [3])'
-GCC_REQD+=		4.9
+GCC_REQD+=		8	
 USE_LANGUAGES=		c c++11
 USE_LIBTOOL=		yes
 USE_PKGLOCALEDIR=	yes
