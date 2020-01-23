@@ -12,6 +12,7 @@ COMMENT=	Fast multi-format tape archiver
 CONFIGURE_ARGS+=	--enable-bsdtar=static
 CONFIGURE_ARGS+=	--disable-bsdcpio
 CONFIGURE_ARGS+=	--disable-shared
+CONFIGURE_ARGS+=	--without-iconv
 .if "${OS_VARIANT}" == "chromeos"
 CONFIGURE_ARGS+=	--disable-acl
 .endif
