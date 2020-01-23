@@ -12,7 +12,7 @@ LICENSE=	gnu-lgpl-v2.1
 
 DEPENDS+=	${PYPKGPREFIX}-cffi>=1.0.0:../../devel/py-cffi
 
-USE_LANGUAGES=	# none
+USE_LANGUAGES=	c
 
 do-test:
 	cd ${WRKSRC}/test && ${PYTHONBIN} test_augeas.py

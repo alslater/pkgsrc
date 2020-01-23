@@ -4,3 +4,4 @@ SHA1 (python-augeas-1.0.3.tar.gz) = 71bf939b5cb5e13ad472727418a16c1883910ea8
 RMD160 (python-augeas-1.0.3.tar.gz) = ecd3dce58550862c9753022713944aa431510d93
 SHA512 (python-augeas-1.0.3.tar.gz) = 737b41e7bb438d80da75b55714c3f0b1706a4b2cacddd20fadf855bc3044e532f4079319b3775032e6f6009cf7f282af33fdf583332772b443a6c2d4925639fa
 Size (python-augeas-1.0.3.tar.gz) = 92747 bytes
+SHA1 (patch-augeas_ffi.py) = 4b28519b885c41598e731699c7713887ca487879
