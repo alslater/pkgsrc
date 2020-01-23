@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.13 2016/07/09 06:38:10 wiz Exp $
+# $NetBSD: Makefile,v 1.16 2018/03/12 16:36:44 hans Exp $
 
 ###########################################################################
 ###########################################################################
@@ -17,8 +17,13 @@
 # these patch files properly; otherwise your changes WILL be lost on the
 # next libtool update.
 #
-# DO NOT MAKE CHANGES TO patch-ab OR patch-ad WITHOUT FOLLOWING THESE
-# INSTRUCTIONS.  There are no exceptions to this rule.
+# DO NOT MAKE CHANGES TO THESE FILES:
+#
+#   patches/patch-build-aux_ltmain.sh
+#   patches/patch-configure
+#   patches/patch-libltdl_configure
+#
+# WITHOUT FOLLOWING THESE INSTRUCTIONS.  There are no exceptions to this rule.
 #
 ###########################################################################
 ###########################################################################
@@ -28,7 +33,7 @@
 FILESDIR=	${.CURDIR}/../libtool-base/files
 
 PKGNAME=	${DISTNAME:S/-/-fortran-/}
-PKGREVISION=	6
+PKGREVISION=	1
 
 COMMENT=	Generic shared library support script (the script itself, incl. Fortran)
 
@@ -58,13 +63,13 @@ CONFIGURE_ARGS+=	--disable-ltdl-install
 
 USE_TOOLS+=		echo
 
-INSTALLATION_DIRS+=	bin${BINARCHSUFFIX}
+INSTALLATION_DIRS+=	bin
 
 .PHONY: fix-libtool
 fix-libtool:
 	cd ${WRKSRC}; for f in libtool; do				\
-		${SED}	-e "s,-L${BUILDLINK_DIR}/lib${LIBARCHSUFFIX} *,,g" \
-			-e "s,${BUILDLINK_DIR}/lib${LIBARCHSUFFIX} *,,g" \
+		${SED}	-e "s,-L${BUILDLINK_DIR}/lib *,,g"		\
+			-e "s,${BUILDLINK_DIR}/lib *,,g"		\
 			-e "s,${TOOLS_BASEDIR}/bin/,,g"			\
 			$$f > $$f.new;					\
 		if [ -x $$f ]; then ${CHMOD} +x $$f.new; fi;		\
@@ -79,8 +84,8 @@ post-build:
 		${FILESDIR}/shlibtool-fortran.in > ${WRKSRC}/shlibtool-fortran
 
 do-install:
-	${INSTALL_SCRIPT} ${WRKSRC}/shlibtool-fortran ${DESTDIR}${PREFIX}/bin${BINARCHSUFFIX}/shlibtool-fortran
-	${INSTALL_SCRIPT} ${WRKSRC}/libtool ${DESTDIR}${PREFIX}/bin${BINARCHSUFFIX}/libtool-fortran
+	${INSTALL_SCRIPT} ${WRKSRC}/shlibtool-fortran ${DESTDIR}${PREFIX}/bin/shlibtool-fortran
+	${INSTALL_SCRIPT} ${WRKSRC}/libtool ${DESTDIR}${PREFIX}/bin/libtool-fortran
 
 BUILDLINK_DEPMETHOD.dlcompat=	build
 
