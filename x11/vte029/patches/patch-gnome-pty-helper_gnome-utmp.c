@@ -1,8 +1,8 @@
-$NetBSD: patch-ah,v 1.1 2012/08/10 13:46:01 ryoon Exp $
+$NetBSD$
 
---- gnome-pty-helper/gnome-utmp.c.orig	2004-05-01 19:12:51.000000000 +1200
+--- gnome-pty-helper/gnome-utmp.c.orig	2015-10-12 14:28:42.000000000 +0000
 +++ gnome-pty-helper/gnome-utmp.c
-@@ -242,6 +242,9 @@ write_logout_record (void *data, int utm
+@@ -245,6 +245,9 @@ write_logout_record (char *login_name, v
  #if defined(HAVE_UT_UT_ID)
  	strncpy (put.ut_id, ut->ut_id, sizeof (put.ut_id));
  #endif
@@ -12,7 +12,7 @@ $NetBSD: patch-ah,v 1.1 2012/08/10 13:46:01 ryoon Exp $
  
  	strncpy (put.ut_line, ut->ut_line, sizeof (put.ut_line));
  
-@@ -254,6 +257,10 @@ write_logout_record (void *data, int utm
+@@ -265,6 +268,10 @@ write_logout_record (char *login_name, v
  	if (utmp)
  		update_utmp (&put);
  

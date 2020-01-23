@@ -1,6 +1,6 @@
-$NetBSD: patch-af,v 1.1 2012/08/10 13:46:01 ryoon Exp $
+$NetBSD$
 
---- src/slowcat.c.orig	2004-04-27 22:48:17.000000000 +0200
+--- src/slowcat.c.orig	2015-10-12 14:28:30.000000000 +0000
 +++ src/slowcat.c
 @@ -81,6 +81,8 @@ main(int argc, char **argv)
  	int i, c;

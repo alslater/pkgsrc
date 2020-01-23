@@ -1,11 +1,8 @@
-$NetBSD: patch-aa,v 1.1 2012/08/10 13:46:01 ryoon Exp $
+$NetBSD$
 
-Let's assume that if the macro CMSG_FIRSTHDR is not defined, that struct
-msghdr does not have the msg_control member, too. Needed for Solaris.
-
---- src/pty.c.orig	2007-02-26 22:05:14.000000000 +0100
+--- src/pty.c.orig	2015-10-12 14:34:49.000000000 +0000
 +++ src/pty.c
-@@ -659,12 +659,15 @@ _vte_pty_read_ptypair(int tunnel, int *p
+@@ -931,12 +931,15 @@ _vte_pty_read_ptypair(int tunnel, int *p
  		msg.msg_namelen = 0;
  		msg.msg_iov = &vec;
  		msg.msg_iovlen = 1;
@@ -21,7 +18,7 @@ msghdr does not have the msg_control member, too. Needed for Solaris.
  		for (cmsg = CMSG_FIRSTHDR(&msg);
  		     cmsg != NULL;
  		     cmsg = CMSG_NXTHDR(&msg, cmsg)) {
-@@ -683,6 +686,7 @@ _vte_pty_read_ptypair(int tunnel, int *p
+@@ -955,6 +958,7 @@ _vte_pty_read_ptypair(int tunnel, int *p
  				}
  			}
  		}

@@ -1,6 +1,6 @@
-$NetBSD: patch-ai,v 1.1 2012/08/10 13:46:01 ryoon Exp $
+$NetBSD$
 
---- gnome-pty-helper/gnome-pty-helper.c.orig	2010-07-15 17:08:44.000000000 +0000
+--- gnome-pty-helper/gnome-pty-helper.c.orig	2015-10-12 14:28:42.000000000 +0000
 +++ gnome-pty-helper/gnome-pty-helper.c
 @@ -122,6 +122,7 @@ pass_fd (int client_fd, int fd)
  	msg.msg_iovlen     = 1;
