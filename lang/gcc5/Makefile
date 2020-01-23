@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.14 2016/09/08 09:55:32 jperkin Exp $
+# $NetBSD: Makefile,v 1.33 2019/11/03 19:03:59 rillig Exp $
 
 GCC_PKGNAME=		gcc5
-PKGREVISION=		2
+PKGREVISION=		5
 .include		"version.mk"
 
 DISTNAME=	gcc-${GCC5_DIST_VERSION}
@@ -11,9 +11,9 @@ PKGNAME=	${GCC_PKGNAME}-${GCC5_DIST_VERSION}
 ## PKGREVISION of this package!
 CATEGORIES=	lang
 MASTER_SITES=	${MASTER_SITE_GNU:=gcc/gcc-${GCC5_DIST_VERSION}/}
-EXTRACT_SUFX=	.tar.bz2
+EXTRACT_SUFX=	.tar.xz
 
-MAINTAINER=	ryoon@NetBSD.org
+MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://gcc.gnu.org/
 COMMENT=	The GNU Compiler Collection (GCC) - 5 Release Series
 LICENSE=	gnu-gpl-v2 AND gnu-gpl-v3 AND gnu-lgpl-v2 AND gnu-lgpl-v3
@@ -23,8 +23,9 @@ EXTRACT_ONLY=		${DEFAULT_DISTFILES}
 
 NOT_FOR_PLATFORM=	Interix-*-*
 
-USE_LANGUAGES=	c c++
+USE_LANGUAGES=		c c++03
 USE_TOOLS+=		gmake makeinfo sed:run tar:build
+USE_TOOLS.NetBSD+=	gsed
 
 GNU_CONFIGURE=		yes
 ## Build outside ${WRKSRC}
@@ -36,6 +37,7 @@ GCC_PREFIX=		${PREFIX}/${GCC_SUBPREFIX}
 GNU_CONFIGURE_PREFIX=	${GCC_PREFIX}
 INFO_FILES=		yes
 CONFIGURE_ARGS+=	--disable-libstdcxx-pch
+GCC_TARGET_MACHINE=	${MACHINE_GNU_PLATFORM}
 
 UNLIMIT_RESOURCES+=	datasize
 UNLIMIT_RESOURCES+=	stacksize
@@ -65,6 +67,15 @@ BOOT_LDFLAGS+=		${LDFLAGS:M-Wl,-syslibroot*}
 # GCC does not understand this option; remove it, or stage build will fail
 BUILDLINK_TRANSFORM+=	rm:-stdlib=libc++
 
+# Disable fixincludes on SmartOS, header changes result in broken includes
+# being generated, see https://github.com/joyent/pkgsrc-legacy/issues/270
+.if ${OS_VARIANT} == "SmartOS"
+SUBST_CLASSES+=		fixinc
+SUBST_STAGE.fixinc=	pre-configure
+SUBST_FILES.fixinc=	gcc/Makefile.in
+SUBST_SED.fixinc=	-e "s,\./fixinc.sh,-c true,"
+.endif
+
 .include "options.mk"
 
 ## For graphite support.
@@ -83,14 +94,25 @@ CONFIGURE_ARGS+=	--enable-shared
 CONFIGURE_ARGS+=	--enable-long-long
 CONFIGURE_ARGS+=	--with-local-prefix=${GCC_PREFIX:Q}
 .if !empty(MACHINE_PLATFORM:MNetBSD-*-*)
-# on NetBSD, use the native SSP code in libc
+# native SSP conflicts with gcc's libssp
 CONFIGURE_ARGS+=	--disable-libssp
+# Match base libstdc++ major
+SUBST_CLASSES+=		libstdc
+SUBST_STAGE.libstdc=	pre-configure
+SUBST_FILES.libstdc=	libstdc++-v3/configure
+SUBST_MESSAGE.libstdc=	Bumping libstdc++ major to 7
+SUBST_SED.libstdc=	-e 's,libtool_VERSION=6:,libtool_VERSION=7:,g'
 .else
 CONFIGURE_ARGS+=	--enable-libssp
 .endif
 CONFIGURE_ARGS+=	--enable-threads=posix
 CONFIGURE_ARGS+=	--with-boot-ldflags=${BOOT_LDFLAGS:Q}
 
+# multilib on Darwin requires fat-binaries
+CONFIGURE_ARGS.Darwin+=	--disable-multilib
+.if !empty(OSX_SDK_PATH)
+CONFIGURE_ARGS.Darwin+=	--with-sysroot=${OSX_SDK_PATH}
+.endif
 CONFIGURE_ARGS.NetBSD+=	--with-gnu-ld --with-ld=/usr/bin/ld
 CONFIGURE_ARGS.NetBSD+=	--with-gnu-as --with-as=/usr/bin/as
 MAKE_ENV.NetBSD+=	ac_cv_func_clock_gettime=yes

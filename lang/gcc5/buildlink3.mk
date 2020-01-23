@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.2 2015/11/25 12:51:17 jperkin Exp $
+# $NetBSD: buildlink3.mk,v 1.3 2018/01/07 13:04:18 rillig Exp $
 
 BUILDLINK_TREE+=	gcc5
 
@@ -16,7 +16,7 @@ BUILDLINK_FILES.gcc5=		#empty
 BUILDLINK_AUTO_VARS.gcc5=	no
 
 # Packages that link against shared libraries need a full dependency.
-#.if defined(_USE_GCC_SHLIB) && empty(USE_PKGSRC_GCC_RUNTIME:M[Yy][Ee][Ss])
+#.if defined(_USE_GCC_SHLIB)
 #DEPENDS+=	{gcc5, gcc5-libs}>=${_GCC_REQD}:../../lang/gcc5-libs
 #ABI_DEPENDS+=	{gcc5,gcc5-libs}>=5.1.0:../../lang/gcc5-libs
 #.endif
@@ -30,4 +30,5 @@ pkgbase := gcc5
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
 .endif # GCC5_BUILDLINK3_MK
+
 BUILDLINK_TREE+=	-gcc5
