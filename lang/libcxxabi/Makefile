@@ -27,7 +27,7 @@ CMAKE_ARG_PATH=	${WRKSRC}
 
 USE_LANGUAGES=	c c++
 USE_CMAKE=	yes
-GCC_REQD+=	4.8
+GCC_REQD+=	8
 SSP_SUPPORTED=	no
 
 CMAKE_ARGS+=	-DCMAKE_BUILD_TYPE=Release
@@ -38,6 +38,10 @@ CMAKE_ARGS+=	-DLIBCXXABI_USE_LLVM_UNWINDER=YES
 
 # avoid conflict with stddef.h
 CXXFLAGS.NetBSD+=	-D__DEFINED_max_align_t=1
+
+#CXXFLAGS+=	-Wno-strict-aliasing
+#CXXFLAGS+=	-Wno-strict-overflow
+##CXXFLAGS+=	-Wno-shadow
 
 post-extract:
 	${MKDIR} ${WRKDIR}/build

@@ -8,3 +8,4 @@ SHA1 (libcxxabi-9.0.0.src.tar.xz) = 9e6532595d98eca447cb00352848fed7688f722c
 RMD160 (libcxxabi-9.0.0.src.tar.xz) = 811596f352be78bd11bd1dd9465c5392f28d1f62
 SHA512 (libcxxabi-9.0.0.src.tar.xz) = 261f32f61814728ce61c830c80192a55e1ba03c50f49712e208052444ac3acc6d7efcbd7b76a505292f9233aad23b00180aca4e72326ae1244385b39f226e625
 Size (libcxxabi-9.0.0.src.tar.xz) = 552088 bytes
+SHA1 (patch-src_cxa__vector.cpp) = fa58326b01a05de92266df2fecd43c1ca7bb17de
