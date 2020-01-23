@@ -1,7 +1,9 @@
-# $NetBSD: Makefile,v 1.21 2019/11/03 11:45:46 rillig Exp $
+# $NetBSD: Makefile,v 1.13 2016/07/09 13:03:59 wiz Exp $
 
-DISTNAME=		omniORB-4.1.7
-PKGREVISION=		2
+VERSION=		4.2.3
+DISTNAME=		omniORB-${VERSION}
+PKGNAME=		omniORB-${VERSION}
+PKGREVISION=		1
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=omniorb/}
 EXTRACT_SUFX=		.tar.bz2
@@ -13,22 +15,22 @@ COMMENT=		CORBA ORB
 MAKE_FILE=		GNUmakefile
 
 GNU_CONFIGURE=	YES
-USE_LANGUAGES=	c c++03
+USE_LANGUAGES=	c c++
 USE_TOOLS+=	gmake
 
-PKGCONFIG_OVERRIDE+=	contrib/pkgconfig/omniCOS4.pc.in
-PKGCONFIG_OVERRIDE+=	contrib/pkgconfig/omniCOSDynamic4.pc.in
-PKGCONFIG_OVERRIDE+=	contrib/pkgconfig/omniConnectionMgmt4.pc.in
-PKGCONFIG_OVERRIDE+=	contrib/pkgconfig/omniDynamic4.pc.in
-PKGCONFIG_OVERRIDE+=	contrib/pkgconfig/omniORB4.pc.in
-PKGCONFIG_OVERRIDE+=	contrib/pkgconfig/omnithread3.pc.in
+PKGCONFIG_OVERRIDE+= contrib/pkgconfig/omniCOS4.pc.in
+PKGCONFIG_OVERRIDE+= contrib/pkgconfig/omniCOSDynamic4.pc.in
+PKGCONFIG_OVERRIDE+= contrib/pkgconfig/omniConnectionMgmt4.pc.in
+PKGCONFIG_OVERRIDE+= contrib/pkgconfig/omniDynamic4.pc.in
+PKGCONFIG_OVERRIDE+= contrib/pkgconfig/omniORB4.pc.in
+PKGCONFIG_OVERRIDE+= contrib/pkgconfig/omnithread3.pc.in
 
 # omniORB requires native threads support
 PTHREAD_OPTS=	require native
-RCD_SCRIPTS=	omninames
+RCD_SCRIPTS= 	omninames
 
-OMNIORB_ETCDIR?=	${PKG_SYSCONFDIR}
-OMNIORB_CONFIG=		${OMNIORB_ETCDIR}/omniORB.cfg
+OMNIORB_ETCDIR?= ${PKG_SYSCONFDIR}
+OMNIORB_CONFIG=	${OMNIORB_ETCDIR}/omniORB.cfg
 
 CONFIGURE_ARGS+=	--with-omniORB-config=${OMNIORB_CONFIG:Q}
 #CONFIGURE_ARGS+=	--with-omniNames-logdir=
@@ -44,9 +46,11 @@ PKG_SUGGESTED_OPTIONS=	inet6
 CONFIGURE_ARGS+=--disable-ipv6
 .endif
 
-PY_PATCHPLIST=			yes
-REPLACE_PYTHON+=		src/tool/omniidl/python/scripts/omniidlrun.py
-PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 4.1.7
+PY_PATCHPLIST=		yes
+REPLACE_PYTHON+=	src/tool/omniidl/python/scripts/omniidlrun.py
+REPLACE_PYTHON+=	src/tool/omniidl/python3/scripts/omniidlrun.py
+
+PYTHON_VERSIONS_ACCEPTED= 38
 
 post-install:
 	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/share/examples/omniORB/

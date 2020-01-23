@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.11 2016/07/09 13:04:01 wiz Exp $
 
-DISTNAME=	omniORBpy-3.5
+DISTNAME=	omniORBpy-4.2.3
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 PKGREVISION=	1
 CATEGORIES=	devel python
@@ -18,7 +18,11 @@ USE_LANGUAGES+=	c c++
 MAKE_FILE=	GNUmakefile
 
 PYTHON_SELF_CONFLICT=	yes
-PYTHON_VERSIONS_ACCEPTED=	27 # omniORB
+
+PYTHON_VERSIONS_ACCEPTED= 36 37 38
+
+post-install:
+	${FIND} ${DESTDIR}${PREFIX}/${PYSITELIB} -name "__pycache__" | xargs rm -rf
 
 .include "../../lang/python/application.mk"
 .include "../../net/omniORB/buildlink3.mk"
