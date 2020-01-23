@@ -1,0 +1,12 @@
+$NetBSD$
+
+--- docs/meson.build.orig	2019-10-08 10:44:10.000000000 +0000
++++ docs/meson.build
+@@ -73,7 +73,6 @@ endif
+ xsltproc = find_program('xsltproc', required: false)
+ if get_option('man') and xsltproc.found()
+   xlstproc_flags = [
+-    '--nonet',
+     '--stringparam', 'man.output.quietly', '1',
+     '--stringparam', 'funcsynopsis.style', 'ansi',
+     '--stringparam', 'man.th.extra1.suppress', '1',
