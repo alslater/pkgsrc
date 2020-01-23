@@ -22,7 +22,7 @@ PYTHON_VERSIONS_ACCEPTED=	27 # as of 5.212.0-alpha2
 BUILDLINK_TRANSFORM+=   opt:-ldl:${BUILDLINK_LDADD.dl:M*}
 
 USE_LANGUAGES=		c c++11
-USE_TOOLS+=		gmake perl:build pkg-config bison flex sed
+USE_TOOLS+=		gmake perl:build pkg-config bison flex sed ar ld
 USE_CMAKE=		yes
 CMAKE_ARG_PATH=		..
 CONFIGURE_DIRS=		_build
@@ -36,6 +36,12 @@ CMAKE_ARGS+=		-DSHARED_CORE:BOOL=ON
 CMAKE_ARGS+=		-DUSE_SYSTEM_MALLOC:BOOL=ON
 CMAKE_ARGS+=		-DUSE_LD_GOLD:BOOL=OFF
 CMAKE_ARGS+=		-DENABLE_API_TESTS=OFF
+#CMAKE_ARGS+=		-DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
+
+.if ${OPSYS} == "SunOS"
+CMAKE_ARGS+=		-DUSE_THIN_ARCHIVES:BOOL=OFF
+CMAKE_ARGS+=		-DUSE_LINKER_VERSION_SCRIPT:BOOL=OFF
+.endif
 
 CMAKE_ARGS+=		-DKDE_INSTALL_LIBEXECDIR=${CMAKE_INSTALL_PREFIX}/libexec
 #CMAKE_ARGS+=		-DLIBEXEC_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/libexec
@@ -47,6 +53,8 @@ pre-configure:
 
 # wcstof(3) etc. is used in C++ code.
 CFLAGS.NetBSD+=		-D_NETBSD_SOURCE
+
+LDFLAGS.SunOS+=         -lsocket
 
 ## for GL_GLEXT_LEGACY with GL/gl.h error, GL_ARB_shader_objects is not defined.
 #BUILDLINK_TRANSFORM+=	rm:-Wundef
@@ -99,6 +107,7 @@ post-install:
 .include "../../textproc/hyphen/buildlink3.mk"
 .include "../../textproc/icu/buildlink3.mk"
 .include "../../textproc/libxslt/buildlink3.mk"
+.include "../../fonts/woff2/buildlink3.mk"
 .if ${OPSYS} != "Darwin"
 # https://github.com/GStreamer/gst-plugins-bad/commit/b9e15fddb14b2cde6470255794ef130523885e9f
 BUILDLINK_API_DEPENDS.gst-plugins1-base+=	gst-plugins1-base>=1.15.1
