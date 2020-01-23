@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.117 2016/07/09 06:38:10 wiz Exp $
+# $NetBSD: Makefile,v 1.120 2018/11/13 21:44:42 sevan Exp $
 
 ###########################################################################
 ###########################################################################
@@ -17,8 +17,13 @@
 # these patch files properly; otherwise your changes WILL be lost on the
 # next libtool update.
 #
-# DO NOT MAKE CHANGES TO patch-ab OR patch-ad WITHOUT FOLLOWING THESE
-# INSTRUCTIONS.  There are no exceptions to this rule.
+# DO NOT MAKE CHANGES TO THESE FILES:
+#
+#   patches/patch-build-aux_ltmain.sh
+#   patches/patch-configure
+#   patches/patch-libltdl_configure
+#
+# WITHOUT FOLLOWING THESE INSTRUCTIONS.  There are no exceptions to this rule.
 #
 ###########################################################################
 ###########################################################################
@@ -26,7 +31,7 @@
 .include "../../devel/libtool/Makefile.common"
 
 PKGNAME=	${DISTNAME:S/-/-base-/}
-PKGREVISION=	13
+PKGREVISION=	2
 
 COMMENT=	Generic shared library support script (the script itself)
 
@@ -60,8 +65,8 @@ USE_TOOLS+=		echo
 .PHONY: fix-libtool
 fix-libtool:
 	cd ${WRKSRC}; for f in libtool; do				\
-		${SED}	-e "s,-L${BUILDLINK_DIR}/lib${LIBARCHSUFFIX} *,,g" \
-			-e "s,${BUILDLINK_DIR}/lib${LIBARCHSUFFIX} *,,g" \
+		${SED}	-e "s,-L${BUILDLINK_DIR}/lib *,,g"		\
+			-e "s,${BUILDLINK_DIR}/lib *,,g"		\
 			-e "s,${TOOLS_BASEDIR}/bin/,,g"			\
 			$$f > $$f.new;					\
 		if [ -x $$f ]; then ${CHMOD} +x $$f.new; fi;		\
@@ -76,7 +81,7 @@ post-build:
 		${FILESDIR}/shlibtool.in > ${WRKSRC}/shlibtool
 
 post-install:
-	${INSTALL_SCRIPT} ${WRKSRC}/shlibtool ${DESTDIR}${PREFIX}/bin${BINARCHSUFFIX}/shlibtool
+	${INSTALL_SCRIPT} ${WRKSRC}/shlibtool ${DESTDIR}${PREFIX}/bin/shlibtool
 
 BUILDLINK_DEPMETHOD.dlcompat=	build
 
