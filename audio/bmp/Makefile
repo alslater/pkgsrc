@@ -4,7 +4,7 @@
 BMP_ENABLE_ENCODERS=	yes
 
 .include "Makefile.common"
-PKGREVISION=		38
+PKGREVISION=		39
 
 USE_TOOLS+=		unzip:run
 
@@ -20,6 +20,8 @@ PRINT_PLIST_AWK+=	/cdaudio/ { print "$${PLIST.cdaudio}" $$0; next }
 # for more information.
 USE_LANGUAGES=		c c++
 LDFLAGS.NetBSD+=	-lstdc++ -lm
+
+LDFLAGS.SunOS+=		-L${LOCALBASE}/lib -lgmodule-2.0
 
 .include "../../audio/id3lib/buildlink3.mk"
 .include "../../audio/libvorbis/buildlink3.mk"
