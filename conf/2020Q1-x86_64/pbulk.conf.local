@@ -33,7 +33,7 @@ keep_prefix=yes
 keep_wrkdir=yes
 
 packages=/data/packages/OmniOS/2020Q1/x86_64
-prefix=/opt/essiell/
+prefix=/opt/essiell20
 pkgdb=${prefix}/var/db/pkg
 varbase=${prefix}/var
 
