@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.85 2019/12/10 13:03:41 adam Exp $
 
-DISTNAME=	samba-4.11.3
+DISTNAME=	samba-4.11.4
 CATEGORIES=	net
 MASTER_SITES=	https://download.samba.org/pub/samba/stable/
 
@@ -99,6 +99,7 @@ CONFIGURE_ARGS+=	--without-gpgme
 
 # Depends on ncurses, explicitly disable for now.
 CONFIGURE_ARGS+=	--without-regedit
+CONFIGURE_ARGS+=	-vvv
 
 PY_PATCHPLIST=		yes
 MAKE_FLAGS+=		WAF_BINARY=${PYTHONBIN}\ ${WRKSRC}/buildtools/bin/waf
@@ -186,6 +187,42 @@ post-install:
 		${DESTDIR}${PREFIX}/${EGDIR}
 	${INSTALL_DATA} ${WRKSRC}/examples/smb.conf.default \
 		${DESTDIR}${PREFIX}/${EGDIR}
+	# Conflicting PLIST with ldb
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbadd
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbadd
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbdel
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbedit
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbmodify
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbrename
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbsearch
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbadd.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbdel.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbedit.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbmodify.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbrename.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbsearch.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man3/ldb.3
+	${RM} -f ${DESTDIR}${PREFIX}/lib/python3.8/site-packages/_ldb_text.py
+	${RM} -f ${DESTDIR}${PREFIX}/lib/python3.8/site-packages/ldb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/python3.8/site-packages/samba/tests/smbd_fuzztest.py
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/asq.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/ldb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/mdb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/paged_searches.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/rdn_name.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/sample.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/server_sort.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/skel.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/tdb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-cmdline-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-key-value-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-mdb-int-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-tdb-err-map-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-tdb-int-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb.so.2
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb.so.2.0.8
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libpyldb-util.so.2
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libpyldb-util.so.2.0.8
 
 REPLACE_PERL+=		librpc/tables.pl
 REPLACE_PERL+=		pidl/pidl
