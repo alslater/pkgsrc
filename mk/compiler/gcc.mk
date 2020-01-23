@@ -329,19 +329,19 @@ _NEED_GCC49=	yes
 _NEED_GCC5?=	no
 .for _pattern_ in ${_GCC5_PATTERNS}
 .  if !empty(_GCC_REQD:M${_pattern_})
-_NEED_GCC5=	yes
+_NEED_GCC8=	yes
 .  endif
 .endfor
 _NEED_GCC6?=	no
 .for _pattern_ in ${_GCC6_PATTERNS}
 .  if !empty(_GCC_REQD:M${_pattern_})
-_NEED_GCC6=	yes
+_NEED_GCC8=	yes
 .  endif
 .endfor
 _NEED_GCC7?=	no
 .for _pattern_ in ${_GCC7_PATTERNS}
 .  if !empty(_GCC_REQD:M${_pattern_})
-_NEED_GCC7=	yes
+_NEED_GCC8=	yes
 .  endif
 .endfor
 _NEED_GCC8?=	no
