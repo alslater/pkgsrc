@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.2 2020/01/18 21:51:12 jperkin Exp $
 
 DISTNAME=	squid-4.9
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	www
 MASTER_SITES=	http://www.squid-cache.org/Versions/v4/
 MASTER_SITES+=	ftp://ftp.squid-cache.org/pub/squid/
@@ -30,6 +30,8 @@ CONFIGURE_ARGS+=	--enable-storeio=${SQUID_BACKENDS:Q}
 CONFIGURE_ARGS+=	--with-aio
 CONFIGURE_ARGS+=	--with-default-user=${SQUID_USER}
 CONFIGURE_ARGS+=	--with-pidfile=${VARBASE}/run/squid.pid
+
+CFLAGS+=		-Wno-write-strings
 
 # Let 'purge' find correct config file by default.
 CPPFLAGS+=		-DDEFAULT_SQUID_CONF=\"${PKG_SYSCONFDIR}/squid.conf\"
@@ -86,4 +88,5 @@ post-install:
 .endfor
 
 .include "../../devel/libltdl/buildlink3.mk"
+.include "../../textproc/libxml2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
