@@ -93,14 +93,11 @@ net/httping
 net/iftop
 net/mosh
 net/omniEvents
-net/omniEvents42
 net/omniORB
-net/omniORB42
 net/proftpd
 net/py-boto
 net/py-dns
 net/py-omniORBpy
-net/py-omniORBpy42
 net/py-twisted
 net/py-twisted-docs
 net/rabbitmq
