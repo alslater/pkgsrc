@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gtodo-applet-0.1
-PKGREVISION=	66
+PKGREVISION=	67
 CATEGORIES=	time gnome
 MASTER_SITES=	# http://download.qballcow.nl/programs/gtodo/
 

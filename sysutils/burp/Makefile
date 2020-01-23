@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.5 2016/09/01 16:18:07 wiz Exp $
 
 DISTNAME=	burp-1.4.40
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	sysutils archivers
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=burp/}
 EXTRACT_SUFX=	.tar.bz2

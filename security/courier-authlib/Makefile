@@ -3,7 +3,7 @@
 .include "Makefile.common"
 
 DISTNAME=	courier-authlib-0.64.0
-PKGREVISION=	11
+PKGREVISION=	12
 CATEGORIES=	security
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=courier/}
 EXTRACT_SUFX=	.tar.bz2

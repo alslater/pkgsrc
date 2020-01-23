@@ -3,7 +3,7 @@
 .include "../../games/crossfire-client/Makefile.common"
 
 PKGNAME=	crossfire-client-gtk2-${CROSSFIRE_VERSION}
-PKGREVISION=	28
+PKGREVISION=	29
 COMMENT=	Multi-player graphical arcade and adventure game; GTK2 client
 
 INSTALL_DIRS=	gtk-v2

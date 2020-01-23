@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libetpan
 LIBETPAN_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libetpan+=	libetpan>=1.0
-BUILDLINK_ABI_DEPENDS.libetpan+=	libetpan>=1.7.2nb1
+BUILDLINK_ABI_DEPENDS.libetpan+=	libetpan>=1.7.2nb2
 BUILDLINK_PKGSRCDIR.libetpan?=	../../mail/libetpan
 
 BDB_ACCEPTED?=	db4 db5 db6

@@ -7,7 +7,7 @@ COMMENT?=	SQL shell for Sybase and MS-SQL servers
 # Normal package Makefile contents follow.
 DISTNAME=	sqsh-2.1-src
 PKGNAME_BASE=	${DISTNAME:S/-src//}
-PKGREVISION=	15
+PKGREVISION=	16
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=sqsh/}
 

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	grantlee-0.5.1
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	devel
 MASTER_SITES=	http://downloads.grantlee.org/
 

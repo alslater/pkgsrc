@@ -18,7 +18,7 @@ CONFLICTS+=	gtk2+<2.22
 
 .include "../../graphics/gdk-pixbuf2/Makefile.version"
 
-USE_TOOLS+=	gmake pkg-config
+USE_TOOLS+=	gmake pkg-config msgfmt
 MAKE_ENV+=	LD_LIBRARY_PATH=${WRKSRC}/output/gdk-pixbuf
 
 MESON_ARGS+=			-D installed_tests=false

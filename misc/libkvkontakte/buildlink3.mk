@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libkvkontakte
 LIBKVKONTAKTE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libkvkontakte+=	libkvkontakte>=2.5.0
-BUILDLINK_ABI_DEPENDS.libkvkontakte?=	libkvkontakte>=4.13.0nb2
+BUILDLINK_ABI_DEPENDS.libkvkontakte?=	libkvkontakte>=4.13.0nb3
 BUILDLINK_PKGSRCDIR.libkvkontakte?=	../../misc/libkvkontakte
 
 .include "../../devel/qjson/buildlink3.mk"

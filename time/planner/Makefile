@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	planner-0.14.6
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	time x11 gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/planner/0.14/}
 EXTRACT_SUFX=	.tar.xz

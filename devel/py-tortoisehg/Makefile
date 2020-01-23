@@ -16,7 +16,7 @@ REPLACE_PYTHON+=	thg
 BUILD_DEPENDS+=	${PYPKGPREFIX}-sphinx>=1.3.4nb1:../../textproc/py-sphinx1
 DEPENDS+=	${PYPKGPREFIX}-iniparse>=0.4:../../textproc/py-iniparse
 DEPENDS+=	${PYPKGPREFIX}-pygments>=1.6:../../textproc/py-pygments
-DEPENDS+=	${PYPKGPREFIX}-mercurial>=5.0.0:../../devel/py-mercurial
+DEPENDS+=	${PYPKGPREFIX}-mercurial>=4.9.0:../../devel/py-mercurial
 
 PYTHON_VERSIONS_ACCEPTED=	27 # py-iniparse, py-mercurial
 

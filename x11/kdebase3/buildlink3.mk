@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdebase
 KDEBASE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdebase+=	kdebase>=3.5.0nb2
-BUILDLINK_ABI_DEPENDS.kdebase+=	kdebase>=3.5.10nb39
+BUILDLINK_ABI_DEPENDS.kdebase+=	kdebase>=3.5.10nb40
 BUILDLINK_PKGSRCDIR.kdebase?=	../../x11/kdebase3
 
 pkgbase := kdebase

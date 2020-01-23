@@ -8,7 +8,7 @@ DISTNAME=	cups-${DIST_VERS}-source
 PKGNAME=	cups-${DIST_VERS:S/-/./g}
 BASE_VERS=	1.5.4
 DIST_VERS=	${BASE_VERS}
-PKGREVISION=	16
+PKGREVISION=	17
 
 # Fix for https://www.cups.org/str.php?L4609
 PATCH_SITES=	http://www.cups.org/strfiles.php/3482/

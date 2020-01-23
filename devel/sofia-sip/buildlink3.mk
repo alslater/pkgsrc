@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	sofia-sip
 SOFIA_SIP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.sofia-sip+=	sofia-sip>=1.12.10
-BUILDLINK_ABI_DEPENDS.sofia-sip?=		sofia-sip>=1.12.11nb3
+BUILDLINK_ABI_DEPENDS.sofia-sip?=		sofia-sip>=1.12.11nb4
 BUILDLINK_PKGSRCDIR.sofia-sip?=		../../devel/sofia-sip
 
 .include "../../devel/glib2/buildlink3.mk"

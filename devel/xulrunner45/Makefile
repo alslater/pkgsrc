@@ -9,6 +9,7 @@ MASTER_SITES=		${MASTER_SITE_MOZILLA_ALL:=firefox/releases/${MOZ_VER}/source/}
 EXTRACT_SUFX=		.tar.xz
 
 PKGNAME=	xulrunner45-${MOZ_BRANCH}${MOZ_BRANCH_MINOR:S/esr//:S/b/beta/}
+PKGREVISION=	1
 CATEGORIES=	devel www
 
 MAINTAINER=	ryoon@NetBSD.org

@@ -2,7 +2,7 @@
 #
 
 PKGNAME=		dhcpcd-qt-${DHCPCD_UI_VERSION}
-PKGREVISION=		2
+PKGREVISION=		3
 CATEGORIES=		net
 
 COMMENT=		Qt system tray monitor for dhcpcd

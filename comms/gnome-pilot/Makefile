@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		gnome-pilot-2.0.17
-PKGREVISION=		57
+PKGREVISION=		58
 CATEGORIES=		comms gnome
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/gnome-pilot/2.0/}
 

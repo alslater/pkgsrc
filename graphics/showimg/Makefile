@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	showimg-0.9.5
-PKGREVISION=	41
+PKGREVISION=	42
 CATEGORIES=	kde graphics x11
 MASTER_SITES=	# http://www.jalix.org/projects/showimg/download/0.9.5/
 EXTRACT_SUFX=	.tar.bz2

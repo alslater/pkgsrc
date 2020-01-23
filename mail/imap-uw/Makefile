@@ -11,7 +11,7 @@
 
 DISTNAME=	imap-2007f
 PKGNAME=	${DISTNAME:S/-/-uw-/}
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	mail
 MASTER_SITES=	ftp://ftp.cac.washington.edu/imap/
 EXTRACT_SUFX=	.tar.Z

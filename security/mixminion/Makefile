@@ -2,7 +2,7 @@
 
 DISTNAME=		Mixminion-0.0.8alpha3
 PKGNAME=		${DISTNAME:S/M/m/}
-PKGREVISION=		7
+PKGREVISION=		8
 CATEGORIES=		security mail
 MASTER_SITES=		http://mixminion.net/dist/0.0.8alpha3/
 

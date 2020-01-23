@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.35 2016/03/05 11:29:21 jperkin Exp $
 
 DISTNAME=	keepassx-2.0.2
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	security x11
 MASTER_SITES=	https://www.keepassx.org/releases/${PKGVERSION_NOREV}/
 

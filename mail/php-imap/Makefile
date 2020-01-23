@@ -3,6 +3,7 @@
 MODNAME=		imap
 CATEGORIES+=		mail
 COMMENT=		PHP extension for IMAP (Internet Mailbox Access Protocol)
+PKGREVISION=		1
 
 CONFLICTS=	php-imap-[0-9]*
 

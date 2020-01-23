@@ -3,7 +3,7 @@
 
 VERSION=		0.2.8
 DISTNAME=		libp11-${VERSION}
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		security
 MASTER_SITES=		https://github.com/OpenSC/libp11/archive/
 

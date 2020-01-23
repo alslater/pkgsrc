@@ -2,7 +2,7 @@
 
 DISTNAME=	serf-1.3.9
 CATEGORIES=	www
-PKGREVISION=	1
+PKGREVISION=	2
 MASTER_SITES=	https://www.apache.org/dist/serf/
 EXTRACT_SUFX=	.tar.bz2
 

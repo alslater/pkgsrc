@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	streamtuner-0.99.99
-PKGREVISION=	39
+PKGREVISION=	40
 CATEGORIES=	audio www
 MASTER_SITES=	http://savannah.nongnu.org/download/streamtuner/
 

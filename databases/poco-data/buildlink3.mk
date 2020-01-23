@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	poco-data
 POCO_DATA_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.poco-data+=	poco-data>=1.6.1
-BUILDLINK_ABI_DEPENDS.poco-data+=	poco-data>=1.6.1nb1
+BUILDLINK_ABI_DEPENDS.poco-data+=	poco-data>=1.6.1nb2
 BUILDLINK_PKGSRCDIR.poco-data?=	../../databases/poco-data
 
 .include "../../devel/poco/buildlink3.mk"

@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.6 2016/07/12 13:29:35 mef Exp $
 
 DISTNAME=	klayout-0.24.8
+PKGREVISION=	1
 CATEGORIES=	cad
 MASTER_SITES=	http://www.klayout.org/downloads/
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libtcpa
 LIBTCPA_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libtcpa+=	libtcpa>=1.1b
-BUILDLINK_ABI_DEPENDS.libtcpa+=	libtcpa>=1.1bnb7
+BUILDLINK_ABI_DEPENDS.libtcpa+=	libtcpa>=1.1bnb8
 BUILDLINK_PKGSRCDIR.libtcpa?=	../../security/libtcpa
 BUILDLINK_DEPMETHOD.libtcpa?=	build
 

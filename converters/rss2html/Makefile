@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		rss2html-0.8.2
-PKGREVISION=		8
+PKGREVISION=		9
 CATEGORIES=		converters
 MASTER_SITES=		ftp://ftp.nopcode.org/prj/rss2html/
 

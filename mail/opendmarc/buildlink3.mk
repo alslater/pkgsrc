@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	opendmarc
 OPENDMARC_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.opendmarc+=	opendmarc>=1.1.3nb2
-BUILDLINK_ABI_DEPENDS.opendmarc?=	opendmarc>=1.3.1nb2
+BUILDLINK_ABI_DEPENDS.opendmarc?=	opendmarc>=1.3.1nb4
 BUILDLINK_PKGSRCDIR.opendmarc?=	../../mail/opendmarc
 
 .include "../../security/openssl/buildlink3.mk"

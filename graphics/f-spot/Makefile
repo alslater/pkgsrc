@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	f-spot-0.8.2
-PKGREVISION=	39
+PKGREVISION=	40
 CATEGORIES=	graphics
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/f-spot/0.8/}
 EXTRACT_SUFX=	.tar.bz2

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	evas-xpm
 EVAS_XPM_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.evas-xpm+=	evas-xpm>=1.7.7
-BUILDLINK_ABI_DEPENDS.evas-xpm?=	evas-xpm>=1.7.7nb2
+BUILDLINK_ABI_DEPENDS.evas-xpm?=	evas-xpm>=1.7.7nb3
 BUILDLINK_PKGSRCDIR.evas-xpm?=	../../graphics/evas-xpm
 
 .include "../../fonts/fontconfig/buildlink3.mk"

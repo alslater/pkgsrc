@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	raptor
 RAPTOR_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.raptor+=	raptor>=1.0.0
-BUILDLINK_ABI_DEPENDS.raptor+=	raptor>=1.4.21nb12
+BUILDLINK_ABI_DEPENDS.raptor+=	raptor>=1.4.21nb13
 BUILDLINK_PKGSRCDIR.raptor?=	../../textproc/raptor
 
 .include "../../textproc/libxml2/buildlink3.mk"

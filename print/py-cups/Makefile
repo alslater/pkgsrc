@@ -2,7 +2,7 @@
 
 DISTNAME=	pycups-${VERSION}
 PKGNAME=	${PYPKGPREFIX}-cups-${VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 VERSION=	1.9.71
 CATEGORIES=	print python
 MASTER_SITES=	http://cyberelk.net/tim/data/pycups/

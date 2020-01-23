@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libkexif
 LIBKEXIF_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libkexif+=	libkexif>=0.2.5
-BUILDLINK_ABI_DEPENDS.libkexif+=	libkexif>=0.2.5nb33
+BUILDLINK_ABI_DEPENDS.libkexif+=	libkexif>=0.2.5nb34
 BUILDLINK_PKGSRCDIR.libkexif?=	../../graphics/libkexif
 
 .include "../../graphics/libexif/buildlink3.mk"

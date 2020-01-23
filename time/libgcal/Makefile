@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libgcal-0.9.6
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	time
 MASTER_SITES=	http://libgcal.googlecode.com/files/
 EXTRACT_SUFX=	.tar.bz2

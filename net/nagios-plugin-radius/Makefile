@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	nagios-plugin-radius-${PLUGINSVERSION}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	net sysutils
 
 MAINTAINER=	pkgsrc-users@NetBSD.org

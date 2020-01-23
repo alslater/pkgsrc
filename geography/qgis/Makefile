@@ -2,7 +2,7 @@
 
 DISTNAME=	qgis-2.14.3
 #PKGREVISION=	2
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	geography
 MASTER_SITES=	http://qgis.org/downloads/
 EXTRACT_SUFX=	.tar.bz2

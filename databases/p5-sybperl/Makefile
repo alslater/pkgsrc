@@ -3,7 +3,7 @@
 
 DISTNAME=	sybperl-2.16
 PKGNAME=	p5-${DISTNAME}
-PKGREVISION= 22
+PKGREVISION= 23
 CATEGORIES=	databases perl5
 MASTER_SITES=	http://www.peppler.org/downloads/
 

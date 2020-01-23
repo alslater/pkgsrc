@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	poco-${POCO_VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	devel
 
 COMMENT=	POCO C++ Foundation libraries

@@ -1,5 +1,6 @@
 # $NetBSD: Makefile,v 1.160 2019/02/27 13:18:01 maya Exp $
 
+PKGREVISION= 1
 .include "Makefile.version"
 
 DISTNAME=	cmake-${CMAKE_VERSION}

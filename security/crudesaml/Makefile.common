@@ -6,6 +6,7 @@
 DISTNAME=	crudesaml-1.4
 CATEGORIES=	security
 MASTER_SITES=	http://ftp.espci.fr/pub/crudesaml/
+PKGREVISION=	1
 
 MAINTAINER=	manu@NetBSD.org
 

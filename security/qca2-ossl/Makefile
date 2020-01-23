@@ -2,7 +2,7 @@
 
 DISTNAME=	qca-ossl-2.0.0-beta3
 PKGNAME=	qca2-ossl-${DISTNAME:S/-beta/beta/:C/.*-//}
-PKGREVISION=	30
+PKGREVISION=	31
 CATEGORIES=	security
 MASTER_SITES=	http://delta.affinix.com/download/qca/2.0/plugins/
 EXTRACT_SUFX=	.tar.bz2

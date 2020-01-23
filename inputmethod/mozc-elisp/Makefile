@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	${EMACS_PKGNAME_PREFIX}${DISTNAME:S/mozc-/mozc-elisp-/}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	inputmethod editors
 
 EMACS_MODULES=	base leim

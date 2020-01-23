@@ -3,7 +3,7 @@
 
 # XXX The version number is the last one before the agpl change.
 DISTNAME=	ghostscript-9.05
-PKGREVISION=	8
+PKGREVISION=	9
 CATEGORIES=	print meta-pkgs
 MASTER_SITES=	# empty
 

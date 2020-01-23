@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libglobalplatform
 LIBGLOBALPLATFORM_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libglobalplatform+=	libglobalplatform>=6.0.0
-BUILDLINK_ABI_DEPENDS.libglobalplatform?=	libglobalplatform>=6.0.0nb1
+BUILDLINK_ABI_DEPENDS.libglobalplatform?=	libglobalplatform>=6.0.0nb2
 BUILDLINK_PKGSRCDIR.libglobalplatform?=	../../security/libglobalplatform
 
 .include "../../security/pcsc-lite/buildlink3.mk"

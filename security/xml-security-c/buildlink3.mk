@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	xml-security-c
 XML_SECURITY_C_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.xml-security-c+=	xml-security-c>=1.4.0
-BUILDLINK_ABI_DEPENDS.xml-security-c+=	xml-security-c>=1.7.2nb2
+BUILDLINK_ABI_DEPENDS.xml-security-c+=	xml-security-c>=1.7.3nb1
 BUILDLINK_PKGSRCDIR.xml-security-c?=	../../security/xml-security-c
 
 .include "../../security/openssl/buildlink3.mk"

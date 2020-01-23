@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gimmix-0.5.7.1
-PKGREVISION=	30
+PKGREVISION=	31
 CATEGORIES=	audio
 MASTER_SITES=	http://download.berlios.de/gimmix/
 EXTRACT_SUFX=	.tar.bz2

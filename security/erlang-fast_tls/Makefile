@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.3 2016/08/12 09:25:49 fhajny Exp $
 
 DISTNAME=	fast_tls-1.0.7
+PKGREVISION=	1
 CATEGORIES=	security
 MASTER_SITES=	${MASTER_SITE_GITHUB:=processone/}
 

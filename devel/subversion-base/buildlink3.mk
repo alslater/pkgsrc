@@ -9,7 +9,7 @@ BUILDLINK_TREE+=	subversion-base
 SUBVERSION_BASE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.subversion-base+=	subversion-base>=1.5.2nb1
-BUILDLINK_ABI_DEPENDS.subversion-base+=	subversion-base>=1.10.4nb1
+BUILDLINK_ABI_DEPENDS.subversion-base+=	subversion-base>=1.12.0nb1
 BUILDLINK_PKGSRCDIR.subversion-base?=	../../devel/subversion-base
 
 BUILDLINK_FILES.subversion-base+=	bin/svn-config

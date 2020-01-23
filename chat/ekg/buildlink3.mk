@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	ekg
 EKG_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.ekg+=	ekg>=1.6
-BUILDLINK_ABI_DEPENDS.ekg+=	ekg>=1.7nb11
+BUILDLINK_ABI_DEPENDS.ekg+=	ekg>=1.7nb12
 BUILDLINK_PKGSRCDIR.ekg?=	../../chat/ekg
 
 .include "../../devel/zlib/buildlink3.mk"

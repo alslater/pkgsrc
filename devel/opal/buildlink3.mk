@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	opal
 OPAL_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.opal+=	opal>=3.6.1
-BUILDLINK_ABI_DEPENDS.opal+=	opal>=3.6.6nb12
+BUILDLINK_ABI_DEPENDS.opal+=	opal>=3.6.6nb14
 BUILDLINK_PKGSRCDIR.opal?=	../../devel/opal
 
 .include "../../audio/speex/buildlink3.mk"

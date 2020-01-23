@@ -2,7 +2,7 @@
 
 DISTNAME=	kdelibs-${_KDE_VERSION}
 PKGNAME=	kdelibdocs-${_KDE_VERSION}
-PKGREVISION=	29
+PKGREVISION=	30
 CATEGORIES=	x11 devel
 LICENSE=	gnu-gpl-v2
 

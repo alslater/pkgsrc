@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	pkcs11-helper
 PKCS11_HELPER_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.pkcs11-helper+=	pkcs11-helper>=1.06
-BUILDLINK_ABI_DEPENDS.pkcs11-helper+=	pkcs11-helper>=1.10nb7
+BUILDLINK_ABI_DEPENDS.pkcs11-helper+=	pkcs11-helper>=1.10nb8
 BUILDLINK_PKGSRCDIR.pkcs11-helper?=	../../security/pkcs11-helper
 
 pkgbase := pkcs11-helper

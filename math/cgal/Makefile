@@ -2,7 +2,7 @@
 
 PKGNAME=	cgal-3.9
 DISTNAME=	CGAL-3.9
-PKGREVISION=	27
+PKGREVISION=	28
 CATEGORIES=	math
 MASTER_SITES=	https://gforge.inria.fr/frs/download.php/29125/
 

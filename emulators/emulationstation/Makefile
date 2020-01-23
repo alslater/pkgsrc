@@ -2,7 +2,7 @@
 
 DISTNAME=	abba19584636c28cd98e3810e857f493cb63d06c
 PKGNAME=	emulationstation-2.0.0_rc1_20150210
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	emulators games
 MASTER_SITES=	https://github.com/Aloshi/EmulationStation/archive/
 EXTRACT_SUFX=	.zip

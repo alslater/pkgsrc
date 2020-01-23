@@ -2,7 +2,7 @@
 
 DISTNAME=	pycurl-7.19.3.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/py//}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	www python
 MASTER_SITES=	http://pycurl.sourceforge.net/download/
 

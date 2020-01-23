@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.8 2016/03/07 20:17:33 nros Exp $
 
 DISTNAME=		dmg2img-1.6.5
+PKGREVISION=		1
 CATEGORIES=		sysutils
 MASTER_SITES+=		http://vu1tur.eu.org/tools/
 

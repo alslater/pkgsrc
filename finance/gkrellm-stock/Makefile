@@ -3,7 +3,7 @@
 
 DISTNAME=		gkrellstock-0.5.1
 PKGNAME=		gkrellm-stock-0.5.1
-PKGREVISION=		39
+PKGREVISION=		40
 CATEGORIES=		finance
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=gkrellstock/}
 

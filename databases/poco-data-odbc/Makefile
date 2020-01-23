@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	poco-data-odbc-${POCO_VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	databases
 
 COMMENT=	POCO C++ ODBC RDBMS Accessor libraries

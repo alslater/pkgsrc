@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.57 2016/12/02 19:07:16 maya Exp $
 
 DISTNAME=		lyx-2.2.2
+PKGREVISION=		1
 CATEGORIES=		editors
 MASTER_SITES=		ftp://ftp.lyx.org/pub/lyx/stable/2.2.x/ \
 			http://gd.tuwien.ac.at/publishing/tex/lyx/stable/2.2.x/ \

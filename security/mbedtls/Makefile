@@ -3,7 +3,7 @@
 
 DISTNAME=		mbedtls-2.2.1-apache
 PKGNAME=		${DISTNAME:-apache=}
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		security devel
 MASTER_SITES=		https://tls.mbed.org/download/
 EXTRACT_SUFX=		.tgz

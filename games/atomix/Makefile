@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		atomix-2.14.0
-PKGREVISION=		39
+PKGREVISION=		40
 CATEGORIES=		games
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/atomix/2.14/}
 

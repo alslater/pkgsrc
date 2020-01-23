@@ -2,7 +2,7 @@
 
 DISTNAME=	cku302
 PKGNAME=	kermit-9.0.302
-PKGREVISION=	9
+PKGREVISION=	10
 CATEGORIES=	comms
 MASTER_SITES=	ftp://ftp.kermitproject.org/kermit/archives/
 

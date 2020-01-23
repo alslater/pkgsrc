@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	filelight-1.0
-PKGREVISION=	42
+PKGREVISION=	43
 CATEGORIES=	sysutils
 MASTER_SITES=	http://www.methylblue.com/filelight/packages/
 EXTRACT_SUFX=	.tar.bz2

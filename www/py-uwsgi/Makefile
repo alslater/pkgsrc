@@ -2,6 +2,7 @@
 
 DISTNAME=	uwsgi-2.0.14
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+PKGREVISION=	1
 CATEGORIES=	python www
 MASTER_SITES=	http://projects.unbit.it/downloads/
 

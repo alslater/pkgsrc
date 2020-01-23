@@ -2,7 +2,7 @@
 
 DISTNAME=	Pound-2.7f
 PKGNAME=	${DISTNAME:S/Pound/pound/}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	www
 MASTER_SITES=	http://www.apsis.ch/pound/
 EXTRACT_SUFX=	.tgz

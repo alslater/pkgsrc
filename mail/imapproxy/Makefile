@@ -3,7 +3,7 @@
 
 DISTNAME=	up-imapproxy-1.2.7
 PKGNAME=	imapproxy-1.2.7
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	mail
 MASTER_SITES=	http://www.imapproxy.org/downloads/
 

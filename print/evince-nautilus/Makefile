@@ -4,7 +4,7 @@
 .include "../../print/evince/Makefile.common"
 
 PKGNAME=		${DISTNAME:S/evince/evince-nautilus/}
-PKGREVISION=		43
+PKGREVISION=		44
 COMMENT=		File properties plugin for evince files
 
 .include "options.mk"

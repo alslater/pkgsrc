@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libp11
 LIBP11_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libp11+=	libp11>=0.2.4
-BUILDLINK_ABI_DEPENDS.libp11+=	libp11>=0.2.8nb1
+BUILDLINK_ABI_DEPENDS.libp11+=	libp11>=0.2.8nb2
 BUILDLINK_PKGSRCDIR.libp11?=	../../security/libp11
 
 .include "../../devel/libltdl/buildlink3.mk"

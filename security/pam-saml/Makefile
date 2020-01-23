@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	${DISTNAME:S/crudesaml-/pam-saml-/}
-PKGREVISION=	4
+PKGREVISION=	5
 COMMENT=	Crude SAML assertion validator for bridging WebSSO and PAM
 
 INSTALLATION_DIRS=	lib/security ${PKGMANDIR}/man5

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	soprano
 SOPRANO_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.soprano+=	soprano>=2.0.3
-BUILDLINK_ABI_DEPENDS.soprano+=	soprano>=2.9.4nb7
+BUILDLINK_ABI_DEPENDS.soprano+=	soprano>=2.9.4nb8
 BUILDLINK_PKGSRCDIR.soprano?=	../../textproc/soprano
 
 .include "../../textproc/libclucene/buildlink3.mk"

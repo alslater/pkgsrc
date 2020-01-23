@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	pdf2djvu-0.9.4
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	print
 MASTER_SITES=	https://bitbucket.org/jwilk/pdf2djvu/downloads/
 EXTRACT_SUFX=	.tar.xz

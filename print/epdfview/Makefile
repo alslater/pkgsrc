@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	epdfview-0.1.8
-PKGREVISION=	41
+PKGREVISION=	42
 CATEGORIES=	print
 MASTER_SITES=	http://anduin.linuxfromscratch.org/BLFS/epdfview/
 EXTRACT_SUFX=	.tar.bz2

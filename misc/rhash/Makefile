@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.11 2019/02/05 09:51:10 adam Exp $
 
 DISTNAME=	rhash-1.3.8
+PKGREVISION=	1
 CATEGORIES=	security
 MASTER_SITES=	${MASTER_SITE_GITHUB:=rhash/}
 GITHUB_PROJECT=	RHash

@@ -2,6 +2,7 @@
 
 USE_LANGUAGES=	c c++
 
+PKGREVISION= 1
 .include "Makefile.common"
 
 COMMENT+=	Bad plugins

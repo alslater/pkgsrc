@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libwww
 LIBWWW_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libwww+=	libwww>=5.3.2nb2
-BUILDLINK_ABI_DEPENDS.libwww+=	libwww>=5.4.0nb16
+BUILDLINK_ABI_DEPENDS.libwww+=	libwww>=5.4.0nb18
 BUILDLINK_PKGSRCDIR.libwww?=	../../www/libwww
 
 .include "../../mk/bsd.fast.prefs.mk"

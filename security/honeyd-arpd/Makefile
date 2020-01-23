@@ -3,7 +3,7 @@
 
 DISTNAME=	arpd-0.2
 PKGNAME=	honeyd-arpd-0.2
-PKGREVISION=	19
+PKGREVISION=	20
 CATEGORIES=	security net
 MASTER_SITES=	http://niels.xtdnet.nl/honeyd/
 

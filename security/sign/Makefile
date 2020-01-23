@@ -4,7 +4,7 @@ GITHUB_PROJECT= sign
 GITHUB_TAG=     1.0.7
 DISTNAME=       ${GITHUB_TAG}
 PKGNAME=        sign-${DISTNAME}
-PKGREVISION=        1
+PKGREVISION=        2
 CATEGORIES=	security
 MASTER_SITES=   ${MASTER_SITE_GITHUB:=apankrat/}
 

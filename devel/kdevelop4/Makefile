@@ -3,7 +3,7 @@
 
 DISTNAME=	kdevelop-4.7.0
 PKGNAME=	kdevelop4-4.7.0
-PKGREVISION=	13
+PKGREVISION=	14
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_KDE:=kdevelop/4.7.0/src/}
 EXTRACT_SUFX=	.tar.xz

@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.14 2016/03/05 11:27:48 jperkin Exp $
 
 PKGNAME=	evas-edb-${EVAS_VERSION}
-PKGREVISION=	2
+PKGREVISION=	3
 COMMENT=	Evas Edb image loader
 
 EVAS_IMAGE_LOADERS=	edb

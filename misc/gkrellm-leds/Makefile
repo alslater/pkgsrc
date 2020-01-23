@@ -3,7 +3,7 @@
 
 DISTNAME=	gkleds-0.8.2
 PKGNAME=	${DISTNAME:S/^gk/gkrellm-/}
-PKGREVISION=	30
+PKGREVISION=	31
 CATEGORIES=	misc
 MASTER_SITES=	http://heim.ifi.uio.no/~oyvinha/files/files/
 

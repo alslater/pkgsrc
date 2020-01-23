@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	ucommon
 UCOMMON_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.ucommon+=	ucommon>=6.0.0
-BUILDLINK_ABI_DEPENDS.ucommon?=	ucommon>=6.3.1nb3
+BUILDLINK_ABI_DEPENDS.ucommon?=	ucommon>=6.3.1nb4
 BUILDLINK_PKGSRCDIR.ucommon?=	../../devel/ucommon
 
 pkgbase := ucommon

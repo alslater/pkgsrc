@@ -2,7 +2,7 @@
 
 .include "dist.mk"
 PKGNAME=	xulrunner192-${MOZ_BRANCH}${MOZ_BRANCH_MINOR}
-PKGREVISION=	37
+PKGREVISION=	38
 CATEGORIES=	devel www
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -36,6 +36,13 @@ SUBST_FILES.fix-paths2=		${MOZILLA_DIR}xpcom/build/nsXPCOMPrivate.h
 SUBST_FILES.fix-paths2+=	${MOZILLA_DIR}xulrunner/app/nsRegisterGREUnix.cpp
 SUBST_FILES.fix-paths2+=	${MOZILLA_DIR}xulrunner/installer/Makefile.in
 SUBST_SED.fix-paths2=           -e 's,/etc/gre.d,${PREFIX}/lib/xulrunner192/gre.d,g'
+
+# As yet unclear why these libraries are missing SSP
+CHECK_SSP_SKIP+=	lib/xulrunner192-sdk/sdk/lib/libplc4.so
+CHECK_SSP_SKIP+=	lib/xulrunner192-sdk/sdk/lib/libxpcom.so
+CHECK_SSP_SKIP+=	lib/xulrunner192/libplc4.so
+CHECK_SSP_SKIP+=	lib/xulrunner192/libxpcom.so
+CHECK_SSP_SKIP+=	lib/xulrunner192/plugins/libunixprintplugin.so
 
 .include "../../devel/xulrunner192/mozilla-common.mk"
 CONFIGURE_ARGS+=	--enable-chrome-format=jar

@@ -3,6 +3,7 @@
 
 DISTNAME=	openscad-2015.03-3.src
 PKGNAME=	openscad-2015.03p3
+PKGREVISION=	1
 CATEGORIES=	cad
 MASTER_SITES=	http://files.openscad.org/
 

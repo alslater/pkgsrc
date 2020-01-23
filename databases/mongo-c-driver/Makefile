@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.22 2016/12/17 14:25:30 joerg Exp $
 
 DISTNAME=	mongo-c-driver-1.5.0
+PKGREVISION=	1
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_GITHUB:=mongodb/}
 

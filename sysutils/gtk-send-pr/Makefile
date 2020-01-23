@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		gtk-send-pr-0.4.9
-PKGREVISION=		27
+PKGREVISION=		28
 CATEGORIES=		sysutils
 MASTER_SITES=		http://download.berlios.de/gtk-send-pr/
 EXTRACT_SUFX=		.tar.bz2

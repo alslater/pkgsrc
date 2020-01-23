@@ -2,7 +2,7 @@
 
 DISTNAME=	libgt-0.3.13
 PKGNAME=	${DISTNAME:S/gt/guardtime/}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	security
 MASTER_SITES=	http://download.guardtime.com/
 

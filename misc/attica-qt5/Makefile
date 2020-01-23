@@ -2,7 +2,7 @@
 
 DISTNAME=	attica-${KF5VER}
 PKGNAME=	${DISTNAME:S/-/-qt5-/}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	misc
 
 HOMEPAGE=	https://community.kde.org/Frameworks

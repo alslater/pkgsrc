@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	efreet-1.7.7
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	sysutils devel
 MASTER_SITES=	http://download.enlightenment.org/releases/
 EXTRACT_SUFX=	.tar.bz2

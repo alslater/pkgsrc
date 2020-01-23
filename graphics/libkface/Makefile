@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	libkface-4.13.0
-PKGREVISION=	3
+PKGREVISION=	4
 DISTNAME=	digikam-4.13.0
 CATEGORIES=	graphics
 MASTER_SITES=	${MASTER_SITE_KDE:=digikam/}

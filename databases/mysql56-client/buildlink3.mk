@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mysql-client
 MYSQL_CLIENT_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mysql-client+=	mysql-client>=5.6.10<5.7
-BUILDLINK_ABI_DEPENDS.mysql-client+=	mysql-client>=5.6.29nb1
+BUILDLINK_ABI_DEPENDS.mysql-client+=	mysql-client>=5.6.46nb1
 BUILDLINK_PKGSRCDIR.mysql-client?=	../../databases/mysql56-client
 BUILDLINK_INCDIRS.mysql-client?=	include/mysql
 BUILDLINK_LIBDIRS.mysql-client?=	lib

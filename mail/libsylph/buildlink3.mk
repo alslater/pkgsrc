@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libsylph
 LIBSYLPH_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libsylph+=	libsylph>=0.3.0
-BUILDLINK_ABI_DEPENDS.libsylph+=	libsylph>=1.1.0nb4
+BUILDLINK_ABI_DEPENDS.libsylph+=	libsylph>=1.1.0nb5
 BUILDLINK_PKGSRCDIR.libsylph?=	../../mail/libsylph
 
 .include "../../devel/gettext-lib/buildlink3.mk"

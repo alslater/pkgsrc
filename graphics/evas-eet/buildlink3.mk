@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	evas-eet
 EVAS_EET_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.evas-eet+=	evas-eet>=1.7.7
-BUILDLINK_ABI_DEPENDS.evas-eet?=	evas-eet>=1.7.7nb2
+BUILDLINK_ABI_DEPENDS.evas-eet?=	evas-eet>=1.7.7nb3
 BUILDLINK_PKGSRCDIR.evas-eet?=	../../graphics/evas-eet
 
 .include "../../devel/eet/buildlink3.mk"

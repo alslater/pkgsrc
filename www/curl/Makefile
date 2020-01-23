@@ -2,6 +2,7 @@
 
 DISTNAME=	curl-7.67.0
 #PKGREVISION=	1
+PKGREVISION=	1
 CATEGORIES=	www
 MASTER_SITES=	https://curl.haxx.se/download/
 EXTRACT_SUFX=	.tar.bz2

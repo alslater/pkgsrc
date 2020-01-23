@@ -3,7 +3,7 @@
 .include "Makefile.common"
 
 PKGNAME=	${DISTNAME}
-PKGREVISION=	29
+PKGREVISION=	30
 MAINTAINER=	pkgsrc-users@NetBSD.org
 COMMENT=	X11 (X Window System) IRC client, using the GTK2 toolkit
 

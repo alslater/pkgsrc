@@ -5,6 +5,7 @@ COMMENT?=	XEmacs text editor version 21
 
 DISTNAME=	xemacs-21.4.24
 #PKGREVISION=	1
+PKGREVISION=	1
 CATEGORIES=	editors
 MASTER_SITES=	${MASTER_SITE_XEMACS:=${DISTNAME:C/[.][^.]*$//}/}
 

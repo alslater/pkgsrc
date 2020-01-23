@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.47 2017/09/08 11:10:41 wiz Exp $
 
 DISTNAME=	tcpdump-4.9.2
+PKGREVISION=	1
 CATEGORIES=	net
 MASTER_SITES=	http://www.tcpdump.org/release/
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	gnome-vfs
 GNOME_VFS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.gnome-vfs+=	gnome-vfs>=2.8.0
-BUILDLINK_ABI_DEPENDS.gnome-vfs+=	gnome-vfs>=2.24.4nb30
+BUILDLINK_ABI_DEPENDS.gnome-vfs+=	gnome-vfs>=2.24.4nb31
 BUILDLINK_PKGSRCDIR.gnome-vfs?=		../../sysutils/gnome-vfs
 
 pkgbase := gnome-vfs

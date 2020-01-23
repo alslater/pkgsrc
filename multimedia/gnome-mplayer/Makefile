@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gnome-mplayer-1.0.9
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	multimedia
 MASTER_SITES=	http://gnome-mplayer.googlecode.com/svn/packages/
 

@@ -3,7 +3,7 @@
 
 DISTNAME=		krecipes-1.0-beta1
 PKGNAME=		krecipes-1.0beta1
-PKGREVISION=		47
+PKGREVISION=		48
 CATEGORIES=		databases kde
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=krecipes/}
 

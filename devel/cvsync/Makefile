@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	cvsync-0.24.19
-PKGREVISION=	9
+PKGREVISION=	10
 CATEGORIES=	devel scm
 MASTER_SITES=	ftp://ftp.cvsync.org/pub/cvsync/
 

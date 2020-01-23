@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.17 2017/06/02 08:29:56 adam Exp $
 
 PKGNAME=	${DISTNAME:S/-/-cloak-/}
+PKGREVISION=	1
 COMMENT=	Hide specific attributes unless explicitely requested for OpenLDAP
 
 CONFLICTS+=	openldap<2.3.23nb1

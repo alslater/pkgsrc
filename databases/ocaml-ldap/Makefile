@@ -2,6 +2,7 @@
 
 VERSION=	2.2
 PKGNAME=	ocaml-ldap-${VERSION}
+PKGREVISION=	1
 DISTNAME=	ocamldap-${VERSION}
 CATEGORIES=	databases
 MASTER_SITES=	http://bitbucket.org/deplai_j/ocamldap/downloads/

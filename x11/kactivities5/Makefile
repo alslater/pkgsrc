@@ -2,7 +2,7 @@
 
 DISTNAME=	kactivities-${KF5VER}
 PKGNAME=	kactivities5-${KF5VER}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	x11
 
 HOMEPAGE=	https://community.kde.org/Frameworks

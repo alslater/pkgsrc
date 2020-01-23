@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libbonoboui-2.24.4
-PKGREVISION=	27
+PKGREVISION=	28
 CATEGORIES=	devel gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libbonoboui/2.24/}
 EXTRACT_SUFX=	.tar.bz2

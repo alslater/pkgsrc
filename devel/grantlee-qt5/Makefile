@@ -3,7 +3,7 @@
 
 DISTNAME=	grantlee-5.1.0
 PKGNAME=	${DISTNAME:S/-/-qt5-/}
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	devel
 MASTER_SITES=	http://downloads.grantlee.org/
 

@@ -18,12 +18,13 @@ USE_LIBTOOL=		yes
 GNU_CONFIGURE=		yes
 USE_TOOLS+=		gmake intltool msgfmt pkg-config bash
 USE_LANGUAGES=		c c++14
-# for c++14 \todo
-GCC_REQD+=		5
 
 BUILDLINK_TRANSFORM+=	rm:-Werror=format=2
 
 .include "../../mk/bsd.prefs.mk"
+
+# for c++14 \todo
+GCC_REQD=		8
 
 .if ${OPSYS} == "SunOS" || ${OPSYS} == "Darwin"
 CONFIGURE_ARGS+=	--disable-Bsymbolic

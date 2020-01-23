@@ -7,16 +7,14 @@ PECL_VERSION=	3.1.6
 PECL_LEGACY_VERSION_SCHEME=	yes
 PECL_DISTNAME=	${PECL_VERSION}
 CATEGORIES=	databases
-MASTER_SITES=	${MASTER_SITE_GITHUB:=nicolasff/}
+MASTER_SITES=	${MASTER_SITE_GITHUB:=phpredis/}
 GITHUB_PROJECT=	phpredis
 EXTRACT_SUFX=	.tar.gz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	https://github.com/nicolasff/phpredis
+HOMEPAGE=	https://github.com/phpredis/phpredis
 COMMENT=	PHP extension for Redis
 LICENSE=	php
-
-PHP_VERSIONS_ACCEPTED= 70 71 72 73
 
 WRKSRC=		${WRKDIR}/${GITHUB_PROJECT}-${PECL_VERSION}
 

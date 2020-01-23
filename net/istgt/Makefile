@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		istgt-20141125
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		net
 MASTER_SITES=		http://www.peach.ne.jp/archives/istgt/
 

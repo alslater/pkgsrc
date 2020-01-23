@@ -35,9 +35,9 @@ PY_SETUP_SUBST+=	X11LIB=\'X11\'
 .if ${_PYTHON_VERSION} >= 27
 EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/tkinter.h
 .endif
-.if ${_PYTHON_VERSION} >= 38
-EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/clinic
-.endif
+#.if ${_PYTHON_VERSION} >= 38
+#EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/clinic
+#.endif
 
 # ignore errors due to missing files (EXTRACT_ELEMENTS!)
 do-patch:

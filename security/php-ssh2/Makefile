@@ -3,7 +3,7 @@
 
 MODNAME=		ssh2
 PECL_VERSION=		0.12
-PKGREVISION=		3
+PKGREVISION=		4
 CATEGORIES+=		security
 
 MAINTAINER=		filip@joyent.com

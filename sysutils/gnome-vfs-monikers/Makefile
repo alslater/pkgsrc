@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gnome-vfs-monikers-2.15.3
-PKGREVISION=	32
+PKGREVISION=	33
 CATEGORIES=	sysutils
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gnome-vfs-monikers/2.15/}
 EXTRACT_SUFX=	.tar.bz2

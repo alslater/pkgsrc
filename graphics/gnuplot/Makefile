@@ -8,7 +8,7 @@ MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=gnuplot/}
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://gnuplot.sourceforge.net/
 COMMENT=	Portable interactive, function plotting utility
-PKGREVISION=	1
+PKGREVISION=	2
 #LICENSE=	gnuplot + BSD
 
 CONFLICTS+=		gnuplot-nox11-[0-9]*

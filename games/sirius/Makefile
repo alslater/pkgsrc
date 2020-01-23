@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	sirius-0.8.0
-PKGREVISION=	48
+PKGREVISION=	49
 CATEGORIES=	games gnome
 MASTER_SITES=	http://sirius.bitvis.nu/files/
 

@@ -3,7 +3,7 @@
 
 DISTNAME=		gkrellmoon-0.6
 PKGNAME=		gkrellm-moon-0.6
-PKGREVISION=		32
+PKGREVISION=		33
 CATEGORIES=		misc
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=gkrellmoon/}
 

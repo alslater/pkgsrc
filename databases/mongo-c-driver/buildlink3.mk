@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mongo-c-driver
 MONGO_C_DRIVER_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mongo-c-driver+=	mongo-c-driver>=1.2.0
-BUILDLINK_ABI_DEPENDS.mongo-c-driver?=	mongo-c-driver>=1.3.3nb1
+BUILDLINK_ABI_DEPENDS.mongo-c-driver?=	mongo-c-driver>=1.5.0nb1
 BUILDLINK_PKGSRCDIR.mongo-c-driver?=	../../databases/mongo-c-driver
 
 pkgbase := mongo-c-driver

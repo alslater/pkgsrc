@@ -4,7 +4,7 @@
 # We can't omit PKGNAME here to handle PKG_OPTIONS.
 #
 PKGNAME=		php-${PHP_VERSION}
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		lang
 
 HOMEPAGE=		https://www.php.net/

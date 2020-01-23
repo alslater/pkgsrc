@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdenetwork
 KDENETWORK_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdenetwork+=	kdenetwork>=3.5.0nb1
-BUILDLINK_ABI_DEPENDS.kdenetwork+=	kdenetwork>=3.5.10nb36
+BUILDLINK_ABI_DEPENDS.kdenetwork+=	kdenetwork>=3.5.10nb38
 BUILDLINK_PKGSRCDIR.kdenetwork?=	../../net/kdenetwork3
 
 .include "../../converters/uulib/buildlink3.mk"

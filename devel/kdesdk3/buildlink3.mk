@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdesdk
 KDESDK_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdesdk+=	kdesdk>=3.5.0nb1
-BUILDLINK_ABI_DEPENDS.kdesdk+=	kdesdk>=3.5.10nb58
+BUILDLINK_ABI_DEPENDS.kdesdk+=	kdesdk>=3.5.10nb64
 BUILDLINK_PKGSRCDIR.kdesdk?=	../../devel/kdesdk3
 
 BDB_ACCEPTED?=		db4 db5

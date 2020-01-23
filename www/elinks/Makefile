@@ -2,7 +2,7 @@
 
 DISTNAME=		elinks-0.12pre6
 PKGNAME=		${DISTNAME:S/pre/rc/}
-PKGREVISION=		11
+PKGREVISION=		12
 CATEGORIES=		www
 MASTER_SITES=		http://elinks.or.cz/download/ \
 			http://ftp.icm.edu.pl/packages/elinks/

@@ -12,7 +12,8 @@ DEPENDS+=	qt5-qtbase-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtbase
 DEPENDS+=	qt5-qtcharts-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtcharts
 DEPENDS+=	qt5-qtconnectivity-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtconnectivity
 DEPENDS+=	qt5-qtdeclarative-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtdeclarative
-DEPENDS+=	qt5-qtdoc-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtdoc
+# Disable until qttools can be built with the same compiler as llvm/clang
+#DEPENDS+=	qt5-qtdoc-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtdoc
 DEPENDS+=	qt5-qtgraphicaleffects-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtgraphicaleffects
 DEPENDS+=	qt5-qtimageformats-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtimageformats
 DEPENDS+=	qt5-qtlocation-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtlocation

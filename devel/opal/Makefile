@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		opal-3.6.6
-PKGREVISION=		13
+PKGREVISION=		14
 CATEGORIES=		devel net comms
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/opal/3.6/}
 EXTRACT_SUFX=		.tar.bz2

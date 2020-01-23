@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		libcassandra-20101010
-PKGREVISION=		23
+PKGREVISION=		24
 CATEGORIES=		databases
 MASTER_SITES=		ftp://ftp.ancient-solutions.com/pub/bsdprojects/NetBSD/packages/distfiles/
 

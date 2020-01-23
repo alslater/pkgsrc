@@ -10,5 +10,5 @@ PYTHON_FOR_BUILD_ONLY=	yes
 EXTRACT_USING=		bsdtar
 
 #PKGREVISION= 1
-PKGREVISION= 1
+PKGREVISION= 2
 .include "../../security/lasso/Makefile.common"

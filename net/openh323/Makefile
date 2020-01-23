@@ -2,7 +2,7 @@
 
 DISTNAME=	openh323-v1_15_2-src
 PKGNAME=	openh323-1.15.2
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	net
 MASTER_SITES=	http://www.voxgratia.org/releases/
 EXTRACT_SUFX=	-tar.gz

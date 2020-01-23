@@ -5,7 +5,7 @@
 #       to find out the current sound file versions
 
 DISTNAME=	asterisk-14.2.0
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	comms net audio
 MASTER_SITES=	http://downloads.asterisk.org/pub/telephony/asterisk/ \
 		http://downloads.asterisk.org/pub/telephony/asterisk/old-releases/ \

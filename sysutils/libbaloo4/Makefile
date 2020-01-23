@@ -2,7 +2,7 @@
 
 DISTNAME=	baloo-${_KDE_VERSION}
 PKGNAME=	libbaloo4-${_KDE_VERSION}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	sysutils
 COMMENT=	KDE framework for searching and managing user metadata
 LICENSE=	gnu-gpl-v3

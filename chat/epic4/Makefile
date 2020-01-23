@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	epic4-2.10.2
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	chat
 MASTER_SITES=	ftp://ftp.epicsol.org/pub/epic/EPIC4-PRODUCTION/ \
 		ftp://totem.fix.no/pub/mirrors/epic/EPIC4-PRODUCTION/

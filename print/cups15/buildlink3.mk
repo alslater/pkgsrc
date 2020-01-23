@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	cups
 CUPS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.cups+=	cups>=1.1.19nb3<1.7
-BUILDLINK_ABI_DEPENDS.cups+=	cups>=1.5.4nb15
+BUILDLINK_ABI_DEPENDS.cups+=	cups>=1.5.4nb17
 BUILDLINK_PKGSRCDIR.cups?=	../../print/cups15
 
 pkgbase := cups

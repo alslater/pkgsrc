@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		MyPasswordSafe-20061216
-PKGREVISION=		24
+PKGREVISION=		25
 CATEGORIES=		security
 MASTER_SITES=		http://www.semanticgap.com/myps/release/
 DISTFILES=		${DISTNAME}.src.tgz

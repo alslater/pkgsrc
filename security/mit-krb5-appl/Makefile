@@ -2,7 +2,7 @@
 
 DISTNAME=	krb5-appl-1.0.3
 PKGNAME=	mit-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	security
 MASTER_SITES=	http://web.mit.edu/kerberos/dist/krb5-appl/${PKGVERSION_NOREV:R}/
 EXTRACT_SUFX=	.tar

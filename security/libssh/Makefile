@@ -6,7 +6,7 @@
 VER=			0.7.3
 DISTNAME=		libssh-${VER}
 PKGNAME=		libssh-0.73
-PKGREVISION=		2
+PKGREVISION=		3
 CATEGORIES=		security
 MASTER_SITES=		https://red.libssh.org/attachments/download/195/
 EXTRACT_SUFX=		.tar.xz

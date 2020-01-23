@@ -2,6 +2,7 @@
 #
 
 DISTNAME=	alpine-2.20
+PKGREVISION=	1
 CATEGORIES=	mail
 MASTER_SITES=	http://patches.freeiz.com/alpine/release/src/
 EXTRACT_SUFX=	.tar.xz

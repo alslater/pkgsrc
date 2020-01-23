@@ -3,6 +3,7 @@
 MODNAME=		snmp
 CATEGORIES+=		net
 COMMENT=		PHP extension for SNMP
+PKGREVISION=		1
 
 CONFLICTS=	php-snmp-[0-9]*
 

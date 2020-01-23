@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libmrss-0.19.2
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	www
 MASTER_SITES=	http://www.autistici.org/bakunin/libmrss/
 

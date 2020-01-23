@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	konversation-1.1
-PKGREVISION=	38
+PKGREVISION=	39
 CATEGORIES=	chat kde
 MASTER_SITES=	http://download.berlios.de/konversation/
 EXTRACT_SUFX=	.tar.bz2

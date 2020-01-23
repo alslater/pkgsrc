@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libtunepimp
 LIBTUNEPIMP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libtunepimp+=	libtunepimp>=0.5.0
-BUILDLINK_ABI_DEPENDS.libtunepimp+=	libtunepimp>=0.5.3nb17
+BUILDLINK_ABI_DEPENDS.libtunepimp+=	libtunepimp>=0.5.3nb18
 BUILDLINK_PKGSRCDIR.libtunepimp?=	../../audio/libtunepimp
 
 .include "../../audio/musicbrainz/buildlink3.mk"

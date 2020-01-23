@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		racoon2-20100526a
-PKGREVISION=		9
+PKGREVISION=		10
 CATEGORIES=		security net
 MASTER_SITES=		ftp://ftp.racoon2.wide.ad.jp/pub/racoon2/
 EXTRACT_SUFX=		.tgz

@@ -2,7 +2,7 @@
 
 DISTNAME=	pine4.64
 PKGNAME=	pine-4.64
-PKGREVISION=	13
+PKGREVISION=	14
 CATEGORIES=	mail news
 MASTER_SITES=	ftp://ftp.cac.washington.edu/pine/ \
 		ftp://ftp.fu-berlin.de/unix/mail/pine/

@@ -2,7 +2,7 @@
 
 DISTNAME=	ruby-ldap-0.9.16
 PKGNAME=	${DISTNAME:S/^ruby-/${RUBY_PKGPREFIX}-/}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	databases ruby
 
 MAINTAINER=	pkgsrc-users@NetBSD.org

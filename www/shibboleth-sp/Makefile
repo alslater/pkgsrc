@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	shibboleth-sp-2.5.5
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	www
 MASTER_SITES=	http://www.shibboleth.net/downloads/service-provider/${PKGVERSION_NOREV}/
 

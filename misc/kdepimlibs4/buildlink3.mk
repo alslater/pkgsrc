@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdepimlibs
 KDEPIMLIBS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdepimlibs+=	kdepimlibs4>=4.0.0
-BUILDLINK_ABI_DEPENDS.kdepimlibs+=	kdepimlibs4>=4.14.10nb2
+BUILDLINK_ABI_DEPENDS.kdepimlibs+=	kdepimlibs4>=4.14.10nb3
 BUILDLINK_PKGSRCDIR.kdepimlibs?=	../../misc/kdepimlibs4
 
 .include "../../mk/bsd.fast.prefs.mk"

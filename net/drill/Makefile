@@ -3,7 +3,7 @@
 VERSION=	1.6.17
 DISTNAME=	ldns-${VERSION}
 PKGNAME=	drill-${VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	http://www.nlnetlabs.nl/downloads/ldns/
 

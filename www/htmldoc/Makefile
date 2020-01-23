@@ -7,7 +7,7 @@ COMMENT?=	Converts HTML to indexed HTML, PDF and/or PostScript
 # Normal package Makefile contents follow.
 DISTNAME=	htmldoc-1.8.27-source
 PKGNAME_BASE=	${DISTNAME:S/-source//}
-PKGREVISION=	15
+PKGREVISION=	16
 CATEGORIES=	www
 MASTER_SITES=	ftp://ftp.easysw.com/pub/htmldoc/${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tar.bz2

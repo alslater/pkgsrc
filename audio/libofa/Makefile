@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		libofa-0.9.3
-PKGREVISION=		9
+PKGREVISION=		10
 CATEGORIES=		audio
 MASTER_SITES=		http://distfiles.aydogan.net/audio/ \
 					http://musicip-libofa.googlecode.com/files/

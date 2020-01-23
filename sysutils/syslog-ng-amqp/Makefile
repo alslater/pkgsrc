@@ -3,6 +3,7 @@
 SYSLOG_MOD=		afamqp
 SYSLOG_MOD_TARGET=	afamqp
 COMMENT=		Syslog-ng RabbitMQ module
+PKGREVISION=		1
 
 .include "../../sysutils/syslog-ng/Makefile.module"
 

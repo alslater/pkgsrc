@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	raptor-1.4.21
-PKGREVISION=	12
+PKGREVISION=	13
 CATEGORIES=	textproc
 MASTER_SITES=	http://download.librdf.org/source/
 

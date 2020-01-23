@@ -2,7 +2,7 @@
 
 DISTNAME=	Unreal3.2.10.5
 PKGNAME=	${DISTNAME:tl:S/l/lircd-/1}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	chat
 MASTER_SITES=	http://unrealircd.org/downloads/
 

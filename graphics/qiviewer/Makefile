@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	qiviewer-0.5.0
-PKGREVISION=	16
+PKGREVISION=	17
 CATEGORIES=	graphics
 MASTER_SITES=	http://qiviewer.googlecode.com/files/
 EXTRACT_SUFX=	.tar.bz2

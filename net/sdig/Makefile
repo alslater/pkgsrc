@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.20 2016/03/05 11:29:11 jperkin Exp $
 
 DISTNAME=	sdig-0.30
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	net
 MASTER_SITES=	http://www.exploits.org/sdig/
 DISTFILES=	${DISTNAME}${EXTRACT_SUFX} mactable.gz

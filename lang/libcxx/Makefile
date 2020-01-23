@@ -7,6 +7,7 @@ CATEGORIES=	lang devel
 MASTER_SITES=	http://releases.llvm.org/${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tar.xz
 
+GCC_REQD=	8 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://libcxx.llvm.org/
 COMMENT=	C++ Standard Library

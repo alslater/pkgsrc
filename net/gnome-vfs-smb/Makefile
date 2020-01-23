@@ -3,7 +3,7 @@
 
 GNOME_VFS_NAME=		smb
 GNOME_VFS_FLAG=		samba
-PKGREVISION=		23
+PKGREVISION=		24
 CATEGORIES=		net
 
 EGFILES+=		modules/smb-module.conf

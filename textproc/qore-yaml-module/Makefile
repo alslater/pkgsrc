@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.4 2016/08/07 11:44:43 nros Exp $
 
 DISTNAME=	qore-yaml-module-0.5
+PKGREVISION=	1
 CATEGORIES=	textproc
 MASTER_SITES=   ${MASTER_SITE_GITHUB:=qorelanguage/}
 EXTRACT_SUFX=   .tar.bz2

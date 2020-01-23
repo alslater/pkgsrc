@@ -3,7 +3,7 @@
 QTKEYCHAINVER=	0.4.0
 DISTNAME=	qtkeychain-${QTKEYCHAINVER}
 PKGNAME=	qt4-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	security
 MASTER_SITES=	-https://github.com/frankosterfeld/qtkeychain/archive/v${QTKEYCHAINVER}.tar.gz
 

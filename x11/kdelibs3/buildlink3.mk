@@ -8,7 +8,7 @@ BUILDLINK_TREE+=	kdelibs
 KDELIBS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdelibs+=	kdelibs>=3.5.6<4
-BUILDLINK_ABI_DEPENDS.kdelibs+=	kdelibs>=3.5.10nb39
+BUILDLINK_ABI_DEPENDS.kdelibs+=	kdelibs>=3.5.10nb41
 BUILDLINK_PKGSRCDIR.kdelibs?=	../../x11/kdelibs3
 
 pkgbase := kdelibs

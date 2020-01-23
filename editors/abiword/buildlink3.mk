@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	abiword
 ABIWORD_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.abiword+=	abiword>=3.0.1
-BUILDLINK_ABI_DEPENDS.abiword?=	abiword>=3.0.1nb4
+BUILDLINK_ABI_DEPENDS.abiword?=	abiword>=3.0.1nb5
 BUILDLINK_PKGSRCDIR.abiword?=	../../editors/abiword
 
 .include "../../converters/fribidi/buildlink3.mk"

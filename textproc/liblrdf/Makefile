@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	liblrdf-0.5.0
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	textproc
 MASTER_SITES=	# github download sucks for packaging
 

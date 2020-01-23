@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libspectre
 LIBSPECTRE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libspectre+=	libspectre>=0.2.1
-BUILDLINK_ABI_DEPENDS.libspectre+=	libspectre>=0.2.7nb10
+BUILDLINK_ABI_DEPENDS.libspectre+=	libspectre>=0.2.7nb11
 BUILDLINK_PKGSRCDIR.libspectre?=	../../print/libspectre
 
 .include "../../print/ghostscript/buildlink3.mk"

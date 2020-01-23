@@ -3,7 +3,7 @@
 DISTNAME=	wmget-0.6.0-src
 PKGNAME=	${DISTNAME:S/-src//}
 WRKSRC=		${WRKDIR}/wmget
-PKGREVISION=	9
+PKGREVISION=	10
 CATEGORIES=	net
 MASTER_SITES=	http://amtrickey.net/download/
 

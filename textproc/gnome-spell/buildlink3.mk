@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	gnome-spell
 GNOME_SPELL_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.gnome-spell+=		gnome-spell>=1.0.5
-BUILDLINK_ABI_DEPENDS.gnome-spell+=	gnome-spell>=1.0.8nb34
+BUILDLINK_ABI_DEPENDS.gnome-spell+=	gnome-spell>=1.0.8nb35
 BUILDLINK_PKGSRCDIR.gnome-spell?=	../../textproc/gnome-spell
 
 .include "../../devel/libbonobo/buildlink3.mk"

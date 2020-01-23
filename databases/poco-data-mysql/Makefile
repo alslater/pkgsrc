@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	poco-data-mysql-${POCO_VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	databases
 
 COMMENT=	POCO C++ MySQL RDBMS Accessor libraries

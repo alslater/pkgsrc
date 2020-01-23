@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libktorrent
 LIBKTORRENT_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libktorrent+=	libktorrent>=1.2.1.2
-BUILDLINK_ABI_DEPENDS.libktorrent+=	libktorrent>=1.3.1nb6
+BUILDLINK_ABI_DEPENDS.libktorrent+=	libktorrent>=1.3.1nb7
 BUILDLINK_PKGSRCDIR.libktorrent?=	../../net/libktorrent
 
 .include "../../devel/boost-libs/buildlink3.mk"

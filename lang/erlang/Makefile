@@ -2,6 +2,7 @@
 
 DISTNAME=	erlang-${DIST_VERSION_MAJOR}.${DIST_VERSION_MINOR}${!empty(DIST_VERSION_PATCH):?.:}${DIST_VERSION_PATCH}
 PKGNAME=	${DISTNAME:S/OTP-/erlang-/}
+PKGREVISION=	1
 CATEGORIES=	lang
 MASTER_SITES=	${MASTER_SITE_GITHUB:=erlang/}
 GITHUB_PROJECT=	otp
@@ -17,6 +18,7 @@ EXTRACT_USING=	bsdtar
 WRKSRC=		${WRKDIR}/otp-${GITHUB_TAG}
 GNU_CONFIGURE=	yes
 USE_TOOLS+=	autoconf awk gmake perl:run flex
+USE_LANGUAGES+= c++ c
 
 .include "../../mk/bsd.prefs.mk"
 

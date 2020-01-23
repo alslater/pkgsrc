@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libssh
 LIBSSH_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libssh+=	libssh>=0.54
-BUILDLINK_ABI_DEPENDS.libssh+=	libssh>=0.73nb1
+BUILDLINK_ABI_DEPENDS.libssh+=	libssh>=0.73nb3
 BUILDLINK_PKGSRCDIR.libssh?=	../../security/libssh
 
 pkgbase := libssh

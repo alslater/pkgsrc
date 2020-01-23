@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		gturing-0.1.1
-PKGREVISION=		58
+PKGREVISION=		59
 CATEGORIES=		games gnome
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/gturing/0.1/}
 EXTRACT_SUFX=		.tar.bz2

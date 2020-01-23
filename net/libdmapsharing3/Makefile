@@ -2,7 +2,7 @@
 
 DISTNAME=	libdmapsharing-2.9.15
 PKGNAME=	${DISTNAME:S/sharing/sharing3/}
-PKGREVISION=	27
+PKGREVISION=	28
 CATEGORIES=	net
 MASTER_SITES=	http://www.flyn.org/projects/libdmapsharing/
 

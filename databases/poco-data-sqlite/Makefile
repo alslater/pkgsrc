@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	poco-data-sqlite-${POCO_VERSION}
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	databases
 
 COMMENT=	POCO C++ SQLite RDBMS Accessor libraries

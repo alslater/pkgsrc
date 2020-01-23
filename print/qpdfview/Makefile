@@ -2,7 +2,7 @@
 
 VER=		0.4.16
 DISTNAME=	qpdfview-${VER}
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	print
 MASTER_SITES=	https://launchpad.net/qpdfview/trunk/${VER}/+download/
 

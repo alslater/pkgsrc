@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	lhs-0.1
-PKGREVISION=	9
+PKGREVISION=	10
 CATEGORIES=	www
 MASTER_SITES=	ftp://dev.null.pl/pub/
 

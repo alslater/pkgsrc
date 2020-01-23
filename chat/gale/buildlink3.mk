@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	gale
 GALE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.gale+=	gale>=0.99f
-BUILDLINK_ABI_DEPENDS.gale+=	gale>=0.99fnb14
+BUILDLINK_ABI_DEPENDS.gale+=	gale>=0.99fnb15
 BUILDLINK_PKGSRCDIR.gale?=	../../chat/gale
 
 .include "../../devel/boehm-gc/buildlink3.mk"

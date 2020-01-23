@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	rtmpdump-2.4
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	net multimedia
 MASTER_SITES=	http://rtmpdump.mplayerhq.hu/download/
 

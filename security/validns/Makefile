@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	validns-0.8
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	security
 MASTER_SITES=	http://www.validns.net/download/
 

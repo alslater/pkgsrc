@@ -3,7 +3,7 @@
 
 DISTNAME=	frama-c-Oxygen-20120901
 PKGNAME=	${DISTNAME:S/-Oxygen//}
-PKGREVISION=	35
+PKGREVISION=	36
 CATEGORIES=	devel
 MASTER_SITES=	http://frama-c.com/download/
 

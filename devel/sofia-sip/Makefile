@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	sofia-sip-1.12.11
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	devel net comms
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=sofia-sip/}
 

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gmfsk-0.6
-PKGREVISION=	47
+PKGREVISION=	48
 CATEGORIES=	ham
 MASTER_SITES=	http://gmfsk.connect.fi/
 

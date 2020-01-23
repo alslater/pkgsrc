@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	openimageio
 OPENIMAGEIO_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.openimageio+=	openimageio>=1.1.1
-BUILDLINK_ABI_DEPENDS.openimageio?=	openimageio>=1.5.16nb3
+BUILDLINK_ABI_DEPENDS.openimageio?=	openimageio>=1.5.16nb4
 BUILDLINK_PKGSRCDIR.openimageio?=	../../graphics/openimageio
 
 .include "../../devel/boost-libs/buildlink3.mk"

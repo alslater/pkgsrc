@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	net-snmp
 NET_SNMP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.net-snmp+=	net-snmp>=5.0.9nb3
-BUILDLINK_ABI_DEPENDS.net-snmp+=	net-snmp>=5.7.3nb3
+BUILDLINK_ABI_DEPENDS.net-snmp+=	net-snmp>=5.7.3nb13
 BUILDLINK_PKGSRCDIR.net-snmp?=	../../net/net-snmp
 
 pkgbase := net-snmp

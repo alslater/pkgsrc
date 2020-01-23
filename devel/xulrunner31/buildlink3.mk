@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	xulrunner31
 XULRUNNER31_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.xulrunner31+=	xulrunner31>=31.2.0
-BUILDLINK_ABI_DEPENDS.xulrunner31+=	xulrunner31>=31.8.0nb5
+BUILDLINK_ABI_DEPENDS.xulrunner31+=	xulrunner31>=31.8.0nb11
 BUILDLINK_PKGSRCDIR.xulrunner31?=	../../devel/xulrunner31
 
 BUILDLINK_INCDIRS.xulrunner31+=		lib/xulrunner31/include

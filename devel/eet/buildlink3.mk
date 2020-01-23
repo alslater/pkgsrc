@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	eet
 EET_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.eet+=	eet>=1.7.7
-BUILDLINK_ABI_DEPENDS.eet?=	eet>=1.7.7nb2
+BUILDLINK_ABI_DEPENDS.eet?=	eet>=1.7.7nb3
 BUILDLINK_PKGSRCDIR.eet?=	../../devel/eet
 
 .include "../../devel/eina/buildlink3.mk"

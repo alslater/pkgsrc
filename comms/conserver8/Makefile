@@ -2,7 +2,7 @@
 #
 
 PKGVER=		8.2.1
-PKGREVISION=	4
+PKGREVISION=	5
 DISTNAME=	conserver-${PKGVER}
 PKGNAME=	conserver8-${PKGVER}
 CATEGORIES=	comms

@@ -23,7 +23,7 @@ PATCHDIR=	${.CURDIR}/../../print/poppler/patches
 USE_CMAKE=		yes
 USE_LANGUAGES=		c c++14
 USE_TOOLS+=		pkg-config
-GCC_REQD+=		5
+GCC_REQD+=		8
 
 # Don't accidentally find libtiff
 CMAKE_ARGS+=	-DCMAKE_DISABLE_FIND_PACKAGE_TIFF=TRUE

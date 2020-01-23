@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.67 2016/04/09 14:19:25 richard Exp $
 
-PKGREVISION=	4
+PKGREVISION=	5
 .include "Makefile.common"
 COMMENT=	API for access to scanners, digital cameras, frame grabbers, etc
 

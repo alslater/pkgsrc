@@ -3,6 +3,7 @@
 SYSLOG_MOD=		smtp
 SYSLOG_MOD_DIR=		afsmtp
 COMMENT=		Syslog-ng SMTP module
+PKGREVISION=		1
 
 .include "../../sysutils/syslog-ng/Makefile.module"
 

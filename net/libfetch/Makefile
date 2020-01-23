@@ -2,6 +2,7 @@
 #
 
 DISTNAME=	libfetch-2.38
+PKGREVISION=	1
 CATEGORIES=	net
 MASTER_SITES=	# empty
 DISTFILES=	# empty

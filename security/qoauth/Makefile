@@ -3,7 +3,7 @@
 
 PKGNAME=	qoauth-1.0.1
 DISTNAME=	${PKGNAME_NOREV}-src
-PKGREVISION=	11
+PKGREVISION=	12
 CATEGORIES=	security
 MASTER_SITES=	http://files.ayoy.net/qoauth/release/1.0.1/src/
 EXTRACT_SUFX=	.tar.bz2

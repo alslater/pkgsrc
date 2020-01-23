@@ -2,7 +2,7 @@
 
 # Before updating, make sure net/samba4 supports the newer version.
 DISTNAME=	ldb-2.0.7
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	databases
 MASTER_SITES=	http://www.samba.org/ftp/ldb/
 

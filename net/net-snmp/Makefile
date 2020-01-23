@@ -2,7 +2,7 @@
 
 .include "Makefile.common"
 CATEGORIES=	net
-PKGREVISION=	12
+PKGREVISION=	13
 
 MAINTAINER=	adam@NetBSD.org
 COMMENT=	Extensible SNMP implementation

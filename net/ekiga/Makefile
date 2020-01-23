@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		ekiga-3.2.6
-PKGREVISION=		54
+PKGREVISION=		55
 CATEGORIES=		net comms
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/ekiga/3.2/}
 EXTRACT_SUFX=		.tar.bz2

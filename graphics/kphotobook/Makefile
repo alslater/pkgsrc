@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	kphotobook-0.0.6
-PKGREVISION=	38
+PKGREVISION=	39
 CATEGORIES=	kde graphics
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=kphotobook/}
 

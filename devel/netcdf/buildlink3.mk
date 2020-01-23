@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	netcdf
 NETCDF_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.netcdf+=	netcdf>=3.5
-BUILDLINK_ABI_DEPENDS.netcdf+=	netcdf>=4.2.1.1nb4
+BUILDLINK_ABI_DEPENDS.netcdf+=	netcdf>=4.2.1.1nb5
 BUILDLINK_PKGSRCDIR.netcdf?=	../../devel/netcdf
 
 .include "../../devel/hdf5/buildlink3.mk"

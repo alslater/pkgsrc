@@ -11,6 +11,8 @@ COMMENT=	MATE terminal emulator application
 TOOL_DEPENDS+=	itstool-[0-9]*:../../textproc/itstool
 TOOL_DEPENDS+=	libxml2-[0-9]*:../../textproc/libxml2 # for xmllint
 
+GCC_REQD=	8
+
 .include "options.mk"
 
 .include "../../devel/glib2/schemas.mk"

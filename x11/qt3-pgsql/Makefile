@@ -3,7 +3,7 @@
 .include "../../x11/qt3-libs/Makefile.common"
 
 PKGNAME=	qt3-psql-${QTVERSION}
-PKGREVISION=	21
+PKGREVISION=	22
 COMMENT=	QT postgresql driver
 
 CONFIGURE_ARGS+=	-I${QTDIR}/include \

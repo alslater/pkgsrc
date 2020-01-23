@@ -6,6 +6,7 @@ BUILDLINK_TREE+=	rhash
 RHASH_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.rhash+=	rhash>=1.3.1
+BUILDLINK_ABI_DEPENDS.rhash?=	rhash>=1.3.8nb1
 BUILDLINK_PKGSRCDIR.rhash?=	../../misc/rhash
 
 BUILDLINK_DEPMETHOD.rhash?=	build

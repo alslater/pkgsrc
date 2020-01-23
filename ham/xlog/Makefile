@@ -2,6 +2,7 @@
 #
 
 DISTNAME=	xlog-2.0.14
+PKGREVISION=	1
 CATEGORIES=	ham
 MASTER_SITES=	http://download.savannah.gnu.org/releases/xlog/
 LICENSE=	gnu-gpl-v3

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	ptlib
 PTLIB_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.ptlib+=	ptlib>=2.6.1
-BUILDLINK_ABI_DEPENDS.ptlib+=	ptlib>=2.10.7nb10
+BUILDLINK_ABI_DEPENDS.ptlib+=	ptlib>=2.10.7nb11
 BUILDLINK_PKGSRCDIR.ptlib?=	../../devel/ptlib
 
 PTLIB_CONFIG?=     ${BUILDLINK_PREFIX.ptlib}/bin/ptlib-config

@@ -2,7 +2,7 @@
 
 DISTNAME=	globalplatform-6.0.0
 PKGNAME=	lib${DISTNAME}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	security
 # The pkgsrc guide says to do:
 # MASTER_SITES=${MASTER_SITE_SOURCEFORGE:=globalplatform/GlobalPlatform%20Library/GlobalPlatform%20Library%20${PKGVERSION_NOREV}/}

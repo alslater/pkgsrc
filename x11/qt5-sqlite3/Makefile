@@ -2,7 +2,7 @@
 
 DISTNAME=	qtbase-opensource-src-${QTVERSION}
 PKGNAME=	qt5-sqlite3-${QTVERSION}
-PKGREVISION=	6
+PKGREVISION=	7
 COMMENT=	Qt5 SQLite3 plugin
 
 BUILD_DIRS=		src/plugins/sqldrivers

@@ -2,7 +2,7 @@
 
 VERSION=	4.9.1
 
-PYTHON_VERSIONS_INCOMPATIBLE=	26 34 35 36 # not yet ported as of 3.9
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 3.9
 
 # see also https://www.mercurial-scm.org/wiki/SupportedPythonVersions
 # 3.x support is not planned for the near future

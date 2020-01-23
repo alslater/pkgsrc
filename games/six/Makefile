@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	six-0.5.3
-PKGREVISION=	32
+PKGREVISION=	33
 CATEGORIES=	games
 MASTER_SITES=	http://six.retes.hu/download/
 

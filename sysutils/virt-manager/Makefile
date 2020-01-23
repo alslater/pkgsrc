@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.24 2016/08/03 10:23:25 adam Exp $
 
 DISTNAME=	virt-manager-0.9.4
-PKGREVISION=	17
+PKGREVISION=	18
 CATEGORIES=	sysutils
 MASTER_SITES=	http://virt-manager.org/download/sources/virt-manager/
 

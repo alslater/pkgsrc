@@ -15,7 +15,7 @@ MAKE_JOBS_SAFE=	no
 .include "../../sysutils/dbus-glib/buildlink3.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../x11/startup-notification/buildlink3.mk"
-.include "../../x11/vte3/buildlink3.mk"
+.include "../../x11/vte029/buildlink3.mk"
 .include "../../x11/libxfce4ui/buildlink3.mk"
 .include "../../x11/xfce4-exo/buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"

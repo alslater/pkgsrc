@@ -3,7 +3,7 @@
 
 DISTNAME=	lwt-2.5.2
 PKGNAME=	ocaml-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	devel
 #MASTER_SITES=	http://github.com/ocsigen/lwt/archive/
 MASTER_SITES=	${MASTER_SITE_GITHUB:=ocsigen/}

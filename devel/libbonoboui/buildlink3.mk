@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libbonoboui
 LIBBONOBOUI_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libbonoboui+=		libbonoboui>=2.8.0
-BUILDLINK_ABI_DEPENDS.libbonoboui+=	libbonoboui>=2.24.4nb27
+BUILDLINK_ABI_DEPENDS.libbonoboui+=	libbonoboui>=2.24.4nb28
 BUILDLINK_PKGSRCDIR.libbonoboui?=	../../devel/libbonoboui
 
 .include "../../devel/GConf/buildlink3.mk"

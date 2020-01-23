@@ -5,7 +5,7 @@ BMP_USE_ESD:=		yes
 .include "../../audio/bmp/Makefile.common"
 
 PKGNAME=		${DISTNAME:S/bmp/bmp-esound/}
-PKGREVISION=		29
+PKGREVISION=		30
 CATEGORIES+=		gnome
 
 COMMENT=		BMP plugin to output sound through the esound daemon

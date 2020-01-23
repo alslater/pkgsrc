@@ -58,10 +58,11 @@ BUILD_DEFS_EFFECTS+=		MYSQL_VERSION MYSQL_PKG_PREFIX
 MYSQL_VERSIONS_ACCEPTED?=	${_PKG_MYSQLS}
 
 # The available MySQL packages:
-_PKG_MYSQLS=			80 57 56 55 51 mariadb55 mariadb100
-_PKG_MYSQLS+=			57-cluster
-_PKG_MYSQLS+=			percona80 percona57 percona56 percona55
-_PKG_MYSQLS+=			percona57-cluster percona56-cluster percona55-cluster
+_PKG_MYSQLS=			57 56 55 51 mariadb55 
+#_PKG_MYSQLS+=			57-cluster
+#._PKG_MYSQLS+=			percona80 percona57 percona56 percona55
+#.`_PKG_MYSQLS+=			percona57-cluster percona56-cluster percona55-cluster
+MYSQL_VERSIONS_ACCEPTED?=	${_PKG_MYSQLS}
 
 _MYSQL_PKGBASE.57-cluster=	mysql-cluster-7.3.*
 _MYSQL_PKGSRCDIR.57-cluster=	../../joyent/mysql73-cluster

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	zyGrib-7.0.0
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	misc
 MASTER_SITES=	http://www.zygrib.org/getfile.php?file=
 EXTRACT_SUFX=	.tgz

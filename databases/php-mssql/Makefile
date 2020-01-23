@@ -3,6 +3,7 @@
 MODNAME=		mssql
 CATEGORIES+=		databases
 COMMENT=		PHP extension for MS SQL databases
+PKGREVISION=		1
 
 USE_PHP_EXT_PATCHES=	yes
 

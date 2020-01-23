@@ -19,6 +19,8 @@ post-configure:
 
 BUILD_DIRS=	libdbusmenu-gtk
 
+BUILDLINK_TRANSFORM+=	rm:-Werror
+
 .include "../../devel/libdbusmenu-glib/buildlink3.mk"
 BUILDLINK_DEPMETHOD.gobject-introspection+=	build
 .include "../../devel/gobject-introspection/buildlink3.mk"

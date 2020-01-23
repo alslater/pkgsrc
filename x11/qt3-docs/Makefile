@@ -3,7 +3,7 @@
 .include "../../x11/qt3-libs/Makefile.common"
 
 PKGNAME=	qt3-docs-${QTVERSION}
-PKGREVISION=	15
+PKGREVISION=	16
 COMMENT=	Documentation for the QT C++ X GUI toolkit
 
 BUILD_QT3=	yes

@@ -7,7 +7,7 @@ SWTDATE=	200909170800
 
 PKGNAME=	swt-${SWTREL}.${SWTVER}
 DISTNAME=	swt-${SWTREL}-gtk-linux-x86
-PKGREVISION=	33
+PKGREVISION=	34
 CATEGORIES=	devel
 MASTER_SITES=	http://download.eclipse.org/eclipse/downloads/drops/R-${SWTREL}-${SWTDATE}/
 EXTRACT_SUFX=	.zip

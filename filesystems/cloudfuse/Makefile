@@ -2,7 +2,7 @@
 
 DISTNAME=	1003a82
 PKGNAME=	cloudfuse-20120124
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	filesystems
 MASTER_SITES=	https://github.com/redbo/cloudfuse/tarball/
 DIST_SUBDIR=	cloudfuse

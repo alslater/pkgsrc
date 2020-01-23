@@ -2,7 +2,7 @@
 
 DISTNAME=	texworks-0.4.5-r1281
 PKGNAME=	texworks-0.4.5
-PKGREVISION=	15
+PKGREVISION=	16
 CATEGORIES=	editors
 MASTER_SITES=	http://texworks.googlecode.com/files/
 

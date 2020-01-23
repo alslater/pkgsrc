@@ -3,6 +3,7 @@
 MODNAME=		ftp
 CATEGORIES+=		net
 COMMENT=		PHP extension for FTP access
+PKGREVISION=		1
 
 CONFLICTS=	php-ftp-[0-9]*
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	kdemultimedia
 KDEMULTIMEDIA_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.kdemultimedia+=	kdemultimedia>=3.5.0nb2
-BUILDLINK_ABI_DEPENDS.kdemultimedia+=	kdemultimedia>=3.5.10nb45
+BUILDLINK_ABI_DEPENDS.kdemultimedia+=	kdemultimedia>=3.5.10nb46
 BUILDLINK_PKGSRCDIR.kdemultimedia?=	../../multimedia/kdemultimedia3
 
 .include "../../audio/arts/buildlink3.mk"

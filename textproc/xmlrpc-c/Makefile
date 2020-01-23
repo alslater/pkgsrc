@@ -3,7 +3,7 @@
 DISTNAME=	xmlrpc-c-1.25.26
 # the "super stable" branch
 PKGNAME=	${DISTNAME:S/-c-/-c-ss-/}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	textproc devel
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=xmlrpc-c/}
 EXTRACT_SUFX=	.tgz

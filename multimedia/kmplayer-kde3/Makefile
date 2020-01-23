@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	kmplayer-0.10.0c
-PKGREVISION=	46
+PKGREVISION=	47
 CATEGORIES=	multimedia kde
 MASTER_SITES=	http://kmplayer.kde.org/pkgs/
 EXTRACT_SUFX=	.tar.bz2

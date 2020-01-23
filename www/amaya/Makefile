@@ -2,7 +2,7 @@
 
 DISTNAME=	amaya-fullsrc-11.3.1
 PKGNAME=	${DISTNAME:S/-fullsrc//}
-PKGREVISION=	31
+PKGREVISION=	32
 CATEGORIES=	www
 MASTER_SITES=	http://www.w3.org/Amaya/Distribution/ \
 		ftp://ftp.w3.org/pub/amaya/ \

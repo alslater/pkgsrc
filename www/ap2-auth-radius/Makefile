@@ -2,7 +2,7 @@
 
 DISTNAME=	mod_auth_radius
 PKGNAME=	${APACHE_PKG_PREFIX}-auth-radius-1.5.7
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	www databases
 MASTER_SITES=	ftp://ftp.freeradius.org/pub/radius/
 

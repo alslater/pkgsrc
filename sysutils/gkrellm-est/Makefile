@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		gkrellm-est-20040710
-PKGREVISION=		31
+PKGREVISION=		32
 CATEGORIES=		sysutils
 MASTER_SITES=		http://cubidou.nerim.net/gkrellm-est/
 

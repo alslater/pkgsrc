@@ -2,7 +2,7 @@
 
 DISTNAME=	lua-${LUA_VERSION}
 PKGNAME=	lua52-${LUA_VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	lang
 MASTER_SITES=	http://www.lua.org/ftp/
 MASTER_SITES+=	http://www.tecgraf.puc-rio.br/lua/ftp/

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	rabbitmq-c
 RABBITMQ_C_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.rabbitmq-c+=	rabbitmq-c>=0.6.0
-BUILDLINK_ABI_DEPENDS.rabbitmq-c+=	rabbitmq-c>=0.7.1nb1
+BUILDLINK_ABI_DEPENDS.rabbitmq-c+=	rabbitmq-c>=0.9.0nb1
 BUILDLINK_PKGSRCDIR.rabbitmq-c?=	../../net/rabbitmq-c
 
 .include "../../devel/popt/buildlink3.mk"

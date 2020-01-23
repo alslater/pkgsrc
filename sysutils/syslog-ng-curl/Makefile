@@ -3,7 +3,7 @@
 SYSLOG_MOD=		http
 SYSLOG_MOD_TARGET=	curl
 COMMENT=		Syslog-ng curl module
-PKGREVISION=		1
+PKGREVISION=		2
 
 .include "../../sysutils/syslog-ng/Makefile.module"
 

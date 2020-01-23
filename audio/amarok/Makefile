@@ -2,7 +2,7 @@
 
 DISTNAME=	amarok-${VERS}
 VERS=		2.8.0
-PKGREVISION=	24
+PKGREVISION=	25
 CATEGORIES=	audio multimedia
 MASTER_SITES=	${MASTER_SITE_KDE:=amarok/${VERS}/src/}
 EXTRACT_SUFX=	.tar.bz2

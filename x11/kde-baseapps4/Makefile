@@ -2,7 +2,7 @@
 
 DISTNAME=	kde-baseapps-15.12.0
 PKGNAME=	${DISTNAME:S/-1/4-1/}
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	x11
 COMMENT=	Base modules for the KDE 4 integrated X11 desktop
 MASTER_SITES=	${MASTER_SITE_KDE:=applications/15.12.0/src/}

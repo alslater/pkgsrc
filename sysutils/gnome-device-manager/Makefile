@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gnome-device-manager-0.2
-PKGREVISION=	39
+PKGREVISION=	40
 CATEGORIES=	sysutils gnome
 MASTER_SITES=	http://hal.freedesktop.org/releases/
 EXTRACT_SUFX=	.tar.bz2

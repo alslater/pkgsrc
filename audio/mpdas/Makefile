@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		mpdas-0.3.2
-PKGREVISION=		2
+PKGREVISION=		3
 CATEGORIES=		audio
 MASTER_SITES=		http://50hz.ws/mpdas/
 

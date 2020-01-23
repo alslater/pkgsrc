@@ -2,7 +2,7 @@
 
 DISTNAME=	libcarddav_0.6.2-2debian2
 PKGNAME=	${DISTNAME:S/_/-/:S/-2debian2/.2.2/}
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	misc
 MASTER_SITES=	https://quickbuild.pearsoncomputing.net/~trinity/+archive/trinity-builddeps/+files/
 

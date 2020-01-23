@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.26 2016/03/05 11:29:28 jperkin Exp $
 
 PKGNAME=		${DISTNAME:S/-/-clientonly-/}
-PKGREVISION=		3
+PKGREVISION=		4
 COMMENT=		The Network Backup Solution (client only)
 
 CONFLICTS=		bacula-[0-9]* bacula-client-[0-9]*

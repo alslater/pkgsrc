@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	enlightenment
 ENLIGHTENMENT_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.enlightenment+=	enlightenment>=0.17.3
-BUILDLINK_ABI_DEPENDS.enlightenment?=	enlightenment>=0.17.3nb8
+BUILDLINK_ABI_DEPENDS.enlightenment?=	enlightenment>=0.17.3nb9
 BUILDLINK_PKGSRCDIR.enlightenment?=	../../x11/enlightenment
 
 .include "../../devel/ecore/buildlink3.mk"

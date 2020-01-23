@@ -77,6 +77,47 @@ SUBST_FILES.fixinc=	gcc/Makefile.in
 SUBST_SED.fixinc=	-e "s,\./fixinc.sh,-c true,"
 .endif
 
+CHECK_SSP_SKIP+= gcc8/bin/c++
+CHECK_SSP_SKIP+= gcc8/bin/cc
+CHECK_SSP_SKIP+= gcc8/bin/cpp
+CHECK_SSP_SKIP+= gcc8/bin/g++
+CHECK_SSP_SKIP+= gcc8/bin/gcc
+CHECK_SSP_SKIP+= gcc8/bin/gcc-ar
+CHECK_SSP_SKIP+= gcc8/bin/gcc-nm
+CHECK_SSP_SKIP+= gcc8/bin/gcc-ranlib
+CHECK_SSP_SKIP+= gcc8/bin/gcov
+CHECK_SSP_SKIP+= gcc8/bin/gcov-dump
+CHECK_SSP_SKIP+= gcc8/bin/gcov-tool
+CHECK_SSP_SKIP+= gcc8/bin/gfortran
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-c++
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-g++
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-gcc
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-gcc-8.3.0
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-gcc-ar
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-gcc-nm
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-gcc-ranlib
+CHECK_SSP_SKIP+= gcc8/bin/x86_64-sun-solaris2.11-gfortran
+CHECK_SSP_SKIP+= gcc8/lib/libatomic.so.1.2.0
+CHECK_SSP_SKIP+= gcc8/lib/libgcc_s.so.1
+CHECK_SSP_SKIP+= gcc8/lib/libgfortran.so.5.0.0
+CHECK_SSP_SKIP+= gcc8/lib/libgomp.so.1.0.0
+CHECK_SSP_SKIP+= gcc8/lib/libitm.so.1.0.0
+CHECK_SSP_SKIP+= gcc8/lib/libobjc.so.4.0.0
+CHECK_SSP_SKIP+= gcc8/lib/libquadmath.so.0.0.0
+CHECK_SSP_SKIP+= gcc8/lib/libssp.so.0.0.0
+CHECK_SSP_SKIP+= gcc8/lib/libstdc++.so.6.0.25
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/cc1
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/cc1obj
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/cc1objplus
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/cc1plus
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/collect2
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/f951
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/install-tools/fixincl
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/liblto_plugin.so.0.0.0
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/lto-wrapper
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/lto1
+CHECK_SSP_SKIP+= gcc8/libexec/gcc/x86_64-sun-solaris2.11/8.3.0/plugin/gengtype
+
 .include "options.mk"
 
 ## For graphite support.
