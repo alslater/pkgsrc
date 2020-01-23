@@ -1,17 +1,5 @@
 #
-# The 2014Q4 and newer branches have built-in SunOS project support and use
-# definitions below. Older branches set up SMF projects via INSTALL scripts
-# in the meta dir.
-#
-.if !empty(BRANCH:M201[0-3]Q[1-4]) || \
-    !empty(BRANCH:M2014Q[1-3])
-.  if exists(${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL.project)
-INSTALL_TEMPLATES+=	${PKGBUILD_BASEDIR}/meta/${PKGPATH}/INSTALL.project
-.  endif
-.endif
-
-#
-# Define per-package projects
+# Define per-package projects supported in 2014Q4 onwards.
 #
 
 SMF_PROJECT.apache-cassandra=	cassandra
@@ -62,6 +50,8 @@ SMF_PROJECT.postgresql91-server=postgres
 SMF_PROJECT.postgresql92-server=postgres
 SMF_PROJECT.postgresql93-server=postgres
 SMF_PROJECT.postgresql94-server=postgres
+SMF_PROJECT.postgresql95-server=postgres
+SMF_PROJECT.postgresql96-server=postgres
 SMF_PROJECT_ATTRS.postgres=	process.max-file-descriptor=(basic,10000,deny)
 SMF_PROJECT_DESC.postgres=	PostgreSQL service
 SMF_PROJECT_GROUP.postgres=	${PGGROUP}
