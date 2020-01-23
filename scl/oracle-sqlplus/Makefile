@@ -38,6 +38,8 @@ SFILES_MK=sfiles-${DIST_OS}-${EMUL_ARCH}.mk
 
 .sinclude "${SFILES_MK}"
 
+CHECK_SSP_SKIP+= oracle/11/libsqlplus.so
+CHECK_SSP_SKIP+= oracle/11/libsqlplusic.so
 
 .include "../../scl/oracle-client/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

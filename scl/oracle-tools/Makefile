@@ -39,5 +39,5 @@ SFILES_MK=sfiles-${DIST_OS}-${EMUL_ARCH}.mk
 .sinclude "${SFILES_MK}"
 
 
-.include "../../scl/oracle-client/buildlink3.mk
+.include "../../scl/oracle-client/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

@@ -31,6 +31,9 @@ FETCH_MESSAGE+=	"	${DOWNLOAD}"
 FETCH_MESSAGE+=	"	or ${ARCHIVE}"
 .endif
 
+CHECK_SSP_SKIP+= oracle/11/libociei.so
+CHECK_SSP_SKIP+= oracle/11/libnnz11.so
+CHECK_SSP_SKIP+= oracle/11/libocijdbc11.so
 
 WRKSRC=		${WRKDIR}/instantclient_11_2/
 
