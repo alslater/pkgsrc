@@ -19,6 +19,8 @@ GNU_CONFIGURE=		yes
 # classhash__load__check__resize__trigger__size__base__inherit__graph.png
 EXTRACT_USING=		bsdtar
 
+GCC_REQD+=		8
+
 PKGCONFIG_OVERRIDE+=	data/cairomm-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	data/cairomm-ft-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	data/cairomm-pdf-1.0.pc.in

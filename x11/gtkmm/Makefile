@@ -16,6 +16,8 @@ USE_LIBTOOL=		yes
 USE_TOOLS+=		gmake perl:run pkg-config
 GNU_CONFIGURE=		yes
 
+GCC_REQD+=		8
+
 EXTRACT_USING=		bsdtar
 
 PKGCONFIG_OVERRIDE+=	gdk/gdkmm.pc.in

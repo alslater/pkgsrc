@@ -16,6 +16,8 @@ USE_LANGUAGES=		c c++11
 USE_LIBTOOL=		yes
 USE_TOOLS+=		bash ggrep gmake perl:build pkg-config
 
+GCC_REQD+= 		8
+
 # The NetBSD bootstraps are built for NetBSD 8 (because rust doesn't
 # build on 7).  Mark earlier versions as broken.
 BROKEN_ON_PLATFORM+=	NetBSD-[1-7].*-*
