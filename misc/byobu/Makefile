@@ -1,9 +1,8 @@
 # $NetBSD: Makefile,v 1.12 2016/08/17 18:58:05 maya Exp $
 
-BYOBUVER=	5.125
+BYOBUVER=	5.130
 DISTNAME=	byobu_${BYOBUVER}.orig
 PKGNAME=	${DISTNAME:S/_/-/:S/.orig//}
-PKGREVISION=	1
 CATEGORIES=	misc
 MASTER_SITES=	https://launchpad.net/byobu/trunk/${BYOBUVER}/+download/
 

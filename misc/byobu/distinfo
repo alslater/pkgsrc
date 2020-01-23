@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.5 2016/08/17 18:58:05 maya Exp $
 
-SHA1 (byobu_5.125.orig.tar.gz) = 3a6c315f3534ee7233ae65e32b9ed8605d8111aa
-RMD160 (byobu_5.125.orig.tar.gz) = 92e4bebb9da89e991396b1cca4564a663f68fd0a
-SHA512 (byobu_5.125.orig.tar.gz) = cf5ef0e8902552fcfe839793b660454a6480154e0a315322311cecbc962ccf31aec5a6de035b7e83979d49058a64b222bade146163c31bd597feeed11c0a94b1
-Size (byobu_5.125.orig.tar.gz) = 582407 bytes
+SHA1 (byobu_5.130.orig.tar.gz) = ee85fa0bbb990b7b4e54e6af0c6a74b122d9771f
+RMD160 (byobu_5.130.orig.tar.gz) = 1f27628b62755b791b52657ffc0605b44ad8f428
+SHA512 (byobu_5.130.orig.tar.gz) = dae3d0de3f1a65e5f3a647c1135ecf89261bf2518fea44bb49e00109ba5e1e5a8939206bb85d97f45fa01482438b3bfcb6f9ddd03dbaa1a8caca807f95b279cf
+Size (byobu_5.130.orig.tar.gz) = 761162 bytes
