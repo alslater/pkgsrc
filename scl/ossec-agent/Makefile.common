@@ -60,6 +60,9 @@ FILES_SUBST+=           OSSEC_DIR=${OSSEC_DIR} OSSEC_GROUP=${OSSEC_GROUP} \
 CONF_FILES_PERMS+=      ${OSSEC_DIR}/etc/ossec.conf.sample ${OSSEC_DIR}/etc/ossec.conf \
                         ${REAL_ROOT_USER} ${OSSEC_GROUP} 0440
 
+CONF_FILES_PERMS+=	${OSSEC_DIR}/etc/client.keys.sample ${OSSEC_DIR}/etc/client.keys \
+                        ${REAL_ROOT_USER} ${OSSEC_GROUP} 0440 
+
 SUBST_CLASSES+=         dir
 SUBST_STAGE.dir=        pre-configure
 SUBST_MESSAGE.dir=      Fixing default paths
@@ -87,6 +90,7 @@ pre-install:
 post-install:
 	${LN} -sf ${LUA_INTERPRETER} ${DESTDIR}${OSSEC_DIR}/bin/ossec-lua
 	${LN} -sf ${LUA_COMPILER} ${DESTDIR}${OSSEC_DIR}/bin/ossec-luac
+	${MV} ${DESTDIR}${OSSEC_DIR}/etc/client.keys ${DESTDIR}${OSSEC_DIR}/etc/client.keys.sample
 
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../security/openssl/buildlink3.mk"
