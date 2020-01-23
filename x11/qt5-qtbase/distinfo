@@ -10,6 +10,7 @@ SHA1 (patch-mkspecs_features_toolchain.prf) = 0cf13cb6e859dd6276954239b91953e557
 SHA1 (patch-qmake_Makefile.unix) = ec1af3d76dc5bd0b7b1d375ceeebbd016b6f555f
 SHA1 (patch-qmake_generators_makefile.cpp) = 1bca636dc88f258876df54bd0c6c64114fa7411d
 SHA1 (patch-qmake_generators_unix_unixmake2.cpp) = 3f2a6a11dacbf7959e5ec032cb4b6ef31b874fb7
+SHA1 (patch-src_3rdparty_tinycbor_src_cborinternal__p.h) = 1c3bf8d567e50159f3b27b1e38a99977a3ce0003
 SHA1 (patch-src_corelib_codecs_qiconvcodec.cpp) = e050b334cecc56259bd1755cd2de8c5bbf1409c0
 SHA1 (patch-src_corelib_configure.json) = b0865730d33f11e047d3016832e6b56cf5f54add
 SHA1 (patch-src_corelib_global_qconfig-bootstrapped.h) = c52c811a44d965cf9d420749ffe999673c388a68
