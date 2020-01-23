@@ -1,16 +1,21 @@
-# $NetBSD: Makefile,v 1.23 2016/01/27 12:26:11 jperkin Exp $
+# $NetBSD: Makefile,v 1.26 2019/11/02 22:54:25 rillig Exp $
 
 .include "../../archivers/libarchive/Makefile.common"
+.include "../../mk/bsd.prefs.mk"
 
 PKGNAME=	${DISTNAME:S/libarchive/bsdtar/}
 COMMENT=	Fast multi-format tape archiver
 
 # Explicitly do not depend on libtool as this can be used
 # as bootstrap dependency.
-#USE_LIBTOOL=	yes
+#USE_LIBTOOL=		yes
 CONFIGURE_ARGS+=	--enable-bsdtar=static
 CONFIGURE_ARGS+=	--disable-bsdcpio
 CONFIGURE_ARGS+=	--disable-shared
+CONFIGURE_ARGS+=	--without-iconv
+.if "${OS_VARIANT}" == "chromeos"
+CONFIGURE_ARGS+=	--disable-acl
+.endif
 
 .include "../../archivers/bzip2/builtin.mk"
 .include "../../archivers/xz/builtin.mk"
@@ -20,15 +25,17 @@ CHECK_BUILTIN.openssl:=	yes
 CHECK_BUILTIN.openssl:=	no
 
 .if empty(USE_BUILTIN.bzip2:M[yY][eE][sS])
-CPPFLAGS+=	-I${WRKDIR}/bzip2
-LDFLAGS+=	-L${WRKDIR}/bzip2
+CPPFLAGS+=		-I${WRKDIR}/bzip2
+LDFLAGS+=		-L${WRKDIR}/bzip2
 .endif
 .if empty(USE_BUILTIN.zlib:M[yY][eE][sS])
-CPPFLAGS+=	-I${WRKDIR}/zlib
-LDFLAGS+=	-L${WRKDIR}/zlib
+CPPFLAGS+=		-I${WRKDIR}/zlib
+LDFLAGS+=		-L${WRKDIR}/zlib
 .endif
 .if empty(USE_BUILTIN.openssl:M[yY][eE][sS])
 CONFIGURE_ARGS+=	--without-openssl
+.else
+LDFLAGS+=		-lcrypto
 .endif
 .if empty(USE_BUILTIN.xz:M[yY][eE][sS])
 CONFIGURE_ARGS+=	--without-lzma

@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.12 2016/09/13 11:09:34 adam Exp $
+# $NetBSD: Makefile,v 1.13 2019/01/15 10:54:46 markd Exp $
 
-DISTNAME=	lcms2-2.8
+DISTNAME=	lcms2-2.9
 CATEGORIES=	graphics
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=lcms/}
 
@@ -10,7 +10,6 @@ COMMENT=	Little Color Management System - a color management library
 LICENSE=	mit
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 GNU_CONFIGURE=		yes
 TEST_TARGET=		check
 

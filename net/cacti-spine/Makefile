@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	cacti-spine-0.8.8h
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	http://www.cacti.net/downloads/spine/
 

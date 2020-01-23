@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	dikt-2j
-PKGREVISION=	18
+PKGREVISION=	19
 CATEGORIES=	textproc x11
 MASTER_SITES=	http://dikt.googlecode.com/files/
 EXTRACT_SUFX=	.txz

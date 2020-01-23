@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mysql-cluster
 MYSQL_CLUSTER_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mysql-cluster+=	mysql-cluster>=7.3.7
-BUILDLINK_ABI_DEPENDS.mysql-cluster?=	mysql-cluster>=7.4.7nb1
+BUILDLINK_ABI_DEPENDS.mysql-cluster?=	mysql-cluster>=7.4.12nb2
 BUILDLINK_PKGSRCDIR.mysql-cluster?=	../../databases/mysql-cluster
 BUILDLINK_INCDIRS.mysql-cluster?=	include/mysql
 BUILDLINK_LIBDIRS.mysql-cluster?=	lib

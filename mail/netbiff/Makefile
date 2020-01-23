@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		netbiff-0.9.18
-PKGREVISION=		27
+PKGREVISION=		28
 CATEGORIES=		mail
 MASTER_SITES=		http://www.cs.virginia.edu/~jrk3g/netbiff/
 

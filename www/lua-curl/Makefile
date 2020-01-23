@@ -2,7 +2,7 @@
 
 DISTNAME=	lua-curl-0.2
 PKGNAME=	${LUA_PKGPREFIX}-curl-0.2
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	www
 MASTER_SITES=	http://luaforge.net/frs/download.php/2634/
 

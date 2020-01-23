@@ -1,4 +1,4 @@
-# $NetBSD: check-shlibs.mk,v 1.29 2016/04/10 15:58:02 joerg Exp $
+# $NetBSD: check-shlibs.mk,v 1.31 2018/10/01 14:59:49 triaxx Exp $
 #
 # This file verifies that all libraries used by the package can be found
 # at run-time.
@@ -9,6 +9,14 @@
 #	Whether the check should be enabled or not.
 #
 #	Default value: "yes" for PKG_DEVELOPERs, "no" otherwise.
+#
+# CHECK_SHLIBS_BLACKLIST
+# 	A list of regular expressions that will cause the test to fail
+# 	if they are matched in the resolved runpath.  For example, set
+# 	to ^/usr/lib/lib(crypto|ssl) will ensure that OpenSSL is not
+# 	accidentally picked up from the OS.
+#
+#	Default value: empty.
 #
 # Package-settable variables:
 #
@@ -65,8 +73,12 @@ CHECK_SHLIBS_NATIVE_ENV+=	PKG_INFO_CMD=${PKG_INFO:Q}
 CHECK_SHLIBS_NATIVE_ENV+=	DEPENDS_FILE=${_RRDEPENDS_FILE:Q}
 CHECK_SHLIBS_NATIVE_ENV+=	DESTDIR=${DESTDIR:Q}
 CHECK_SHLIBS_NATIVE_ENV+=	WRKDIR=${WRKDIR:Q}
+CHECK_SHLIBS_NATIVE_ENV+=	LANG=C
 .  if defined(CHECK_WRKREF) && !empty(CHECK_WRKREF:Mextra)
 CHECK_SHLIBS_NATIVE_ENV+=	CHECK_WRKREF_EXTRA_DIRS=${CHECK_WRKREF_EXTRA_DIRS:Q}
+.  endif
+.  if defined(CHECK_SHLIBS_BLACKLIST)
+CHECK_SHLIBS_NATIVE_ENV+=	CHECK_SHLIBS_BLACKLIST=${CHECK_SHLIBS_BLACKLIST:Q}
 .  endif
 
 _check-shlibs: error-check .PHONY

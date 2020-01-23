@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.4 2016/11/03 21:25:55 wiz Exp $
+# $NetBSD: buildlink3.mk,v 1.10 2018/11/23 08:06:28 ryoon Exp $
 
 BUILDLINK_TREE+=	ffmpeg3
 
@@ -6,11 +6,11 @@ BUILDLINK_TREE+=	ffmpeg3
 FFMPEG3_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.ffmpeg3+=	ffmpeg3>=3.0
-BUILDLINK_ABI_DEPENDS.ffmpeg3+=	ffmpeg3>=3.1.2nb1
+BUILDLINK_ABI_DEPENDS.ffmpeg3+=	ffmpeg3>=3.4.5nb2
 BUILDLINK_PKGSRCDIR.ffmpeg3?=	../../multimedia/ffmpeg3
 
 pkgbase := ffmpeg3
-.  include "../../mk/pkg-build-options.mk"
+.include "../../mk/pkg-build-options.mk"
 
 .include "../../mk/bsd.fast.prefs.mk"
 
@@ -36,6 +36,14 @@ pkgbase := ffmpeg3
 
 .if !empty(PKG_BUILD_OPTIONS.ffmpeg3:Mlibvpx)
 .  include "../../multimedia/libvpx/buildlink3.mk"
+.endif
+
+.if !empty(PKG_BUILD_OPTIONS.ffmpeg3:Mvaapi)
+.  include "../../multimedia/libva/buildlink3.mk"
+.endif
+
+.if !empty(PKG_BUILD_OPTIONS.ffmpeg3:Mvdpau)
+.  include "../../multimedia/libvdpau/buildlink3.mk"
 .endif
 
 BUILDLINK_INCDIRS.ffmpeg3+=		include/ffmpeg3

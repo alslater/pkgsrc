@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.18 2016/02/26 11:27:19 jperkin Exp $
+# $NetBSD: Makefile,v 1.21 2018/03/07 11:57:43 wiz Exp $
 
-DISTNAME=	xf86-video-openchrome-0.3.3
-PKGREVISION=	4
+DISTNAME=	xf86-video-openchrome-0.6.0
+PKGREVISION=	1
 CATEGORIES=	x11
-MASTER_SITES=	http://www.openchrome.org/releases/
+MASTER_SITES=	http://xorg.freedesktop.org/archive/individual/driver/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.openchrome.org/
+HOMEPAGE=	https://www.freedesktop.org/wiki/Openchrome/
 COMMENT=	Modular Xorg OpenChrome driver for VIA UniChrome video chipsets
 
 USE_LANGUAGES=	c99
@@ -29,8 +29,5 @@ PLIST.XvMC=		yes
 
 .include "../../x11/modular-xorg-server/buildlink3.mk"
 .include "../../x11/libXvMC/buildlink3.mk"
-.include "../../x11/randrproto/buildlink3.mk"
-.include "../../x11/renderproto/buildlink3.mk"
-.include "../../x11/xextproto/buildlink3.mk"
-.include "../../x11/xproto/buildlink3.mk"
+.include "../../x11/xorgproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

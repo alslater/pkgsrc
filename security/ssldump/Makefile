@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	ssldump-0.9b3
-PKGREVISION=	15
+PKGREVISION=	16
 CATEGORIES=	security
 MASTER_SITES=	http://www.rtfm.com/ssldump/
 

@@ -2,7 +2,7 @@
 
 DISTNAME=	SSLCrypto-0.1.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	security python
 MASTER_SITES=	http://www.freenet.org.nz/python/SSLCrypto/
 

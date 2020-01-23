@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.51 2016/09/19 13:04:18 wiz Exp $
+# $NetBSD: Makefile,v 1.70 2019/11/03 11:45:36 rillig Exp $
 #
 
 DISTNAME=	gtk-vnc-0.5.2
-PKGREVISION=	14
+PKGREVISION=	29
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gtk-vnc/0.5/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://live.gnome.org/gtk-vnc
+#HOMEPAGE=	http://live.gnome.org/gtk-vnc
 COMMENT=	VNC viewer widget for GTK
 LICENSE=	gnu-lgpl-v2.1
 
@@ -20,7 +20,7 @@ PKGCONFIG_OVERRIDE+=	gtk-vnc-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	gtk-vnc-2.0.pc.in
 PKGCONFIG_OVERRIDE+=	gvnc-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	gvncpulse-1.0.pc.in
-PY_PATCHPLIST=	yes
+PY_PATCHPLIST=		yes
 
 CONFIGURE_ARGS+=	--with-coroutine=gthread
 
@@ -50,7 +50,7 @@ SUBST_STAGE.mapfile=	pre-build
 SUBST_FILES.mapfile=	gtk3-build/src/Makefile
 SUBST_SED.mapfile=	-e '/VERSION_SCRIPT_FLAGS.*GTK_VNC_VERSION_FILE/d'
 
-#VIEW_REQUIRED=0.6.0
+#VIEW_REQUIRED=	0.6.0
 #libview
 
 .include "../../devel/glib2/buildlink3.mk"

@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.49 2016/12/04 05:17:46 ryoon Exp $
+# $NetBSD: Makefile,v 1.58 2019/11/03 09:14:16 rillig Exp $
 
-PKGREVISION= 6
+PKGREVISION= 12
 .include "../../x11/qt4-libs/Makefile.common"
 
 PKGNAME=	qt4-sqlite3-${QTVERSION}
@@ -18,7 +18,7 @@ do-build:
 	cd ${WRKSRC}/src/tools/moc && env ${MAKE_ENV} ${GMAKE}
 	cd ${WRKSRC}/src/plugins/sqldrivers/sqlite && env ${MAKE_ENV} ${GMAKE}
 
-SQLDRVDIR=	${QTPREFIX}/plugins/sqldrivers
+SQLDRVDIR=		${QTPREFIX}/plugins/sqldrivers
 INSTALLATION_DIRS=	${SQLDRVDIR}
 
 do-install:

@@ -1,11 +1,11 @@
-# $NetBSD: termcap.buildlink3.mk,v 1.11 2016/04/11 04:22:34 dbj Exp $
+# $NetBSD: termcap.buildlink3.mk,v 1.13 2019/09/02 02:23:02 rillig Exp $
 #
 # This Makefile fragment is meant to be included by packages that require
 # a termcap implementation that supports the basic termcap functions:
 #
 #	tgetent, tgetstr, tgetflag, tgetnum, tgoto, tputs
 #
-# === Variables set by this file ===
+# System-defined variables:
 #
 # TERMCAP_TYPE
 #	The name of the selected termcap implementation.
@@ -69,3 +69,14 @@ BUILDLINK_PREFIX.termcap?=	${BUILDLINK_PREFIX.curses}
 BUILDLINK_LIBNAME.termcap?=	${BUILDLINK_LIBNAME.curses}
 BUILDLINK_LDADD.termcap?=	${BUILDLINK_LDADD.curses}
 .endif
+
+_VARGROUPS+=		termcap
+_DEF_VARS.termcap=	_TERMCAP_TYPES BUILD_DEFS_EFFECTS BUILDLINK_TRANSFORM
+_SYS_VARS.termcap=	CHECK_BUILTIN.termcap BUILTIN_LIBNAME.termcap \
+			TERMCAP_TYPE \
+			BUILDLINK_PREFIX.termcap BUILDLINK_LIBNAME.termcap \
+			BUILDLINK_LDADD.termcap \
+			BUILDLINK_PREFIX.curses BUILDLINK_LIBNAME.curses \
+			BUILDLINK_LDADD.curses
+_USER_VARS.termcap=	USE_BUILTIN.termcap
+_USE_VARS.termcap=	CURSES_TYPE

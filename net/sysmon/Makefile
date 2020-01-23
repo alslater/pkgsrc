@@ -2,6 +2,7 @@
 #
 
 DISTNAME=		sysmon-0.93
+PKGREVISION=		1
 CATEGORIES=		net
 MASTER_SITES=		ftp://puck.nether.net/pub/jared/
 

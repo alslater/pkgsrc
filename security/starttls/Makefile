@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		starttls-0.10
-PKGREVISION=		9
+PKGREVISION=		10
 CATEGORIES=		security
 MASTER_SITES=		ftp://opaopa.org/pub/elisp/
 

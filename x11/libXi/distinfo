@@ -1,6 +1,6 @@
-$NetBSD: distinfo,v 1.27 2016/10/25 12:30:02 wiz Exp $
+$NetBSD: distinfo,v 1.29 2019/06/19 17:30:51 wiz Exp $
 
-SHA1 (libXi-1.7.8.tar.bz2) = 8a07a2ff4cb39c87aeebbac3118f10e87b854637
-RMD160 (libXi-1.7.8.tar.bz2) = 3df3dc45f1a9b7be66d5f3fc19044e7dc375bd3d
-SHA512 (libXi-1.7.8.tar.bz2) = 36d8b48a4f98d3d41a65ba30c19506f776d72093380e66192048a72bb24868edb9fc7304071ca9207e9ac5c389398da59c639bb17abab5d6ef7a905ecd4c8816
-Size (libXi-1.7.8.tar.bz2) = 486332 bytes
+SHA1 (libXi-1.7.10.tar.bz2) = 79052e50ea07ce2431f8988a60553d9091d46207
+RMD160 (libXi-1.7.10.tar.bz2) = 28fa5b4378ba4cc2ffcfd6bdea073a1b28ecf817
+SHA512 (libXi-1.7.10.tar.bz2) = 591f0860bf5904897587c4990d6c852f3729a212d1ef390362d41242440e078221877c31db2232d5cc81727fe97f4e194b077f7de917e251e60641bbd06ee218
+Size (libXi-1.7.10.tar.bz2) = 484519 bytes

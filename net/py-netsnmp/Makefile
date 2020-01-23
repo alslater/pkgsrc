@@ -8,7 +8,7 @@ CATEGORIES=     net python
 MAINTAINER=     pkgsrc-users@NetBSD.org
 COMMENT=        Python bindings to extensible SNMP implementation
 
-PYTHON_VERSIONS_INCOMPATIBLE=   34 35
+PYTHON_VERSIONS_ACCEPTED=	27
 
 USE_LANGUAGES=  	c
 EGG_NAME=		netsnmp_python-1.0a1

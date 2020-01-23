@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.3 2016/11/04 10:55:44 fhajny Exp $
+@comment $NetBSD: PLIST,v 1.7 2019/11/20 08:32:02 adam Exp $
 bin/activate-global-python-argcomplete
 bin/python-argcomplete-check-easy-install-script
 bin/python-argcomplete-tcsh
@@ -7,10 +7,17 @@ ${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
 ${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
 ${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
 ${PYSITELIB}/${EGG_INFODIR}/not-zip-safe
+${PYSITELIB}/${EGG_INFODIR}/requires.txt
 ${PYSITELIB}/${EGG_INFODIR}/top_level.txt
 ${PYSITELIB}/argcomplete/__init__.py
 ${PYSITELIB}/argcomplete/__init__.pyc
 ${PYSITELIB}/argcomplete/__init__.pyo
+${PYSITELIB}/argcomplete/_check_console_script.py
+${PYSITELIB}/argcomplete/_check_console_script.pyc
+${PYSITELIB}/argcomplete/_check_console_script.pyo
+${PYSITELIB}/argcomplete/_check_module.py
+${PYSITELIB}/argcomplete/_check_module.pyc
+${PYSITELIB}/argcomplete/_check_module.pyo
 ${PYSITELIB}/argcomplete/bash_completion.d/python-argcomplete.sh
 ${PYSITELIB}/argcomplete/compat.py
 ${PYSITELIB}/argcomplete/compat.pyc
@@ -24,3 +31,6 @@ ${PYSITELIB}/argcomplete/my_argparse.pyo
 ${PYSITELIB}/argcomplete/my_shlex.py
 ${PYSITELIB}/argcomplete/my_shlex.pyc
 ${PYSITELIB}/argcomplete/my_shlex.pyo
+${PYSITELIB}/argcomplete/shellintegration.py
+${PYSITELIB}/argcomplete/shellintegration.pyc
+${PYSITELIB}/argcomplete/shellintegration.pyo

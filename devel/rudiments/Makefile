@@ -2,6 +2,7 @@
 #
 
 DISTNAME=		rudiments-0.56.0
+PKGREVISION=		1
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=rudiments/}
 

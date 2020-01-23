@@ -1,4 +1,4 @@
-# $NetBSD: cwrappers.mk,v 1.27 2016/10/05 12:46:43 joerg Exp $
+# $NetBSD: cwrappers.mk,v 1.31 2019/05/07 19:36:43 rillig Exp $
 #
 # This Makefile fragment implements integration of pkgtools/cwrappers.
 
@@ -9,7 +9,7 @@ BUILD_DEPENDS+=		cwrappers>=20150314:../../pkgtools/cwrappers
 
 # XXX This should be PREFIX, but USE_CROSSBASE overrides it.
 CWRAPPERS_SRC_DIR=	${LOCALBASE}/libexec/cwrappers
-CWRAPPERS_CONFIG_DIR=	${WRKDIR}/.cwrapper/config${LIBARCHSUFFIX}
+CWRAPPERS_CONFIG_DIR=	${WRKDIR}/.cwrapper/config
 CONFIGURE_ENV+=		CWRAPPERS_CONFIG_DIR=${CWRAPPERS_CONFIG_DIR}
 MAKE_ENV+=		CWRAPPERS_CONFIG_DIR=${CWRAPPERS_CONFIG_DIR}
 ALL_ENV+=		CWRAPPERS_CONFIG_DIR=${CWRAPPERS_CONFIG_DIR}
@@ -67,7 +67,7 @@ generate-cwrappers:
 .for wrappee in as cxx cc cpp f77 imake ld libtool shlibtool
 	${RUN}echo worklog=${WRKLOG:Q} > ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}}
 	${RUN}echo wrksrc=${WRKSRC:Q} >> ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}}
-	${RUN}case ${wrappee} in *libtool) ;; *) echo path=${_PATH_ORIG:Q} >> ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}};; esac
+	${RUN}case ${wrappee} in *libtool) ;; *) echo path=${_PATH_COMPONENTS:N${WRAPPER_BINDIR}:ts::Q} >> ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}};; esac
 	${RUN}echo exec_path=${WRAPPER_BINDIR}/${CWRAPPERS_ALIASES.${wrappee}:[1]} >> ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}}
 	${RUN}echo exec=${CWRAPPERS_WRAPPEE.${wrappee}:Q} >> ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}}
 .  for cmd in ${WRAPPER_REORDER_CMDS}
@@ -91,6 +91,11 @@ generate-cwrappers:
 .  for alias in ${CWRAPPERS_ALIASES.${wrappee}}
 	${RUN}ln -s ${CWRAPPERS_SRC_DIR}/${CWRAPPERS_CONFIG.${wrappee}}-wrapper ${WRAPPER_BINDIR}/${alias}
 .  endfor
+. if ${_PKGSRC_MKPIE} == "yes"
+.  for arg in ${_MKPIE_LDFLAGS.gcc}
+	${RUN}echo append_executable=${arg} >> ${CWRAPPERS_CONFIG_DIR}/${CWRAPPERS_CONFIG.${wrappee}}
+.  endfor
+. endif
 .endfor
 
 PREPEND_PATH+=		${WRAPPER_BINDIR}
@@ -99,7 +104,7 @@ _COOKIE.wrapper=	${WRKDIR}/.wrapper_done
 
 .PHONY: wrapper
 .if !target(wrapper)
-.  if exists(${_COOKIE.wrapper})
+.  if exists(${_COOKIE.wrapper}) && !${_CLEANING}
 wrapper:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -113,7 +118,7 @@ wrapper: barrier
 acquire-wrapper-lock: acquire-lock
 release-wrapper-lock: release-lock
 
-.if exists(${_COOKIE.wrapper})
+.if exists(${_COOKIE.wrapper}) && !${_CLEANING}
 ${_COOKIE.wrapper}:
 	@${DO_NADA}
 .else
@@ -121,11 +126,7 @@ ${_COOKIE.wrapper}: real-wrapper
 .endif
 
 .PHONY: real-wrapper
-.if defined(_MULTIARCH)
-real-wrapper: wrapper-message wrapper-dirs-multi wrapper-vars-multi pre-wrapper do-wrapper-multi post-wrapper wrapper-cookie error-check
-.else
 real-wrapper: wrapper-message wrapper-dirs wrapper-vars pre-wrapper do-wrapper post-wrapper wrapper-cookie error-check
-.endif
 
 .PHONY: wrapper-message
 wrapper-message:
@@ -142,16 +143,6 @@ do-wrapper: generate-cwrappers
 .if !target(do-wrapper)
 do-wrapper:
 	@${DO_NADA}
-.endif
-
-.if defined(_MULTIARCH)
-.  for _tgt_ in wrapper-dirs wrapper-vars do-wrapper
-.PHONY: ${_tgt_}-multi
-${_tgt_}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} WRKSRC=${WRKSRC}-${_abi_} ${_tgt_}
-.    endfor
-.  endfor
 .endif
 
 .if !target(pre-wrapper)

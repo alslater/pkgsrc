@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.3 2014/08/08 21:29:39 wiz Exp $
+# $NetBSD: Makefile,v 1.5 2017/03/16 14:37:33 wiz Exp $
 
 .include "Makefile.common"
 

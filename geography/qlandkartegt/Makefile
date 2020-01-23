@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	qlandkartegt-1.4.2
-PKGREVISION=	22
+PKGREVISION=	23
 CATEGORIES=	geography
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=qlandkartegt/}
 

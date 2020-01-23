@@ -2,7 +2,7 @@
 
 .include "Makefile.common"
 
-PKGREVISION=	15
+PKGREVISION=	16
 COMMENT=	Password sniffer (webspy)
 
 DEPENDS+=	dsniff-nox11-[0-9]*:../../security/dsniff-nox11

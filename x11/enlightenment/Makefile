@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	enlightenment-0.17.3
-PKGREVISION=	8
+PKGREVISION=	9
 CATEGORIES=	x11
 MASTER_SITES=	http://download.enlightenment.org/releases/
 EXTRACT_SUFX=	.tar.bz2

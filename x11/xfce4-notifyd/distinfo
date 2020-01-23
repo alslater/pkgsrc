@@ -1,6 +1,6 @@
-$NetBSD: distinfo,v 1.2 2015/11/04 03:29:05 agc Exp $
+$NetBSD: distinfo,v 1.6 2019/04/28 07:48:29 gutteridge Exp $
 
-SHA1 (xfce4-notifyd-0.2.4.tar.bz2) = 66458a41f0ddeb350e5fb2e4d7cadfef6a5066f7
-RMD160 (xfce4-notifyd-0.2.4.tar.bz2) = a07e2c12f7d802f08c2787497f66fa5ec6c1aea1
-SHA512 (xfce4-notifyd-0.2.4.tar.bz2) = 4cee6395ee925e41ec22baa0fca21b38261a547ddff32f6c140db91996e2aa39b86113ffbe42da3c98728513a10eadd99504a05f31100762eb5b19bf8a74ae7c
-Size (xfce4-notifyd-0.2.4.tar.bz2) = 361619 bytes
+SHA1 (xfce4-notifyd-0.4.4.tar.bz2) = 4ff6270b95960540f34e66af76145ed3c874a282
+RMD160 (xfce4-notifyd-0.4.4.tar.bz2) = d1b19c9a4acb0da36186d8b4c85c431c0fba3ee8
+SHA512 (xfce4-notifyd-0.4.4.tar.bz2) = 546a5063673e36ef26bcdac624bfcef41a14918dbb496fb3d282613334f173b51669184b6bcfbee0f07a17863620898be2f464e487ca9755abe7285d6a43d8d5
+Size (xfce4-notifyd-0.4.4.tar.bz2) = 536304 bytes

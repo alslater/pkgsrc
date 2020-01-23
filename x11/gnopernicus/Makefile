@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		gnopernicus-1.1.1
-PKGREVISION=		41
+PKGREVISION=		42
 CATEGORIES=		x11
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/gnopernicus/1.1/}
 EXTRACT_SUFX=		.tar.bz2

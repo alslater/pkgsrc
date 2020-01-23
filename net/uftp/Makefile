@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.5 2016/03/05 11:29:13 jperkin Exp $
 
 DISTNAME=	uftp-4.1.2
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	net
 MASTER_SITES=	http://sourceforge.net/projects/uftp-multicast/files/source-tar/
 EXTRACT_SUFX=	.tar

@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.16 2016/09/19 13:04:19 wiz Exp $
 
 DISTNAME=		gloox-1.0.17
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		chat
 MASTER_SITES=		http://camaya.net/download/
 EXTRACT_SUFX=		.tar.bz2

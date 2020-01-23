@@ -1,11 +1,11 @@
-# $NetBSD: Makefile,v 1.113 2017/09/18 16:54:06 adam Exp $
+# $NetBSD: Makefile,v 1.118 2019/08/03 08:31:25 adam Exp $
 
-DISTNAME=	freetype-2.8.1
+DISTNAME=	freetype-2.10.1
 PKGNAME=	${DISTNAME:S/-/2-/}
 CATEGORIES=	graphics
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=freetype/}
 MASTER_SITES+=	http://download.savannah.gnu.org/releases/freetype/
-EXTRACT_SUFX=	.tar.bz2
+EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://www.freetype.org/
@@ -13,7 +13,6 @@ COMMENT=	Font rendering engine and library API
 LICENSE=	gnu-gpl-v2
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		bin lib
 USE_TOOLS+=		grep gmake pkg-config
 GNU_CONFIGURE=		yes
 CONFIGURE_DIRS=		builds/unix
@@ -22,6 +21,9 @@ CONFIGURE_ARGS+=	--includedir=${PREFIX}/include
 CONFIGURE_ARGS+=	--enable-shared
 CONFIGURE_ARGS+=	--with-harfbuzz=no
 CONFIGURE_ENV+=		ac_cv_path_GREP=${GREP:Q} ac_cv_path_EGREP=${EGREP:Q}
+
+# Remove this when all dependent packages have switched to pkg-config
+CONFIGURE_ARGS+=	--enable-freetype-config
 
 .if exists(/System/Library/Frameworks/Carbon.framework)
 LDFLAGS+=	-framework Carbon

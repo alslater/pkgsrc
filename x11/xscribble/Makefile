@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.18 2012/10/29 05:07:20 asau Exp $
+# $NetBSD: Makefile,v 1.20 2019/11/03 09:14:21 rillig Exp $
 
 DISTNAME=	xscribble
 PKGNAME=	xscribble-20000616
@@ -8,12 +8,12 @@ MASTER_SITES=	http://www.handhelds.org/download/projects/xscribble/
 EXTRACT_SUFX=	.tgz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.handhelds.org/projects/xscribble.html
+#HOMEPAGE=	http://www.handhelds.org/projects/xscribble.html
 COMMENT=	Handwriting recognition (like graffiti)
 
 MAKE_JOBS_SAFE=		no
 
-USE_IMAKE=	YES
+USE_IMAKE=		YES
 NO_INSTALL_MANPAGES=	YES
 
 .include "../../mk/bsd.prefs.mk"

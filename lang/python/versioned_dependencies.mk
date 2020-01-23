@@ -1,4 +1,4 @@
-# $NetBSD: versioned_dependencies.mk,v 1.26 2016/11/07 11:07:05 wiz Exp $
+# $NetBSD: versioned_dependencies.mk,v 1.35 2019/11/15 14:05:54 wiz Exp $
 #
 # This file determines which separate distribution of a Python
 # package is used as dependency, depending on the Python version
@@ -9,23 +9,23 @@
 # PYTHON_VERSIONED_DEPENDENCIES
 #       The Python package which should be added as a dependency.
 #
-#       Possible values: dateutil
+#       Possible values: Pmw X cherrypy dialog ipython jsonlib python-digest sphinx
 #       Default: (nothing)
 #
 
 .include "../../lang/python/pyversion.mk"
 
+# format: short name for PYTHON_VERSIONED_DEPENDENCIES<space>python-2.x path<space>python-3.x path
 _SUPPORTED_PACKAGES=	# empty
 _SUPPORTED_PACKAGES+=	Pmw x11/py-Pmw x11/py-Pmw2
 _SUPPORTED_PACKAGES+=	X textproc/py-X2 textproc/py-X
-_SUPPORTED_PACKAGES+=	cairo graphics/py-cairo graphics/py-cairo3
-_SUPPORTED_PACKAGES+=	dateutil time/py-dateutil time/py-dateutil
+_SUPPORTED_PACKAGES+=	cherrypy www/py-cherrypy17 www/py-cherrypy
 _SUPPORTED_PACKAGES+=	dialog devel/py-dialog2 devel/py-dialog
-_SUPPORTED_PACKAGES+=	ephem math/py-ephem math/py-ephem3
-_SUPPORTED_PACKAGES+=	flup www/py-flup www/py-flup3
-_SUPPORTED_PACKAGES+=	gobject devel/py-gobject devel/py-gobject3
+_SUPPORTED_PACKAGES+=	ipython devel/py-ipython5 devel/py-ipython
 _SUPPORTED_PACKAGES+=	jsonlib textproc/py-jsonlib textproc/py-jsonlib3
 _SUPPORTED_PACKAGES+=	python-digest www/py-python-digest www/py-python3-digest
+_SUPPORTED_PACKAGES+=	sphinx textproc/py-sphinx1 textproc/py-sphinx
+_SUPPORTED_PACKAGES+=	more-itertools devel/py-more-itertools2 devel/py-more-itertools
 
 .for pattern in ${PYTHON_VERSIONED_DEPENDENCIES}
 _PKG_MATCHED=	no
@@ -43,6 +43,10 @@ dir:=	${py3dir}
 .include "../../${dir}/buildlink3.mk"
 .      elif "${type}" == ":build"
 BUILD_DEPENDS:=	${BUILD_DEPENDS} ${PYPKGPREFIX}-${pkg}-[0-9]*:../../${dir}
+.      elif "${type}" == ":test"
+TEST_DEPENDS:=	${TEST_DEPENDS} ${PYPKGPREFIX}-${pkg}-[0-9]*:../../${dir}
+.      elif "${type}" == ":tool"
+TOOL_DEPENDS:=	${TOOL_DEPENDS} ${PYPKGPREFIX}-${pkg}-[0-9]*:../../${dir}
 .      else
 DEPENDS:=	${DEPENDS} ${PYPKGPREFIX}-${pkg}-[0-9]*:../../${dir}
 .      endif

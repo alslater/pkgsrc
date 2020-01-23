@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.56 2016/06/27 19:16:02 maya Exp $
 
 DISTNAME=	libtorrent-0.13.6
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	http://rtorrent.net/downloads/
 

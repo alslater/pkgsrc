@@ -3,6 +3,7 @@
 DISTNAME=	phonon-backend-vlc-0.9.0
 
 COMMENT=	Multimedia API for KDE and QT - VLC backend
+PKGREVISION=	1
 
 .include "Makefile.common"
 

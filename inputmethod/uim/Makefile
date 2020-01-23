@@ -3,7 +3,7 @@
 
 .include "../../inputmethod/uim/Makefile.common"
 
-PKGREVISION=		35
+PKGREVISION=		36
 COMMENT=		Multilingual input method library
 #LICENSE=		See ${WRKSRC}/COPYING
 

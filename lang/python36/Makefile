@@ -1,9 +1,9 @@
-# $NetBSD: Makefile,v 1.14 2018/06/17 19:21:22 adam Exp $
+# $NetBSD: Makefile,v 1.20 2019/10/15 16:55:44 adam Exp $
 
 .include "dist.mk"
 
 PKGNAME=	python36-${PY_DISTVERSION}
-#PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	lang python
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -13,7 +13,7 @@ LICENSE=	python-software-foundation
 
 CONFLICTS+=	python-[0-9]*
 
-PLIST_AWK+=		-f ${PKGSRCDIR}/lang/python/plist-python.awk
+PLIST_AWK=		-f ${PKGSRCDIR}/lang/python/plist-python.awk
 PLIST_AWK_ENV+=		PYVERS=36
 PRINT_PLIST_AWK+=	/^[^@]/ && /[^\/]+\.pyc$$/ {
 PRINT_PLIST_AWK+=	sub(/__pycache__\//, "")
@@ -27,7 +27,6 @@ CONFIGURE_ARGS+=	--enable-shared
 CONFIGURE_ARGS+=	--with-system-ffi
 CONFIGURE_ARGS+=	--with-threads
 CONFIGURE_ARGS+=	--without-ensurepip
-CONFIGURE_ARGS+=	--without-pymalloc
 CONFIGURE_ENV+=		OPT=${CFLAGS:M*:Q}
 CONFIGURE_ENV+=		ac_cv_path_mkdir=${TOOLS_PATH.mkdir}
 PKGCONFIG_OVERRIDE+=	Misc/python.pc.in
@@ -78,22 +77,17 @@ PLIST.oss=	yes
 CFLAGS+=		-I${OSX_SDK_PATH:Q}/usr/include
 .endif
 
-PLIST_VARS+=	dll nis no-nis
-.if ${OPSYS} == "IRIX"
-.  if ${ABI} == "64"
-PLIST.no-nis=	yes
-.  else
-PLIST.nis=	yes
+PLIST_VARS+=	nis
+.for incdir in ${_OPSYS_INCLUDE_DIRS}
+.  if (exists(${incdir}/rpc/rpc.h) || exists(${incdir}/tirpc/rpc/rpc.h))
+HAVE_RPC_H=	yes
 .  endif
-.else
-PLIST.dll=	yes
-.  if ${OPSYS} != "NetBSD" || exists(/usr/bin/ypcat)
-.    if "${OS_VARIANT}" != "chromeos"
-PLIST.nis=	yes
-.    endif
-.  else
-PLIST.no-nis=	yes
+.  if (exists(${incdir}/rpcsvc/yp_prot.h) || exists(${incdir}/nsl/rpcsvc/yp_prot.h))
+HAVE_YP_PROT_H=	yes
 .  endif
+.endfor
+.if (${HAVE_RPC_H:Uno} == yes && ${HAVE_YP_PROT_H:Uno} == yes)
+PLIST.nis=	yes
 .endif
 
 PLIST_SUBST+=	PY_VER_SUFFIX=${PY_VER_SUFFIX:Q}
@@ -153,25 +147,16 @@ REPLACE_FILES.python+=	Lib/turtledemo/yinyang.py
 REPLACE_FILES.python+=	Lib/uu.py
 REPLACE_FILES.python+=	Lib/webbrowser.py
 
+# XXX: It might be needed to add manually more paths like ${PREFIX}/qt5/lib
+# Test: python -c 'from ctypes.util import find_library; print(find_library("ffi"));'
 SUBST_CLASSES+=		findlib
-SUBST_MESSAGE.findlib=	Fixing find_library_file on Darwin.
+SUBST_MESSAGE.findlib=	Fixing find_library().
 SUBST_STAGE.findlib=	pre-configure
 SUBST_FILES.findlib=	Lib/ctypes/macholib/dyld.py
 SUBST_FILES.findlib+=	Lib/ctypes/util.py
 SUBST_FILES.findlib+=	Lib/distutils/unixccompiler.py
 SUBST_SED.findlib=	-e 's,/usr/local,${PREFIX},'
-
-# XXX: It might be needed to add manually more paths like ${PREFIX}/qt5/lib
-# Testing:
-# >>> from ctypes.util import find_library
-# >>> find_library("m")
-# 'libm.so.0'
-
-SUBST_CLASSES+=		pfindlib
-SUBST_MESSAGE.pfindlib=	Fixing find_library() on POSIX-like (excluding Darwin) systems.
-SUBST_STAGE.pfindlib=	pre-configure
-SUBST_FILES.pfindlib=	Lib/ctypes/util.py
-SUBST_SED.pfindlib=	-e "s!\('-Wl,-t', \)!'${COMPILER_RPATH_FLAG}${PREFIX}/lib', '-L${PREFIX}/lib', \1!"
+SUBST_SED.findlib+=	-e "s!\('-Wl,-t'\)!'${COMPILER_RPATH_FLAG}${PREFIX}/lib', '-L${PREFIX}/lib', \1!"
 
 .include "options.mk"
 
@@ -182,6 +167,10 @@ SUBST_FILES.sslbase=	setup.py
 SUBST_VARS.sslbase=	SSLBASE
 
 CHECK_INTERPRETER_SKIP=	lib/python${PY_VER_SUFFIX}/venv/scripts/posix/pydoc
+
+# Harmless PKG_CONFIG_LIBDIR references to BUILDLINK_DIR
+CHECK_WRKREF_SKIP+=	lib/python3.5/_sysconfigdata.py
+CHECK_WRKREF_SKIP+=	lib/python3.5/config-3.5/Makefile
 
 # Avoid error: Cannot generate ./Include/opcode.h, python not found !
 post-configure:

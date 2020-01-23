@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	zphoto-1.2
-PKGREVISION=	43
+PKGREVISION=	44
 CATEGORIES=	graphics
 MASTER_SITES=	http://0xcc.net/zphoto/
 

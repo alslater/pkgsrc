@@ -8,7 +8,7 @@
 DISTNAME=	ssmtp_2.64.orig
 EXTRACT_SUFX=	.tar.bz2
 PKGNAME=	ssmtp-2.64
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	mail
 MASTER_SITES=	${MASTER_SITE_DEBIAN:=pool/main/s/ssmtp/}
 

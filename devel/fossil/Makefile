@@ -2,6 +2,7 @@
 
 DISTNAME=	fossil-src-2.2
 PKGNAME=	${DISTNAME:S/-src//}
+PKGREVISION=	1
 WRKSRC=		${WRKDIR}/${PKGNAME}
 CATEGORIES=	devel scm
 MASTER_SITES=	http://fossil-scm.org/xfer/uv/download/

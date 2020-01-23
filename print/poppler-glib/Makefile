@@ -1,47 +1,56 @@
-# $NetBSD: Makefile,v 1.63 2016/11/08 10:51:26 wiz Exp $
+# $NetBSD: Makefile,v 1.80 2019/12/08 13:56:25 wiz Exp $
 
 .include "../../print/poppler/Makefile.common"
 
 PKGNAME=	poppler-glib-${POPPLER_VERS}
+PKGREVISION=	1
 
 COMMENT=	PDF rendering library (GLib wrapper)
-MAINTAINER=	reed@reedmedia.net
 
-CONFLICTS+=		poppler<0.4.5nb1
+CONFLICTS+=	poppler<0.4.5nb1
 
-GNU_CONFIGURE=		yes
-USE_TOOLS+=		gmake
-PKGCONFIG_OVERRIDE+=	${WRKSRC}/poppler-glib.pc.in
+PKGCONFIG_OVERRIDE+=	${WRKSRC}/poppler-glib.pc.cmake
 
-CONFIGURE_ARGS+=	--sysconfdir=${PKG_SYSCONFDIR:Q}
-# Build the cairo graphics backend, required by glib.
-CONFIGURE_ARGS+=	--enable-cairo-output
+USE_TOOLS+=	python
+
 # Don't build the splash graphics backend.
-CONFIGURE_ARGS+=	--disable-splash-output
-# Don't compile poppler qt wrapper.
-CONFIGURE_ARGS+=	--disable-poppler-qt
+CMAKE_ARGS+=	-DENABLE_SPLASH=OFF
 # Don't compile GTK+ test program.
-CONFIGURE_ARGS+=	--disable-gtk-test
-CONFIGURE_ARGS+=	--disable-utils
-CONFIGURE_ARGS+=	--disable-poppler-cpp
+CMAKE_ARGS+=	-DBUILD_GTK_TESTS=OFF
+# Compile GLib wrapper which also needs gtk2
+CMAKE_ARGS+=	-DENABLE_GLIB=ON
+# Do not generate glib API documentation.
+CMAKE_ARGS+=	-DENABLE_GTK_DOC=OFF
+# Don't build and install the tools
+CMAKE_ARGS+=	-DENABLE_UTILS=OFF
+# Don't compile poppler cpp wrapper.
+CMAKE_ARGS+=	-DENABLE_CPP=OFF
+# Don't compile poppler qt5 wrapper.
+CMAKE_ARGS+=	-DENABLE_QT5=OFF
+# Don't build libcurl based HTTP support. ## might want to include
+CMAKE_ARGS+=	-DENABLE_LIBCURL=OFF
 
 CFLAGS.FreeBSD+=	-DLLONG_MAX=__LLONG_MAX
+
+# The result binary of g-ir-scanner cannot find libpoppler-glib.so.
+MAKE_ENV+=	LD_LIBRARY_PATH=${WRKSRC}/glib
 
 BUILDLINK_API_DEPENDS.poppler+=     poppler-${POPPLER_VERS}{,nb*}
 .include "../../print/poppler/buildlink3.mk"
 
-BUILD_DIRS=		goo fofi poppler glib
 INSTALL_DIRS=		glib
 
-INSTALLATION_DIRS+=	lib${LIBARCHSUFFIX}/pkgconfig
+INSTALLATION_DIRS+=	lib/pkgconfig
 
 post-install:
-	${INSTALL_DATA} ${WRKSRC}/poppler-cairo.pc ${DESTDIR}${PREFIX}/lib${LIBARCHSUFFIX}/pkgconfig
-	${INSTALL_DATA} ${WRKSRC}/poppler-glib.pc ${DESTDIR}${PREFIX}/lib${LIBARCHSUFFIX}/pkgconfig
+	${INSTALL_DATA} ${WRKSRC}/poppler-glib.pc ${DESTDIR}${PREFIX}/lib/pkgconfig
 
+.include "../../lang/python/tool.mk"
 BUILDLINK_ABI_DEPENDS.glib2+=	glib2>=2.41.0
 .include "../../devel/glib2/buildlink3.mk"
-.include "../../graphics/cairo/buildlink3.mk"
+.include "../../devel/gobject-introspection/buildlink3.mk"
+.include "../../graphics/cairo-gobject/buildlink3.mk"
+#.include "../../textproc/gtk-doc/buildlink3.mk"
 .include "../../mk/jpeg.buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

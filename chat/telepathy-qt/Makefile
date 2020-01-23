@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.5 2016/07/09 13:03:33 wiz Exp $
+# $NetBSD: Makefile,v 1.14 2019/11/02 22:18:26 rillig Exp $
 
 DISTNAME=	telepathy-qt-0.9.6.1
-PKGREVISION=	1
+PKGREVISION=	3
 CATEGORIES=	chat
 MASTER_SITES=	http://telepathy.freedesktop.org/releases/telepathy-qt/
 
 MAINTAINER=	jaapb@NetBSD.org
-HOMEPAGE=	http://telepathy.freedesktop.org/doc/telepathy-qt/
+HOMEPAGE=	https://telepathy.freedesktop.org/doc/telepathy-qt/
 COMMENT=	Qt bindings for telepathy
 LICENSE=	gnu-lgpl-v2.1
 
@@ -18,9 +18,9 @@ PKGCONFIG_OVERRIDE+=	TelepathyQt/TelepathyQt.pc.in
 PKGCONFIG_OVERRIDE+=	TelepathyQt/TelepathyQtService.pc.in
 PKGCONFIG_OVERRIDE+=	TelepathyQt/Farstream/TelepathyQtFarstream.pc.in
 
-PYTHON_FOR_BUILD_ONLY=	yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 0.24.1
-BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
+PYTHON_FOR_BUILD_ONLY=		yes
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 0.24.1
+BUILD_DEPENDS+=			${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 
 BUILDLINK_TRANSFORM.SunOS+=	rm:-Wl,--no-add-needed
 

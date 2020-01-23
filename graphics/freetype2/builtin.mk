@@ -1,4 +1,4 @@
-# $NetBSD: builtin.mk,v 1.16 2016/04/07 10:02:13 adam Exp $
+# $NetBSD: builtin.mk,v 1.19 2019/11/02 22:37:56 rillig Exp $
 
 BUILTIN_PKG:=	freetype2
 
@@ -40,7 +40,7 @@ BUILTIN_VERSION.freetype2!=						\
 		${H_FREETYPE2}
 BUILTIN_PKG.freetype2=	freetype2-${BUILTIN_VERSION.freetype2}
 .endif
-MAKEVARS+=	BUILTIN_PKG.freetype2
+MAKEVARS+=		BUILTIN_PKG.freetype2
 
 ###
 ### Determine whether we should use the built-in implementation if it
@@ -57,7 +57,7 @@ USE_BUILTIN.freetype2=	yes
 .      for _dep_ in ${BUILDLINK_API_DEPENDS.freetype2}
 .        if !empty(USE_BUILTIN.freetype2:M[yY][eE][sS])
 USE_BUILTIN.freetype2!=							\
-	if ${PKG_ADMIN} pmatch ${_dep_:Q} ${BUILTIN_PKG.freetype2:Q}; then \
+	if ${PKG_ADMIN} pmatch ${_dep_:Q} ${BUILTIN_PKG.freetype2}; then \
 		${ECHO} yes;						\
 	else								\
 		${ECHO} no;						\
@@ -67,7 +67,7 @@ USE_BUILTIN.freetype2!=							\
 .    endif
 .  endif  # PREFER.freetype2
 .endif
-MAKEVARS+=	USE_BUILTIN.freetype2
+MAKEVARS+=		USE_BUILTIN.freetype2
 
 ###
 ### The section below only applies if we are not including this file
@@ -85,15 +85,13 @@ BUILDLINK_API_DEPENDS.freetype2+=	freetype2>=2.1.3
 .    if !empty(MACHINE_PLATFORM:MNetBSD-[67].*-*) && \
 	(("${BUILTIN_VERSION.freetype2}" == "2.4.5") || \
 	("${BUILTIN_VERSION.freetype2}" == "2.5.3"))
-_FT2_VER_MAP.2.5.3=17.2.11
-_FT2_VER_MAP.2.4.5=13.0.7
-SUBST_CLASSES+=		fx-ft2-pc-version
-SUBST_STAGE.fx-ft2-pc-version=	post-wrapper
-SUBST_MESSAGE.fx-ft2-pc-version=\
-       Fixes wrong module version in freetype2.pc
-SUBST_FILES.fx-ft2-pc-version=	${BUILDLINK_X11_DIR}/lib/pkgconfig/freetype2.pc
-SUBST_SED.fx-ft2-pc-version=   \
-       -e 's|^\(Version:\).*|\1 ${_FT2_VER_MAP.${BUILTIN_VERSION.freetype2}}|'
+_FT2_VER_MAP.2.5.3=			17.2.11
+_FT2_VER_MAP.2.4.5=			13.0.7
+SUBST_CLASSES+=				fx-ft2-pc-version
+SUBST_STAGE.fx-ft2-pc-version=		post-wrapper
+SUBST_MESSAGE.fx-ft2-pc-version=	Fixes wrong module version in freetype2.pc
+SUBST_FILES.fx-ft2-pc-version=		${BUILDLINK_X11_DIR}/lib/pkgconfig/freetype2.pc
+SUBST_SED.fx-ft2-pc-version=		-e 's|^\(Version:\).*|\1 ${_FT2_VER_MAP.${BUILTIN_VERSION.freetype2}}|'
 .    endif
 .  endif
 

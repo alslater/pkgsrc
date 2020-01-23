@@ -1,4 +1,4 @@
-# $NetBSD: install.mk,v 1.69 2016/07/26 08:41:36 jperkin Exp $
+# $NetBSD: install.mk,v 1.78 2019/09/06 09:00:35 jperkin Exp $
 #
 # This file provides the code for the "install" phase.
 #
@@ -21,7 +21,7 @@
 #	in order to install the package.
 #
 
-# === User-settable variables ===
+# User-settable variables:
 #
 # INSTALL_UNSTRIPPED
 #	If "yes", all binaries and shared libraries are installed
@@ -34,16 +34,15 @@
 #
 # Keywords: strip unstripped
 #
-# === Package-settable variables ===
+# Package-settable variables:
 #
 # INSTALLATION_DIRS
 #	A list of directories that should be created at the very
-#	beginning of the install phase. These directories are relative
-#	to ${PREFIX}. As a convenience, a leading gnu/ is transformed
-#	to ${PKGGNUDIR} and a leading man/ is transformed to
-#	${PKGMANDIR}, to save package authors from typing too much.
-#	Additionally, in the MULTIARCH case, ${{BIN,LIB}ARCHDIR} will
-#	be expanded to all supported MULTIARCH_ABIS.
+#	beginning of the install phase. These directories MUST either
+#	be paths that contain a leading {PREFIX}/ or be relative
+#	paths. As a convenience, a leading gnu/ is transformed to
+#	${PKGGNUDIR} and a leading man/ is transformed to ${PKGMANDIR},
+#	to save package authors from typing too much.
 #
 # AUTO_MKDIRS
 # INSTALLATION_DIRS_FROM_PLIST
@@ -56,6 +55,13 @@
 #	A variable name that should be set as staged installation location
 #	presented as ${DESTDIR} at install phase.
 #	"DESTDIR" is set by default.
+#
+# STRIP_DEBUG_SUPPORTED
+#	If set to anything other than "yes" (the default), stripping will
+#	be disabled for the package.
+#
+# STRIP_FILES_SKIP
+#	A list of files relative to ${PREFIX} that will not be stripped.
 
 ######################################################################
 ### install (PUBLIC)
@@ -71,7 +77,7 @@ _INSTALL_TARGETS+=	release-install-lock
 
 .PHONY: stage-install
 .if !target(stage-install)
-.  if exists(${_COOKIE.install})
+.  if exists(${_COOKIE.install}) && !${_CLEANING}
 stage-install:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -85,7 +91,7 @@ stage-install: barrier
 acquire-install-lock: acquire-lock
 release-install-lock: release-lock
 
-.if exists(${_COOKIE.install})
+.if exists(${_COOKIE.install}) && !${_CLEANING}
 ${_COOKIE.install}:
 	@${DO_NADA}
 .else
@@ -101,11 +107,7 @@ ${_COOKIE.install}: real-install
 _REAL_INSTALL_TARGETS+=	install-check-interactive
 _REAL_INSTALL_TARGETS+=	install-check-version
 _REAL_INSTALL_TARGETS+=	install-message
-.if defined(_MULTIARCH)
-_REAL_INSTALL_TARGETS+=	stage-install-vars-multi
-.else
 _REAL_INSTALL_TARGETS+=	stage-install-vars
-.endif
 _REAL_INSTALL_TARGETS+=	unprivileged-install-hook
 _REAL_INSTALL_TARGETS+=	install-all
 _REAL_INSTALL_TARGETS+=	install-cookie
@@ -170,32 +172,27 @@ _INSTALL_ALL_TARGETS+=		install-check-umask
 .if empty(CHECK_FILES:M[nN][oO]) && !empty(CHECK_FILES_SUPPORTED:M[Yy][Ee][Ss])
 _INSTALL_ALL_TARGETS+=		check-files-pre
 .endif
-.if defined(_MULTIARCH)
-_INSTALL_ALL_TARGETS+=		install-makedirs-multi
-.else
 _INSTALL_ALL_TARGETS+=		install-makedirs
-.endif
 .if defined(INSTALLATION_DIRS_FROM_PLIST) && \
 	!empty(INSTALLATION_DIRS_FROM_PLIST:M[Yy][Ee][Ss])
 _INSTALL_ALL_TARGETS+=		install-dirs-from-PLIST
 .elif defined(AUTO_MKDIRS) && !empty(AUTO_MKDIRS:M[Yy][Ee][Ss])
 _INSTALL_ALL_TARGETS+=		install-dirs-from-PLIST
 .endif
-.if defined(_MULTIARCH)
-_INSTALL_ALL_TARGETS+=		pre-install-multi
-_INSTALL_ALL_TARGETS+=		do-install-multi
-_INSTALL_ALL_TARGETS+=		post-install-multi
-.else
 _INSTALL_ALL_TARGETS+=		pre-install
 _INSTALL_ALL_TARGETS+=		do-install
 _INSTALL_ALL_TARGETS+=		post-install
-.endif
 _INSTALL_ALL_TARGETS+=		plist
-.if !empty(STRIP_DEBUG:M[Yy][Ee][Ss])
+.if ${_PKGSRC_USE_CTF} == "yes"
+_INSTALL_ALL_TARGETS+=		install-ctf
+.endif
+.if ${STRIP_DEBUG:Uno:tl} == "yes" && ${STRIP_DEBUG_SUPPORTED:Uyes:tl} == "yes"
 _INSTALL_ALL_TARGETS+=		install-strip-debug
 .endif
 _INSTALL_ALL_TARGETS+=		install-doc-handling
+.if ${_USE_NEW_PKGINSTALL:Uno} == "no"
 _INSTALL_ALL_TARGETS+=		install-script-data
+.endif
 .if empty(CHECK_FILES:M[nN][oO]) && !empty(CHECK_FILES_SUPPORTED:M[Yy][Ee][Ss])
 _INSTALL_ALL_TARGETS+=		check-files-post
 .endif
@@ -251,19 +248,33 @@ _INSTALL_ONE_DIR_CMD= { \
 	esac;								\
 	}
 
+# _INSTALLATION_DIRS
+#	Contains the items listed in ${INSTALLATION_DIRS} with the
+#	following transformations performed, in order:
+#
+#	1. Leading "${PREFIX}/" is stripped.
+#	2. Leading "gnu/" is transformed into "${PKGGNUDIR}".
+#	3. Leading "man/" is transformed into "${PKGMANDIR}/".
+#
+# Check that paths listed in ${_INSTALLATION_DIRS} are relative paths.
+# This can't be an assertion because some variables used when listing
+# directories in INSTALLATION_DIRS are not expanded until they are
+# used.
+#
+_INSTALLATION_DIRS=	${INSTALLATION_DIRS:C,^${PREFIX}/,,:C,^gnu/,${PKGGNUDIR},:C,^man/,${PKGMANDIR}/,}
+
 .PHONY: install-makedirs
 install-makedirs:
 	${RUN} ${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}
 .if defined(INSTALLATION_DIRS) && !empty(INSTALLATION_DIRS)
 	@${STEP_MSG} "Creating installation directories"
-	${RUN}								\
-	for dir in ${INSTALLATION_DIRS:C,^gnu/,${PKGGNUDIR},:C,^man/,${PKGMANDIR}/,}; do \
+	${RUN} set -- args ${_INSTALLATION_DIRS}; shift;		\
+	while ${TEST} "$$#" -gt 0; do					\
+		dir="$$1"; shift;					\
 		case "$$dir" in						\
-		${PREFIX}/*)						\
-			dir=`${ECHO} "$$dir" | ${SED} "s|^${PREFIX}/||"` ;; \
-		/*)	continue ;;					\
+		/*)	${FAIL_MSG} "INSTALLATION_DIRS: $$dir must be in "${PREFIX:Q}"." ;; \
+		*)	${_INSTALL_ONE_DIR_CMD}	;;			\
 		esac;							\
-		${_INSTALL_ONE_DIR_CMD};				\
 	done
 .endif	# INSTALLATION_DIRS
 
@@ -328,27 +339,46 @@ post-install:
 	@${DO_NADA}
 .endif
 
-.if defined(_MULTIARCH)
-.  for tgt in stage-install-vars install-makedirs pre-install do-install post-install
-# This is a bit ugly, but we need a hook here so that we can modify
-# the DESTDIR in between each ABI install, for example to move ABI
-# specific headers to their own sub-directory.  Also the ugly PATH
-# setting is required for packages which call ${LIBTOOL} directly
-# in a do-install target as it may need to relink and we must ensure
-# the correct wrappers are used.
-.PHONY: ${tgt}-multiarch-hook
-.    if !target(${tgt}-multiarch-hook)
-${tgt}-multiarch-hook:
-	@${DO_NADA}
-.    endif
-.PHONY: ${tgt}-multi
-${tgt}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} PATH=${WRAPPER_DIR}/bin${BINARCHSUFFIX.${_abi_}}:${TOOLS_DIR}/bin${BINARCHSUFFIX.${_abi_}}:${PATH} WRKSRC=${WRKSRC}-${_abi_} ${tgt}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} PATH=${WRAPPER_DIR}/bin${BINARCHSUFFIX.${_abi_}}:${TOOLS_DIR}/bin${BINARCHSUFFIX.${_abi_}}:${PATH} WRKSRC=${WRKSRC}-${_abi_} ${tgt}-multiarch-hook
-.    endfor
-.  endfor
-.endif
+######################################################################
+### install-ctf (PRIVATE)
+######################################################################
+### install-ctf creates CTF information from debug binaries.
+###
+.PHONY: install-ctf
+install-ctf: plist
+	@${STEP_MSG} "Generating CTF data"
+	@${RM} -f ${WRKDIR}/.ctfdata ${WRKDIR}/.ctffail ${WRKDIR}/.ctfnox
+	${RUN}cd ${DESTDIR:Q}${PREFIX:Q};				\
+	${CAT} ${_PLIST_NOKEYWORDS} | while read f; do			\
+		case "$${f}" in						\
+		${CTF_FILES_SKIP:@p@${p}) continue ;;@}			\
+		*) ;;							\
+		esac;							\
+		[ ! -h "$${f}" ] || continue;				\
+		/bin/file -b "$${f}" | grep ^ELF >/dev/null || continue; \
+		if /bin/elfdump "$${f}" | grep SUNW_ctf >/dev/null; then \
+			continue;					\
+		fi;							\
+		tmp_f="$${f}.XXX";					\
+		if err=`${CTFCONVERT} -o "$${tmp_f}" "$${f}" 2>&1`; then \
+			if [ -f "$${tmp_f}" -a -f "$${f}" ]; then	\
+				${MV} "$${tmp_f}" "$${f}";		\
+			fi;						\
+		fi;							\
+		${RM} -f "$${tmp_f}";					\
+		if /bin/elfdump "$${f}"	| grep SUNW_ctf >/dev/null; then \
+			${ECHO} $${f}					\
+			    | ${SED} -e 's|^${DESTDIR}||'		\
+			    >>${WRKDIR}/.ctfdata;			\
+			[ -x "$${f}" ] || ${ECHO} $${f}			\
+			    | ${SED} -e 's|^${DESTDIR}||'		\
+			    >>${WRKDIR}/.ctfnox;			\
+		else							\
+			${ECHO} "$${f}: $${err}"			\
+			    | ${SED} -e 's|^${DESTDIR}||'		\
+			    >>${WRKDIR}/.ctffail;			\
+		fi;							\
+	done
 
 ######################################################################
 ### install-strip-debug (PRIVATE)
@@ -359,16 +389,20 @@ ${tgt}-multi:
 .PHONY: install-strip-debug
 install-strip-debug: plist
 	@${STEP_MSG} "Automatic stripping of debug information"
-	${RUN}${CAT} ${_PLIST_NOKEYWORDS} \
-	| ${SED} -e 's|^|${DESTDIR}${PREFIX}/|' \
-	| while read f; do \
-		tmp_f="$${f}.XXX"; \
-		if ${STRIP} -g -o "$${tmp_f}" "$${f}" 2> /dev/null; then \
-			[ ! -f "$${f}" ] || \
-			    ${MV} "$${tmp_f}" "$${f}"; \
-		else \
-			${RM} -f "$${tmp_f}"; \
-		fi \
+	${RUN}cd ${DESTDIR:Q}${PREFIX:Q};				\
+	${CAT} ${_PLIST_NOKEYWORDS} | while read f; do			\
+		[ ! -h "$${f}" ] || continue;				\
+		case "$${f}" in						\
+		${STRIP_FILES_SKIP:@p@${p}) continue;;@}		\
+		*) ;;							\
+		esac;							\
+		tmp_f="$${f}.XXX";					\
+		if ${STRIP_DBG} -o "$${tmp_f}" "$${f}" 2>/dev/null; then \
+			if [ -f "$${tmp_f}" -a -f "$${f}" ]; then	\
+				${MV} "$${tmp_f}" "$${f}";		\
+			fi;						\
+		fi;							\
+		${RM} -f "$${tmp_f}";					\
 	done
 
 ######################################################################

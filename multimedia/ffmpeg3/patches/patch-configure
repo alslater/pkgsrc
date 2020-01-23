@@ -1,20 +1,18 @@
-$NetBSD: patch-configure,v 1.3 2016/10/28 19:15:06 adam Exp $
+$NetBSD: patch-configure,v 1.6 2018/05/27 15:24:32 tsutsui Exp $
 
---- configure.orig	2016-10-27 16:17:39.000000000 +0000
+Enable PIC on NetBSD, even on i386 to avoid text relocations.
+
+--- configure.orig	2018-02-12 00:29:18.000000000 +0000
 +++ configure
-@@ -4676,6 +4676,11 @@ case $target_os in
+@@ -4940,6 +4940,7 @@ case $target_os in
          ;;
      netbsd)
          disable symver
-+        # NetBSD/macppc *really* needs PIC enabled.  ffmpeg has repeatedly
-+        # broken time and time again because PIC support has been removed
-+        # from architectures that need it.  So, if you touch this, please
-+        # be careful and make sure that your changes work.
-+        test "${subarch}" != "x86_32" && enable pic
++        enable pic
          oss_indev_extralibs="-lossaudio"
          oss_outdev_extralibs="-lossaudio"
          enabled gcc || check_ldflags -Wl,-zmuldefs
-@@ -5138,10 +5143,13 @@ check_cc <<EOF && enable attribute_may_a
+@@ -5360,10 +5361,13 @@ check_cc <<EOF && enable attribute_may_a
  union { int x; } __attribute__((may_alias)) x;
  EOF
  
@@ -29,14 +27,5 @@ $NetBSD: patch-configure,v 1.3 2016/10/28 19:15:06 adam Exp $
  EOF
 -od -t x1 $TMPO | grep -q '42 *49 *47 *45' && enable bigendian
  
- if ! enabled ppc64 || enabled bigendian; then
-     disable vsx
-@@ -6805,7 +6814,7 @@ Version: $version
- Requires: $(enabled shared || echo $requires)
- Requires.private: $(enabled shared && echo $requires)
- Conflicts:
--Libs: -L\${libdir} $(enabled rpath && echo "-Wl,-rpath,\${libdir}") -l${shortname} $(enabled shared || echo $libs)
-+Libs: -L\${libdir} -Wl,-R\${libdir} $(enabled rpath && echo "-Wl,-rpath,\${libdir}") -l${shortname} $(enabled shared || echo $libs)
- Libs.private: $(enabled shared && echo $libs)
- Cflags: -I\${includedir}
- EOF
+ check_cc <<EOF && enable const_nan
+ #include <math.h>

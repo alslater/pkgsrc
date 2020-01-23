@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	konversation-1.5.1
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	chat kde
 MASTER_SITES=	${MASTER_SITE_KDE:=konversation/1.5.1/src/}
 EXTRACT_SUFX=	.tar.xz

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		monit-5.8
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		sysutils
 MASTER_SITES=		http://mmonit.com/monit/dist/
 

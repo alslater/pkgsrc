@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.105 2016/08/26 17:14:57 joerg Exp $
+# $NetBSD: Makefile,v 1.122 2019/11/03 09:14:14 rillig Exp $
 
 DISTNAME=	pygtk-2.24.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/pygtk/gtk2/}
-PKGREVISION=	20
+PKGREVISION=	29
 CATEGORIES=	x11 python
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/pygtk/2.24/}
 EXTRACT_SUFX=	.tar.bz2
@@ -17,15 +17,14 @@ CONFLICTS=	${PYPKGPREFIX}-gtk<0.6.10
 # IOError: [Errno 2] No such file or directory: 'gtk-types.defs'
 MAKE_JOBS_SAFE=	no
 
-USE_LIBTOOL=	YES
+USE_LIBTOOL=		YES
 PKGCONFIG_OVERRIDE+=	pygtk-2.0.pc.in
-GNU_CONFIGURE=	YES
-CONFIGURE_ENV+=	PYTHON=${PYTHONBIN:Q}
-USE_TOOLS+=	gmake pkg-config
+GNU_CONFIGURE=		YES
+CONFIGURE_ENV+=		PYTHON=${PYTHONBIN:Q}
+USE_TOOLS+=		gmake pkg-config
 
 PY_PATCHPLIST=	YES
-PYTHON_VERSIONED_DEPENDENCIES=	cairo:link
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # not yet ported as of 2.24.0
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 2.24.0
 
 REPLACE_PYTHON+=	examples/atk/atk-demo.py
 REPLACE_PYTHON+=	examples/glade/autoconnect.py
@@ -78,9 +77,9 @@ REPLACE_PYTHON+=	tests/runtests.py
 
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
-.include "../../lang/python/versioned_dependencies.mk"
 
 .include "../../devel/libglade/buildlink3.mk"
+.include "../../graphics/py-cairo/buildlink3.mk"
 BUILDLINK_API_DEPENDS.pygobject+=	${PYPKGPREFIX}-gobject>=2.15.3
 .include "../../devel/py-gobject/buildlink3.mk"
 BUILDLINK_API_DEPENDS.gtk2+=		gtk2+>=2.16.0

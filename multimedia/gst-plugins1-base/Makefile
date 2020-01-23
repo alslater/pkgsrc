@@ -1,13 +1,10 @@
-# $NetBSD: Makefile,v 1.14 2016/12/01 12:33:55 martin Exp $
+# $NetBSD: Makefile,v 1.20 2019/11/14 15:25:31 wiz Exp $
 
 .include "Makefile.common"
 
-#CONFIGURE_ARGS+= --disable-silent-rules
-
 COMMENT+=	Base plugins
 
-USE_TOOLS+=	perl:run
-MAKE_JOBS_SAFE=		no
+USE_TOOLS+=		perl:run
 PKGCONFIG_OVERRIDE+=	pkgconfig/*.pc.in
 
 # only useful if gstreamer was built with the "gstcheck" option

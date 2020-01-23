@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.4 2016/03/05 11:29:26 jperkin Exp $
 
 DISTNAME=	scrypt-1.2.0
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	security
 MASTER_SITES=	https://www.tarsnap.com/scrypt/
 EXTRACT_SUFX=	.tgz

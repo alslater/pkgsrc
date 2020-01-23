@@ -3,7 +3,7 @@
 
 GST_PLUGINS0.10_NAME=	rtmp
 GST_PLUGINS0.10_DIRS=	ext/rtmp
-PKGREVISION=		4
+PKGREVISION=		5
 
 .include "../../multimedia/gst-plugins0.10-bad/Makefile.common"
 

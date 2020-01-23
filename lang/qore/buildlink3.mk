@@ -7,6 +7,7 @@ BUILDLINK_TREE+=	qore
 QORE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.qore+=	qore>=0.8.12 # API version 0.19
+BUILDLINK_ABI_DEPENDS.qore?=	qore>=0.8.12.4nb1
 BUILDLINK_PKGSRCDIR.qore?=	../../lang/qore
 
 .include "../../archivers/bzip2/buildlink3.mk"

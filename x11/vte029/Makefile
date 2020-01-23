@@ -7,7 +7,7 @@ PKGREVISION=	14
 CATEGORIES=	x11
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/
+HOMEPAGE=	https://www.gnome.org/
 COMMENT=	Terminal widget with improved accessibility and I18N support
 LICENSE=	gnu-lgpl-v2
 
@@ -19,6 +19,7 @@ USE_TOOLS+=		automake gmake intltool msgfmt pkg-config
 CONFIGURE_ARGS+=	--disable-python
 CONFIGURE_ARGS+=	--with-ft-exec-prefix=${BUILDLINK_PREFIX.freetype2}
 CONFIGURE_ARGS+=	--enable-Bsymbolic=auto
+CONFIGURE_ARGS+=	--disable-vala
 
 pre-configure:
 	set -e; cd ${WRKSRC}/gnome-pty-helper; \
@@ -26,6 +27,7 @@ pre-configure:
 
 BUILDLINK_API_DEPENDS.glib2+=		glib2>=2.31.13
 .include "../../devel/glib2/buildlink3.mk"
+.include "../../devel/gobject-introspection/buildlink3.mk"
 BUILDLINK_API_DEPENDS.pang+=	pango>=1.22.0
 .include "../../devel/pango/buildlink3.mk"
 # for FC_WIDTH

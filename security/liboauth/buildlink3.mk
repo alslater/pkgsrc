@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	liboauth
 LIBOAUTH_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.liboauth+=	liboauth>=0.8.9
-BUILDLINK_ABI_DEPENDS.liboauth?=	liboauth>=1.0.3nb2
+BUILDLINK_ABI_DEPENDS.liboauth?=	liboauth>=1.0.3nb3
 BUILDLINK_PKGSRCDIR.liboauth?=	../../security/liboauth
 
 .include "../../security/openssl/buildlink3.mk"

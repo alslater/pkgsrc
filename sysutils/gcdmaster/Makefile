@@ -2,7 +2,7 @@
 
 .include "../../sysutils/cdrdao/Makefile.common"
 
-PKGREVISION=	33
+PKGREVISION=	34
 
 PKGNAME=	gcdmaster-${CDRDAO_VER}
 COMMENT=	Gnome UI frontend to cdrdao

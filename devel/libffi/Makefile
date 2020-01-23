@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.29 2016/11/03 11:40:28 maya Exp $
+# $NetBSD: Makefile,v 1.33 2017/09/05 15:08:42 joerg Exp $
 
 DISTNAME=	libffi-3.2.1
-PKGREVISION=	2
+PKGREVISION=	4
 CATEGORIES=	devel
 MASTER_SITES=	ftp://sourceware.org/pub/libffi/
 
@@ -12,11 +12,9 @@ LICENSE=	mit
 
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		pkg-config
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS=		--includedir=${PREFIX}/include
-
 PKGCONFIG_OVERRIDE+=	libffi.pc.in
 INFO_FILES=		yes
 
@@ -50,17 +48,6 @@ CPPFLAGS+=	-D__PIC__
 .if !empty(OPSYS:MIRIX)
 USE_TOOLS+=		bash gmake
 MAKE_FLAGS+=		SHELL=${TOOLS_DIR}/bin/bash
-.endif
-
-.if ${MULTIARCH:U:tl} == "yes"
-do-install-multiarch-hook:
-	${MKDIR} ${DESTDIR}/${PREFIX}/include${INCARCHSUFFIX}
-	${MV} ${DESTDIR}/${PREFIX}/include/ffi.h \
-		${DESTDIR}/${PREFIX}/include${INCARCHSUFFIX}
-
-post-install:
-	${INSTALL_DATA} ${FILESDIR}/ffi.h \
-		${DESTDIR}/${PREFIX}/include
 .endif
 
 .include "../../mk/pthread.buildlink3.mk"

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		spamdyke-5.0.1
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		mail
 MASTER_SITES=		${HOMEPAGE}releases/
 EXTRACT_SUFX=		.tgz

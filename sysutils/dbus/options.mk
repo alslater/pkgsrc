@@ -1,4 +1,4 @@
-# $NetBSD: options.mk,v 1.10 2016/02/26 10:24:12 jperkin Exp $
+# $NetBSD: options.mk,v 1.13 2019/11/04 21:28:43 rillig Exp $
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.dbus
 PKG_SUPPORTED_OPTIONS+=	debug x11
@@ -13,6 +13,7 @@ PKG_SUPPORTED_OPTIONS+=	kqueue
 PKG_SUGGESTED_OPTIONS+=	kqueue
 .endif
 
+PLIST_VARS+=		launchd
 # We may want to make it SUGGESTED once we have a framework for
 # launchd support. See PR/49591.
 PKG_SUPPORTED_OPTIONS.Darwin+=	launchd
@@ -28,7 +29,7 @@ CONFIGURE_ARGS+=	--disable-verbose-mode
 .endif
 
 .if !empty(PKG_OPTIONS:Mkqueue)
-CONFIGURE_ARGS+= 	--enable-kqueue
+CONFIGURE_ARGS+=	--enable-kqueue
 .else
 CONFIGURE_ARGS+=	--disable-kqueue
 .endif
@@ -39,7 +40,7 @@ CONFIGURE_ARGS+=	--with-x
 BUILDLINK_DEPMETHOD.libXt=	build
 .  include "../../x11/libXt/buildlink3.mk"
 .else
-CONFIGURE_ARGS=		--without-x
+CONFIGURE_ARGS+=	--without-x
 .endif
 
 .if !empty(PKG_OPTIONS:Mlaunchd)

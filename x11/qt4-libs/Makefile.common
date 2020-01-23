@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.common,v 1.41 2016/02/25 08:27:05 jperkin Exp $
+# $NetBSD: Makefile.common,v 1.49 2019/11/03 09:14:16 rillig Exp $
 # used by x11/qt4-docs/Makefile
 # used by x11/qt4-libs/Makefile
 # used by x11/qt4-mng/Makefile
@@ -10,7 +10,7 @@
 
 DISTNAME=	qt-everywhere-opensource-src-${QTVERSION}
 CATEGORIES=	x11
-MASTER_SITES=	http://download.qt-project.org/official_releases/qt/${QTVERSION:R}/${QTVERSION}/
+MASTER_SITES=	http://download.qt.io/archive/qt/${QTVERSION:R}/${QTVERSION}/
 EXTRACT_USING=	bsdtar
 
 .include "../../x11/qt4/Makefile.common"
@@ -22,7 +22,6 @@ PATCHDIR=	${.CURDIR}/../../x11/qt4-libs/patches
 HAS_CONFIGURE=		yes
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		gmake
 
 .if empty(PKGNAME:U:Mqt4-libs-*)
@@ -31,16 +30,11 @@ BUILDLINK_API_DEPENDS.qt4-libs+=	qt4-libs>=${QTVERSION}
 
 QTPREFIX=		${PREFIX}/qt4
 
-MULTIARCH_DIRS.lib=	lib qt4/imports qt4/lib qt4/plugins
-
 # libphonon is available in multimedia/phonon
 CONFIGURE_ARGS+=	-no-phonon
 CONFIGURE_ARGS+=	-no-phonon-backend
 CONFIGURE_ARGS+=	-optimized-qmake
 CONFIGURE_ARGS+=	-prefix "${QTPREFIX}"
-CONFIGURE_ARGS+=	-libdir "${QTPREFIX}/lib${LIBARCHSUFFIX}"
-CONFIGURE_ARGS+=	-plugindir "${QTPREFIX}/plugins${LIBARCHSUFFIX}"
-CONFIGURE_ARGS+=	-importdir "${QTPREFIX}/imports${LIBARCHSUFFIX}"
 CONFIGURE_ARGS+=	${CFLAGS:M-I*} ${LDFLAGS:M-L*} ${LDFLAGS:M-l*}
 CONFIGURE_ARGS+=	-opensource -confirm-license
 CONFIGURE_ARGS+=	-sysconfdir "${PKG_SYSCONFDIR}/xdg"
@@ -57,6 +51,7 @@ MAKE_ENV+=		QTPREFIX=${QTPREFIX:Q}
 MAKE_ENV+=		QTDIR=${WRKSRC}
 PLIST_VARS+=		mac unix
 .if ${OPSYS} == "Darwin"
+CFLAGS+=		-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=1
 PLIST.mac=		yes
 QMAKE_CONF=		qmake.conf.mac
 QMAKE_RANLIB=		${RANLIB}
@@ -71,42 +66,55 @@ SCRIPTS_ENV+=		HOME=${WRKDIR}
 
 .include "../../mk/compiler.mk"
 
+# We can't set USE_LANGUAGES+=c++11 yet because doing so breaks the GCC build
+# in lots of ways, so for now just enable it manually for clang, and enforce
+# C++98 for GCC as GCC 7 defaults to C++14.
+#
+.if !empty(PKGSRC_COMPILER:Mclang)
+CXXFLAGS+=	-std=c++11 -Wno-c++11-narrowing
+.  if empty(MACHINE_PLATFORM:MDarwin-*-*)
+CXXFLAGS+=	-D_GLIBCXX_USE_C99_FP_MACROS_DYNAMIC=1
+.  endif
+.elif !empty(PKGSRC_COMPILER:Mgcc)
+CXXFLAGS+=	-std=c++98
+.endif
+
 .if ${OPSYS} == "SunOS"
-.  if !empty(CC_VERSION:Mgcc*)
+.  if !empty(PKGSRC_COMPILER:Mgcc) || !empty(PKGSRC_COMPILER:Mclang)
 .    if ${ABI:U} == "64"
-CONFIGURE_ARGS+=	-platform solaris-g++-64
+CONFIGURE_ARGS+=		-platform solaris-g++-64
 .    else
-CONFIGURE_ARGS+=	-platform solaris-g++
+CONFIGURE_ARGS+=		-platform solaris-g++
 .    endif
 .  else
 .    if ${ABI:U} == "64"
-CONFIGURE_ARGS+=	-platform solaris-cc-64
+CONFIGURE_ARGS+=		-platform solaris-cc-64
 .    else
-CONFIGURE_ARGS+=	-platform solaris-cc
+CONFIGURE_ARGS+=		-platform solaris-cc
 .    endif
 .  endif
-SYS_LIBS=		-lresolv -lsocket -lnsl -lrt
+SYS_LIBS=			-lresolv -lsocket -lnsl -lrt
 .elif ${OPSYS} == "Interix"
-CONFIGURE_ARGS+=	-platform interix-g++
-CFLAGS+=		-I/usr/local/include/bind
-LDFLAGS+=		-L/usr/local/lib/bind -lbind
-BUILDLINK_PASSTHRU_DIRS+=/usr/local/include/bind /usr/local/lib/bind
-SYS_LIBS=		-lbind -ldb -ldl
+CONFIGURE_ARGS+=		-platform interix-g++
+CFLAGS+=			-I/usr/local/include/bind
+LDFLAGS+=			-L/usr/local/lib/bind -lbind
+BUILDLINK_PASSTHRU_DIRS+=	/usr/local/include/bind /usr/local/lib/bind
+SYS_LIBS=			-lbind -ldb -ldl
 .elif ${OPSYS} == "DragonFly"
-CONFIGURE_ARGS+=	-platform freebsd-g++
+CONFIGURE_ARGS+=		-platform freebsd-g++
 .elif ${OPSYS} == "Darwin"
 .  if !empty(PKGSRC_COMPILER:Mclang)
-CONFIGURE_ARGS+=	-platform macx-llvm
+CONFIGURE_ARGS+=		-platform macx-llvm
 .  else
-CONFIGURE_ARGS+=	-platform macx-g++
+CONFIGURE_ARGS+=		-platform macx-g++
 .  endif
-CONFIGURE_ARGS+=	-no-dwarf2
-CONFIGURE_ARGS+=	-no-framework
+CONFIGURE_ARGS+=		-no-dwarf2
+CONFIGURE_ARGS+=		-no-framework
 .  if exists(/usr/lib/libresolv.dylib)
-LDFLAGS+=		-lresolv
+LDFLAGS+=			-lresolv
 .  endif
 .elif ${OPSYS} == "Linux"
-LDFLAGS+=		-ldl
+LDFLAGS+=			-ldl
 .endif
 
 .if ${OPSYS} != "Darwin" && ${X11_TYPE} != "native"

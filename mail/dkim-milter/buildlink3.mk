@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	dkim-milter
 DKIM_MILTER_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.dkim-milter+=	dkim-milter>=2.8.2
-BUILDLINK_ABI_DEPENDS.dkim-milter+=	dkim-milter>=2.8.3nb5
+BUILDLINK_ABI_DEPENDS.dkim-milter+=	dkim-milter>=2.8.3nb6
 BUILDLINK_PKGSRCDIR.dkim-milter?=	../../mail/dkim-milter
 BUILDLINK_DEPMETHOD.dkim-milter?=	build
 

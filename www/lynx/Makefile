@@ -2,6 +2,7 @@
 
 DISTNAME=	lynx2.8.9rel.1
 PKGNAME=	${DISTNAME:S/lynx/lynx-/:S/rel//}
+PKGREVISION=	1
 #PKGREVISION=	0
 CATEGORIES=	www
 MASTER_SITES=   https://invisible-mirror.net/archives/lynx/tarballs/

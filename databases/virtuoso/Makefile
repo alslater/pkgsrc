@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	virtuoso-opensource-6.1.6
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	databases
 MASTER_SITES=	http://sourceforge.net/projects/virtuoso/files/virtuoso/6.1.6/
 

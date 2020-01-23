@@ -8,7 +8,7 @@ LIBFETCH_BUILDLINK3_MK:=
 BUILDLINK_DEPMETHOD.libfetch?=	build
 
 BUILDLINK_API_DEPENDS.libfetch+=	libfetch>=2.28
-BUILDLINK_ABI_DEPENDS.libfetch?=	libfetch>=2.36nb3
+BUILDLINK_ABI_DEPENDS.libfetch?=	libfetch>=2.38nb1
 BUILDLINK_PKGSRCDIR.libfetch?=	../../net/libfetch
 
 pkgbase := libfetch

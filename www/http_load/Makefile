@@ -2,7 +2,7 @@
 
 DISTNAME=	http_load-12mar2006
 PKGNAME=	http_load-20060312
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	www
 MASTER_SITES=	http://www.acme.com/software/http_load/
 

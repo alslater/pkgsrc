@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	liblastfm
 LIBLASTFM_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.liblastfm+=	liblastfm>=0.3.0
-BUILDLINK_ABI_DEPENDS.liblastfm+=	liblastfm>=0.3.3nb23
+BUILDLINK_ABI_DEPENDS.liblastfm+=	liblastfm>=0.3.3nb24
 BUILDLINK_PKGSRCDIR.liblastfm?=	../../audio/liblastfm
 
 .include "../../audio/libsamplerate/buildlink3.mk"

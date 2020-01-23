@@ -1,4 +1,4 @@
-# $NetBSD: configure.mk,v 1.25 2012/06/01 12:52:37 jperkin Exp $
+# $NetBSD: configure.mk,v 1.29 2019/05/07 19:36:44 rillig Exp $
 #
 # = Package-settable variables =
 #
@@ -46,10 +46,13 @@
 
 _VARGROUPS+=		configure
 _USER_VARS.configure=	CONFIG_SHELL_FLAGS
-_PKG_VARS.configure=	CONFIGURE_ENV CONFIG_SHELL CONFIGURE_SCRIPT \
+_PKG_VARS.configure= \
+	CONFIGURE_DIRS CONFIGURE_ENV CONFIG_SHELL CONFIGURE_SCRIPT \
 	CONFIGURE_ARGS OVERRIDE_GNU_CONFIG_SCRIPTS HAS_CONFIGURE \
 	GNU_CONFIGURE PKGCONFIG_OVERRIDE USE_PKGLOCALEDIR \
 	CMAKE_ARGS CMAKE_ARG_PATH
+_SORTED_VARS.configure=	*_ENV *_OVERRIDE
+_LISTED_VARS.configure=	*_ARGS *_SCRIPTS
 
 CONFIGURE_SCRIPT?=	./configure
 CONFIGURE_ENV+=		${ALL_ENV}
@@ -96,7 +99,7 @@ _CONFIGURE_TARGETS+=	release-configure-lock
 
 .PHONY: configure
 .if !target(configure)
-.  if exists(${_COOKIE.configure})
+.  if exists(${_COOKIE.configure}) && !${_CLEANING}
 configure:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -110,7 +113,7 @@ configure: barrier
 acquire-configure-lock: acquire-lock
 release-configure-lock: release-lock
 
-.if exists(${_COOKIE.configure})
+.if exists(${_COOKIE.configure}) && !${_CLEANING}
 ${_COOKIE.configure}:
 	@${DO_NADA}
 .else
@@ -129,15 +132,6 @@ ${_COOKIE.configure}: real-configure
 #
 _REAL_CONFIGURE_TARGETS+=	configure-check-interactive
 _REAL_CONFIGURE_TARGETS+=	configure-message
-.if defined(_MULTIARCH)
-_REAL_CONFIGURE_TARGETS+=	configure-vars-multi
-_REAL_CONFIGURE_TARGETS+=	pre-configure-multi
-_REAL_CONFIGURE_TARGETS+=	do-configure-pre-hook-multi
-_REAL_CONFIGURE_TARGETS+=	pre-configure-checks-hook-multi
-_REAL_CONFIGURE_TARGETS+=	do-configure-multi
-_REAL_CONFIGURE_TARGETS+=	do-configure-post-hook-multi
-_REAL_CONFIGURE_TARGETS+=	post-configure-multi
-.else
 _REAL_CONFIGURE_TARGETS+=	configure-vars
 _REAL_CONFIGURE_TARGETS+=	pre-configure
 _REAL_CONFIGURE_TARGETS+=	do-configure-pre-hook
@@ -145,7 +139,6 @@ _REAL_CONFIGURE_TARGETS+=	pre-configure-checks-hook
 _REAL_CONFIGURE_TARGETS+=	do-configure
 _REAL_CONFIGURE_TARGETS+=	do-configure-post-hook
 _REAL_CONFIGURE_TARGETS+=	post-configure
-.endif
 _REAL_CONFIGURE_TARGETS+=	_configure-cookie
 _REAL_CONFIGURE_TARGETS+=	error-check
 
@@ -213,6 +206,9 @@ _CONFIGURE_SCRIPT_ENV+=	${CONFIGURE_ENV}
 .PHONY: do-configure-script
 do-configure-script:
 .for _dir_ in ${CONFIGURE_DIRS}
+.  if ${CONFIGURE_DIRS:[#]} != 1
+	${RUN} ${STEP_MSG} "Running "${CONFIGURE_SCRIPT:Q}" in "${_dir_:Q}
+.  endif
 	${RUN}${_ULIMIT_CMD}						\
 	cd ${WRKSRC} && cd ${_dir_} &&					\
 	${PKGSRC_SETENV} ${_CONFIGURE_SCRIPT_ENV}			\
@@ -281,23 +277,6 @@ pre-configure:
 .if !target(post-configure)
 post-configure:
 	@${DO_NADA}
-.endif
-
-.if defined(_MULTIARCH)
-_MULTIARCH_TARGETS+=	configure-vars
-_MULTIARCH_TARGETS+=	pre-configure
-_MULTIARCH_TARGETS+=	do-configure-pre-hook
-_MULTIARCH_TARGETS+=	pre-configure-checks-hook
-_MULTIARCH_TARGETS+=	do-configure
-_MULTIARCH_TARGETS+=	do-configure-post-hook
-_MULTIARCH_TARGETS+=	post-configure
-.  for tgt in ${_MULTIARCH_TARGETS}
-.PHONY: ${tgt}-multi
-${tgt}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} WRKSRC=${WRKSRC}-${_abi_} ${tgt}
-.    endfor
-.  endfor
 .endif
 
 # configure-help:

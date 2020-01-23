@@ -3,6 +3,7 @@
 MODNAME=		ldap
 CATEGORIES+=		databases
 COMMENT=		PHP extension for LDAP database access
+PKGREVISION=		1
 
 CONFLICTS=	php-ldap-[0-9]*
 

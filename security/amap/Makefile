@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	amap-5.2
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	net security
 MASTER_SITES=	http://freeworld.thc.org/releases/
 

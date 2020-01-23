@@ -1,16 +1,18 @@
-# $NetBSD: Makefile,v 1.3 2016/08/03 10:22:18 adam Exp $
+# $NetBSD: Makefile,v 1.21 2019/07/21 22:25:41 wiz Exp $
 
 PKGREVISION= 1
 .include "../../meta-pkgs/mate/Makefile.common"
 
-DISTNAME=	caja-1.14.1
+DISTNAME=	caja-${VERSION:R}.1
 CATEGORIES=	sysutils
 
 COMMENT=	File manager for the MATE desktop
 
-BUILD_DEPENDS+=		gdbus-codegen-[0-9]*:../../devel/gdbus-codegen
+TOOL_DEPENDS+=		gdbus-codegen-[0-9]*:../../devel/gdbus-codegen
 
 PKGCONFIG_OVERRIDE+=	libcaja-extension/libcaja-extension.pc.in
+
+USE_LANGUAGES=		c99
 
 .include "options.mk"
 
@@ -18,18 +20,11 @@ PKGCONFIG_OVERRIDE+=	libcaja-extension/libcaja-extension.pc.in
 
 .include "../../x11/mate-desktop/buildlink3.mk"
 .include "../../devel/exempi/buildlink3.mk"
-.include "../../devel/glib2/buildlink3.mk"
-.include "../../devel/pango/buildlink3.mk"
-.include "../../devel/pangox-compat/buildlink3.mk"
 .include "../../graphics/libexif/buildlink3.mk"
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
 .include "../../textproc/libxml2/buildlink3.mk"
-.include "../../x11/gtk2/buildlink3.mk"
 .include "../../x11/libunique/buildlink3.mk"
-.include "../../x11/libICE/buildlink3.mk"
-.include "../../x11/libX11/buildlink3.mk"
-.include "../../x11/libXrender/buildlink3.mk"
-.include "../../x11/xproto/buildlink3.mk"
 .include "../../databases/shared-mime-info/mimedb.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
+.include "../../sysutils/libnotify/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

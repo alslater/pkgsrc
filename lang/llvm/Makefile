@@ -1,12 +1,18 @@
-# $NetBSD: Makefile,v 1.31 2018/05/22 12:39:23 adam Exp $
+# $NetBSD: Makefile,v 1.48 2019/11/11 19:22:28 nia Exp $
 #
 # when updating this, please also update:
 # devel/include-what-you-use
+# devel/lld
 # devel/lldb
 # devel/polly
 # lang/clang
 # lang/clang-static-analyzer
+# lang/clang-tools-extra
+# lang/compiler-rt
+# lang/libcxx
+# lang/libcxxabi
 # lang/libunwind
+# parallel/openmp
 #
 # Do not update:
 #   lang/libLLVM
@@ -16,32 +22,35 @@
 # Always update all */buildlink3.mk to require the latest stable release
 # version in BUILDLINK_API_DEPENDS, as there is no backwards compatibility
 
-DISTNAME=	llvm-5.0.2.src
+DISTNAME=	llvm-9.0.0.src
+PKGREVISION=	2
 PKGNAME=	${DISTNAME:S/.src//}
 CATEGORIES=	lang devel
-MASTER_SITES=	http://llvm.org/releases/${PKGVERSION_NOREV}/
+MASTER_SITES=	http://releases.llvm.org/${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://llvm.org/
 COMMENT=	Low Level Virtual Machine compiler infrastructure
-LICENSE=	modified-bsd
+LICENSE=	apache-2.0
 
-USE_LANGUAGES=		c c++
+USE_LANGUAGES=		c c++11
 USE_CMAKE=		yes
-GCC_REQD+=		4.8
+GCC_REQD+=		8
 PYTHON_FOR_BUILD_ONLY=	yes
 
 CONFIGURE_DIRS=		${WRKDIR}/build
 CMAKE_ARG_PATH=		${WRKSRC}
 
 CMAKE_ARGS+=	-DCMAKE_BUILD_TYPE=Release
-CMAKE_ARGS+=	-DCMAKE_C_COMPILER=gcc
-CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=g++
+CMAKE_ARGS+=	-DCMAKE_C_COMPILER=${CC:Q}
+CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=${CXX:Q}
 CMAKE_ARGS+=	-DCMAKE_CXX_LINK_FLAGS=${LDFLAGS:Q}
 CMAKE_ARGS+=	-DLLVM_BUILD_LLVM_DYLIB=ON
+CMAKE_ARGS+=	-DLLVM_INCLUDE_BENCHMARKS=OFF
 CMAKE_ARGS+=	-DLLVM_INSTALL_UTILS=ON
 CMAKE_ARGS+=	-DLLVM_LINK_LLVM_DYLIB=ON
+CMAKE_ARGS+=	-DLLVM_ENABLE_RTTI=ON
 
 CMAKE_ARGS.Darwin+=	-DCMAKE_LIBTOOL=/usr/bin/libtool
 
@@ -69,15 +78,17 @@ TEST_ENV+=		LD_LIBRARY_PATH=${WRKDIR}/build/lib
 
 # It may be that the Solaris linker is more strict here and they can be removed on
 # all platforms.  Change this to a patch if verified.
-SUBST_CLASSES.SunOS+=	lto
-SUBST_STAGE.lto=	pre-configure
-SUBST_FILES.lto=	tools/lto/lto.exports
-SUBST_SED.lto=		-e '/^LLVM/d'
+SUBST_CLASSES.SunOS+=	linkmap
+SUBST_STAGE.linkmap=	pre-configure
+SUBST_FILES.linkmap=	tools/lto/lto.exports
+SUBST_FILES.linkmap+=	tools/opt-remarks/OptRemarks.exports
+SUBST_FILES.linkmap+=	tools/remarks-shlib/Remarks.exports
+SUBST_SED.linkmap=	-e '/^LLVM/d'
 
 .include "../../mk/bsd.prefs.mk"
 
 PLIST_VARS+=	notdylib
-.if ${_OPSYS_SHLIB_TYPE} == "dylib"
+.if ${SHLIB_TYPE} == "dylib"
 SOEXT=		dylib
 .else
 SOEXT=		so
@@ -95,7 +106,7 @@ CXXFLAGS+=	-march=i586
 # replacing config.guess is required even for cmake.
 # It is used to detect correct LLVM_HOST_TRIPLE, e.g. for NetBSD/evbarm.
 post-extract:
-	${RUN} mkdir -p ${WRKDIR}/build
+	${MKDIR} ${WRKDIR}/build
 .for f in config.guess config.sub
 	cp ../../mk/gnu-config/${f} ${WRKSRC}/cmake/${f}
 .endfor
@@ -103,4 +114,5 @@ post-extract:
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/tool.mk"
+.include "../../textproc/libxml2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

@@ -1,4 +1,4 @@
-# $NetBSD: builtin.mk,v 1.1 2006/07/29 16:48:27 adam Exp $
+# $NetBSD: builtin.mk,v 1.2 2019/11/03 11:45:44 rillig Exp $
 
 BUILTIN_PKG:=	net-snmp
 

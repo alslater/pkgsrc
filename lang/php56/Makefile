@@ -1,12 +1,13 @@
-# $NetBSD: Makefile,v 1.12 2016/06/24 15:25:21 taca Exp $
+# $NetBSD: Makefile,v 1.23 2019/07/03 07:30:50 nia Exp $
 
 #
 # We can't omit PKGNAME here to handle PKG_OPTIONS.
 #
 PKGNAME=		php-${PHP_VERSION}
+PKGREVISION=		2
 CATEGORIES=		lang
 
-HOMEPAGE=		http://www.php.net/
+HOMEPAGE=		https://www.php.net/
 COMMENT=		PHP Hypertext Preprocessor version 5.6
 LICENSE=		php
 
@@ -36,8 +37,8 @@ SUBST_STAGE.path=	pre-configure
 SUBST_FILES.path=	ext/phar/phar/phar.php
 SUBST_FILES.path+=	php.ini-development php.ini-production run-tests.php
 SUBST_FILES.path+=	sapi/cgi/Makefile.frag
-SUBST_SED.path=		-e 's,@CGIDIR@,${CGIDIR},g'
-SUBST_SED.path+=	-e 's,@PREFIX@,${PREFIX},g'
+SUBST_VARS.path=	CGIDIR
+SUBST_VARS.path+=	PREFIX
 
 INSTALLATION_DIRS+=	${CGIDIR} ${PHP_EXTENSION_DIR} ${EGDIR} share/php
 
@@ -46,16 +47,6 @@ INSTALLATION_DIRS+=	${CGIDIR} ${PHP_EXTENSION_DIR} ${EGDIR} share/php
 .if !empty(MACHINE_PLATFORM:MDarwin-[0-8].*-*)
 CFLAGS+=	-DSQLITE_ENABLE_LOCKING_STYLE=0 -DSQLITE_WITHOUT_ZONEMALLOC
 .endif
-
-.include "../../mk/compiler.mk"
-
-.if ${OPSYS} == "SunOS" && ${PKGSRC_COMPILER} == "clang"
-CONFIGURE_ARGS+=	--disable-libgcc
-.endif
-
-post-extract:
-	cd ${WRKSRC} && \
-		${FIND} . -xdev -type f -name '*.orig' -exec ${RM} -f {} \;
 
 post-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/sapi/cli/php ${DESTDIR}${PREFIX}/bin/php

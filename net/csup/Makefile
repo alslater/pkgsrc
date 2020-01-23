@@ -3,7 +3,7 @@
 
 DISTNAME=	csup-snap-20100404
 PKGNAME=	${DISTNAME:S/-snap//}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	net devel
 MASTER_SITES=	http://distfiles.aydogan.net/net/ \
 				http://www.plhk.ru/static/csup/

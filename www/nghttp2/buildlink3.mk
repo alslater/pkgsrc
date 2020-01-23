@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	nghttp2
 NGHTTP2_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.nghttp2+=	nghttp2>=1.0.0
-BUILDLINK_ABI_DEPENDS.nghttp2+=	nghttp2>=1.15.0nb1
+BUILDLINK_ABI_DEPENDS.nghttp2+=	nghttp2>=1.39.2nb1
 BUILDLINK_PKGSRCDIR.nghttp2?=	../../www/nghttp2
 
 pkgbase := nghttp2

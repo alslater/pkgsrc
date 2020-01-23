@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		siege-3.1.3
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		www
 MASTER_SITES=		http://download.joedog.org/siege/
 

@@ -1,4 +1,4 @@
-# $NetBSD: ccache.mk,v 1.35 2015/03/20 17:53:14 tnn Exp $
+# $NetBSD: ccache.mk,v 1.39 2019/09/02 02:23:02 rillig Exp $
 #
 # Copyright (c) 2004 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -35,7 +28,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 
-# === User-settable variables ===
+# User-settable variables:
 #
 # CCACHE_BASE
 #	The directory where ccache is installed. The build dependency on
@@ -48,7 +41,12 @@
 #	default, they are stored inside WRKDIR, so they are lost after
 #	a "make clean".
 #
-# === Package-settable variables ===
+# CCACHE_LOGFILE
+#       If set to a file path, ccache will write information on what it is
+#       doing to the specified file. This is useful for tracking down
+#       problems.
+#
+# Package-settable variables:
 #
 # IGNORE_CCACHE
 #	Can be set to "yes" for packages that have problems with ccache.
@@ -60,7 +58,7 @@
 COMPILER_CCACHE_MK=	defined
 
 _VARGROUPS+=		ccache
-_USER_VARS.ccache=	CCACHE_BASE CCACHE_DIR
+_USER_VARS.ccache=	CCACHE_BASE CCACHE_DIR CCACHE_LOGFILE
 _PKG_VARS.ccache=	IGNORE_CCACHE
 
 .include "../bsd.fast.prefs.mk"
@@ -140,6 +138,10 @@ TOOL_DEPENDS+=	ccache-[0-9]*:../../devel/ccache
 #
 PKGSRC_MAKE_ENV+=	CCACHE_COMPILERCHECK=echo\ ${CC_VERSION_STRING:Q}
 PKGSRC_MAKE_ENV+=	CCACHE_DIR=${CCACHE_DIR:Q}
+PKGSRC_MAKE_ENV+=	CCACHE_PATH=${CCPATH:H}:${CXXPATH:H}:${CPPPATH:H}
+.ifdef CCACHE_LOGFILE
+PKGSRC_MAKE_ENV+=	CCACHE_LOGFILE=${CCACHE_LOGFILE:Q}
+.endif
 
 # Create symlinks for the compiler into ${WRKDIR}.
 .  for _var_ in ${_CCACHE_VARS}

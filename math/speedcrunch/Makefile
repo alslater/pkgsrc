@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	speedcrunch-0.10.1
-PKGREVISION=	22
+PKGREVISION=	23
 CATEGORIES=	math
 MASTER_SITES=	http://speedcrunch.googlecode.com/files/
 

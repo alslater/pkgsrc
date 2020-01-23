@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.10 2017/09/07 13:47:21 wiz Exp $
+# $NetBSD: Makefile,v 1.15 2019/11/26 10:17:55 wiz Exp $
 
-DISTNAME=	pcre2-10.33
+DISTNAME=	pcre2-10.34
 CATEGORIES=	devel
-MASTER_SITES=	ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
+MASTER_SITES=	ftp://ftp.pcre.org/pub/pcre/
 MASTER_SITES+=	https://ftp.pcre.org/pub/pcre/
 MASTER_SITES+=	${MASTER_SITE_SOURCEFORGE:=pcre/}
 EXTRACT_SUFX=	.tar.bz2
@@ -25,10 +25,11 @@ CONFIGURE_ARGS+=	--enable-pcre2-16
 CONFIGURE_ARGS+=	--enable-pcre2-32
 CONFIGURE_ARGS+=	--enable-pcre2grep-libz
 CONFIGURE_ARGS+=	--enable-pcre2grep-libbz2
-
-# On NetBSD, needs:
+# To avoid having to
 # sysctl -w security.pax.mprotect.enabled=0
-# because of its JIT.
+# because of its JIT on NetBSD.
+CONFIGURE_ARGS.NetBSD+=	--enable-jit-sealloc
+
 TEST_TARGET=		check
 
 .include "options.mk"

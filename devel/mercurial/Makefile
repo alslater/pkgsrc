@@ -16,5 +16,7 @@ DEPENDS+=	${PYPKGPREFIX}-mercurial>=${VERSION}:../../devel/py-mercurial
 
 META_PACKAGE=	yes
 
+PYTHON_VERSIONS_ACCEPTED:	27
+
 .include "../../lang/python/pyversion.mk"
 .include "../../mk/bsd.pkg.mk"

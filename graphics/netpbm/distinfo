@@ -1,15 +1,13 @@
-$NetBSD: distinfo,v 1.103 2016/08/11 22:48:00 is Exp $
+$NetBSD: distinfo,v 1.107 2017/09/04 20:31:41 wiz Exp $
 
-SHA1 (netpbm-10.68.02.tar.gz) = 90fa87549dc7fb33bd7f9f29abad09fe99faf3e1
-RMD160 (netpbm-10.68.02.tar.gz) = 7567eb6c38f06ad89b995b9315deec91db94bfb0
-SHA512 (netpbm-10.68.02.tar.gz) = 7555889392e35f9b24ff70b62a5f9d80aa5157915ef7bf57efa3d5c0f0d0ca198c8baa97ce7985c68b6bea11c3dcfd64ca913b918b0d9d97f93d4927f6efa00b
-Size (netpbm-10.68.02.tar.gz) = 2703809 bytes
-SHA1 (netpbm-docs-r2313.tar.gz) = 8c36b17b1d2dca6ab7bd34666a8929b9ea665743
-RMD160 (netpbm-docs-r2313.tar.gz) = 03854f545c7c0f4c825ee08bc779b62da0ea05c3
-SHA512 (netpbm-docs-r2313.tar.gz) = 978f7e154aadfa2c4332c07f8e822ec1990697c22b4a3b56f5de434a1f249a6b552c6a76763d0ce2684dfbd5d14973bf0b05702dd0ad543c6f440a992bcac0d9
-Size (netpbm-docs-r2313.tar.gz) = 447907 bytes
-SHA1 (patch-common.mk) = cb8d252595055903877464015f3bcd393e7dd043
-SHA1 (patch-converter_other_giftopnm.c) = 444fd73c239279a94481a2163a9e31d340af1a15
-SHA1 (patch-lib_Makefile) = add2f3a3162d3a752f0090e958eec1fcbafea34b
-SHA1 (patch-pm__config.in.h) = c6d51bbdf6c1f7725f08f321591038e296761e61
-SHA1 (patch-wordaccess_be_aligned.h) = 7cc5cd1126f65b3307393c978ac9ff4a49d666de
+SHA1 (netpbm-10.79.04.tar.gz) = 24a5f348b406891354595e85db8b7889c24619ea
+RMD160 (netpbm-10.79.04.tar.gz) = 772d63bc9b08bdc4ec09cb333c3eb9e7615388be
+SHA512 (netpbm-10.79.04.tar.gz) = b5a918bca061015fc6ef361074d010abe88f57dc27971a1db5d4102fd6a02cefc61f2220919d40c9c7a001afac466c74c8d9c1858e3c0f4370422cc4f4c31907
+Size (netpbm-10.79.04.tar.gz) = 2796774 bytes
+SHA1 (netpbm-docs-r3052.tar.gz) = 6986a401717fd1ecb330fd426738bd8069eaf85c
+RMD160 (netpbm-docs-r3052.tar.gz) = 3486f2df6e2e1b83cc5221a969da5db8b842c9ef
+SHA512 (netpbm-docs-r3052.tar.gz) = 0217139aaf8ddba720df3b5242988674d4e5c2ab8f7399de1ecbe169e702eb79dbb55e1622b1af14058cfd3110d1ef0453237e57fb498d3220369d99afa4d77f
+Size (netpbm-docs-r3052.tar.gz) = 472779 bytes
+SHA1 (patch-common.mk) = f590cc66e0fe6a07e848b9b46662bca350557bea
+SHA1 (patch-lib_Makefile) = ff67c418c9d16bdc9d9c95ba658686aa36f213a0
+SHA1 (patch-pm__config.in.h) = dfe51691507a2c7be2946013b1f1b6bdd9b39f49

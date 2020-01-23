@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.12 2014/10/09 14:07:13 wiz Exp $
+# $NetBSD: Makefile,v 1.14 2019/11/13 21:51:24 wiz Exp $
 
-DISTNAME=		libICE-1.0.9
+DISTNAME=		libICE-1.0.10
 CATEGORIES=		x11 devel
 MASTER_SITES=		${MASTER_SITE_XORG:=lib/}
 EXTRACT_SUFX=		.tar.bz2
@@ -10,7 +10,6 @@ HOMEPAGE=		http://xorg.freedesktop.org/
 COMMENT=		Inter Client Exchange (ICE) library for X
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 GNU_CONFIGURE=		yes
 USE_TOOLS+=		pkg-config
 
@@ -20,7 +19,6 @@ PKGCONFIG_OVERRIDE+=	ice.pc.in
 
 .include "../../meta-pkgs/modular-xorg/hacks.mk"
 
-.include "../../x11/xproto/buildlink3.mk"
+.include "../../x11/xorgproto/buildlink3.mk"
 .include "../../x11/xtrans/buildlink3.mk"
-
 .include "../../mk/bsd.pkg.mk"

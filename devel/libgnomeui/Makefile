@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.131 2016/08/03 10:22:10 adam Exp $
+# $NetBSD: Makefile,v 1.148 2019/08/11 13:18:45 wiz Exp $
 #
 
 DISTNAME=	libgnomeui-2.24.5
-PKGREVISION=	32
+PKGREVISION=	45
 CATEGORIES=	devel gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libgnomeui/2.24/}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/
+HOMEPAGE=	https://www.gnome.org/
 COMMENT=	Core GNOME2 graphical libraries
 LICENSE=	gnu-lgpl-v2
 
@@ -18,14 +18,23 @@ GNU_CONFIGURE=		yes
 USE_PKGLOCALEDIR=	yes
 USE_TOOLS+=		gmake msgfmt perl pkg-config intltool
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 
 PKGCONFIG_BASE=		${WRKSRC}/libgnomeui/libgnomeui-2.0.pc
 PKGCONFIG_OVERRIDE=	${PKGCONFIG_BASE}.in
 
+.include "../../mk/compiler.mk"
+
+.if !empty(CC_VERSION:Mgcc-[6-9]*) || !empty(PKGSRC_COMPILER:Mclang)
+SUBST_CLASSES.SunOS+=	xopen
+SUBST_STAGE.xopen=	pre-configure
+SUBST_FILES.xopen=	libgnomeui/gnome-file-entry.c libgnomeui/gnome-client.c
+SUBST_FILES.xopen+=	libgnomeui/gnome-dateedit.c
+SUBST_SED.xopen=	-e '/_XOPEN_SOURCE/s/500/600/'
+SUBST_SED.xopen+=	-e '/_XOPEN_SOURCE$$/s/$$/ 600/'
+.endif
+
 # Needed because part of the pc files doesn't get filled in till after
 # configure does its pass
-
 post-configure:
 	${SED} ${PKGCONFIG_OVERRIDE_SED} < ${PKGCONFIG_BASE} > \
 		${PKGCONFIG_BASE}.tmp

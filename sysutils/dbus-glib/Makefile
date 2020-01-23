@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.39 2016/09/12 07:34:19 wiz Exp $
+# $NetBSD: Makefile,v 1.43 2019/05/04 08:42:24 rillig Exp $
 
-DISTNAME=	dbus-glib-0.108
+DISTNAME=	dbus-glib-0.110
 CATEGORIES=	sysutils
 MASTER_SITES=	http://dbus.freedesktop.org/releases/dbus-glib/
 
@@ -14,24 +14,21 @@ MAKE_JOBS_SAFE=		NO
 GNU_CONFIGURE=		YES
 USE_TOOLS+=		gmake msgfmt pkg-config
 USE_LIBTOOL=		YES
-USE_MULTIARCH=		lib
 
 PKGCONFIG_OVERRIDE=	dbus-glib-1.pc.in
 
 CONFIGURE_ARGS+=	--disable-ansi
 CONFIGURE_ARGS+=	--disable-asserts
-CONFIGURE_ARGS+=	--disable-doxygen-docs
 CONFIGURE_ARGS+=	--disable-gcov
+CONFIGURE_ARGS+=	--disable-gtk-doc
 CONFIGURE_ARGS+=	--disable-tests
-CONFIGURE_ARGS+=	--disable-verbose-mode
-CONFIGURE_ARGS+=	--disable-xml-docs
+CONFIGURE_ARGS+=	--enable-silent-rules
 CONFIGURE_ARGS+=	--enable-checks
-CONFIGURE_ARGS+=	--with-xml=expat
 
 .include "options.mk"
 
 .include "../../devel/gettext-lib/buildlink3.mk"
-BUILDLINK_API_DEPENDS.glib2+=	glib2>=2.32
+BUILDLINK_API_DEPENDS.glib2+=	glib2>=2.40
 .include "../../devel/glib2/buildlink3.mk"
 BUILDLINK_API_DEPENDS.dbus+=	dbus>=1.8
 .include "../../sysutils/dbus/buildlink3.mk"

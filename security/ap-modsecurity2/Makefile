@@ -12,7 +12,6 @@ COMMENT=	Intrusion detection and prevention engine for web applications
 LICENSE=	apache-2.0
 
 APACHE_MODULE=		yes
-PKG_APACHE_ACCEPTED=	apache22 apache24
 USE_APR=		yes
 USE_LANGUAGES=		c++ c
 

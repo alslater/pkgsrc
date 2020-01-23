@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.6 2016/09/13 19:15:13 maya Exp $
 
 PKGNAME=	${DISTNAME:S/-/-client-/}
+PKGREVISION=	1
 COMMENT=	MarisDB 5.5, a free SQL database (client)
 
 CONFLICTS=	mysql3-client-[0-9]*

@@ -20,6 +20,7 @@ DISTNAME=	postgresql-9.5.9
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_PGSQL:=source/v${PKGVERSION_NOREV}/}
 EXTRACT_SUFX=	.tar.bz2
+PKGREVISION=	2
 
 MAINTAINER?=	adam@NetBSD.org
 HOMEPAGE=	https://www.postgresql.org/

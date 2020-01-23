@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.1 2016/05/01 05:03:23 mef Exp $
 
 DISTNAME=	libasr-1.0.2
+PKGREVISION=	1
 CATEGORIES=	net
 MASTER_SITES=	http://www.opensmtpd.org/archives/
 

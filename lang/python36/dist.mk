@@ -1,4 +1,4 @@
-# $NetBSD: dist.mk,v 1.6 2018/03/29 15:28:16 adam Exp $
+# $NetBSD: dist.mk,v 1.10 2019/07/03 20:10:41 adam Exp $
 
 PY_DISTVERSION=	3.6.9
 DISTNAME=	Python-${PY_DISTVERSION}

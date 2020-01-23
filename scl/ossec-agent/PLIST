@@ -33,7 +33,7 @@ ossec/bin/ossec-logcollector
 ossec/bin/ossec-syscheckd
 ossec/bin/util.sh
 ossec/etc/TIMEZONE
-ossec/etc/client.keys
+ossec/etc/client.keys.sample
 ossec/etc/internal_options.conf
 ossec/etc/local_internal_options.conf
 ossec/etc/ossec.conf.sample

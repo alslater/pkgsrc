@@ -2,9 +2,9 @@ $NetBSD: patch-configure,v 1.4 2018/01/07 11:49:10 wen Exp $
 
 Disable the groff html check to prevent random PLIST variation.
 
---- configure.orig	2019-04-24 09:04:58.000000000 +0000
+--- configure.orig	2018-01-07 11:40:07.000000000 +0000
 +++ configure
-@@ -35361,7 +35361,7 @@ fi
+@@ -35692,7 +35692,7 @@ fi
  # Check for groff html support.
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for HTML support in groff" >&5
  $as_echo_n "checking for HTML support in groff... " >&6; }

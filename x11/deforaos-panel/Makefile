@@ -1,14 +1,14 @@
-# $NetBSD: Makefile,v 1.25 2016/08/03 10:22:21 adam Exp $
+# $NetBSD: Makefile,v 1.34 2019/07/21 22:24:15 wiz Exp $
 #
 
 DISTNAME=	Panel-0.3.6
 PKGNAME=	deforaos-panel-0.3.6
-PKGREVISION=	2
+PKGREVISION=	10
 CATEGORIES=	x11
-MASTER_SITES=	http://www.defora.org/os/download/download/4417/
+MASTER_SITES=	https://www.defora.org/os/download/download/4417/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS desktop panel
 
 LICENSE=	gnu-gpl-v3

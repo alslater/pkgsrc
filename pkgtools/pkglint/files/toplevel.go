@@ -1,54 +1,50 @@
-package main
-
-import (
-	"netbsd.org/pkglint/trace"
-)
+package pkglint
 
 type Toplevel struct {
-	previousSubdir string
-	subdirs        []string
+	dir            CurrPath
+	previousSubdir RelPath
+	subdirs        []CurrPath
 }
 
-func CheckdirToplevel() {
+func CheckdirToplevel(dir CurrPath) {
 	if trace.Tracing {
-		defer trace.Call1(G.CurrentDir)()
+		defer trace.Call(dir)()
 	}
 
-	ctx := new(Toplevel)
-	fname := G.CurrentDir + "/Makefile"
+	ctx := Toplevel{dir, "", nil}
+	filename := dir.JoinNoClean("Makefile")
 
-	lines := LoadNonemptyLines(fname, true)
-	if lines == nil {
+	mklines := LoadMk(filename, NotEmpty|LogErrors)
+	if mklines == nil {
 		return
 	}
 
-	for _, line := range lines {
-		if m, commentedOut, indentation, subdir, comment := match4(line.Text, `^(#?)SUBDIR\s*\+=(\s*)(\S+)\s*(?:#\s*(.*?)\s*|)$`); m {
-			ctx.checkSubdir(line, commentedOut == "#", indentation, subdir, comment)
+	for _, mkline := range mklines.mklines {
+		if mkline.IsVarassignMaybeCommented() && mkline.Varname() == "SUBDIR" {
+			ctx.checkSubdir(mkline)
 		}
 	}
 
-	NewMkLines(lines).Check()
+	mklines.Check()
 
-	if G.opts.Recursive {
-		if G.opts.CheckGlobal {
-			G.Pkgsrc.UsedLicenses = make(map[string]bool)
-			G.Pkgsrc.Hashes = make(map[string]*Hash)
+	if G.Opts.Recursive {
+		if G.Opts.CheckGlobal {
+			G.InterPackage.Enable()
 		}
-		G.Todo = append(append([]string(nil), ctx.subdirs...), G.Todo...)
+		G.Todo.PushFront(ctx.subdirs...)
 	}
 }
 
-func (ctx *Toplevel) checkSubdir(line Line, commentedOut bool, indentation, subdir, comment string) {
-	if commentedOut && comment == "" {
-		line.Warnf("%q commented out without giving a reason.", subdir)
+func (ctx *Toplevel) checkSubdir(mkline *MkLine) {
+	subdir := NewRelPathString(mkline.Value())
+
+	if mkline.IsCommentedVarassign() {
+		if !mkline.HasComment() || mkline.Comment() == "" {
+			mkline.Warnf("%q commented out without giving a reason.", subdir)
+		}
 	}
 
-	if indentation != "\t" {
-		line.Warnf("Indentation should be a single tab character.")
-	}
-
-	if contains(subdir, "$") || !fileExists(G.CurrentDir+"/"+subdir+"/Makefile") {
+	if containsVarRef(subdir.String()) || !ctx.dir.JoinNoClean(subdir).JoinNoClean("Makefile").IsFile() {
 		return
 	}
 
@@ -57,15 +53,15 @@ func (ctx *Toplevel) checkSubdir(line Line, commentedOut bool, indentation, subd
 	case subdir > prev:
 		// Correctly ordered
 	case subdir == prev:
-		line.Errorf("Each subdir must only appear once.")
+		mkline.Errorf("Each subdir must only appear once.")
 	case subdir == "archivers" && prev == "x11":
 		// This exception is documented in the top-level Makefile.
 	default:
-		line.Warnf("%s should come before %s", subdir, prev)
+		mkline.Warnf("%s should come before %s.", subdir, prev)
 	}
 	ctx.previousSubdir = subdir
 
-	if !commentedOut {
-		ctx.subdirs = append(ctx.subdirs, G.CurrentDir+"/"+subdir)
+	if !mkline.IsCommentedVarassign() {
+		ctx.subdirs = append(ctx.subdirs, ctx.dir.JoinNoClean(subdir))
 	}
 }

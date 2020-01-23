@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		jpilot-1.8.2
-PKGREVISION=		2
+PKGREVISION=		3
 CATEGORIES=		comms
 MASTER_SITES=		http://www.jpilot.org/
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libgcal
 LIBGCAL_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libgcal+=	libgcal>=0.9.6
-BUILDLINK_ABI_DEPENDS.libgcal?=	libgcal>=0.9.6nb3
+BUILDLINK_ABI_DEPENDS.libgcal?=	libgcal>=0.9.6nb4
 BUILDLINK_PKGSRCDIR.libgcal?=	../../time/libgcal
 
 .include "../../devel/check/buildlink3.mk"

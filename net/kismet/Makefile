@@ -2,7 +2,7 @@
 
 DISTNAME=		kismet-2008-05-R1
 PKGNAME=		kismet-2008.05.01
-PKGREVISION=		35
+PKGREVISION=		36
 CATEGORIES=		net
 MASTER_SITES=		http://www.kismetwireless.net/code/
 

@@ -1,4 +1,4 @@
-# $NetBSD: metadata.mk,v 1.13 2016/04/10 15:58:03 joerg Exp $
+# $NetBSD: metadata.mk,v 1.17 2019/10/01 13:01:02 jperkin Exp $
 
 ######################################################################
 ### The targets below are all PRIVATE.
@@ -71,13 +71,26 @@ ${_BUILD_INFO_FILE}: ${_PLIST_NOKEYWORDS}
 					dsolibs = dsolibs (dsolibs ? ":" : "") $$NF;				\
 				}										\
 				/RPATH/ {									\
-					nrpath = split($$NF ":${DESTDIR}${PREFIX}/lib${LIBARCHSUFFIX}:${SYSTEM_DEFAULT_RPATH}", rpath, ":"); \
+					nrpath = split($$NF ":${SYSTEM_DEFAULT_RPATH}", rpath, ":");		\
 					nlibs = split(dsolibs, libs, ":");					\
 					for (l = 1; l <= nlibs; l++) {						\
 						for (r = 1; r <= nrpath; r++) {					\
 							sub(/\/$$/, "", rpath[r]);				\
-							if (system("test -f " rpath[r] "/" libs[l]) == 0) {	\
-								print rpath[r] "/" libs[l];			\
+							sub(/\/\.$$/, "", rpath[r]);				\
+							libfile = "${DESTDIR}" rpath[r] "/" libs[l];		\
+							if (!(libfile in libcache)) {				\
+								libcache[libfile] = system("test -f " libfile); \
+							}							\
+							if (libcache[libfile] == 0) {				\
+								print libfile;					\
+								break;						\
+							}							\
+							libfile = rpath[r] "/" libs[l];				\
+							if (!(libfile in libcache)) {				\
+								libcache[libfile] = system("test -f " libfile); \
+							}							\
+							if (libcache[libfile] == 0) {				\
+								print libfile;					\
 								break;						\
 							}							\
 						}								\
@@ -178,7 +191,7 @@ ${_BUILD_VERSION_FILE}:
 	${CAT} ${.TARGET}.tmp |						\
 	while read file; do						\
 		${GREP} '\$$NetBSD' $$file 2>/dev/null |		\
-		${SED} -e "s|^|$$file:|";				\
+		${SED} -e "s|^|$$file:|;q";				\
 	done |								\
 	${AWK} '{ sub("^${PKGSRCDIR}/", "");				\
 		  sub(":.*[$$]NetBSD", ":	$$NetBSD");		\
@@ -242,6 +255,12 @@ MESSAGE_SRC_DFLT+=	${PKGDIR}/MESSAGE.${OPSYS}-${MACHINE_ARCH:C/i[3-6]86/i386/g}
 .  endif
 .endif
 MESSAGE_SRC?=	${MESSAGE_SRC_DFLT}
+
+.if ${INIT_SYSTEM} == "rc.d" && exists(${PKGDIR}/MESSAGE.rcd)
+MESSAGE_SRC+=	${PKGDIR}/MESSAGE.rcd
+.elif ${INIT_SYSTEM} == "smf" && exists(${PKGDIR}/MESSAGE.smf)
+MESSAGE_SRC+=	${PKGDIR}/MESSAGE.smf
+.endif
 
 .if !empty(MESSAGE_SRC)
 _MESSAGE_FILE=		${PKG_DB_TMPDIR}/+DISPLAY
@@ -329,6 +348,25 @@ ${_SIZE_ALL_FILE}: ${_RDEPENDS_FILE} ${_SIZE_PKG_FILE}
 
 ######################################################################
 ###
+### +DEINSTALL/+INSTALL - Package deinstall and install scripts
+###
+### These are the scripts invoked by pkg_add(1) and pkg_delete(1)
+### as part of the package installation or removal process.
+###
+### Include scripts.mk to pull in the definitions for the following
+### variables:
+###
+###	_DEINSTALL_FILE (undefined if not required)
+###	_INSTALL_FILE (undefined if not required)
+###
+### This will also add these files to _METADATA_TARGETS.
+###
+.if ${_USE_NEW_PKGINSTALL:Uno} != "no"
+.include "${PKGSRCDIR}/mk/pkgformat/pkg/scripts.mk"
+.endif
+
+######################################################################
+###
 ### +CONTENTS - Package manifest file
 ###
 ### This file contains the list of files and checksums, along with
@@ -356,13 +394,19 @@ _PKG_CREATE_ARGS+=				-f ${_DEPENDS_PLIST}
 _PKG_CREATE_ARGS+=	${PKG_PRESERVE:D	-n ${_PRESERVE_FILE}}
 _PKG_CREATE_ARGS+=				-S ${_SIZE_ALL_FILE}
 _PKG_CREATE_ARGS+=				-s ${_SIZE_PKG_FILE}
-_PKG_CREATE_ARGS+=	${CONFLICTS:D		-C ${CONFLICTS:Q}}
+_PKG_CREATE_ARGS+=	${"${CONFLICTS:M*}" != "":?-C ${CONFLICTS:Q}:}
+.if ${_USE_NEW_PKGINSTALL:Uno} != "no"
+_PKG_CREATE_ARGS+=	${_INSTALL_FILE:D	-i ${_INSTALL_FILE:Q}}
+_PKG_CREATE_ARGS+=	${_DEINSTALL_FILE:D	-k ${_DEINSTALL_FILE:Q}}
+.else
 _PKG_CREATE_ARGS+=	${INSTALL_FILE:D	${_INSTALL_ARG_cmd:sh}}
 _PKG_CREATE_ARGS+=	${DEINSTALL_FILE:D	${_DEINSTALL_ARG_cmd:sh}}
+.endif
 
 _PKG_ARGS_INSTALL+=	${_PKG_CREATE_ARGS}
 _PKG_ARGS_INSTALL+=	-I ${PREFIX} -p ${DESTDIR}${PREFIX}
 
+.if ${_USE_NEW_PKGINSTALL:Uno} == "no"
 _DEINSTALL_ARG_cmd=	if ${TEST} -f ${DEINSTALL_FILE}; then		\
 				${ECHO} "-k "${DEINSTALL_FILE:Q};	\
 			else						\
@@ -373,12 +417,19 @@ _INSTALL_ARG_cmd=	if ${TEST} -f ${INSTALL_FILE}; then		\
 			else						\
 				${ECHO};				\
 			fi
+.endif
 
 _CONTENTS_TARGETS+=	${_BUILD_INFO_FILE}
 _CONTENTS_TARGETS+=	${_BUILD_VERSION_FILE}
 _CONTENTS_TARGETS+=	${_COMMENT_FILE}
+.if ${_USE_NEW_PKGINSTALL:Uno} != "no"
+_CONTENTS_TARGETS+=	${_DEINSTALL_FILE}
+.endif
 _CONTENTS_TARGETS+=	${_DEPENDS_FILE}
 _CONTENTS_TARGETS+=	${_DESCR_FILE}
+.if ${_USE_NEW_PKGINSTALL:Uno} != "no"
+_CONTENTS_TARGETS+=	${_INSTALL_FILE}
+.endif
 _CONTENTS_TARGETS+=	${_MESSAGE_FILE}
 _CONTENTS_TARGETS+=	${_DEPENDS_PLIST}
 _CONTENTS_TARGETS+=	${_PRESERVE_FILE}
@@ -401,7 +452,9 @@ ${_CONTENTS_FILE}: ${_CONTENTS_TARGETS}
 ###	+COMMENT
 ###	+CONTENTS
 ###	+DESC
+###	+DEINSTALL (if required)
 ###	+DISPLAY
+###	+INSTALL (if required)
 ###	+PRESERVE
 ###	+SIZE_ALL
 ###	+SIZE_PKG

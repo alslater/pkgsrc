@@ -3,6 +3,7 @@
 SYSLOG_MOD=		mongodb
 SYSLOG_MOD_DIR=		afmongodb
 COMMENT=		Syslog-ng MongoDB module
+PKGREVISION=		1
 
 .include "../../sysutils/syslog-ng/Makefile.module"
 

@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.7 2016/06/08 17:43:38 wiz Exp $
+# $NetBSD: Makefile,v 1.9 2019/07/09 11:29:30 nia Exp $
 
-DISTNAME=	itsdangerous-0.24
+DISTNAME=	itsdangerous-1.1.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	security python
 MASTER_SITES=	${MASTER_SITE_PYPI:=i/itsdangerous/}
 
 MAINTAINER=	kleink@NetBSD.org
-HOMEPAGE=	http://pythonhosted.org/itsdangerous/
+HOMEPAGE=	https://pythonhosted.org/itsdangerous/
 COMMENT=	Helpers to pass trusted data to untrusted environments and back
 LICENSE=	modified-bsd
 

@@ -1,21 +1,18 @@
-# $NetBSD: Makefile,v 1.210 2016/08/11 22:48:00 is Exp $
+# $NetBSD: Makefile,v 1.221 2019/08/11 13:21:12 wiz Exp $
 
-TEST_TARGETS=	test
-
-DISTNAME=	netpbm-10.68.02
+DISTNAME=	netpbm-10.79.04
+PKGREVISION=	3
 CATEGORIES=	graphics
 MASTER_SITES=	#
-PKGREVISION=	5
-
 # manually created from svn checkout of
 # svn checkout http://svn.code.sf.net/p/netpbm/code/advanced netpbm
-# tar --exclude netpbm/.svn/\* -cvzf /archive/distfiles/netpbm-$VERSION.tar.gz netpbm
+# tar --exclude netpbm/.svn -cvzf /archive/distfiles/netpbm-$VERSION.tar.gz netpbm
 # where VERSION comes from reading netpbm/doc/HISTORY
 # for the documentation:
 # svn checkout http://svn.code.sf.net/p/netpbm/code/userguide netpbm-userguide
 # cd netpbm-userguide && for i in *.html; do python2.7 ../netpbm/buildtools/makeman $i; done && cd ..
 # tar -cvzf /archive/distfiles/netpbm-docs-r${SVN_REVISION}.tar.gz netpbm-userguide/*.[0-9]
-DISTFILES=	${DISTNAME}${EXTRACT_SUFX} netpbm-docs-r2313${EXTRACT_SUFX}
+DISTFILES=	${DISTNAME}${EXTRACT_SUFX} netpbm-docs-r3052${EXTRACT_SUFX}
 
 MAINTAINER=	adam@NetBSD.org
 HOMEPAGE=	http://netpbm.sourceforge.net/
@@ -24,12 +21,11 @@ LICENSE=	gnu-gpl-v2
 
 USE_TOOLS+=	gmake flex pax perl
 USE_FEATURES=	snprintf
-USE_MULTIARCH=	lib
 
 INSTALL_TARGET=	install-dev install-run
 MAKE_ENV+=	INSTALL=${INSTALL:Q} STRIPFLAG=${_STRIPFLAG_INSTALL:Q} \
-		pkgdir=${STAGEDIR:Q} MACHINE=${MACHINE:Q} LIBARCHSUFFIX=${LIBARCHSUFFIX:Q}
-MAKE_FLAGS+=	PKGMANDIR=${PKGMANDIR:Q}
+		pkgdir=${STAGEDIR} MACHINE=${MACHINE:Q}
+MAKE_FLAGS+=	PKGMANDIR=${PKGMANDIR}
 MAKE_FLAGS+=	CFLAGS_FOR_BUILD=${CFLAGS:Q}
 MAKE_FLAGS+=	LDFLAGS_FOR_BUILD=${LDFLAGS:Q}
 MAKE_FILE=	GNUmakefile
@@ -41,16 +37,20 @@ REPLACE_PERL+=	editor/ppmquant
 REPLACE_PERL+=	editor/ppmshadow
 REPLACE_PERL+=	generator/ppmrainbow
 REPLACE_PERL+=	manweb
-STAGEDIR=	${WRKDIR}/staging-${ABI}
+REPLACE_SH+=	buildtools/stamp-date
+STAGEDIR=	${WRKDIR}/staging
 WRKSRC=		${WRKDIR}/netpbm
 
 WRAPPER_REORDER_CMDS+=	reorder:l:rle:netpbm
 
 SUBST_CLASSES+=		rgb_txt
-SUBST_STAGE.rgb_txt=	post-patch
+SUBST_STAGE.rgb_txt=	pre-configure
 SUBST_MESSAGE.rgb_txt=	Configure RGB_TXT
 SUBST_FILES.rgb_txt=	config.mk
 SUBST_SED.rgb_txt+=	-e 's,/usr/share/netpbm/rgb.txt,${PREFIX}/share/netpbm/rgb.txt,'
+
+# needs pkg-config and x11?!
+TEST_TARGET=	test
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -68,7 +68,25 @@ MAKE_FLAGS.SunOS+=	NETWORKLD="-lsocket -lnsl"
 MAKE_FLAGS+=	NETWORKLD="-lsocket -lresolv"
 .endif
 
+.include "../../mk/compiler.mk"
+
+# Ridiculous but they hardcode it in every file so we have no choice.
+.if ${OPSYS} == "SunOS" && \
+    (!empty(CC_VERSION:Mgcc-[6-9]*) || !empty(PKGSRC_COMPILER:Mclang))
+SUBST_CLASSES+=		xopen
+SUBST_STAGE.xopen=	pre-configure
+SUBST_FILES.xopen=	*.c */*.c */*/*.c */*/*/*.c */*/*/*/*.c */*/*/*/*/*.c
+SUBST_FILES.xopen+=	lib/util/lexheader
+SUBST_SED.xopen=	-e '/_XOPEN_SOURCE/s/500/600/'
+SUBST_SED.xopen+=	-e '/_XOPEN_SOURCE/s/1$$/600/'
+SUBST_SED.xopen+=	-e '/_XOPEN_SOURCE[^0-9]*\//s/SOURCE/SOURCE 600/'
+SUBST_SED.xopen+=	-e '/_XOPEN_SOURCE$$/s/E$$/E 600/'
+SUBST_SED.xopen+=	-e '/_POSIX_SOURCE.*fdopen/s/_POSIX_SOURCE/_XOPEN_SOURCE 600/'
+.endif
+
 INSTALLATION_DIRS=	${PKGMANDIR}/man1 ${PKGMANDIR}/man3 ${PKGMANDIR}/man5 share/netpbm
+
+.include "options.mk"
 
 post-extract:
 	cd ${WRKSRC} && ${CP} config.mk.in config.mk
@@ -77,6 +95,12 @@ post-extract:
 	${ECHO} "JPEGHDR_DIR = ${BUILDLINK_PREFIX.jpeg}/include" >> ${WRKSRC}/config.mk
 	${ECHO} "TIFFLIB = ${BUILDLINK_PREFIX.tiff}/lib/libtiff.so" >> ${WRKSRC}/config.mk
 	${ECHO} "TIFFHDR_DIR = ${BUILDLINK_PREFIX.tiff}/include" >> ${WRKSRC}/config.mk
+.if !empty(PKG_OPTIONS:Mjasper)
+	${ECHO} "JASPERLIB = ${BUILDLINK_PREFIX.jasper}/lib/libjasper.so" >> ${WRKSRC}/config.mk
+	${ECHO} "JASPERHDR_DIR = ${BUILDLINK_PREFIX.jasper}/include" >> ${WRKSRC}/config.mk
+.else
+	${ECHO} "JASPERLIB = NONE" >> ${WRKSRC}/config.mk
+.endif
 	${ECHO} "ZLIB = ${BUILDLINK_PREFIX.zlib}/lib/libz.so" >> ${WRKSRC}/config.mk
 	${ECHO} "ZHDR_DIR = ${BUILDLINK_PREFIX.zlib}/include" >> ${WRKSRC}/config.mk
 .if ${OPSYS} == "Darwin"
@@ -101,7 +125,6 @@ post-install:
 	${INSTALL_DATA} ${WRKDIR}/netpbm-userguide/*.5 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man5
 
 .include "../../devel/zlib/buildlink3.mk"
-.include "../../graphics/jasper/buildlink3.mk"
 .include "../../graphics/png/buildlink3.mk"
 .include "../../graphics/tiff/buildlink3.mk"
 .include "../../textproc/libxml2/buildlink3.mk"

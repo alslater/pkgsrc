@@ -1,45 +1,34 @@
-# $NetBSD: Makefile,v 1.30 2016/11/30 12:28:50 wiz Exp $
+# $NetBSD: Makefile,v 1.41 2019/08/11 13:22:28 wiz Exp $
 
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
 PKGREVISION=	1
 COMMENT=	Framework for writing networked applications
 .include "../../net/py-twisted/Makefile.common"
 
-DEPENDS+=	${PYPKGPREFIX}-constantly-[0-9]*:../../devel/py-constantly
-DEPENDS+=	${PYPKGPREFIX}-incremental-[0-9]*:../../devel/py-incremental
-DEPENDS+=	${PYPKGPREFIX}-OpenSSL>=0.6:../../security/py-OpenSSL
-DEPENDS+=	${PYPKGPREFIX}-ZopeInterface>=3.0.1:../../devel/py-ZopeInterface
+DEPENDS+=	${PYPKGPREFIX}-attrs>=17.4.0:../../devel/py-attrs
+DEPENDS+=	${PYPKGPREFIX}-automat>=0.3.0:../../devel/py-automat
+DEPENDS+=	${PYPKGPREFIX}-constantly>=15.1:../../devel/py-constantly
+DEPENDS+=	${PYPKGPREFIX}-hamcrest>=1.9.0:../../devel/py-hamcrest
+DEPENDS+=	${PYPKGPREFIX}-hyperlink>=17.1.1:../../www/py-hyperlink
+DEPENDS+=	${PYPKGPREFIX}-incremental>=16.10.1:../../devel/py-incremental
+DEPENDS+=	${PYPKGPREFIX}-ZopeInterface>=4.4.2:../../devel/py-ZopeInterface
+# TLS
+DEPENDS+=	${PYPKGPREFIX}-OpenSSL>=16.0.0:../../security/py-OpenSSL
+DEPENDS+=	${PYPKGPREFIX}-service_identity-[0-9]*:../../security/py-service_identity
+DEPENDS+=	${PYPKGPREFIX}-idna>=2.4:../../www/py-idna
 
 REPLACE_PYTHON+=	src/twisted/mail/test/pop3testserver.py
 REPLACE_PYTHON+=	src/twisted/trial/test/scripttest.py
 REPLACE_PYTHON+=	src/twisted/python/test/pullpipe.py
 
-CFLAGS.SunOS+=	-D_XOPEN_SOURCE=1 -D_XOPEN_SOURCE_EXTENDED=1 -Du_int=uint32_t
-
-# twisted will install files present in the source directory even
-# though they were not in the tarball.  Therefore, we must clean the
-# .orig files from patches.  This is done pre-install rather than
-# post-patch so that mkpatches(1) will still work.
-pre-install:
-	rm -f ${WRKSRC}/twisted/runner/portmap.c.orig
+USE_LANGUAGES=		c99
 
 post-install:
 	cd ${DESTDIR}${PREFIX}/bin && \
-		for i in cftp ckeygen conch mailmail pyhtmlizer tkconch trial twist twistd; \
-		do \
-			${MV} $$i $$i-${PYVERSSUFFIX}; \
-		done
+	for i in cftp ckeygen conch mailmail pyhtmlizer tkconch trial twist twistd; do \
+		${MV} $$i $$i-${PYVERSSUFFIX} || ${TRUE}; \
+	done
 
-# Do not "make package" after running "make test"; this will result in files
-# being installed that should not be.
-do-test:
-	cd ${WRKSRC} && ./build/scripts-${PYVERSSUFFIX}/trial twisted
-
-# created during self test.
-CHECK_FILES_SKIP+=	${PREFIX}/${PYSITELIB}/twisted/plugins/dropin.cache
-
-# egg.mk restricts the Python version list
-.include "../../lang/python/egg.mk"
 .include "../../lang/python/application.mk"
-
+.include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

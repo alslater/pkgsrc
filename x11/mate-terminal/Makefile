@@ -1,15 +1,17 @@
-# $NetBSD: Makefile,v 1.2 2016/08/03 10:23:37 adam Exp $
+# $NetBSD: Makefile,v 1.18 2019/07/21 22:26:02 wiz Exp $
 
-PKGREVISION= 1
+PKGREVISION= 2
 .include "../../meta-pkgs/mate/Makefile.common"
 
-DISTNAME=	mate-terminal-${MATE_VERSION}
+DISTNAME=	mate-terminal-${VERSION:R}.1
 CATEGORIES=	x11
 
 COMMENT=	MATE terminal emulator application
 
 TOOL_DEPENDS+=	itstool-[0-9]*:../../textproc/itstool
 TOOL_DEPENDS+=	libxml2-[0-9]*:../../textproc/libxml2 # for xmllint
+
+GCC_REQD=	8
 
 .include "options.mk"
 
@@ -19,13 +21,5 @@ REPLACE_PERL+=	mate-terminal.wrapper
 
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../x11/mate-desktop/buildlink3.mk"
-.include "../../devel/dconf/buildlink3.mk"
-.include "../../devel/glib2/buildlink3.mk"
-.include "../../x11/gtk2/buildlink3.mk"
-.include "../../x11/vte/buildlink3.mk"
-.if !empty(PKG_BUILD_OPTIONS.gtk2:Mx11)
-.include "../../x11/libX11/buildlink3.mk"
-.include "../../x11/libSM/buildlink3.mk"
-.endif
-.include "../../lang/python/application.mk"
+.include "../../x11/vte3/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

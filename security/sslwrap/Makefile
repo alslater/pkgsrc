@@ -2,7 +2,7 @@
 
 DISTNAME=	${PKGNAME_NOREV:S/-//}
 PKGNAME=	sslwrap-206
-PKGREVISION=	8
+PKGREVISION=	9
 CATEGORIES=	security net
 MASTER_SITES=	http://www.rickk.com/sslwrap/
 

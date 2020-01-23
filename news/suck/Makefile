@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	suck-4.3.2
-PKGREVISION=	10
+PKGREVISION=	11
 CATEGORIES=	news
 MASTER_SITES=	${MASTER_SITE_SUNSITE:=system/news/transport/}
 

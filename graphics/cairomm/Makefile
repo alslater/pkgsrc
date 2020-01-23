@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.39 2016/11/28 15:34:09 wiz Exp $
+# $NetBSD: Makefile,v 1.44 2019/08/11 13:21:07 wiz Exp $
 
 DISTNAME=	cairomm-1.12.2
+PKGREVISION=	4
 CATEGORIES=	graphics
 MASTER_SITES=	http://cairographics.org/releases/
 
@@ -11,13 +12,14 @@ LICENSE=	gnu-lgpl-v2
 
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_PKGLOCALEDIR=	yes
 USE_TOOLS+=		gmake perl pkg-config
 GNU_CONFIGURE=		yes
 # long file name, does not extract correctly with NetBSD tar(1):
 # classhash__load__check__resize__trigger__size__base__inherit__graph.png
 EXTRACT_USING=		bsdtar
+
+GCC_REQD+=		8
 
 PKGCONFIG_OVERRIDE+=	data/cairomm-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	data/cairomm-ft-1.0.pc.in
@@ -32,8 +34,6 @@ PKGCONFIG_OVERRIDE+=	data/cairomm-win32-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	data/cairomm-win32-font-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	data/cairomm-xlib-1.0.pc.in
 PKGCONFIG_OVERRIDE+=	data/cairomm-xlib-xrender-1.0.pc.in
-
-CONFIGURE_ARGS+=	--disable-docs
 
 PLIST_VARS+=	x11 quartz
 

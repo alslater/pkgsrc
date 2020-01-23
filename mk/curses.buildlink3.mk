@@ -1,4 +1,4 @@
-# $NetBSD: curses.buildlink3.mk,v 1.23 2016/04/11 04:22:34 dbj Exp $
+# $NetBSD: curses.buildlink3.mk,v 1.30 2019/09/02 02:23:02 rillig Exp $
 #
 # This Makefile fragment is meant to be included by packages that require
 # any curses implementation instead of one particular one.  The available
@@ -9,7 +9,7 @@
 # directly include the appropriate buildlink3.mk instead of this file in
 # the package Makefile.
 #
-# === User-settable variables ===
+# User-settable variables:
 #
 # CURSES_DEFAULT
 #	This value represents the type of curses we wish to use on the
@@ -19,7 +19,35 @@
 #	Possible: curses, ncurses, ncursesw, pdcurses
 #	Default: (depends)
 #
-# === Variables set by this file ===
+# Package-settable variables:
+#
+# USE_CURSES
+#	This value represents the features the package needs from curses.
+#	If the system curses does not provide those features, then
+#	a more suitable curses is pulled in (normally ncurses).
+#
+#	Possible: wide
+#	For more possible values, see curses.builtin.mk.
+#	Default: (unset)
+#
+# FAKE_NCURSES
+#	Some packages look exclusively for ncurses or ncursesw,
+#	headers and libraries. This really is an error with the package,
+#	but patching it can be both challenging and cumbersome.
+#	Set this to YES to transform these to system curses.
+#
+#	Possible: YES, NO
+#	Default: NO
+#
+# INCOMPAT_CURSES
+#	If no test exists the missing curses feature then set this
+#	to match the platform where system curses isn't suitable.
+#	This can include the case where the system curses compiles fine,
+#	but for some reason fails to work.
+#
+#	Default: (unset)
+#
+# System-defined variables:
 #
 # CURSES_TYPE
 #	The name of the selected curses implementation.
@@ -101,29 +129,45 @@ PKG_FAIL_REASON+=	\
 .  include "curses.builtin.mk"
 BUILDLINK_TREE+=		curses -curses
 BUILDLINK_LDADD.curses?=	${BUILDLINK_LIBNAME.curses:S/^/-l/:S/^-l$//}
-BUSILDLINK_BUILTIN_MK.curses=	../../mk/curses.builtin.mk
-# Some packages only look for ncurses
-# The correct action would be to write a patch and pass it upstream
-# but by setting FAKE_NCURSES=yes in the package we can temporarily work
-# around the short-coming.
-.  if defined(FAKE_NCURSES) && !empty(FAKE_NCURSES:M[yY][eE][sS])
-BUILDLINK_TARGETS+=		buildlink-curses-ncurses-h
-BUILDLINK_TRANSFORM+=		l:ncurses:${BUILDLINK_LIBNAME.curses}
-BUILDLINK_TRANSFORM+=		l:ncursesw:${BUILDLINK_LIBNAME.curses}
-.  endif
+BUILDLINK_BUILTIN_MK.curses=	../../mk/curses.builtin.mk
 .else
 .  if ${CURSES_TYPE} == "ncurses"
 USE_NCURSES=			yes
 .    include "../../devel/ncurses/buildlink3.mk"
-
 .  elif ${CURSES_TYPE} == "ncursesw"
 .    include "../../devel/ncursesw/buildlink3.mk"
-
 .  elif ${CURSES_TYPE} == "pdcurses"
 .    include "../../devel/pdcurses/buildlink3.mk"
-
 .  endif
-.  for _var_ in PKGNAME PREFIX INCDIRS LIBDIRS LIBNAME LDADD
-BUILDLINK_${_var_}.curses?=	${BUILDLINK_${_var_}.${CURSES_TYPE}}
+.  for var in BUILDLINK_PKGNAME BUILDLINK_PREFIX BUILDLINK_INCDIRS \
+	      BUILDLINK_LIBDIRS BUILDLINK_LIBNAME BUILDLINK_LDADD
+${var}.curses=			${${var}.${CURSES_TYPE}}
 .  endfor
 .endif
+
+# Some packages only look for ncurses
+# The correct action would be to write a patch and pass it upstream
+# but by setting FAKE_NCURSES=yes in the package we can temporarily work
+# around the short-coming.
+.if defined(FAKE_NCURSES) && !empty(FAKE_NCURSES:M[yY][eE][sS])
+.  if ${CURSES_TYPE} != "ncurses"
+.    if ${CURSES_TYPE} != "ncursesw"
+BUILDLINK_TARGETS+=		buildlink-curses-ncurses-h
+BUILDLINK_TRANSFORM+=		l:ncursesw:${BUILDLINK_LIBNAME.curses}
+.    endif
+BUILDLINK_TRANSFORM+=		l:ncurses:${BUILDLINK_LIBNAME.curses}
+.  endif
+.endif
+
+_VARGROUPS+=		curses
+_USER_VARS.curses=	CURSES_DEFAULT
+_PKG_VARS.curses=	FAKE_NCURSES USE_CURSES
+_SYS_VARS.curses=	PKG_OPTIONS CURSES_TYPE BUILDLINK_BUILTIN_MK.curses \
+			USE_NCURSES BUILDLINK_PKGNAME.curses \
+			BUILDLINK_PREFIX.curses BUILDLINK_INCDIRS.curses \
+			BUILDLINK_LIBDIRS.curses BUILDLINK_LIBNAME.curses \
+			BUILDLINK_LDADD.curses
+_USE_VARS.curses=	USE_BUILTIN.curses USE_BUILTIN.cursesw
+_DEF_VARS.curses=	USE_CURSES _CURSES_PKGS CHECK_BUILTIN.curses \
+			_CURSES_ACCEPTED _CURSES_TYPE _PKG_USE_CURSES \
+			H_CURSES BUILDLINK_TARGETS BUILDLINK_TRANSFORM

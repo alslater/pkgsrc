@@ -2,7 +2,7 @@
 
 DISTNAME=	libewf-experimental-20150126
 PKGNAME=	libewf-20150126
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_GITHUB:=libyal/libewf/releases/download/20150126/}
 

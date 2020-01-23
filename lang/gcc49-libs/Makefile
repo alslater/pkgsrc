@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.8 2016/09/06 12:38:35 jperkin Exp $
+# $NetBSD: Makefile,v 1.17 2019/11/03 19:03:59 rillig Exp $
 
 GCC_PKGNAME=	gcc49
 .include	"../../lang/${GCC_PKGNAME}/version.mk"
@@ -9,7 +9,7 @@ PKGNAME=	${GCC_PKGNAME}-libs-${GCC49_DIST_VERSION}
 ## The PKGREVISION of this package needs to be at least 1 more than the
 ## PKGREVISION of the lang/gcc49 package so that with the dependence pattern
 ## '{gcc49,gcc49-libs}>=4.9.*' pkg_add will choose gcc49-libs over gcc49.
-PKGREVISION=	1
+PKGREVISION=	8
 
 CATEGORIES=	lang
 MASTER_SITES=	# empty
@@ -35,12 +35,12 @@ CHECK_SHLIBS=	no
 
 LIBGCC_SUBPREFIX=	${GCC_PKGNAME}
 LIBGCC_PREFIX=		${LOCALBASE}/${LIBGCC_SUBPREFIX}
-ALIBGCC_PREFIX=		${LOCALBASE}/${LIBGCC_SUBPREFIX}
+ALLIBGCC_PREFIX=		${LOCALBASE}/${LIBGCC_SUBPREFIX}
 GCC_TARGET_MACHINE?=	${MACHINE_GNU_PLATFORM}
 BUILD_DEFS+=		GCC_TARGET_MACHINE
 
 .include "../../mk/bsd.prefs.mk"
-.if ${_OPSYS_SHLIB_TYPE} == "dylib"
+.if ${SHLIB_TYPE} == "dylib"
 SHLIB_EXT=	dylib
 .else
 SHLIB_EXT=	so
@@ -49,31 +49,37 @@ SHLIB_EXT=	so
 LIBRARY_FILES=	${WRKDIR}/lib_files
 OBJECT_FILES=	${WRKDIR}/obj_files
 
-GENERATE_PLIST+= ${SED} -e 's,^,${LIBGCC_SUBPREFIX}/${GCC_TARGET_MACHINE}/,' \
-			-e 's,gcc/${MACHINE_GNU_PLATFORM}/${GCC49_DIST_VERSION}/,,' \
-			${LIBRARY_FILES} ${OBJECT_FILES};
-GENERATE_PLIST+= ${GREP} -q 'lib/' ${LIBRARY_FILES} || \
-	   ${ECHO} '@pkgdir ${LIBGCC_SUBPREFIX}/${GCC_TARGET_MACHINE}/lib' ;
+GENERATE_PLIST+=	${SED} -e 's,^,${LIBGCC_SUBPREFIX}/${GCC_TARGET_MACHINE}/,' \
+			       -e 's,gcc/${MACHINE_GNU_PLATFORM}/${GCC49_DIST_VERSION}/,,' \
+			       ${LIBRARY_FILES} ${OBJECT_FILES};
+GENERATE_PLIST+= 	${GREP} -q 'lib/' ${LIBRARY_FILES} || \
+			${ECHO} '@pkgdir ${LIBGCC_SUBPREFIX}/${GCC_TARGET_MACHINE}/lib' ;
 
 ${LIBRARY_FILES}:
 	${PKG_INFO} -qL '${GCC_PKGNAME}-${GCC49_DIST_VERSION}*' |		\
-	${SED} -n -e's,^${ALIBGCC_PREFIX}/,,' -e'/libexec\//d'		\
-		-e'/libgij/d;/libgcj/d;/libjvm/d'			\
+	${SED} -n -e's,^${LIBGCC_PREFIX}/,,' -e'/libexec\//d'		\
+		-e'/libgij/d;/libgcj/d;/libjvm/d;/libgo\./d'		\
 		-e'/lib.*\.${SHLIB_EXT}/p' 		>${LIBRARY_FILES}
 
 ${OBJECT_FILES}:
 	${PKG_INFO} -qL '${GCC_PKGNAME}-${GCC49_DIST_VERSION}*' | \
-	${SED} -n -e 's,^${ALIBGCC_PREFIX}/,,' \
+	${SED} -n -e 's,^${LIBGCC_PREFIX}/,,' \
 		-e '/\.o/p' -e '/libgcc\.a/p' -e '/libssp_nonshared\.a/p' >${OBJECT_FILES}
 
 do-install: ${LIBRARY_FILES} ${OBJECT_FILES}
-	${TEST} -d ${DESTDIR}${ALIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/lib ||	\
+	${TEST} -d ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/lib ||	\
 		${MKDIR} ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/lib
-	cd ${ALIBGCC_PREFIX} && 						\
-	  ${PAX} -rw ${DESTDIR}${ALIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${LIBRARY_FILES}
-	cd ${ALIBGCC_PREFIX} &&                                          \
+	cd ${LIBGCC_PREFIX} && 						\
+	  ${PAX} -rw ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${LIBRARY_FILES}
+.if ${OPSYS} == "Darwin"
+	while read lib; do \
+	  install_name_tool -id ${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/$${lib} \
+	    ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE}/$${lib}; \
+	done <${LIBRARY_FILES}
+.endif
+	cd ${LIBGCC_PREFIX} &&                                          \
 	  ${PAX} -r -s ',gcc/${MACHINE_GNU_PLATFORM}/${GCC49_DIST_VERSION}/,,' \
-		-w ${DESTDIR}${ALIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${OBJECT_FILES}
+		-w ${DESTDIR}${LIBGCC_PREFIX}/${GCC_TARGET_MACHINE} <${OBJECT_FILES}
 
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"

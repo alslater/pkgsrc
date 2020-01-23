@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.104 2016/12/12 13:57:44 wiz Exp $
+# $NetBSD: Makefile,v 1.119 2019/11/04 21:28:43 rillig Exp $
 
-DISTNAME=	dbus-1.10.14
+DISTNAME=	dbus-1.12.16
 CATEGORIES=	sysutils
 MASTER_SITES=	http://dbus.freedesktop.org/releases/dbus/
 
@@ -17,7 +17,6 @@ BUILD_DEPENDS+=	xmlto-[0-9]*:../../textproc/xmlto
 GNU_CONFIGURE=		YES
 USE_TOOLS+=		gmake msgfmt pkg-config
 USE_LIBTOOL=		YES
-USE_MULTIARCH=		lib
 
 PKGCONFIG_OVERRIDE=	dbus-1.pc.in
 
@@ -39,7 +38,6 @@ CONFIGURE_ARGS+=	--localstatedir=${VARBASE:Q}
 # directory. See the commit message on revision 1.35
 CONFIGURE_ARGS+=	--with-session-socket-dir=/tmp
 
-CONFIGURE_ARGS+=	--without-init-scripts
 CONFIGURE_ARGS+=	--disable-ansi
 CONFIGURE_ARGS+=	--disable-console-owner-file
 CONFIGURE_ARGS+=	--disable-doxygen-docs
@@ -57,16 +55,20 @@ CONFIGURE_ARGS+=	--enable-static
 CONFIGURE_ARGS+=	--with-dbus-user=${DBUS_USER}
 CONFIGURE_ARGS+=	--with-test-socket-dir=${WRKDIR:Q}
 
+SUBST_CLASSES+=		docbook
+SUBST_STAGE.docbook=	pre-configure
+SUBST_FILES.docbook=	doc/*.xml*
+SUBST_SED.docbook=	-e 's,http://www.oasis-open.org/docbook/xml,${PREFIX}/share/xml/docbook,g'
+
 PTHREAD_AUTO_VARS=	yes
 
 .if ${OPSYS} == "Linux"
 PLIST.linux=		yes
 .else
-CONFIGURE_ARGS+=	--disable-abstract-sockets
 CONFIGURE_ARGS+=	--disable-selinux
 .endif
 
-PLIST_VARS+=    	linux launchd
+PLIST_VARS+=		linux
 
 DBUS_CONF_DIR=		${PKG_SYSCONFBASE}/dbus-1
 OWN_DIRS+=		${DBUS_CONF_DIR}/services
@@ -105,5 +107,6 @@ post-install:
 
 .include "../../mk/pthread.buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
+BUILDLINK_ABI_DEPENDS.expat+=	expat>=2.1.0
 .include "../../textproc/expat/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

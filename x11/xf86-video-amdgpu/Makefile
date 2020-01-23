@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.10 2016/11/17 21:00:05 wiz Exp $
+# $NetBSD: Makefile,v 1.18 2019/11/14 10:22:16 wiz Exp $
 
-DISTNAME=	xf86-video-amdgpu-1.2.0
+DISTNAME=	xf86-video-amdgpu-19.1.0
 CATEGORIES=	x11
 MASTER_SITES=	${MASTER_SITE_XORG:=driver/}
 EXTRACT_SUFX=	.tar.bz2
@@ -8,6 +8,7 @@ EXTRACT_SUFX=	.tar.bz2
 MAINTAINER=	joerg@NetBSD.org
 HOMEPAGE=	http://xorg.freedesktop.org/
 COMMENT=	Modular Xorg ATI (Tonga, Carrizo, Iceland, Fiji, Stoney) driver
+LICENSE=	mit AND x11
 
 USE_LIBTOOL=	yes
 GNU_CONFIGURE=	yes

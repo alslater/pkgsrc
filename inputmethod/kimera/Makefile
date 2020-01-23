@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	kimera-2.11
-PKGREVISION=	22
+PKGREVISION=	23
 CATEGORIES=	inputmethod japanese
 MASTER_SITES=	${MASTER_SITE_OSDN:=kimera/37271/}
 

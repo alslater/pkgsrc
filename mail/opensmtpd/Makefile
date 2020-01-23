@@ -2,7 +2,7 @@
 
 VERSION=	5.7.3p2
 DISTNAME=	opensmtpd-${VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	mail net
 MASTER_SITES=	http://www.opensmtpd.org/archives/
 

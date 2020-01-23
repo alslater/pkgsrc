@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.16 2016/03/05 11:28:12 jperkin Exp $
+# $NetBSD: Makefile,v 1.17 2017/06/02 08:29:56 adam Exp $
 
 PKGNAME=	${DISTNAME:S/-/-cloak-/}
 PKGREVISION=	1

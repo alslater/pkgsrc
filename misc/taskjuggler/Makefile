@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	taskjuggler-2.4.3
-PKGREVISION=	34
+PKGREVISION=	35
 CATEGORIES=	misc
 MASTER_SITES=	http://www.taskjuggler.org/download/
 EXTRACT_SUFX=	.tar.bz2

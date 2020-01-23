@@ -1,13 +1,13 @@
 # $NetBSD: Makefile,v 1.12 2016/08/17 18:58:05 maya Exp $
 
-BYOBUVER=	5.125
+BYOBUVER=	5.130
 DISTNAME=	byobu_${BYOBUVER}.orig
 PKGNAME=	${DISTNAME:S/_/-/:S/.orig//}
 CATEGORIES=	misc
 MASTER_SITES=	https://launchpad.net/byobu/trunk/${BYOBUVER}/+download/
 
 MAINTAINER=	ryoon@NetBSD.org
-HOMEPAGE=	http://byobu.co/
+HOMEPAGE=	http://www.byobu.co/
 COMMENT=	Open source text-based window manager and terminal multiplexer
 LICENSE=	gnu-gpl-v3
 
@@ -21,9 +21,9 @@ REPLACE_BASH+=	usr/lib/byobu/*
 REPLACE_BASH+=	usr/lib/byobu/include/*
 REPLACE_BASH+=	usr/share/byobu/tests/*
 
-REPLACE_PERL+=	usr/lib/byobu/include/*
-REPLACE_PYTHON+=	usr/lib/byobu/include/*
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # py-newt
+REPLACE_PERL+=			usr/lib/byobu/include/*
+REPLACE_PYTHON+=		usr/lib/byobu/include/*
+PYTHON_VERSIONS_ACCEPTED=	27 # py-newt
 
 EGDIR=			share/examples/byobu
 CONFIGURE_ARGS+=	--sysconfdir=${PREFIX}/${EGDIR}

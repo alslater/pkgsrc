@@ -1,4 +1,4 @@
-# $NetBSD: egg.mk,v 1.24 2016/08/28 09:40:35 richard Exp $
+# $NetBSD: egg.mk,v 1.28 2019/07/17 18:34:16 rillig Exp $
 #
 # Common logic to handle Python Eggs
 #
@@ -28,16 +28,30 @@ PY_PATCHPLIST=	yes
 
 PLIST_SUBST+=	EGG_NAME=${EGG_NAME}-py${PYVERSSUFFIX}
 PLIST_SUBST+=	EGG_INFODIR=${EGG_INFODIR}
-PRINT_PLIST_AWK+=	{ gsub(/${EGG_NAME}-py${PYVERSSUFFIX}.egg-info/, \
+PRINT_PLIST_AWK+=	{ gsub(/${EGG_NAME}-py${PYVERSSUFFIX:S,.,\.,g}.egg-info/, \
 			       "$${EGG_INFODIR}") }
-PRINT_PLIST_AWK+=	{ gsub(/${EGG_NAME}-py${PYVERSSUFFIX}-nspkg.pth/, \
+PRINT_PLIST_AWK+=	{ gsub(/${EGG_NAME}-py${PYVERSSUFFIX:S,.,\.,g}-nspkg.pth/, \
 			       "$${EGG_NAME}-nspkg.pth") }
-PRINT_PLIST_AWK+=	{ gsub(/${PYVERSSUFFIX}/, \
+PRINT_PLIST_AWK+=	{ gsub(/${PYVERSSUFFIX:S,.,\.,g}/, \
 			       "$${PYVERSSUFFIX}") }
 
 _PYSETUPTOOLSINSTALLARGS=	--single-version-externally-managed
 
+# py-setuptools depends on a couple py-* packages that need to be installed
+# beforehand. Of course, those can not be built and installed using py-setuptools
+# itself; so use the setuptools version included with python itself for installing
+# them.
+BOOTSTRAP_SETUPTOOLS?=	no
+.if ${BOOTSTRAP_SETUPTOOLS} == "yes"
+BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
+do-build: ensurepip
+.PHONY: ensurepip
+
+ensurepip:
+	${SETENV} ${MAKE_ENV} ${PYTHONBIN} -m ensurepip --user
+.else
 DEPENDS+=	${PYPKGPREFIX}-setuptools>=0.8:../../devel/py-setuptools
+.endif
 
 INSTALLATION_DIRS+=	${PYSITELIB}
 

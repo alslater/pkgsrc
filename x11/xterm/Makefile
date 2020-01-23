@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.112 2016/10/09 21:05:16 wiz Exp $
+# $NetBSD: Makefile,v 1.121 2019/11/03 09:14:21 rillig Exp $
 
-DISTNAME=	xterm-327
+DISTNAME=	xterm-344
 CATEGORIES=	x11
-MASTER_SITES=	ftp://invisible-island.net/xterm/
+MASTER_SITES=	ftp://ftp.invisible-island.net/xterm/
 EXTRACT_SUFX=	.tgz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://dickey.his.com/xterm/xterm.html
+HOMEPAGE=	https://invisible-island.net/xterm/xterm.html
 COMMENT=	Latest terminal emulator for the X Window System
 LICENSE=	x11
 
@@ -20,11 +20,11 @@ CONFIGURE_ARGS+=	--enable-256-color
 CONFIGURE_ARGS+=	--enable-paste64
 CONFIGURE_ARGS+=	--enable-readline-mouse
 
-CONFIGURE_ARGS.standard=# empty
-CONFIGURE_ARGS.3d=	--with-Xaw3d
-CONFIGURE_ARGS.xpm=	--with-Xaw3d
-CONFIGURE_ARGS.neXtaw=	--with-neXtaw
-CONFIGURE_ARGS+=	${${CONFIGURE_ARGS.${XAW_TYPE}}:L}
+CONFIGURE_ARGS.standard=	# empty
+CONFIGURE_ARGS.3d=		--with-Xaw3d
+CONFIGURE_ARGS.xpm=		--with-Xaw3d
+CONFIGURE_ARGS.neXtaw=		--with-neXtaw
+CONFIGURE_ARGS+=		${${CONFIGURE_ARGS.${XAW_TYPE}}:L}
 
 INSTALLATION_DIRS=	share/applications
 
@@ -58,6 +58,7 @@ post-install:
 .include "options.mk"
 
 .include "../../mk/curses.buildlink3.mk"
+.include "../../mk/termcap.buildlink3.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../mk/xaw.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

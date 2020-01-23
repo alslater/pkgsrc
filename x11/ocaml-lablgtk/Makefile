@@ -2,7 +2,7 @@
 
 DISTNAME=	lablgtk-2.18.5
 PKGNAME=	ocaml-${DISTNAME}
-PKGREVISION=	3
+PKGREVISION=	4
 CATEGORIES=	x11
 MASTER_SITES=	https://forge.ocamlcore.org/frs/download.php/1627/
 

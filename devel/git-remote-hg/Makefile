@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.1 2015/11/26 08:30:57 agc Exp $
+# $NetBSD: Makefile,v 1.3 2019/04/25 07:32:45 maya Exp $
 
 DISTNAME=	git-remote-hg-20140603
+PKGREVISION=	2
 CATEGORIES=	devel scm
 MASTER_SITES=	${MASTER_SITE_GITHUB:=felipec/}
 
@@ -23,6 +24,5 @@ REPLACE_PYTHON=	git-remote-hg
 INSTALL_TARGET=	install install-doc
 AUTO_MKDIRS=	yes
 
-.include "../../devel/ncurses/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"

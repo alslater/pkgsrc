@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	zathura-pdf-mupdf-0.3.0
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	print
 MASTER_SITES=	http://pwmt.org/projects/zathura/plugins/download/
 

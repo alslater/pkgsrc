@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.106 2017/09/10 20:56:24 wiz Exp $
+# $NetBSD: Makefile,v 1.110 2019/11/06 13:23:45 wiz Exp $
 
 .include "Makefile.common"
 
@@ -6,7 +6,6 @@ BUILD_DEPENDS+=	docbook-xml-[0-9]*:../../textproc/docbook-xml
 BUILD_DEPENDS+=	docbook-xsl-[0-9]*:../../textproc/docbook-xsl
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		bin lib
 USE_TOOLS+=		gmake perl
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--with-libxml-prefix=${BUILDLINK_PREFIX.libxml2}
@@ -20,7 +19,7 @@ TEST_TARGET=		check
 BUILDLINK_TRANSFORM.SunOS+=	opt:-Wl,./libxslt.syms:-Wl,./libxslt_solaris.syms
 
 .include "../../mk/bsd.prefs.mk"
-.if !empty(MACHINE_PLATFORM:MIRIX-5*)
+.if !empty(MACHINE_PLATFORM:MIRIX-5.*)
 CPPFLAGS+=	-Dsocklen_t=int
 .endif
 

@@ -2,7 +2,7 @@
 
 DISTNAME=	mupdf-1.10a-source
 PKGNAME=	${DISTNAME:S/-source//}
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	print
 MASTER_SITES=	http://mupdf.com/downloads/archive/
 

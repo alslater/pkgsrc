@@ -1,13 +1,23 @@
-$NetBSD$
+$NetBSD: patch-configure.ac,v 1.4 2018/11/03 12:47:16 leot Exp $
 
---- configure.ac.orig	2018-11-02 01:49:29.000000000 +0000
+Defining _GNU_SOURCE, _BSD_SOURCE etc. in C sources is problematic,
+because the result of the configure command may be inconsistent with it.
+to be consistent, such macros have to be defined in the early stage of
+the configure command, and the AC_USE_SYSTEM_EXTENSIONS macro does the job.
+
+Part of pull request 1458, commit id `df9a0963f8fa6fca773b059dce22c598152f3edb':
+
+ <https://github.com/stedolan/jq/pull/1458>
+
+Also shared via PR pkg/52460.
+
+--- configure.ac.orig	2018-11-02 14:52:43.000000000 +0000
 +++ configure.ac
-@@ -1,7 +1,4 @@
--m4_define([jq_version],
--          m4_esyscmd_s([(git rev-parse --verify -q jq-1.0 > /dev/null &&
--                        (git describe --tags --dirty --match 'jq-*'|sed 's/^jq-//')) ||
--                        echo `git rev-parse --abbrev-ref HEAD`-`git describe --always --dirty`])))
-+m4_define([jq_version], [jq-1.6])
- 
- AC_INIT([jq], [jq_version], [https://github.com/stedolan/jq/issues],
-              [jq], [https://stedolan.github.io/jq])
+@@ -11,6 +11,7 @@ AC_PREREQ([2.64])
+ AC_CONFIG_AUX_DIR([config])
+ AM_INIT_AUTOMAKE([1.11.2 subdir-objects parallel-tests foreign -Wall])
+ AM_SILENT_RULES([yes])
++AC_USE_SYSTEM_EXTENSIONS
+ AM_PROG_AR
+ AM_MAINTAINER_MODE([enable])
+ AC_PROG_CC

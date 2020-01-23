@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gtetrinet-0.7.11
-PKGREVISION=	39
+PKGREVISION=	40
 CATEGORIES=	games gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gtetrinet/0.7/}
 

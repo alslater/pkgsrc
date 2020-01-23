@@ -3,6 +3,7 @@
 COLLECTD_PACKAGE=	snmp
 
 COMMENT=		Statistics collection daemon - snmp plugin
+PKGREVISION=		1
 
 .include "../../sysutils/collectd/Makefile.common"
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	grantlee
 GRANTLEE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.grantlee+=	grantlee>=0.3.0
-BUILDLINK_ABI_DEPENDS.grantlee?=	grantlee>=0.5.1nb2
+BUILDLINK_ABI_DEPENDS.grantlee?=	grantlee>=0.5.1nb4
 BUILDLINK_PKGSRCDIR.grantlee?=	../../devel/grantlee
 
 .include "../../x11/qt4-libs/buildlink3.mk"

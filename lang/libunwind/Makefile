@@ -1,34 +1,36 @@
-# $NetBSD: Makefile,v 1.3 2016/11/14 20:15:33 ryoon Exp $
+# $NetBSD: Makefile,v 1.21 2019/11/03 19:04:03 rillig Exp $
 
-DISTNAME=	libunwind-5.0.2.src
+DISTNAME=	libunwind-9.0.0.src
+PKGREVISION=	1
 PKGNAME=	${DISTNAME:S/.src//}
 CATEGORIES=	lang devel
-MASTER_SITES=	http://llvm.org/releases/${PKGVERSION_NOREV}/
-#MASTER_SITES=	http://llvm.org/pre-releases/3.8.0/rc2/
+MASTER_SITES=	http://releases.llvm.org/${PKGVERSION_NOREV}/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://libunwind.llvm.org/
+#HOMEPAGE=	http://libunwind.llvm.org/
 COMMENT=	LLVM libunwind
-LICENSE=	modified-bsd
+LICENSE=	apache-2.0
 
 CONFIGURE_DIRS=		${WRKDIR}/build
 
-USE_TOOLS+=		pax
-USE_LANGUAGES=		c c++
 USE_CMAKE=		yes
+USE_LANGUAGES=		c c++11
+USE_TOOLS+=		pax
 GCC_REQD+=		4.8
+SSP_SUPPORTED=		no
 
 CMAKE_ARGS+=	-DCMAKE_BUILD_TYPE=Release
-CMAKE_ARGS+=	-DCMAKE_C_COMPILER=gcc
-CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=g++
+CMAKE_ARGS+=	-DCMAKE_C_COMPILER=${CC:Q}
+CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=${CXX:Q}
+CMAKE_ARGS+=    -DLLVM_TEMPORARILY_ALLOW_OLD_TOOLCHAIN=ON
 
 CMAKE_ARG_PATH=	${WRKSRC}
 
 INSTALLATION_DIRS=	include
 
 post-extract:
-	${RUN} mkdir -p ${WRKDIR}/build
+	${MKDIR} ${WRKDIR}/build
 
 post-install:
 	cd ${WRKSRC}/include && ${PAX} -rw . ${DESTDIR}${PREFIX}/include

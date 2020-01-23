@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.20 2016/10/07 18:25:48 adam Exp $
 
 DISTNAME=	klickety-${_KDE_VERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	games
 COMMENT=	a strategy game for KDE, an adaption of the Clickomania game
 

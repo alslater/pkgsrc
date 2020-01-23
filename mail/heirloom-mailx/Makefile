@@ -3,7 +3,7 @@
 
 DISTNAME=	heirloom-mailx_12.5.orig
 PKGNAME=	heirloom-mailx-12.5
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	mail
 MASTER_SITES=	${MASTER_SITE_DEBIAN:=pool/main/h/heirloom-mailx/}
 EXTRACT_SUFX=	.tar.gz

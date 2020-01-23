@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	cfengine-3.7.3
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	sysutils
 MASTER_SITES=	http://cfengine-package-repos.s3.amazonaws.com/tarballs/
 

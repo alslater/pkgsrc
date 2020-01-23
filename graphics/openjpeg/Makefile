@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.14 2016/10/04 19:27:10 adam Exp $
+# $NetBSD: Makefile,v 1.18 2019/11/26 23:10:22 sevan Exp $
 
 DISTNAME=	openjpeg-2.3.1
+PKGREVISION= 	1
 CATEGORIES=	graphics
 MASTER_SITES=	${MASTER_SITE_GITHUB:=uclouvain/}
 GITHUB_TAG=	v${PKGVERSION_NOREV}
@@ -12,8 +13,6 @@ LICENSE=	2-clause-bsd
 
 USE_CMAKE=	yes
 USE_LANGUAGES=	c99 c++
-USE_MULTIARCH=	lib
-CMAKE_ARGS+=	-DOPENJPEG_INSTALL_LIB_DIR=lib${LIBARCHSUFFIX}
 CMAKE_ARGS+=	-DOPENJPEG_INSTALL_MAN_DIR=${PKGMANDIR}
 
 .include "../../devel/zlib/buildlink3.mk"

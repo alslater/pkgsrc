@@ -2,7 +2,7 @@
 
 DISTNAME=		root_v5.26.00b.source
 PKGNAME=		root-5.26
-PKGREVISION=		17
+PKGREVISION=		18
 CATEGORIES=		misc
 MASTER_SITES=		ftp://root.cern.ch/root/
 

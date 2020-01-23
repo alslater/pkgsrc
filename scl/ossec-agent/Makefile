@@ -1,4 +1,5 @@
 PKGNAME=    ${DISTNAME:S/hids/agent/}
+PKGREVISION=    2
 COMMENT=    Security tool to monitor and check logs and intrusions
 
 CONFLICTS+= ossec-server-[0-9]* ossec-local-[0-9]*

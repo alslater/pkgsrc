@@ -3,7 +3,7 @@
 DISTNAME=	phonon-4.9.0
 
 COMMENT=	Multimedia API for KDE and QT
-PKGREVISION=	1
+PKGREVISION=	2
 
 .include "Makefile.common"
 

@@ -2,7 +2,7 @@
 
 DISTNAME=	sipsak-0.9.6-1
 PKGNAME=	${DISTNAME:S/-1//}
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	net comms
 MASTER_SITES=	http://download.berlios.de/sipsak/
 

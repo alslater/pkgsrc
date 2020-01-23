@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.common,v 1.5 2017/04/05 17:36:00 kim Exp $
+# $NetBSD: Makefile.common,v 1.10 2019/12/09 19:22:57 nros Exp $
 
 # used by net/proftpd/Makefile
 # used by net/proftpd/Makefile.module
@@ -14,14 +14,14 @@ MASTER_SITES+=	ftp://ftp.fsn.hu/pub/proftpd/distrib/source/
 # For CVE-2017-7418
 #PATCHFILES=		ecff21e0d0e84f35c299ef91d7fda088e516d4ed.patch
 
-MAINTAINER=	kim@tac.nyc.ny.us
+MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://www.proftpd.org/
 LICENSE=	gnu-gpl-v2
 
 DISTINFO_FILE=		${.CURDIR}/../../net/proftpd/distinfo
 PATCHDIR=		${.CURDIR}/../../net/proftpd/patches
 
-USE_TOOLS+=		gmake intltool msgfmt perl:run
+USE_TOOLS+=		gmake intltool msgfmt perl:run autoconf
 USE_LIBTOOL=		yes
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--sysconfdir=${PKG_SYSCONFDIR}
@@ -37,12 +37,17 @@ CONFIGURE_ENV+=		install_user=${ROOT_USER}
 
 BUILD_DEFS+=		VARBASE
 
-CHECK_SHLIBS_SKIP=libexec/proftpd/*.a
+CHECK_SHLIBS_SKIP=	libexec/proftpd/*.a
+CHECK_SSP_SKIP=		${CHECK_SHLIBS_SKIP}
 
 SUBST_CLASSES+=		libs
 SUBST_STAGE.libs=	pre-build
 SUBST_FILES.libs=	modules/mod_sql_mysql.c
 SUBST_SED.libs=		-e 's|^\(.\*\ \$$Libraries:\ \).* \$$|\1'"`mysql_config --libs`"'\ \$$|'
+
+pre-configure:
+	cd ${WRKSRC} && ${TOOLS_CMD.autoconf} &&\
+	cd contrib/mod_load && ${TOOLS_CMD.autoconf}
 
 .include "options.mk"
 

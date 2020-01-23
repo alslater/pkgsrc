@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.160 2016/09/15 14:32:41 wiz Exp $
+# $NetBSD: Makefile,v 1.207 2019/11/07 12:38:06 wiz Exp $
 
-DISTNAME=	graphviz-2.38.0
-PKGREVISION=	16
+DISTNAME=	graphviz-2.40.1
+PKGREVISION=	43
 CATEGORIES=	graphics
 MASTER_SITES=	http://www.graphviz.org/pub/graphviz/stable/SOURCES/
 
@@ -16,7 +16,6 @@ PRIVILEGED_STAGES+=	clean
 
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		automake bison flex pkg-config
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--disable-java
@@ -25,26 +24,21 @@ CONFIGURE_ARGS+=	--disable-python
 CONFIGURE_ARGS+=	--disable-ruby
 CONFIGURE_ARGS+=	--disable-sharp
 CONFIGURE_ARGS+=	--disable-r
-CONFIGURE_ARGS+=	--with-poppler=no
-CONFIGURE_ARGS+=	--with-gts=no
-CONFIGURE_ARGS+=	--with-qt=no
+CONFIGURE_ARGS+=	--without-qt
 # build fails when PHP and/or Ruby are also installed
 CONFIGURE_ENV+=		ac_cv_prog_PHP=
 CONFIGURE_ENV+=		ac_cv_prog_RUBY=
-# Not ideal but configure hardcodes paths
-CONFIGURE_ENV+=		LIBPOSTFIX=${LIBARCHSUFFIX}
 CPPFLAGS+=		-DNO_POSTSCRIPT_ALIAS=1
 PKGCONFIG_OVERRIDE+=	lib/cdt/libcdt.pc.in
 PKGCONFIG_OVERRIDE+=	lib/cgraph/libcgraph.pc.in
+PKGCONFIG_OVERRIDE+=	lib/edgepaint/liblab_gamut.pc.in
 PKGCONFIG_OVERRIDE+=	lib/expr/libexpr.pc.in
-PKGCONFIG_OVERRIDE+=	lib/graph/libgraph.pc.in
 PKGCONFIG_OVERRIDE+=	lib/gvc/libgvc.pc.in
 PKGCONFIG_OVERRIDE+=	lib/gvpr/libgvpr.pc.in
 PKGCONFIG_OVERRIDE+=	lib/pathplan/libpathplan.pc.in
+PKGCONFIG_OVERRIDE+=	lib/sfdpgen/libsfdp.pc.in
 PKGCONFIG_OVERRIDE+=	lib/xdot/libxdot.pc.in
 XAW_TYPE=		standard
-
-MULTIARCH_DIRS.lib=	# defined in PLIST
 
 # With lua51 there's a PLIST divergence and it isn't obvious whether
 # it's serious or not, or what causes it.
@@ -61,8 +55,6 @@ REPLACE_PERL+=		config/config_perl.pl \
 			tclpkg/gv/demo/modgraph.pl contrib/dotmcl.pl \
 			contrib/dirgraph/dirgraph.pl
 
-.include "../../mk/bsd.prefs.mk"
-
 .include "../../mk/compiler.mk"
 .if !empty(CC_VERSION:Mgcc-2*)
 BUILDLINK_TRANSFORM+=	rm:-Wno-unused-parameter
@@ -74,9 +66,9 @@ pre-build:
 
 # Remove temporary files and directories created by re-linking "libgv_lua.la".
 post-install:
-	${RM} -rf ${DESTDIR}${PREFIX}/lib${LIBARCHSUFFIX}/graphviz/lua/gv.so \
-	  ${DESTDIR}${PREFIX}/lib${LIBARCHSUFFIX}/graphviz/tcl/tcl \
-	  ${DESTDIR}${PREFIX}/lib${LIBARCHSUFFIX}/lua/5.1/gv.so
+	${RM} -rf ${DESTDIR}${PREFIX}/lib/graphviz/lua/gv.so \
+	  ${DESTDIR}${PREFIX}/lib/graphviz/tcl/tcl \
+	  ${DESTDIR}${PREFIX}/lib/lua/5.1/gv.so
 
 .include "options.mk"
 
@@ -86,9 +78,10 @@ post-install:
 .include "../../devel/gettext-lib/buildlink3.mk"
 .include "../../devel/libltdl/buildlink3.mk"
 #.include "../../devel/libltdl/convenience.mk"
+.include "../../devel/pango/buildlink3.mk"
 .include "../../fonts/fontconfig/buildlink3.mk"
-#.include "../../mk/jpeg.buildlink3.mk"
-#.include "../../graphics/png/buildlink3.mk"
+.include "../../graphics/cairo/buildlink3.mk"
+.include "../../graphics/gts/buildlink3.mk"
 .include "../../textproc/expat/buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

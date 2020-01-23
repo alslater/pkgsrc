@@ -3,7 +3,7 @@
 
 DISTNAME=	mxcl-liblastfm-0.3.3-0-gf0b3239
 PKGNAME=	liblastfm-0.3.3
-PKGREVISION=	23
+PKGREVISION=	24
 CATEGORIES=	audio net
 MASTER_SITES=	http://download.github.com/
 

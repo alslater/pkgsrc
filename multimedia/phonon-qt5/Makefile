@@ -2,7 +2,7 @@
 
 DISTNAME=       phonon-4.9.0
 PKGNAME=	${DISTNAME:S/-/-qt5-/}
-PKGREVISION=	4
+PKGREVISION=	5
 
 COMMENT=	Multimedia API for KF5
 

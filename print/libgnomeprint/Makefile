@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libgnomeprint-2.18.8
-PKGREVISION=	23
+PKGREVISION=	24
 CATEGORIES=	print gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libgnomeprint/2.18/}
 EXTRACT_SUFX=	.tar.bz2

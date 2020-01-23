@@ -21,3 +21,4 @@ SHA1 (patch-boost_math_tools_config.hpp) = db3965cd810185116efd669df29067f58cc84
 SHA1 (patch-boost_regex_config.hpp) = 6b752c7c23168c591cd391739c7a4539bef44c12
 SHA1 (patch-libs_config_configure) = e2f204d4fa4f1bd9b4131d28f9be0a1ac22bf711
 SHA1 (patch-libs_config_test_boost__no__range__based__for.ipp) = d9936c472fc2c696d86522b36eb12813ae91bee4
+SHA1 (patch-libs_python_src_converter_builtin__converters.cpp) = 28effd39943e55f6a44cbf85635444616ced7d1f

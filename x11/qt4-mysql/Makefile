@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.40 2016/03/05 11:29:48 jperkin Exp $
+# $NetBSD: Makefile,v 1.42 2019/11/03 09:14:16 rillig Exp $
 
-PKGREVISION= 1
+PKGREVISION= 2
 .include "../../x11/qt4-libs/Makefile.common"
 
 PKGNAME=	qt4-mysql-${QTVERSION}
@@ -16,7 +16,7 @@ do-build:
 	cd ${WRKSRC}/src/tools/moc && env ${MAKE_ENV} ${GMAKE}
 	cd ${WRKSRC}/src/plugins/sqldrivers/mysql && env ${MAKE_ENV} ${GMAKE}
 
-SQLDRVDIR=	${QTPREFIX}/plugins/sqldrivers
+SQLDRVDIR=		${QTPREFIX}/plugins/sqldrivers
 INSTALLATION_DIRS=	${SQLDRVDIR}
 
 do-install:

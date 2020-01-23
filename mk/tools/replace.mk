@@ -1,4 +1,4 @@
-# $NetBSD: replace.mk,v 1.278 2016/04/08 13:12:33 wiz Exp $
+# $NetBSD: replace.mk,v 1.290 2019/06/06 11:54:33 jperkin Exp $
 #
 # Copyright (c) 2005 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -78,6 +71,7 @@
 #
 #	USE_TOOLS+=	perl:run
 #
+# Keywords: USE_TOOLS tool tools
 
 # bison implies "bison-yacc"
 .if !empty(USE_TOOLS:Mbison) || !empty(USE_TOOLS:Mbison\:*)
@@ -130,6 +124,7 @@ PKG_FAIL_REASON+=	"\`\`bison'' and \`\`byacc'' conflict in USE_TOOLS."
 #    BOOTSTRAP_DEPENDS:	:bootstrap
 #    TOOL_DEPENDS:	:build (default), :pkgsrc
 #    DEPENDS:		:run
+#    TEST_DEPENDS:	:test
 #
 .for _t_ in ${USE_TOOLS:N*\:*} ${USE_TOOLS:M*\:bootstrap}
 _TOOLS_DEPMETHOD.${_t_:C/:.*//}=	BOOTSTRAP_DEPENDS
@@ -139,6 +134,9 @@ _TOOLS_DEPMETHOD.${_t_:C/:.*//}=	TOOL_DEPENDS
 .endfor
 .for _t_ in ${USE_TOOLS:M*\:run}
 _TOOLS_DEPMETHOD.${_t_:C/:.*//}=	DEPENDS
+.endfor
+.for _t_ in ${USE_TOOLS:M*\:test}
+_TOOLS_DEPMETHOD.${_t_:C/:.*//}=	TEST_DEPENDS
 .endfor
 
 .if !empty(_USE_TOOLS:Mbison-yacc)	# bison-yacc > yacc
@@ -254,7 +252,7 @@ TOOLS_CREATE+=			bison-yacc
 TOOLS_PATH.bison-yacc=		${LOCALBASE}/bin/bison
 TOOLS_ARGS.bison-yacc=		-y
 .  endif
-TOOLS_CMD.bison-yacc=		${TOOLS_DIR}/bin${BINARCHSUFFIX}/yacc
+TOOLS_CMD.bison-yacc=		${TOOLS_DIR}/bin/yacc
 #
 # bison/yacc is typically a build tool whose path is not embedded in
 # any scripts or config files.  In this case, pass the full command
@@ -281,7 +279,7 @@ MAKEFLAGS+=			TOOLS_IGNORE.byacc=
 TOOLS_DEPENDS.byacc?=		byacc>=20040328:../../devel/byacc
 TOOLS_CREATE+=			byacc
 TOOLS_PATH.byacc=		${LOCALBASE}/bin/yacc
-TOOLS_CMD.byacc=		${TOOLS_DIR}/bin${BINARCHSUFFIX}/yacc
+TOOLS_CMD.byacc=		${TOOLS_DIR}/bin/yacc
 .  endif
 .endif
 
@@ -375,7 +373,7 @@ MAKEFLAGS+=			TOOLS_IGNORE.flex=
 .  elif !empty(_TOOLS_USE_PKGSRC.flex:M[yY][eE][sS])
 .    include "../../devel/flex/buildlink3.mk"
 _TOOLS_DEPENDS.flex=		# empty
-.    for _dep_ in ${BUILDLINK_API_DEPENDS.flex}
+.    for _dep_ in ${BUILDLINK_API_DEPENDS.flex} ${FLEX_REQD:S,^,flex>=,}
 _TOOLS_DEPENDS.flex+=		${_dep_}:${BUILDLINK_PKGSRCDIR.flex}
 .    endfor
 TOOLS_DEPENDS.flex?=		${_TOOLS_DEPENDS.flex}
@@ -406,14 +404,8 @@ TOOLS_ALIASES.gawk=		awk
 .endif
 
 .if !defined(TOOLS_IGNORE.gem) && !empty(_USE_TOOLS:Mgem)
-.  if !empty(PKGPATH:Mmisc/rubygems)
-MAKEFLAGS+=			TOOLS_IGNORE.gem=
-.  elif !empty(_TOOLS_USE_PKGSRC.gem:M[yY][eE][sS])
-.    if !defined(RUBY_VER) || !empty(RUBY_VER:M18)
-TOOLS_DEPENDS.gem?=		${RUBY_PKGPREFIX}-rubygems-[0-9]*:../../misc/rubygems
-.    else
+.  if !empty(_TOOLS_USE_PKGSRC.gem:M[yY][eE][sS])
 TOOLS_DEPENDS.gem?=		${RUBY_BASE}>=${RUBY_VERSION}:${RUBY_SRCDIR}
-.    endif
 TOOLS_CREATE+=			gem
 TOOLS_PATH.gem=			${LOCALBASE}/bin/gem${RUBY_SUFFIX}
 .  endif
@@ -647,7 +639,7 @@ TOOLS_PATH.openssl=		${LOCALBASE}/bin/openssl
 .endif
 
 .if !defined(TOOLS_IGNORE.patch) && !empty(_USE_TOOLS:Mpatch)
-.  if !empty(PKGPATH:Mdevel/patch)
+.  if !empty(PKGPATH:Mdevel/nbpatch)
 MAKEFLAGS+=			TOOLS_IGNORE.patch=
 .  elif !empty(_TOOLS_USE_PKGSRC.patch:M[yY][eE][sS])
 TOOLS_DEPENDS.patch?=		nbpatch-[0-9]*:../../devel/nbpatch
@@ -708,7 +700,7 @@ TOOLS_DEPENDS.sh?=		pdksh>=5.2.14:../../shells/pdksh
 TOOLS_CREATE+=			sh
 TOOLS_PATH.sh=			${LOCALBASE}/bin/pdksh
 .  endif
-TOOLS_CMD.sh=			${TOOLS_DIR}/bin${BINARCHSUFFIX}/sh
+TOOLS_CMD.sh=			${TOOLS_DIR}/bin/sh
 .endif
 
 .if !defined(TOOLS_IGNORE.shlock) && !empty(_USE_TOOLS:Mshlock)
@@ -978,36 +970,51 @@ TOOLS_PATH.[=		${LOCALBASE}/bin/g[
 ######################################################################
 
 # These tools are all supplied by the textproc/grep package if there is
-# no native tool available.
+# no native tool available.  If explicit GNU versions are requested via
+# "ggrep" then they are preferred.
 #
 _TOOLS.grep=	egrep fgrep grep
 
-.for _t_ in ${_TOOLS.grep}
-.  if !defined(TOOLS_IGNORE.${_t_}) && !empty(_USE_TOOLS:M${_t_})
-.    if !empty(PKGPATH:Mtextproc/grep)
+.if !defined(TOOLS_IGNORE.ggrep) && !empty(_USE_TOOLS:Mggrep)
+.  if !empty(PKGPATH:Mtextproc/grep)
+MAKEFLAGS+=		TOOLS_IGNORE.ggrep=
+.  elif !empty(_TOOLS_USE_PKGSRC.ggrep:M[yY][eE][sS])
+TOOLS_DEPENDS.ggrep?=	grep>=2.5.1:../../textproc/grep
+.    for _t_ in ${_TOOLS.grep}
+TOOLS_CREATE+=		g${_t_}
+TOOLS_PATH.${_t_}=	${LOCALBASE}/bin/g${_t_}
+TOOLS_PATH.g${_t_}=	${LOCALBASE}/bin/g${_t_}
+TOOLS_ALIASES.g${_t_}=	${_t_}
+.    endfor
+.  endif
+.else
+.  for _t_ in ${_TOOLS.grep}
+.    if !defined(TOOLS_IGNORE.${_t_}) && !empty(_USE_TOOLS:M${_t_})
+.      if !empty(PKGPATH:Mtextproc/grep)
 MAKEFLAGS+=		TOOLS_IGNORE.${_t_}=
-.    elif !empty(_TOOLS_USE_PKGSRC.${_t_}:M[yY][eE][sS])
+.      elif !empty(_TOOLS_USE_PKGSRC.${_t_}:M[yY][eE][sS])
 TOOLS_DEPENDS.${_t_}?=	grep>=2.5.1:../../textproc/grep
 TOOLS_CREATE+=		${_t_}
 TOOLS_PATH.${_t_}=	${LOCALBASE}/bin/g${_t_}
+.      endif
 .    endif
-.  endif
-.endfor
+.  endfor
+.endif
 
 ######################################################################
 
-# These tools are supplied by textproc/mdocml as replacements for their
+# These tools are supplied by textproc/mandoc as replacements for their
 # groff counterparts.  As this package has fewer dependencies it should
 # be preferred over groff wherever possible.
 #
-_TOOLS.mdocml=	nroff
+_TOOLS.mandoc=	nroff
 
-.for _t_ in ${_TOOLS.mdocml}
+.for _t_ in ${_TOOLS.mandoc}
 .  if !defined(TOOLS_IGNORE.${_t_}) && !empty(_USE_TOOLS:M${_t_})
-.    if !empty(PKGPATH:Mtextproc/mdocml)
+.    if !empty(PKGPATH:Mtextproc/mandoc)
 MAKEFLAGS+=		TOOLS_IGNORE.${_t_}=
 .    elif !empty(_TOOLS_USE_PKGSRC.${_t_}:M[yY][eE][sS])
-TOOLS_DEPENDS.${_t_}?=	mdocml>=1.12.0nb3:../../textproc/mdocml
+TOOLS_DEPENDS.${_t_}?=	mandoc>=1.12.0nb3:../../textproc/mandoc
 TOOLS_CREATE+=		${_t_}
 TOOLS_PATH.${_t_}=	${LOCALBASE}/bin/mandoc
 .    endif
@@ -1099,8 +1106,7 @@ MAKEVARS+=			TOOLS_DEPENDS.ghostscript
 
 .for _t_ in ${_TOOLS.ghostscript}
 .  if !defined(TOOLS_IGNORE.${_t_}) && !empty(_USE_TOOLS:M${_t_})
-.    if !empty(PKGPATH:Mprint/ghostscript) || \
-        !empty(PKGPATH:Mprint/ghostscript-esp)
+.    if !empty(PKGPATH:Mprint/ghostscript)
 MAKEFLAGS+=		TOOLS_IGNORE.${_t_}=
 .    elif !empty(_TOOLS_USE_PKGSRC.${_t_}:M[yY][eE][sS])
 TOOLS_DEPENDS.${_t_}?=	${TOOLS_DEPENDS.ghostscript}
@@ -1129,14 +1135,14 @@ TOOLS_PATH.iceauth=		${LOCALBASE}/bin/iceauth
 .endif
 
 .if !defined(TOOLS_IGNORE.mkfontdir) && !empty(_USE_TOOLS:Mmkfontdir)
-.  if !empty(PKGPATH:Mfonts/mkfontdir)
+.  if !empty(PKGPATH:Mfonts/mkfontscale)
 MAKEFLAGS+=		TOOLS_IGNORE.mkfontdir=
 .  elif !empty(_TOOLS_USE_PKGSRC.mkfontdir:M[yY][eE][sS])
 TOOLS_CREATE+=			mkfontdir
 .    if !empty(X11_TYPE:Mnative)
 TOOLS_PATH.mkfontdir=	${X11BASE}/bin/mkfontdir
 .    else
-TOOLS_DEPENDS.mkfontdir?=	mkfontdir-[0-9]*:../../fonts/mkfontdir
+TOOLS_DEPENDS.mkfontdir?=	mkfontscale>=1.2:../../fonts/mkfontscale
 TOOLS_PATH.mkfontdir=		${LOCALBASE}/bin/mkfontdir
 .    endif
 .  endif
@@ -1277,7 +1283,7 @@ TOOLS_PATH.makedepend=	${X11BASE}/bin/makedepend
 #####
 .    if defined(_TOOLS_DEPMETHOD.${_t_}) && defined(TOOLS_DEPENDS.${_t_})
 .      for _dep_ in ${TOOLS_DEPENDS.${_t_}}
-_dep_test := ${_dep_:C/\:.*$//}
+_dep_test:= ${_dep_:C/\:.*$//}
 .        if empty(${_TOOLS_DEPMETHOD.${_t_}}:C/\:.*$//:M${_dep_test})
 ${_TOOLS_DEPMETHOD.${_t_}}+=	${_dep_}
 .        endif

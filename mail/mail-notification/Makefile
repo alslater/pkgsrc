@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	mail-notification-5.4
-PKGREVISION=	38
+PKGREVISION=	39
 CATEGORIES=	mail gnome
 MASTER_SITES=	http://savannah.nongnu.org/download/mailnotify/
 EXTRACT_SUFX=	.tar.bz2

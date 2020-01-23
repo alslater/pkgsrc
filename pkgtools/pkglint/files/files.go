@@ -1,120 +1,65 @@
-package main
+package pkglint
 
 import (
-	"io/ioutil"
+	"netbsd.org/pkglint/textproc"
 	"strings"
 )
 
-// LoadNonemptyLines loads the given file.
-// If the file doesn't exist or is empty, an error is logged.
-//
-// See [LoadExistingLines].
-func LoadNonemptyLines(fname string, joinBackslashLines bool) []Line {
-	lines, err := readLines(fname, joinBackslashLines)
-	if err != nil {
-		NewLineWhole(fname).Errorf("Cannot be read.")
+type LoadOptions uint8
+
+const (
+	MustSucceed LoadOptions = 1 << iota // It's a fatal error if loading fails.
+	NotEmpty                            // It is an error if the file is empty.
+	Makefile                            // Lines ending in a backslash are continued in the next line.
+	LogErrors                           //
+)
+
+func LoadMk(filename CurrPath, options LoadOptions) *MkLines {
+	lines := Load(filename, options|Makefile)
+	if lines == nil {
 		return nil
 	}
-	if len(lines) == 0 {
-		NewLineWhole(fname).Errorf("Must not be empty.")
+	return NewMkLines(lines)
+}
+
+func Load(filename CurrPath, options LoadOptions) *Lines {
+	if fromCache := G.fileCache.Get(filename, options); fromCache != nil {
+		return fromCache
+	}
+
+	rawText, err := filename.ReadString()
+	if err != nil {
+		switch {
+		case options&MustSucceed != 0:
+			NewLineWhole(filename).Fatalf("Cannot be read.")
+		case options&LogErrors != 0:
+			NewLineWhole(filename).Errorf("Cannot be read.")
+		}
 		return nil
 	}
-	return lines
-}
 
-func LoadExistingLines(fname string, joinBackslashLines bool) []Line {
-	lines, err := readLines(fname, joinBackslashLines)
-	if err != nil {
-		NewLineWhole(fname).Fatalf("Cannot be read.")
-	}
-	return lines
-}
-
-func nextLogicalLine(fname string, rawLines []*RawLine, pindex *int) Line {
-	{ // Handle the common case efficiently
-		index := *pindex
-		rawLine := rawLines[index]
-		textnl := rawLine.textnl
-		if hasSuffix(textnl, "\n") && !hasSuffix(textnl, "\\\n") {
-			*pindex = index + 1
-			return NewLine(fname, rawLine.Lineno, textnl[:len(textnl)-1], rawLines[index:index+1])
+	if rawText == "" && options&NotEmpty != 0 {
+		switch {
+		case options&MustSucceed != 0:
+			NewLineWhole(filename).Fatalf("Must not be empty.")
+		case options&LogErrors != 0:
+			NewLineWhole(filename).Errorf("Must not be empty.")
 		}
+		return nil
 	}
 
-	text := ""
-	index := *pindex
-	firstlineno := rawLines[index].Lineno
-	var lineRawLines []*RawLine
-	interestingRawLines := rawLines[index:]
-
-	for i, rawLine := range interestingRawLines {
-		indent, rawText, outdent, cont := splitRawLine(rawLine.textnl)
-
-		if text == "" {
-			text += indent
-		}
-		text += rawText
-		lineRawLines = append(lineRawLines, rawLine)
-
-		if cont != "" && i != len(interestingRawLines)-1 {
-			text += " "
-			index++
-		} else {
-			text += outdent + cont
-			break
-		}
+	if G.Opts.Profiling {
+		G.loaded.Add(filename.Clean().String(), 1)
 	}
 
-	lastlineno := rawLines[index].Lineno
-	*pindex = index + 1
-
-	return NewLineMulti(fname, firstlineno, lastlineno, text, lineRawLines)
+	result := convertToLogicalLines(filename, rawText, options&Makefile != 0)
+	if filename.HasSuffixText(".mk") {
+		G.fileCache.Put(filename, options, result)
+	}
+	return result
 }
 
-func splitRawLine(textnl string) (leadingWhitespace, text, trailingWhitespace, cont string) {
-	end := len(textnl)
-
-	if end-1 >= 0 && textnl[end-1] == '\n' {
-		end--
-	}
-
-	backslashes := 0
-	for end-1 >= 0 && textnl[end-1] == '\\' {
-		end--
-		backslashes++
-	}
-	cont = textnl[end : end+backslashes%2]
-	end += backslashes / 2
-
-	trailingEnd := end
-	for end-1 >= 0 && (textnl[end-1] == ' ' || textnl[end-1] == '\t') {
-		end--
-	}
-	trailingStart := end
-	trailingWhitespace = textnl[trailingStart:trailingEnd]
-
-	i := 0
-	leadingStart := i
-	for i < end && (textnl[i] == ' ' || textnl[i] == '\t') {
-		i++
-	}
-	leadingEnd := i
-	leadingWhitespace = textnl[leadingStart:leadingEnd]
-
-	text = textnl[leadingEnd:trailingStart]
-	return
-}
-
-func readLines(fname string, joinBackslashLines bool) ([]Line, error) {
-	rawText, err := ioutil.ReadFile(fname)
-	if err != nil {
-		return nil, err
-	}
-
-	return convertToLogicalLines(fname, string(rawText), joinBackslashLines), nil
-}
-
-func convertToLogicalLines(fname string, rawText string, joinBackslashLines bool) []Line {
+func convertToLogicalLines(filename CurrPath, rawText string, joinBackslashLines bool) *Lines {
 	var rawLines []*RawLine
 	for lineno, rawLine := range strings.SplitAfter(rawText, "\n") {
 		if rawLine != "" {
@@ -122,22 +67,99 @@ func convertToLogicalLines(fname string, rawText string, joinBackslashLines bool
 		}
 	}
 
-	var loglines []Line
+	var loglines []*Line
 	if joinBackslashLines {
 		for lineno := 0; lineno < len(rawLines); {
-			loglines = append(loglines, nextLogicalLine(fname, rawLines, &lineno))
+			line, nextLineno := nextLogicalLine(filename, rawLines, lineno)
+			loglines = append(loglines, line)
+			lineno = nextLineno
 		}
 	} else {
 		for _, rawLine := range rawLines {
 			text := strings.TrimSuffix(rawLine.textnl, "\n")
-			logline := NewLine(fname, rawLine.Lineno, text, []*RawLine{rawLine})
+			logline := NewLine(filename, rawLine.Lineno, text, rawLine)
 			loglines = append(loglines, logline)
 		}
 	}
 
-	if 0 < len(rawLines) && !hasSuffix(rawLines[len(rawLines)-1].textnl, "\n") {
-		NewLineEOF(fname).Errorf("File must end with a newline.")
+	if rawText != "" && !hasSuffix(rawText, "\n") {
+		loglines[len(loglines)-1].Errorf("File must end with a newline.")
 	}
 
-	return loglines
+	return NewLines(filename, loglines)
+}
+
+func nextLogicalLine(filename CurrPath, rawLines []*RawLine, index int) (*Line, int) {
+	{ // Handle the common case efficiently
+		rawLine := rawLines[index]
+		textnl := rawLine.textnl
+		if hasSuffix(textnl, "\n") && !hasSuffix(textnl, "\\\n") {
+			return NewLine(filename, rawLine.Lineno, textnl[:len(textnl)-1], rawLines[index]), index + 1
+		}
+	}
+
+	var text strings.Builder
+	firstlineno := rawLines[index].Lineno
+	var lineRawLines []*RawLine
+	interestingRawLines := rawLines[index:]
+	trim := ""
+
+	for i, rawLine := range interestingRawLines {
+		indent, rawText, outdent, cont := matchContinuationLine(rawLine.textnl)
+
+		if text.Len() == 0 {
+			text.WriteString(indent)
+		}
+		text.WriteString(strings.TrimPrefix(rawText, trim))
+
+		lineRawLines = append(lineRawLines, rawLine)
+
+		if cont != "" && i != len(interestingRawLines)-1 {
+			text.WriteString(" ")
+			index++
+			trim = textproc.NewLexer(rawText).NextString("#")
+		} else {
+			text.WriteString(outdent)
+			text.WriteString(cont)
+			break
+		}
+	}
+
+	lastlineno := rawLines[index].Lineno
+
+	return NewLineMulti(filename, firstlineno, lastlineno, text.String(), lineRawLines), index + 1
+}
+
+func matchContinuationLine(textnl string) (leadingWhitespace, text, trailingWhitespace, cont string) {
+	j := len(textnl)
+
+	if textnl[j-1] == '\n' {
+		j--
+	}
+
+	backslashes := 0
+	for j > 0 && textnl[j-1] == '\\' {
+		j--
+		backslashes++
+	}
+	cont = textnl[j : j+backslashes%2]
+	j += backslashes / 2
+
+	trailingEnd := j
+	for j > 0 && isHspace(textnl[j-1]) {
+		j--
+	}
+	trailingStart := j
+	trailingWhitespace = textnl[trailingStart:trailingEnd]
+
+	i := 0
+	leadingStart := i
+	for i < j && isHspace(textnl[i]) {
+		i++
+	}
+	leadingEnd := i
+	leadingWhitespace = textnl[leadingStart:leadingEnd]
+
+	text = textnl[leadingEnd:trailingStart]
+	return
 }

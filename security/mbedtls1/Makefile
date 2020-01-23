@@ -3,6 +3,7 @@
 
 DISTNAME=		mbedtls-1.3.17-gpl
 PKGNAME=		${DISTNAME:-gpl=}
+PKGREVISION=		1
 CATEGORIES=		security devel
 MASTER_SITES=		https://tls.mbed.org/download/
 EXTRACT_SUFX=		.tgz

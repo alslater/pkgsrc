@@ -2,7 +2,7 @@
 
 DISTNAME=	dnsperf-src-2.0.0.0-1
 PKGNAME=	dnsperf-2.0.0.0
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	benchmarks net
 MASTER_SITES=	ftp://ftp.nominum.com/pub/nominum/${PKGBASE}/${PKGVERSION_NOREV}/
 

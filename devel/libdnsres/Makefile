@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		libdnsres-0.1a
-PKGREVISION=		13
+PKGREVISION=		14
 CATEGORIES=		devel
 MASTER_SITES=		http://www.monkey.org/~provos/
 

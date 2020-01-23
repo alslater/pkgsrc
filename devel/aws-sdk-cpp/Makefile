@@ -1,6 +1,7 @@
 # $NetBSD$
 
 DISTNAME=	aws-sdk-cpp-1.6.6
+PKGREVISION=	1
 CATEGORIES=	devel
 MASTER_SITES=	-https://github.com/aws/aws-sdk-cpp/archive/${PKGVERSION_NOREV}${EXTRACT_SUFX}
 EXTRACT_SUFX=	.tar.gz

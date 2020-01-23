@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	serf
 SERF_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.serf+=	serf>=1.1.1
-BUILDLINK_ABI_DEPENDS.serf+=	serf>=1.3.8nb1
+BUILDLINK_ABI_DEPENDS.serf+=	serf>=1.3.9nb2
 BUILDLINK_PKGSRCDIR.serf?=	../../www/serf
 
 .include "../../devel/apr/buildlink3.mk"

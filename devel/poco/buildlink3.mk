@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	poco
 POCO_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.poco+=	poco>=1.6.1
-BUILDLINK_ABI_DEPENDS.poco+=	poco>=1.6.1nb1
+BUILDLINK_ABI_DEPENDS.poco+=	poco>=1.6.1nb2
 BUILDLINK_PKGSRCDIR.poco?=	../../devel/poco
 
 .include "../../security/openssl/buildlink3.mk"

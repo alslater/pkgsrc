@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.common,v 1.38 2016/06/17 13:56:53 jperkin Exp $
+# $NetBSD: Makefile.common,v 1.43 2019/05/02 10:59:13 jperkin Exp $
 #
 # used by databases/openldap-client/Makefile
 # used by databases/openldap-cloak/Makefile
@@ -8,22 +8,9 @@
 
 .include "../../databases/openldap/Makefile.version"
 
-DISTNAME=	openldap-${OPENLDAP_VERSION}
 CATEGORIES=	databases
-MASTER_SITES=	ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
-		http://www.openldap.org/software/download/OpenLDAP/openldap-release/ \
-		ftp://gd.tuwien.ac.at/infosys/network/OpenLDAP/openldap-release/ \
-		ftp://ftp.ntua.gr/mirror/OpenLDAP/openldap-release/ \
-		ftp://ftp.dti.ad.jp/pub/net/OpenLDAP/openldap-release/ \
-		ftp://ftp.u-aizu.ac.jp/pub/net/openldap/openldap-release/ \
-		ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/ \
-		ftp://ftp.linux.pt/pub/mirrors/OpenLDAP/openldap-release/ \
-		ftp://sunsite.cnlab-switch.ch/mirror/OpenLDAP/openldap-release/
-EXTRACT_SUFX=	.tgz
 
 MAINTAINER=	adam@NetBSD.org
-HOMEPAGE=	http://www.openldap.org/
-LICENSE=	modified-bsd
 
 CONFLICTS+=		ldapsdk-[0-9]*
 
@@ -31,7 +18,6 @@ DISTINFO_FILE=		${.CURDIR}/../../databases/openldap/distinfo
 PATCHDIR=		${.CURDIR}/../../databases/openldap/patches
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		soelim
 GNU_CONFIGURE=		yes
 
@@ -52,7 +38,7 @@ PKG_USERS_VARS+=	SLAPD_USER
 # the internal avl_* prototypes conflict with those in <sys/avl.h> which
 # is included by another system header file on Solaris, so subst them.
 SUBST_CLASSES.SunOS+=	conflict
-SUBST_STAGE.conflict=	post-patch
+SUBST_STAGE.conflict=	pre-configure
 SUBST_FILES.conflict=	${WRKSRC}/*/*.h
 SUBST_FILES.conflict+=	${WRKSRC}/*/*/*.c ${WRKSRC}/*/*/*/*.c
 SUBST_SED.conflict+=	-e 's,avl_free,openldap_avl_free,g'
@@ -112,6 +98,11 @@ PTH_FDSETSIZE_cmd=							\
 		${ECHO} 0;						\
 	fi
 CPPFLAGS+=	-DOPENLDAP_FD_SETSIZE=${PTH_FDSETSIZE_cmd:sh:Q}
+.endif
+
+# OpenLDAP hardcodes this to 4096, disregarding the OS default.
+.if !empty(MACHINE_PLATFORM:MSunOS-*-x86_64)
+CPPFLAGS+=	-DOPENLDAP_FD_SETSIZE=65536
 .endif
 
 MAKE_FLAGS+=		moduledir=${OPENLDAP_MODULEDIR}

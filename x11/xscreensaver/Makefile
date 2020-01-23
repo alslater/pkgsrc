@@ -1,5 +1,6 @@
-# $NetBSD: Makefile,v 1.109 2016/10/19 20:10:20 wiz Exp $
+# $NetBSD: Makefile,v 1.119 2019/11/24 21:54:52 wiz Exp $
 
+PKGREVISION=	3
 COMMENT=	Screen saver and locker for the X window system
 
 CONFLICTS+=	xscreensaver-gnome<4.14
@@ -15,22 +16,17 @@ CONFIGURE_ARGS+=	--with-configdir=${PREFIX}/libexec/xscreensaver/config
 EGDIR=			${PREFIX}/share/examples/xscreensaver
 MESSAGE_SUBST+=		EGDIR=${EGDIR:Q}
 
-# Remove useless locale files that have no translations in them.
-# use pipes from 5.17, the new version is too slow
-post-extract:
-	cd ${WRKSRC}/po && ${RM} -f ca.po
-	${CP} ${FILESDIR}/pipes.c ${WRKSRC}/hacks/glx
-
 INSTALLATION_DIRS=	${EGDIR}/pam.d
 
 post-install:
 	${INSTALL_DATA} ${FILESDIR}/pam-xscreensaver-NetBSD \
 	    ${DESTDIR}${EGDIR}/pam.d/xscreensaver-NetBSD
 
+.include "../../graphics/png/buildlink3.mk"
 .include "../../x11/libXScrnSaver/buildlink3.mk"
 .include "../../x11/libXext/buildlink3.mk"
 .include "../../x11/libXinerama/buildlink3.mk"
 .include "../../x11/libXpm/buildlink3.mk"
-.include "../../x11/libXxf86misc/buildlink3.mk"
 .include "../../x11/libXxf86vm/buildlink3.mk"
+.include "../../x11/libXft/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

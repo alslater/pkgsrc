@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		xorp-1.6
-PKGREVISION=		6
+PKGREVISION=		7
 CATEGORIES=		net
 MASTER_SITES=		http://www.xorp.org/releases/1.6/
 

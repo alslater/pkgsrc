@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	evas-jpeg
 EVAS_JPEG_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.evas-jpeg+=	evas-jpeg>=1.7.7
-BUILDLINK_ABI_DEPENDS.evas-jpeg?=	evas-jpeg>=1.7.7nb2
+BUILDLINK_ABI_DEPENDS.evas-jpeg?=	evas-jpeg>=1.7.7nb3
 BUILDLINK_PKGSRCDIR.evas-jpeg?=	../../graphics/evas-jpeg
 
 .include "../../fonts/fontconfig/buildlink3.mk"

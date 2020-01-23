@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.4 2016/09/18 23:13:13 wiedi Exp $
 
 DISTNAME=	radsecproxy-1.6.6
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	https://software.uninett.no/radsecproxy/
 

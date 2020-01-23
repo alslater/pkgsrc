@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	marble
 MARBLE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.marble+=	marble>=4.8.0
-BUILDLINK_ABI_DEPENDS.marble?=	marble>=4.14.3nb4
+BUILDLINK_ABI_DEPENDS.marble?=	marble>=4.14.3nb5
 BUILDLINK_PKGSRCDIR.marble?=	../../misc/marble
 
 .include "../../x11/kdelibs4/buildlink3.mk"

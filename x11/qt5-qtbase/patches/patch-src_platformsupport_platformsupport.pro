@@ -1,15 +1,15 @@
-$NetBSD: patch-src_platformsupport_platformsupport.pro,v 1.1 2014/12/30 17:23:46 adam Exp $
+$NetBSD: patch-src_platformsupport_platformsupport.pro,v 1.3 2019/08/09 17:41:39 adam Exp $
 
-* Libtoolized and make it shared library
+Fix building xkbcommon when other libraries are not available.
 
---- src/platformsupport/platformsupport.pro.orig	2013-11-27 01:01:11.000000000 +0000
+--- src/platformsupport/platformsupport.pro.orig	2019-08-08 18:28:51.325203043 +0000
 +++ src/platformsupport/platformsupport.pro
-@@ -1,7 +1,7 @@
- TARGET     = QtPlatformSupport
- QT         = core-private gui-private
+@@ -11,7 +11,7 @@ SUBDIRS = \
+ qtConfig(freetype)|darwin|win32: \
+     SUBDIRS += fontdatabases
  
--CONFIG += static internal_module
-+CONFIG += internal_module
- mac:LIBS_PRIVATE += -lz
- 
- DEFINES += QT_NO_CAST_FROM_ASCII
+-qtConfig(evdev)|qtConfig(tslib)|qtConfig(libinput)|qtConfig(integrityhid) {
++qtConfig(evdev)|qtConfig(tslib)|qtConfig(libinput)|qtConfig(integrityhid)|qtConfig(xkbcommon) {
+     SUBDIRS += input
+     input.depends += devicediscovery
+ }

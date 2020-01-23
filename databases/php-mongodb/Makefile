@@ -7,6 +7,7 @@ CATEGORIES+=		databases
 MAINTAINER=		bartosz.kuzma@gmail.com
 HOMEPAGE=		http://docs.mongodb.org/ecosystem/drivers/php/
 COMMENT=		MongoDB database driver
+PKGREVISION=		1
 LICENSE=		apache-2.0
 
 .include "../../security/openssl/buildlink3.mk"

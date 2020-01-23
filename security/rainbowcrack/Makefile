@@ -2,7 +2,7 @@
 
 PKGNAME=		rainbowcrack-1.2
 DISTNAME=		rainbowcrack-1.2-src
-PKGREVISION=		5
+PKGREVISION=		6
 CATEGORIES=		security
 MASTER_SITES=		# http://www.rainbowcrack.com/downloads/
 EXTRACT_SUFX=		.zip

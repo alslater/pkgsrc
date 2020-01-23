@@ -2,7 +2,7 @@
 
 DISTNAME=	# empty
 PKGNAME=	thunderbird31-${TB_VER}
-PKGREVISION=	3
+PKGREVISION=	4
 TB_VER=		31.7.0
 CATEGORIES=	mail
 MASTER_SITES=	${MASTER_SITE_MOZILLA:=thunderbird/releases/${TB_VER}/source/}

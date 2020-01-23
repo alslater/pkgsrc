@@ -2,6 +2,7 @@
 
 DISTNAME=	cups-filters-1.13.1
 +PKGREVISION=	1
+PKGREVISION=	1
 CATEGORIES=	print
 MASTER_SITES=	http://openprinting.org/download/cups-filters/
 EXTRACT_SUFX=	.tar.xz

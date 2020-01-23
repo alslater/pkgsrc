@@ -3,6 +3,7 @@
 COLLECTD_PACKAGE=	amqp
 
 COMMENT=		Statistics collection daemon - amqp plugin
+PKGREVISION=		1
 
 .include "../../sysutils/collectd/Makefile.common"
 

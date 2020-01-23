@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	evas-gif
 EVAS_GIF_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.evas-gif+=	evas-gif>=1.7.7
-BUILDLINK_ABI_DEPENDS.evas-gif?=	evas-gif>=1.7.7nb5
+BUILDLINK_ABI_DEPENDS.evas-gif?=	evas-gif>=1.7.7nb6
 BUILDLINK_PKGSRCDIR.evas-gif?=	../../graphics/evas-gif
 
 .include "../../fonts/fontconfig/buildlink3.mk"

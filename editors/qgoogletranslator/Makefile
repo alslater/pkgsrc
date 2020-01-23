@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	qgoogletranslator-1.2.1
-PKGREVISION=	18
+PKGREVISION=	19
 CATEGORIES=	editors
 MASTER_SITES=	http://qgt.googlecode.com/files/
 EXTRACT_SUFX=	.tar.bz2

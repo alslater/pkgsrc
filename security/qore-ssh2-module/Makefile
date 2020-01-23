@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.6 2016/08/07 11:44:43 nros Exp $
 
 DISTNAME=	qore-ssh2-module-1.0
+PKGREVISION=	1
 CATEGORIES=	security
 MASTER_SITES=   ${MASTER_SITE_GITHUB:=qorelanguage/}
 EXTRACT_SUFX=   .tar.bz2

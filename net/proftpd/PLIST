@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.28 2019/10/07 19:29:47 christos Exp $
 bin/ftpasswd
 bin/ftpcount
 bin/ftpdctl
@@ -58,6 +58,7 @@ include/proftpd/netaddr.h
 include/proftpd/netio.h
 include/proftpd/options.h
 include/proftpd/parser.h
+include/proftpd/pfilter.h
 include/proftpd/pidfile.h
 include/proftpd/pool.h
 include/proftpd/pr-syslog.h
@@ -93,6 +94,7 @@ libexec/proftpd/mod_dynmasq.la
 libexec/proftpd/mod_exec.la
 libexec/proftpd/mod_ifsession.la
 libexec/proftpd/mod_ifversion.la
+libexec/proftpd/mod_load.la
 libexec/proftpd/mod_qos.la
 libexec/proftpd/mod_quotatab.la
 libexec/proftpd/mod_quotatab_file.la
@@ -103,7 +105,7 @@ libexec/proftpd/mod_ratio.la
 libexec/proftpd/mod_readme.la
 libexec/proftpd/mod_rewrite.la
 libexec/proftpd/mod_sftp.la
-libexec/proftpd/mod_sftp_pam.la
+${PLIST.pam}libexec/proftpd/mod_sftp_pam.la
 libexec/proftpd/mod_sftp_sql.la
 libexec/proftpd/mod_shaper.la
 libexec/proftpd/mod_site_misc.la
@@ -133,22 +135,15 @@ sbin/in.proftpd
 sbin/proftpd
 share/doc/proftpd/Configuration.html
 share/doc/proftpd/NEWS
-share/doc/proftpd/README.AIX
-share/doc/proftpd/README.DSO
-share/doc/proftpd/README.FreeBSD
+share/doc/proftpd/README.md
 share/doc/proftpd/README.IPv6
 share/doc/proftpd/README.LDAP
 share/doc/proftpd/README.PAM
-share/doc/proftpd/README.Solaris2.5x
-share/doc/proftpd/README.Unixware
 share/doc/proftpd/README.capabilities
 share/doc/proftpd/README.classes
 share/doc/proftpd/README.controls
-share/doc/proftpd/README.cygwin
 share/doc/proftpd/README.facl
-share/doc/proftpd/README.md
 share/doc/proftpd/README.modules
-share/doc/proftpd/README.ports
 share/doc/proftpd/faq.html
 share/doc/proftpd/license.txt
 share/examples/proftpd/anonymous.conf
@@ -169,6 +164,4 @@ share/locale/ko_KR/LC_MESSAGES/proftpd.mo
 share/locale/ru_RU/LC_MESSAGES/proftpd.mo
 share/locale/zh_CN/LC_MESSAGES/proftpd.mo
 share/locale/zh_TW/LC_MESSAGES/proftpd.mo
-@pkgdir var/run
 @pkgdir lib/proftpd
-@pkgdir etc

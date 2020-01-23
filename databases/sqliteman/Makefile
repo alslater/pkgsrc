@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.3 2016/03/05 11:28:19 jperkin Exp $
 
 DISTNAME=	sqliteman-1.2.2
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=sqliteman/}
 EXTRACT_SUFX=	.tar.bz2

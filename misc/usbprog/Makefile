@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	usbprog-0.2.0
-PKGREVISION=	27
+PKGREVISION=	28
 CATEGORIES=	misc
 MASTER_SITES=	http://download.berlios.de/usbprog/
 EXTRACT_SUFX=	.tar.bz2

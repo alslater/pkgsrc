@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.32 2016/10/09 17:49:38 ryoon Exp $
+# $NetBSD: Makefile,v 1.44 2019/11/02 22:37:57 rillig Exp $
 
 DISTNAME=	gdk-pixbuf-${PIXBUF2_VERSION}
 PKGNAME=	${DISTNAME:S/pixbuf/pixbuf2/}
@@ -8,31 +8,41 @@ EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://developer.gnome.org/gdk-pixbuf
-COMMENT=	Image loaders for gtk2
+COMMENT=	Library for image loading and manipulation
 LICENSE=	gnu-gpl-v2
 
 CONFLICTS+=	gtk2+<2.22
 
 .include "../../graphics/gdk-pixbuf2/Makefile.version"
 
-GNU_CONFIGURE=		yes
-USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
-USE_TOOLS+=		pkg-config gmake
-USE_PKGLOCALEDIR=	yes
+USE_TOOLS+=	gmake pkg-config xgettext
+MAKE_ENV+=	LD_LIBRARY_PATH=${WRKSRC}/output/gdk-pixbuf
 
-PKGCONFIG_OVERRIDE+=	contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc.in
-PKGCONFIG_OVERRIDE+=	gdk-pixbuf-2.0.pc.in
+MESON_ARGS+=			-D installed_tests=false
+MESON_ARGS+=			-D x11=false
+MESON_ARGS+=			-D man=false
+PKGCONFIG_OVERRIDE_STAGE=	pre-install
+PKGCONFIG_OVERRIDE=		output/meson-private/gdk-pixbuf-2.0.pc
+
+PYTHON_VERSIONS_INCOMPATIBLE=	27
+
+.include "../../lang/python/pyversion.mk"
+
+REPLACE_INTERPRETER+=	py3
+REPLACE.py3.old=	.*/usr/bin/env python[^ ]*
+REPLACE.py3.new=	${PYTHONBIN}
+REPLACE_FILES.py3+=	build-aux/gen-installed-test.py
+REPLACE_FILES.py3+=	build-aux/gen-thumbnailer.py
+REPLACE_FILES.py3+=	build-aux/gen-resources.py
 
 _BUILDING_GTK2= yes
 .include "loaders.mk"
 
-# We remove the loader database during post-install since we create it
-# anew in the +INSTALL script as part of the POST-INSTALL action.
-#
-post-install:
-	${RM} -f ${DESTDIR}${GDK_PIXBUF_LOADERS_DB}
+pre-build:
+	${CHMOD} +x ${WRKSRC}/build-aux/*.py ${WRKSRC}/build-aux/*.sh
 
+.include "../../devel/meson/build.mk"
+.include "../../databases/shared-mime-info/buildlink3.mk"
 BUILDLINK_API_DEPENDS.glib2+= glib2>=2.37.2
 .include "../../devel/glib2/buildlink3.mk"
 BUILDLINK_DEPMETHOD.gobject-introspection:= build

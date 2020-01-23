@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mupdf
 MUPDF_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mupdf+=	mupdf>=1.10a
-BUILDLINK_ABI_DEPENDS.mupdf?=	mupdf>=1.10a
+BUILDLINK_ABI_DEPENDS.mupdf?=	mupdf>=1.10anb5
 BUILDLINK_PKGSRCDIR.mupdf?=	../../print/mupdf
 
 pkgbase := mupdf

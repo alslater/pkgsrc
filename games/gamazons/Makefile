@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gamazons-0.83
-PKGREVISION=	39
+PKGREVISION=	40
 CATEGORIES=	games
 MASTER_SITES=	http://www.yorgalily.org/gamazons/src/
 

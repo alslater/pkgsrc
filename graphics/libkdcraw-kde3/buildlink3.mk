@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libkdcraw
 LIBKDCRAW_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libkdcraw+=	libkdcraw>=0.1.1<4.0
-BUILDLINK_ABI_DEPENDS.libkdcraw+=	libkdcraw>=0.1.9nb28
+BUILDLINK_ABI_DEPENDS.libkdcraw+=	libkdcraw>=0.1.9nb29
 BUILDLINK_PKGSRCDIR.libkdcraw?=	../../graphics/libkdcraw-kde3
 
 .include "../../graphics/lcms/buildlink3.mk"

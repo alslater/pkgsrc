@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.19 2012/09/15 10:05:49 obache Exp $
+# $NetBSD: buildlink3.mk,v 1.21 2019/11/03 17:12:01 rillig Exp $
 
 BUILDLINK_TREE+=	gstreamer0.10
 

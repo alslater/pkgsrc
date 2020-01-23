@@ -1,17 +1,15 @@
-# $NetBSD: Makefile,v 1.100 2016/07/09 06:38:21 wiz Exp $
+# $NetBSD: Makefile,v 1.107 2019/10/03 23:43:04 nia Exp $
 
 DISTNAME=		gnome-icon-theme-3.12.0
-PKGREVISION=		1
+PKGREVISION=		5
 CATEGORIES=		graphics gnome
 MASTER_SITES=		${MASTER_SITE_GNOME:=sources/gnome-icon-theme/${PKGVERSION_NOREV:R}/}
 EXTRACT_SUFX=		.tar.xz
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
-HOMEPAGE=		http://www.gnome.org/
+HOMEPAGE=		https://www.gnome.org/
 COMMENT=		Theme consisting of a set of icons for GNOME
 LICENSE=		cc-by-sa-v3.0 AND gnu-lgpl-v3
-
-TOOL_DEPENDS+=		librsvg>=2.22.3:../../graphics/librsvg
 
 GNU_CONFIGURE=		yes
 USE_TOOLS+=		gmake intltool msgfmt pkg-config
@@ -27,19 +25,15 @@ PKGCONFIG_OVERRIDE=	gnome-icon-theme.pc.in
 # the current pkgsrc version.
 BUILDLINK_API_DEPENDS.icon-naming-utils+=	icon-naming-utils>=0.8.90
 
-FILES_SUBST+=		GTK_UPDATE_ICON_CACHE="${LOCALBASE}/bin/gtk-update-icon-cache"
-FILES_SUBST+=		ICON_THEME_DIR="${PREFIX}/share/icons/gnome"
-INSTALL_TEMPLATES+=	../../graphics/gnome-icon-theme/files/icon-cache.tmpl
-DEINSTALL_TEMPLATES+=	../../graphics/gnome-icon-theme/files/icon-cache.tmpl
-PRINT_PLIST_AWK+=	/^share\/icons\/gnome\/icon-theme.cache$$/ { next; }
+ICON_THEMES=	yes
 
+.include "../../mk/bsd.prefs.mk"
 post-install:
-	${LOCALBASE}/bin/rsvg-convert ${FILESDIR}/distributor-logo.svg -w 16 -h 16 -o ${DESTDIR}${PREFIX}/share/icons/gnome/16x16/places/start-here.png
-	${LOCALBASE}/bin/rsvg-convert ${FILESDIR}/distributor-logo.svg -w 22 -h 22 -o ${DESTDIR}${PREFIX}/share/icons/gnome/22x22/places/start-here.png
-	${LOCALBASE}/bin/rsvg-convert ${FILESDIR}/distributor-logo.svg -w 24 -h 24 -o ${DESTDIR}${PREFIX}/share/icons/gnome/24x24/places/start-here.png
-	${LOCALBASE}/bin/rsvg-convert ${FILESDIR}/distributor-logo.svg -w 32 -h 32 -o ${DESTDIR}${PREFIX}/share/icons/gnome/32x32/places/start-here.png
-	${LOCALBASE}/bin/rsvg-convert ${FILESDIR}/distributor-logo.svg -w 48 -h 48 -o ${DESTDIR}${PREFIX}/share/icons/gnome/48x48/places/start-here.png
-	${LOCALBASE}/bin/rsvg-convert ${FILESDIR}/distributor-logo.svg -w 256 -h 256 -o ${DESTDIR}${PREFIX}/share/icons/gnome/256x256/places/start-here.png
+.if ${OPSYS} == "NetBSD"
+.  for s in 16 22 24 32 48 256
+	${INSTALL_DATA} ${FILESDIR}/netbsd-${s}.png ${DESTDIR}${PREFIX}/share/icons/gnome/${s}x${s}/places/start-here.png
+.  endfor
+.endif
 
 BUILDLINK_DEPMETHOD.gettext-lib=	build
 .include "../../devel/gettext-lib/buildlink3.mk"

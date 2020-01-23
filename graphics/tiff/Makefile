@@ -1,9 +1,8 @@
-# $NetBSD: Makefile,v 1.139 2017/12/03 09:07:06 maya Exp $
+# $NetBSD: Makefile,v 1.146 2019/11/04 01:11:38 gdt Exp $
 
-DISTNAME=	tiff-4.0.9
-PKGREVISION=	1
+DISTNAME=	tiff-4.1.0
 CATEGORIES=	graphics
-MASTER_SITES=	ftp://download.osgeo.org/libtiff/
+MASTER_SITES=	https://download.osgeo.org/libtiff/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://simplesystems.org/libtiff/
@@ -14,7 +13,6 @@ EXTRACT_ONLY=	${DISTNAME}${EXTRACT_SUFX}
 
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-rpath
 CONFIGURE_ARGS+=	--enable-cxx
@@ -28,7 +26,7 @@ TEST_TARGET=		check
 post-install:
 	cd ${DESTDIR}/${PREFIX}/${PKGMANDIR}/man3 && for file in *.3tiff; do\
 		target=`${ECHO} $$file | sed "s/3tiff/3/"`; \
-		[ -f $$file ] && ${MV} $$file $$target || ${TRUE}; \
+		${MV} $$file $$target; \
 	done
 
 .include "options.mk"

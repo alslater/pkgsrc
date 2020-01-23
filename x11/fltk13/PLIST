@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.4 2015/12/29 06:02:25 dholland Exp $
+@comment $NetBSD: PLIST,v 1.6 2019/07/16 11:21:25 micha Exp $
 bin/fltk-config
 bin/fluid
 include/FL/Enumerations.H
@@ -247,6 +247,7 @@ include/FL/Fl_XBM_Image.H
 ${PLIST.cs}include/FL/Fl_XBM_Image.h
 include/FL/Fl_XPM_Image.H
 ${PLIST.cs}include/FL/Fl_XPM_Image.h
+include/FL/abi-version.h
 include/FL/dirent.h
 include/FL/filename.H
 ${PLIST.cs}include/FL/filename.h
@@ -277,6 +278,8 @@ include/FL/mac.H
 ${PLIST.cs}include/FL/mac.h
 include/FL/math.h
 include/FL/names.h
+include/FL/platform.H
+${PLIST.cs}include/FL/platform.h
 include/FL/win32.H
 ${PLIST.cs}include/FL/win32.h
 include/FL/x.H

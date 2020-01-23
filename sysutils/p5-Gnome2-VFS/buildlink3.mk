@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	p5-Gnome2-VFS
 P5_GNOME2_VFS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.p5-Gnome2-VFS+=	p5-Gnome2-VFS>=1.081
-BUILDLINK_ABI_DEPENDS.p5-Gnome2-VFS+=	p5-Gnome2-VFS>=1.081nb33
+BUILDLINK_ABI_DEPENDS.p5-Gnome2-VFS+=	p5-Gnome2-VFS>=1.082nb1
 BUILDLINK_PKGSRCDIR.p5-Gnome2-VFS?=	../../sysutils/p5-Gnome2-VFS
 
 .include "../../sysutils/gnome-vfs/buildlink3.mk"

@@ -1,12 +1,13 @@
-$NetBSD: distinfo,v 1.36 2015/11/23 15:18:19 adam Exp $
+$NetBSD: distinfo,v 1.38 2019/12/01 14:30:44 adam Exp $
 
-SHA1 (PyQt-mac-gpl-4.11.4.tar.gz) = c319f273e40afe68a2e65ff2b9c01e0d43e980f7
-RMD160 (PyQt-mac-gpl-4.11.4.tar.gz) = 55ab22e65a2681b7af3680db9462967578a907f0
-SHA512 (PyQt-mac-gpl-4.11.4.tar.gz) = 9aa8b860dc72eea5ccee33cc62d6935ac2dac21cfff8b1ed18c584d075f58a717fa2880284b0b27615f63bfafd1a50a0f7f40c1a1f43dd513aeb0da7e8cae900
-Size (PyQt-mac-gpl-4.11.4.tar.gz) = 11312655 bytes
-SHA1 (PyQt-x11-gpl-4.11.4.tar.gz) = 5c489e655279f85d47c8a275d97a12dfa0c8fd87
-RMD160 (PyQt-x11-gpl-4.11.4.tar.gz) = d3ade67c4433852474c86220ea8611eb7f7cd0b1
-SHA512 (PyQt-x11-gpl-4.11.4.tar.gz) = 58d0c5e30b0480c1b6ce1a3cc3ef0a1841bb15631830fb937d1f17f5d3d8cbe66a5e2adcfb2c3990fae38db66dd430668bd25413e254e72064a38c48f689f170
-Size (PyQt-x11-gpl-4.11.4.tar.gz) = 11317088 bytes
-SHA1 (patch-configure.py) = 516da08fad535a7b743b400e9e613689982d057d
-SHA1 (patch-sip_QtCore_qlist.sip) = 4fb548d4ee755cbc955ec32a6b1702a71a9815f1
+SHA1 (PyQt4_gpl_mac-4.12.3.tar.gz) = 5d4bb6eeb1a6fe6ba37b55c41d04dc2b5e5ebfba
+RMD160 (PyQt4_gpl_mac-4.12.3.tar.gz) = cebd9cda0246027112674bf2bae0a295f9c711ff
+SHA512 (PyQt4_gpl_mac-4.12.3.tar.gz) = 895678ea77cbb5b81cbd65bd57bf2271443b2a40e14f7f5f61a5d917e49ef23f08c911cecdff2bcc851c3360ef0281a5eda72acfe7ca4a66eb99af93db9ac1ec
+Size (PyQt4_gpl_mac-4.12.3.tar.gz) = 11336223 bytes
+SHA1 (PyQt4_gpl_x11-4.12.3.tar.gz) = 0f743997fc43d564aecaf89818cd4d259bd5664b
+RMD160 (PyQt4_gpl_x11-4.12.3.tar.gz) = c146d67829542ec8dee6db24531dcb0f8b9a4411
+SHA512 (PyQt4_gpl_x11-4.12.3.tar.gz) = 5b50bc7b1f1f1e93db323477745db7bf0f8783f403b6d65d4c0e0f1fc9b8d61c09afa67bea25575bdb3ad40c0bd4d956d27802fc193bc4dc31b993227ba12f22
+Size (PyQt4_gpl_x11-4.12.3.tar.gz) = 11336418 bytes
+SHA1 (patch-configure-ng.py) = 33774cb4365566d9978fd59745143bee6380dcb8
+SHA1 (patch-configure.py) = aebd8a287f3d24b8d1d6133d689cdb9c9eda1ad9
+SHA1 (patch-sip_QtCore_qlist.sip) = 9227b40ac8c0c37f7a1dcd7a3337686cfa8298f5

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	pwlib
 PWLIB_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.pwlib+=	pwlib>=1.8.3nb1
-BUILDLINK_ABI_DEPENDS.pwlib+=	pwlib>=1.8.3nb12
+BUILDLINK_ABI_DEPENDS.pwlib+=	pwlib>=1.8.3nb13
 BUILDLINK_PKGSRCDIR.pwlib?=	../../devel/pwlib
 
 .include "../../security/openssl/buildlink3.mk"

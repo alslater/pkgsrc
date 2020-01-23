@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	libmediawiki-4.13.0
-PKGREVISION=	2
+PKGREVISION=	3
 DISTNAME=	digikam-4.13.0
 CATEGORIES=	www
 MASTER_SITES=	${MASTER_SITE_KDE:=digikam/}

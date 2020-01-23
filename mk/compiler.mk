@@ -1,4 +1,4 @@
-# $NetBSD: compiler.mk,v 1.83 2016/11/10 20:59:43 joerg Exp $
+# $NetBSD: compiler.mk,v 1.94 2019/07/23 13:57:04 gdt Exp $
 #
 # This Makefile fragment implements handling for supported C/C++/Fortran
 # compilers.
@@ -40,10 +40,16 @@
 # The following variables may be set by a package:
 #
 # USE_LANGUAGES
-#	Lists the languages used in the source code of the package,
-#	and is used to determine the correct compilers to install.
-#	Valid values are: c, c99, c++, fortran, fortran77, java, objc,
-#	obj-c++, and ada.  The default is "c".
+#	Declares the languages used in the source code of the package.
+#	This is used to determine the correct compilers to make
+#	visible to the build environment, installing them if
+#	necessary.  Flags such as -std=c++99 are also added.
+#	Valid values are: c, c99, c++, c++03, gnu++03, c++0x, gnu++0x,
+#	c++11, gnu++11, c++14, gnu++14, c++17, gnu++17, fortran,
+#	fortran77, java, objc, obj-c++, and ada.  The default is "c".
+#
+#       The above is partly aspirational.  As an example c++11 does
+#       not force a new enough version of gcc.
 #
 # The following variables are defined, and available for testing in
 # package Makefiles:
@@ -77,10 +83,17 @@ USE_LANGUAGES?=	c
 USE_LANGUAGES+=	c
 .endif
 
+_CXX_STD_VERSIONS=	gnu++17 c++17 gnu++14 c++14 gnu++11 c++11 gnu++0x c++0x gnu++03 c++03
+.for _version_ in ${_CXX_STD_VERSIONS}
+.  if !empty(USE_LANGUAGES:M${_version_})
+USE_LANGUAGES+=		c++
+.  endif
+.endfor
+
 COMPILER_USE_SYMLINKS?=	yes
 
-_COMPILERS=		ccc gcc icc ido mipspro mipspro-ucode \
-			sunpro xlc hp pcc clang
+_COMPILERS=		ccc clang gcc hp icc ido \
+			mipspro mipspro-ucode pcc sunpro xlc
 _PSEUDO_COMPILERS=	ccache distcc f2c g95
 
 .if defined(NOT_FOR_COMPILER) && !empty(NOT_FOR_COMPILER)
@@ -157,6 +170,22 @@ ${_var_}:=	${${_var_}:C/^/_asdf_/1:M_asdf_*:S/^_asdf_//:T} ${${_var_}:C/^/_asdf_
 .  endif
 .endfor
 
+# Pass the compiler flag based on the most recent version of the C++ standard
+# required.  We currently assume that each standard is a superset of all that
+# come after it.
+#
+# If and when the flags differ between compilers we can push this down into
+# the respective mk/compiler/*.mk files.
+#
+_CXX_VERSION_REQD=
+.for _version_ in ${_CXX_STD_VERSIONS}
+.  if empty(_CXX_VERSION_REQD) && !empty(USE_LANGUAGES:M${_version_})
+_CXX_VERSION_REQD=	${_version_}
+_WRAP_EXTRA_ARGS.CXX+=	${_CXX_STD_FLAG.${_CXX_VERSION_REQD}}
+CWRAPPERS_PREPEND.cxx+=	${_CXX_STD_FLAG.${_CXX_VERSION_REQD}}
+.  endif
+.endfor
+
 .if defined(ABI) && !empty(ABI)
 _WRAP_EXTRA_ARGS.CC+=	${_COMPILER_ABI_FLAG.${ABI}}
 _WRAP_EXTRA_ARGS.CXX+=	${_COMPILER_ABI_FLAG.${ABI}}
@@ -165,6 +194,23 @@ CWRAPPERS_PREPEND.as+=	--${ABI}
 CWRAPPERS_PREPEND.cc+=	${_COMPILER_ABI_FLAG.${ABI}}
 CWRAPPERS_PREPEND.cxx+=	${_COMPILER_ABI_FLAG.${ABI}}
 CWRAPPERS_PREPEND.f77+=	${_COMPILER_ABI_FLAG.${ABI}}
+.endif
+
+# Enable SSP if the user has chosen to and the compiler supports it.
+#
+.if ${_PKGSRC_USE_SSP} == "yes" && defined(_SSP_CFLAGS)
+_WRAP_EXTRA_ARGS.CC+=	${_SSP_CFLAGS}
+_WRAP_EXTRA_ARGS.CXX+=	${_SSP_CFLAGS}
+CWRAPPERS_APPEND.cc+=	${_SSP_CFLAGS}
+CWRAPPERS_APPEND.cxx+=	${_SSP_CFLAGS}
+CWRAPPERS_APPEND.f77+=	${_SSP_CFLAGS}
+.endif
+
+# Add debug flags if the user has requested CTF and the compiler supports it.
+#
+.if ${_PKGSRC_USE_CTF} == "yes" && defined(_CTF_CFLAGS)
+_WRAP_EXTRA_ARGS.CC+=	${_CTF_CFLAGS}
+CWRAPPERS_APPEND.cc+=	${_CTF_CFLAGS}
 .endif
 
 # If the languages are not requested, force them not to be available

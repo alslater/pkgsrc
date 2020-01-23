@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gecko-mediaplayer-1.0.9
-PKGREVISION=	6
+PKGREVISION=	7
 CATEGORIES=	multimedia www
 MASTER_SITES=	http://gecko-mediaplayer.googlecode.com/svn/packages/
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libguardtime
 LIBGUARDTIME_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libguardtime+=	libguardtime>=0.3.11
-BUILDLINK_ABI_DEPENDS.libguardtime+=	libguardtime>=0.3.13nb2
+BUILDLINK_ABI_DEPENDS.libguardtime+=	libguardtime>=0.3.13nb3
 BUILDLINK_PKGSRCDIR.libguardtime?=	../../security/libguardtime
 
 .include "../../security/openssl/buildlink3.mk"

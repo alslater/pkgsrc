@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		qcomicbook-0.9.0
-PKGREVISION=		26
+PKGREVISION=		27
 CATEGORIES=		graphics
 MASTER_SITES=		http://qcomicbook.org/releases/
 

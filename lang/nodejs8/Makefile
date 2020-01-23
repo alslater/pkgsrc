@@ -5,7 +5,7 @@ DISTNAME=	node-v8.12.0
 # Stated by the changelog as of 8.2.0
 GCC_REQD+=	4.9.4
 
-PKGREVISION= 1
+PKGREVISION= 2
 .include "options.mk"
 
 CONFIGURE_ARGS+=	--with-intl=system-icu

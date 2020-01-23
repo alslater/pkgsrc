@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libgnomecups-0.2.3
-PKGREVISION=	16
+PKGREVISION=	17
 CATEGORIES=	print gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libgnomecups/0.2/}
 

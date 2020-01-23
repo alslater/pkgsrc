@@ -1,4 +1,4 @@
-$NetBSD: patch-runConfigureICU,v 1.1 2017/04/22 20:11:45 adam Exp $
+$NetBSD: patch-runConfigureICU,v 1.2 2018/12/09 18:28:16 adam Exp $
 
 Add support for DragonFlyBSD and Bitrig.
 

@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	evas-edb
 EVAS_EDB_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.evas-edb+=	evas-edb>=1.7.7
-BUILDLINK_ABI_DEPENDS.evas-edb?=	evas-edb>=1.7.7nb2
+BUILDLINK_ABI_DEPENDS.evas-edb?=	evas-edb>=1.7.7nb3
 BUILDLINK_PKGSRCDIR.evas-edb?=	../../graphics/evas-edb
 
 .include "../../databases/edb/buildlink3.mk"

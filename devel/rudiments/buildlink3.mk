@@ -11,7 +11,7 @@ BUILDLINK_TREE+=	rudiments
 RUDIMENTS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.rudiments+=	rudiments>=0.56
-BUILDLINK_ABI_DEPENDS.rudiments+=	rudiments>=0.56.0
+BUILDLINK_ABI_DEPENDS.rudiments+=	rudiments>=0.56.0nb1
 BUILDLINK_PKGSRCDIR.rudiments?=		../../devel/rudiments
 
 .include "../../devel/pcre/buildlink3.mk"

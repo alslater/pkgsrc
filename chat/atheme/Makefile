@@ -3,7 +3,7 @@
 
 DISTNAME=	atheme-services-3.0.4
 PKGNAME=	${DISTNAME:S/-services//}
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	chat
 # Gives 401
 #MASTER_SITES=	http://distfiles.atheme.org/

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	gimmage-0.2.3
-PKGREVISION=	28
+PKGREVISION=	29
 CATEGORIES=	graphics
 MASTER_SITES=	http://download.berlios.de/gimmage/
 

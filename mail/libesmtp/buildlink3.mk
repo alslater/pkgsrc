@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	libesmtp
 LIBESMTP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.libesmtp+=	libesmtp>=1.0rc1nb1
-BUILDLINK_ABI_DEPENDS.libesmtp+=	libesmtp>=1.0.6nb3
+BUILDLINK_ABI_DEPENDS.libesmtp+=	libesmtp>=1.0.6nb4
 BUILDLINK_PKGSRCDIR.libesmtp?=	../../mail/libesmtp
 
 LIBESMTP=	-lesmtp

@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.24 2016/02/26 11:27:15 jperkin Exp $
+# $NetBSD: Makefile,v 1.26 2019/11/13 22:01:53 wiz Exp $
 
-DISTNAME=		libXt-1.1.5
+DISTNAME=		libXt-1.2.0
 CATEGORIES=		x11 devel
 MASTER_SITES=		${MASTER_SITE_XORG:=lib/}
 EXTRACT_SUFX=		.tar.bz2
@@ -12,7 +12,6 @@ LICENSE=		mit
 
 GNU_CONFIGURE=		yes
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 USE_TOOLS+=		pkg-config
 
 CONFIGURE_ARGS+=	--with-appdefaultdir=${PREFIX}/lib/X11/app-defaults
@@ -37,7 +36,5 @@ CONFIGURE_ENV+=		ac_cv_path_RAWCPP="${PREFIX}/bin/tradcpp -Uunix"
 .include "../../x11/libSM/buildlink3.mk"
 .include "../../x11/libICE/buildlink3.mk"
 .include "../../x11/libX11/buildlink3.mk"
-.include "../../x11/kbproto/buildlink3.mk"
-.include "../../x11/xproto/buildlink3.mk"
-
+.include "../../x11/xorgproto/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

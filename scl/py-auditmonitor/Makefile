@@ -1,7 +1,9 @@
 # $NetBSD$
 
-DISTNAME=	auditmonitor-0.7
-#PKGREVICSION=	1
+VERSION=	0.7
+DISTNAME=	auditmonitor-${VERSION}
+PKGREVISION=	1
+PKGNAME=    auditmonitor-${VERSION}
 CATEGORIES=	scl python
 MASTER_SITES=	${MASTER_SITE_GITHUB:=alslater/}
 GITHUB_TAG= 	v${PKGVERSION_NOREV}
@@ -12,7 +14,9 @@ HOMEPAGE=	https://github.com/alslater/auditmonitor/
 COMMENT=	BSM Audit Monitor	
 #LICENSE=	# TODO: (see mk/license.mk)
 
-PYTHON_VERSIONS_INCOMPATIBLE= 27 34 35
+WRKSRC=     ${WRKDIR}/auditmonitor-${VERSION}
+
+PYTHON_VERSIONS_ACCEPTED= 38
 
 SMF_NAME=	auditmonitor
 

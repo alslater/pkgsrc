@@ -3,7 +3,7 @@
 MVL_VERSION=		1.2.0
 DISTNAME=		mod-vhost-ldap_${MVL_VERSION}.orig
 PKGNAME=		${APACHE_PKG_PREFIX}-vhost-ldap-${MVL_VERSION}
-PKGREVISION=		7
+PKGREVISION=		8
 CATEGORIES=		www databases
 MASTER_SITES=		${MASTER_SITE_DEBIAN:=pool/main/m/mod-vhost-ldap/}
 

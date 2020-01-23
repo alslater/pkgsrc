@@ -1,4 +1,4 @@
-# $NetBSD: builtin.mk,v 1.14 2013/06/17 05:27:50 dholland Exp $
+# $NetBSD: builtin.mk,v 1.17 2019/11/02 22:37:58 rillig Exp $
 
 BUILTIN_PKG:=	glu
 
@@ -32,7 +32,7 @@ MAKEVARS+=	IS_BUILTIN.glu
 .  if empty(PC_GLU:M__nonexistent__)
 BUILTIN_VERSION.Mesa!= ${SED} -n -e 's/Version: //p' ${PC_GLU}
 .  elif empty(H_GLU:M__nonexistent__)
-.    include "../../graphics/Mesa/version.mk"
+.    include "../../graphics/MesaLib/version.mk"
 .  else # ?
 BUILTIN_VERSION.Mesa:= 0.something-weird-happened
 .  endif
@@ -56,7 +56,7 @@ USE_BUILTIN.glu=	yes
 .      for dep in ${BUILDLINK_API_DEPENDS.glu}
 .        if !empty(USE_BUILTIN.glu:M[yY][eE][sS])
 USE_BUILTIN.glu!=							\
-	if ${PKG_ADMIN} pmatch ${dep:Q} ${BUILTIN_PKG.glu:Q}; then	\
+	if ${PKG_ADMIN} pmatch ${dep:Q} ${BUILTIN_PKG.glu}; then	\
 		${ECHO} yes;						\
 	else								\
 		${ECHO} no;						\
@@ -66,7 +66,7 @@ USE_BUILTIN.glu!=							\
 .    endif
 .  endif  # PREFER.glu
 .endif
-MAKEVARS+=	USE_BUILTIN.glu
+MAKEVARS+=		USE_BUILTIN.glu
 
 ###
 ### The section below only applies if we are not including this file

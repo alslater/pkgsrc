@@ -1,4 +1,4 @@
-# $NetBSD: tools.NetBSD.mk,v 1.59 2016/11/10 20:58:46 joerg Exp $
+# $NetBSD: tools.NetBSD.mk,v 1.65 2019/11/21 21:11:22 tnn Exp $
 #
 # System-supplied tools for the NetBSD operating system.
 
@@ -41,9 +41,13 @@ TOOLS_PLATFORM.ftp?=		/usr/bin/ftp
 .if exists(/usr/bin/gettext)
 TOOLS_PLATFORM.gettext?=	/usr/bin/gettext
 .endif
+TOOLS_PLATFORM.gegrep?=		/usr/bin/egrep
+TOOLS_PLATFORM.gfgrep?=		/usr/bin/fgrep
+TOOLS_PLATFORM.ggrep?=		/usr/bin/grep
 TOOLS_PLATFORM.grep?=		/usr/bin/grep
 TOOLS_PLATFORM.groff?=		/usr/bin/groff
 TOOLS_PLATFORM.gsoelim?=	${TOOLS_PLATFORM.soelim}	# GNUish
+TOOLS_PLATFORM.gstrip?=		/usr/bin/strip
 TOOLS_PLATFORM.gunzip?=		/usr/bin/gunzip -f
 TOOLS_PLATFORM.gzcat?=		/usr/bin/gzcat
 TOOLS_PLATFORM.gzip?=		/usr/bin/gzip -nf ${GZIP}
@@ -89,8 +93,7 @@ TOOLS_PLATFORM.nroff?=		/usr/bin/nroff
 TOOLS_PLATFORM.openssl?=	/usr/bin/openssl
 TOOLS_PLATFORM.patch?=		/usr/bin/patch
 TOOLS_PLATFORM.pax?=		/bin/pax
-.if empty(MACHINE_PLATFORM:MNetBSD-[^0-3].*-386) || \
-	empty(MACHINE_PLATFORM:MNetBSD-[^0-3].*-x86_64)
+.if exists(/usr/sbin/paxctl)
 TOOLS_PLATFORM.paxctl?=		/usr/sbin/paxctl
 .endif
 TOOLS_PLATFORM.printf?=		/usr/bin/printf

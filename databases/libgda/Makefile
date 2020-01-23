@@ -4,7 +4,7 @@
 .include "Makefile.common"
 .include "options.mk"
 
-PKGREVISION=		3
+PKGREVISION=		4
 
 PKGCONFIG_OVERRIDE=	libgda-5.0.pc.in libgda-report-5.0.pc.in \
 			libgda-sqlcipher-5.0.pc.in libgda-sqlite-5.0.pc.in

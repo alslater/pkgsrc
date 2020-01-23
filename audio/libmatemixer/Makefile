@@ -1,12 +1,19 @@
-# $NetBSD: Makefile,v 1.2 2016/08/03 10:22:30 adam Exp $
+# $NetBSD: Makefile,v 1.15 2019/07/21 22:24:26 wiz Exp $
 
-PKGREVISION= 1
 .include "../../meta-pkgs/mate/Makefile.common"
 
-DISTNAME=	libmatemixer-${MATE_VERSION}
+DISTNAME=	libmatemixer-${VERSION}
+PKGREVISION=	2
 CATEGORIES=	audio
 
 COMMENT=	MATE audio mixer
 
-.include "../../x11/gtk2/buildlink3.mk"
+.include "../../mk/oss.buildlink3.mk"
+
+PLIST_VARS+=		oss
+.if ${OSS_TYPE} != "none"
+CONFIGURE_ARGS+=	--enable-oss
+PLIST.oss=		yes
+.endif
+
 .include "../../mk/bsd.pkg.mk"

@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	mad123-0.8.5
-PKGREVISION=	17
+PKGREVISION=	18
 CATEGORIES=	audio
 MASTER_SITES=	http://www.mctavish.co.uk/mad123/
 

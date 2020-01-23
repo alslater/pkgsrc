@@ -1,17 +1,27 @@
-# $NetBSD: Makefile.common,v 1.5 2016/10/19 13:45:54 wiz Exp $
+# $NetBSD: Makefile.common,v 1.39 2019/12/15 09:48:37 adam Exp $
 # used by security/py-acme/Makefile
 # used by security/py-certbot/Makefile
+# used by security/py-certbot-apache/Makefile
+# used by security/py-certbot-dns-dnsimple/Makefile
+# used by security/py-certbot-dns-dnsmadeeasy/Makefile
+# used by security/py-certbot-dns-gehirn/Makefile
+# used by security/py-certbot-dns-google/Makefile
+# used by security/py-certbot-dns-linode/Makefile
+# used by security/py-certbot-dns-luadns/Makefile
+# used by security/py-certbot-dns-nsone/Makefile
+# used by security/py-certbot-dns-ovh/Makefile
+# used by security/py-certbot-dns-rfc2136/Makefile
+# used by security/py-certbot-dns-route53/Makefile
+# used by security/py-certbot-dns-sakuracloud/Makefile
+# used by security/py-certbot-nginx/Makefile
 
-DISTNAME=	certbot-0.9.3
-MASTER_SITES=	${MASTER_SITE_GITHUB:=certbot/}
+CERTBOT_VERSION=	1.0.0
 
-HOMEPAGE=	https://letsencrypt.org/
+PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+CATEGORIES?=	security python
 
-GITHUB_PROJECT=	certbot
-GITHUB_TAG=	v${PKGVERSION_NOREV}
+MAINTAINER=	adam@NetBSD.org
+HOMEPAGE=	https://github.com/certbot/certbot
+LICENSE=	apache-2.0
 
-EXTRACT_USING=	bsdtar
-USE_TOOLS+=	bsdtar
-
-DISTINFO_FILE=	${PKGDIR}/../../security/py-certbot/distinfo
-#PATCHDIR=	${PKGDIR}/../../security/py-certbot/patches
+USE_LANGUAGES=	# none

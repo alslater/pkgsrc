@@ -1,9 +1,9 @@
-# $NetBSD: Makefile,v 1.3 2016/08/03 10:22:23 adam Exp $
+# $NetBSD: Makefile,v 1.15 2019/07/21 22:26:00 wiz Exp $
 
-PKGREVISION= 1
 .include "../../meta-pkgs/mate/Makefile.common"
 
-DISTNAME=	libmatekbd-1.14.1
+DISTNAME=	libmatekbd-${VERSION}
+PKGREVISION=	2
 CATEGORIES=	x11
 
 COMMENT=	MATE keyboard configuration library
@@ -13,8 +13,6 @@ PKGCONFIG_OVERRIDE+=	libmatekbdui.pc.in
 
 .include "../../devel/glib2/schemas.mk"
 
-.include "../../devel/glib2/buildlink3.mk"
-.include "../../x11/gtk2/buildlink3.mk"
 .include "../../x11/libxklavier/buildlink3.mk"
 .include "../../x11/libX11/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

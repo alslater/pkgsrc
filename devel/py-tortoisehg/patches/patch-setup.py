@@ -45,4 +45,4 @@ $NetBSD: patch-setup.py,v 1.4 2018/04/22 22:21:09 wiz Exp $
 +    _data_files += [('share/tortoisehg', ['contrib/mergetools.rc'])]
  
      return _scripts, _packages, _data_files, _extra
-
+ 

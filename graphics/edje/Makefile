@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	edje-1.7.7
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	graphics
 MASTER_SITES=	http://download.enlightenment.org/releases/
 EXTRACT_SUFX=	.tar.bz2

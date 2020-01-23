@@ -2,6 +2,7 @@
 
 DISTNAME=	tarsnap-autoconf-1.0.37
 PKGNAME=	${DISTNAME:S/-autoconf//}
+PKGREVISION=	1
 CATEGORIES=	sysutils archivers security
 MASTER_SITES=	https://www.tarsnap.com/download/
 EXTRACT_SUFX=	.tgz

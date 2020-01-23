@@ -1,4 +1,4 @@
-$NetBSD: patch-Makefile.pre.in,v 1.5 2017/12/19 09:37:14 adam Exp $
+$NetBSD: patch-Makefile.pre.in,v 1.6 2018/12/31 10:06:45 adam Exp $
 
 Use only one optimisation level; needed for PLIST and setuptools compatibility.
 Do not build/install libpython3.so.

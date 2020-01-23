@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.11 2014/10/09 14:07:14 wiz Exp $
+# $NetBSD: Makefile,v 1.12 2019/03/17 08:16:10 wiz Exp $
 
-DISTNAME=		libXmu-1.1.2
+DISTNAME=		libXmu-1.1.3
 CATEGORIES=		x11 devel
 MASTER_SITES=		${MASTER_SITE_XORG:=lib/}
 EXTRACT_SUFX=		.tar.bz2
@@ -10,7 +10,6 @@ HOMEPAGE=		http://xorg.freedesktop.org/
 COMMENT=		X Miscellaneous Utilities library
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 PKGCONFIG_OVERRIDE+=	xmu.pc.in
 PKGCONFIG_OVERRIDE+=	xmuu.pc.in
 GNU_CONFIGURE=		yes

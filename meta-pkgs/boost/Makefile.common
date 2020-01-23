@@ -57,6 +57,8 @@ GCC_REQD+=		4.5
 
 PLIST_SUBST+=		BOOST_VERSION="${BOOST_VERSION}"
 
+#PYTHON_VERSIONS_ACCEPTED=	27
+
 SUBST_CLASSES+=		prefix
 SUBST_STAGE.prefix=	pre-configure
 SUBST_MESSAGE.prefix=	Fixing prefix.
@@ -76,6 +78,7 @@ TOOLS_PLATFORM.tar=	#empty
 .    include "../../mk/compiler.mk"
 .    if !empty(CC_VERSION:Mgcc-4.[6-9]*)
 BUILDLINK_TRANSFORM+=	opt:-D_XOPEN_SOURCE=500:-D_XOPEN_SOURCE=600
+BUILDLINK_TRANSFORM+=	rm:-Werror
 .    endif
 .  endif
 

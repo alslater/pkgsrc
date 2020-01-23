@@ -2,7 +2,7 @@
 #
 
 .include "../../print/evince/Makefile.common"
-PKGREVISION=	51
+PKGREVISION=	52
 
 COMMENT=		Document viewer
 

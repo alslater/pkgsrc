@@ -1,8 +1,7 @@
-# $NetBSD: Makefile,v 1.16 2016/12/04 05:17:15 ryoon Exp $
+# $NetBSD: Makefile,v 1.36 2019/09/16 19:24:53 adam Exp $
 
-DISTNAME=	qtbase-opensource-src-${QTVERSION}
+DISTNAME=	qtbase-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-mysql-${QTVERSION}
-PKGREVISION=	6
 COMMENT=	Qt5 MySQL plugin
 
 CFLAGS+=		-I${BUILDLINK_PREFIX.mysql-client}/include/mysql
@@ -16,7 +15,11 @@ INSTALL_ENV+=		INSTALL_ROOT=${DESTDIR}
 do-configure:
 	${RM} -f -r ${WRKSRC}/mkspecs
 	cd ${WRKSRC}/${BUILD_DIRS} && \
-	${QTDIR}/bin/qmake "sql-plugins=mysql" -o Makefile
+	${QTDIR}/bin/qmake -o Makefile "QT.sql.enabled_features+=sql-mysql" "QMAKE_LIBS_MYSQL=-lmysqlclient"
+
+post-install:
+	${RM} -f ${DESTDIR}${PREFIX}/qt5/lib/cmake/Qt5Sql/Qt5Sql_QSQLiteDriverPlugin.cmake
+	${RM} -f ${DESTDIR}${PREFIX}/qt5/plugins/sqldrivers/libqsqlite.*
 
 .include "../../x11/qt5-qtbase/buildlink3.mk"
 .include "../../mk/mysql.buildlink3.mk"

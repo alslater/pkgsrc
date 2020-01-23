@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.9 2016/08/28 15:48:36 wiz Exp $
+# $NetBSD: Makefile,v 1.15 2019/07/13 09:28:58 adam Exp $
 
-DISTNAME=	Flask-0.11
+DISTNAME=	Flask-1.1.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
 CATEGORIES=	www python
 MASTER_SITES=	${MASTER_SITE_PYPI:=F/Flask/}
@@ -10,18 +10,20 @@ HOMEPAGE=	http://flask.pocoo.org/
 COMMENT=	Python web microframework
 LICENSE=	modified-bsd
 
-USE_LANGUAGES=	# empty
+DEPENDS+=	${PYPKGPREFIX}-click>=5.1:../../devel/py-click
+DEPENDS+=	${PYPKGPREFIX}-itsdangerous>=0.24:../../security/py-itsdangerous
+DEPENDS+=	${PYPKGPREFIX}-jinja2>=2.10.1:../../textproc/py-jinja2
+DEPENDS+=	${PYPKGPREFIX}-werkzeug>=0.15:../../www/py-werkzeug
+TEST_DEPENDS+=	${PYPKGPREFIX}-test>=3.0:../../devel/py-test
 
-DEPENDS+=	${PYPKGPREFIX}-click>=2.0:../../devel/py-click
-DEPENDS+=	${PYPKGPREFIX}-itsdangerous-[0-9]*:../../security/py-itsdangerous
-DEPENDS+=	${PYPKGPREFIX}-jinja2-[0-9]*:../../textproc/py-jinja2
-DEPENDS+=	${PYPKGPREFIX}-werkzeug-[0-9]*:../../www/py-werkzeug
+USE_LANGUAGES=	# none
 
-# actually TEST_DEPENDS
-BUILD_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
+post-install:
+	cd ${DESTDIR}${PREFIX}/bin && \
+	${MV} flask flask-${PYVERSSUFFIX} || ${TRUE}
 
 do-test:
-	cd ${WRKSRC} && py.test-${PYVERSSUFFIX}
+	cd ${WRKSRC}/tests && pytest-${PYVERSSUFFIX}
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

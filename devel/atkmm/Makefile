@@ -14,6 +14,7 @@ LICENSE=	gnu-lgpl-v2.1 AND gnu-gpl-v2
 
 CONFLICTS+=	gtkmm<2.22.0
 
+GCC_REQD+=	8
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
 USE_MULTIARCH=		lib

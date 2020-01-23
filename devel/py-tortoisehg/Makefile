@@ -1,23 +1,24 @@
-# $NetBSD: Makefile,v 1.41 2016/12/20 08:53:22 wiz Exp $
+# $NetBSD: Makefile,v 1.59 2019/11/03 10:18:29 rillig Exp $
 
-DISTNAME=		tortoisehg-4.9.1
+DISTNAME=		tortoisehg-5.0.2
+PKGREVISION=		1
 PKGNAME=		${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=		devel python
 MASTER_SITES=		http://bitbucket.org/tortoisehg/targz/downloads/
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
-HOMEPAGE=		http://tortoisehg.bitbucket.org/
+HOMEPAGE=		https://tortoisehg.bitbucket.io/
 COMMENT=		GUI for Mercurial
 LICENSE=		gnu-gpl-v2
 
 REPLACE_PYTHON+=	thg
 
-BUILD_DEPENDS+=	${PYPKGPREFIX}-sphinx>=1.3.4nb1:../../textproc/py-sphinx
+BUILD_DEPENDS+=	${PYPKGPREFIX}-sphinx>=1.3.4nb1:../../textproc/py-sphinx1
 DEPENDS+=	${PYPKGPREFIX}-iniparse>=0.4:../../textproc/py-iniparse
 DEPENDS+=	${PYPKGPREFIX}-pygments>=1.6:../../textproc/py-pygments
-DEPENDS+=	${PYPKGPREFIX}-mercurial>=2.8.1:../../devel/py-mercurial
+DEPENDS+=	${PYPKGPREFIX}-mercurial>=4.9.0:../../devel/py-mercurial
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # py-iniparse, py-mercurial
+PYTHON_VERSIONS_ACCEPTED=	27 # py-iniparse, py-mercurial
 
 thg_icon=		/share/pixmaps/tortoisehg/icons/thg_logo.ico
 SUBST_CLASSES+=		df
@@ -27,7 +28,7 @@ SUBST_FILES.df=		contrib/thg.desktop
 SUBST_SED.df=		-e 's:thg_logo:${PREFIX}${thg_icon}:1'
 
 pre-build:
-	${RUN} cd ${WRKSRC}/doc && ${MAKE_PROGRAM} SPHINXBUILD=sphinx-build${PYVERSSUFFIX} html
+	${RUN} cd ${WRKSRC}/doc && ${MAKE_PROGRAM} SPHINXBUILD=sphinx-build-${PYVERSSUFFIX} html
 	${RUN} rm ${WRKSRC}/doc/build/html/.buildinfo
 	# conflicts with mercurial
 	# https://bitbucket.org/tortoisehg/thg/issues/4629/tortoisehg-file-name-conflict-with
@@ -36,5 +37,5 @@ pre-build:
 .include "../../lang/python/application.mk"
 .include "../../lang/python/distutils.mk"
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
-.include "../../x11/py-qt4-qscintilla/buildlink3.mk"
+.include "../../x11/py-qt5-qscintilla/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

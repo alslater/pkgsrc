@@ -1,20 +1,23 @@
-$NetBSD: distinfo,v 1.64 2016/11/29 22:51:12 ryoon Exp $
+$NetBSD: distinfo,v 1.102 2019/12/03 14:29:21 ryoon Exp $
 
-SHA1 (nss-3.27.2.tar.gz) = b63dc5ab4608b9954ffe3edd4152c90e1b93bf6a
-RMD160 (nss-3.27.2.tar.gz) = 36e2fcf2eca8c26d597df39718835d2d3e6963a7
-SHA512 (nss-3.27.2.tar.gz) = 699847665e93fd649cb60ce6bc8f849f452779e7232a09bbeb0613f9e6c57bb81948f1ae59cc86648e41a212cda259109850ccd14546d35910deb75f5d2a13b8
-Size (nss-3.27.2.tar.gz) = 7397599 bytes
-SHA1 (patch-am) = bab47640c0d25629f43578e7b788859418b27ecd
+SHA1 (nss-3.47.1.tar.gz) = 527b6a50b31eed96d4d6ad71a1002404c8aa7458
+RMD160 (nss-3.47.1.tar.gz) = cc281100c6ae0cc0c9c45918f79b518cbc61b3d5
+SHA512 (nss-3.47.1.tar.gz) = ddee53f58929e5f3849c9f88a3a6735453a258c3c32a7e3e73cc949e0b7ad2dff81b21db31c9c5e1ef3eb79d63c31660e38ce76c06ca54a5681dd611dc2e2ae9
+Size (nss-3.47.1.tar.gz) = 76462846 bytes
+SHA1 (patch-am) = fea682bf03bc8b645049f93ed58554ca45f47aca
 SHA1 (patch-an) = 4ab22f2a575676b5b640bc9a760b83eb05c75e69
-SHA1 (patch-md) = 0a09fd2abb8674a2d301f1b6a5331af5db94178f
-SHA1 (patch-me) = e785e4e12b54f2618746a550a09593c2eede5f65
+SHA1 (patch-md) = 8547c9414332c02221b96719dea1e09cb741f4d1
+SHA1 (patch-me) = dd6adff2cd3ca61925b566210a8b9697348bd45e
 SHA1 (patch-mf) = 534fe5f711f60dadc3432bc805a6153535f11709
 SHA1 (patch-mg) = 3c878548c98bdea559a3e653e63e0ed22a2a8834
 SHA1 (patch-mh) = a46d3098a85c3a4a57895a9845bc1741fc5e9561
 SHA1 (patch-mj) = 08ca1a37afce99e0292a20348fc6855547f44e8a
 SHA1 (patch-mn) = 5b79783e48249044be1a904a6cfd20ba175b5fd4
-SHA1 (patch-nss_cmd_platlibs.mk) = 7dadcb72acf15714c61ae74b21c5baf45bc51d4c
-SHA1 (patch-nss_coreconf_OpenBSD.mk) = fccc17845c28f5b1268c96eb4e952e32dd530d1d
+SHA1 (patch-nss_cmd_platlibs.mk) = 01f4350de601b29c94e8a791a28daca226866bb6
+SHA1 (patch-nss_coreconf_OpenBSD.mk) = 1a4c3711d5d1f7f9e8d58b36145b15d7e444d754
 SHA1 (patch-nss_coreconf_command.mk) = 008f7670f164bf19555a7691f5a59fc8bf687078
-SHA1 (patch-nss_lib_freebl_config.mk) = 1c198177da8ba7928cbfbd23e385503be99ebe27
+SHA1 (patch-nss_lib_freebl_md5.c) = 5cbec40695e296f0713895fb85cd37f6df76b85b
+SHA1 (patch-nss_lib_util_utilpars.c) = 5d3000515b01037929730a752b7d7a0f46f06deb
+SHA1 (patch-nss_tests_all.sh) = b328778b538db66f5447f962f23afd6f650f7071
+SHA1 (patch-nss_tests_merge_merge.sh) = 42a4866d226b1076740ba9a5e42c7604f2cb15a7
 SHA1 (patch-security_nss_cmd_shlibsign_sign.sh) = 7948b7b502a4c148ee185836dde8a84d3aa388af

@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.7 2009/03/20 19:25:23 joerg Exp $
+# $NetBSD: buildlink3.mk,v 1.9 2019/09/12 20:46:03 rillig Exp $
 
 BUILDLINK_TREE+=	desktop-file-utils
 
@@ -7,14 +7,14 @@ DESKTOP_FILE_UTILS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.desktop-file-utils+=	desktop-file-utils>=0.8
 BUILDLINK_ABI_DEPENDS.desktop-file-utils+=	desktop-file-utils>=0.10nb1
-BUILDLINK_PKGSRCDIR.desktop-file-utils?=../../sysutils/desktop-file-utils
+BUILDLINK_PKGSRCDIR.desktop-file-utils?=	../../sysutils/desktop-file-utils
 
 BUILDLINK_TARGETS+=	desktop-file-utils-buildlink-fake
 
 _DFU_FAKE_UPDATEDB=	${BUILDLINK_DIR}/bin/update-desktop-database
 
-desktop-file-utils-buildlink-fake:
-	${_PKG_SILENT}${_PKG_DEBUG}					\
+desktop-file-utils-buildlink-fake: .PHONY
+	${RUN}								\
 	if [ ! -f ${_DFU_FAKE_UPDATEDB} ]; then				\
 		${ECHO_BUILDLINK_MSG} "Creating ${_DFU_FAKE_UPDATEDB}";	\
 		${MKDIR} ${_DFU_FAKE_UPDATEDB:H};			\

@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.21 2016/12/19 15:47:09 asau Exp $
 
 DISTNAME=	slurm-2.6.4
-PKGREVISION=	9
+PKGREVISION=	10
 CATEGORIES=	parallel
 MASTER_SITES=	http://www.schedmd.com/download/archive/ \
 		http://www.schedmd.com/download/latest/ \

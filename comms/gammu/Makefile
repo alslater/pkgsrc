@@ -2,6 +2,7 @@
 #
 
 DISTNAME=	gammu-1.37.91
+PKGREVISION=	1
 CATEGORIES=	comms
 MASTER_SITES=	http://dl.cihar.com/gammu/releases/
 EXTRACT_SUFX=	.tar.bz2

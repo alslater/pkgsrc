@@ -1,11 +1,11 @@
-# $NetBSD: Makefile,v 1.62 2016/02/02 07:38:29 dbj Exp $
+# $NetBSD: Makefile,v 1.66 2018/04/03 18:22:47 adam Exp $
 
 PKGNAME=	${PYPKGPREFIX}-Tk-${PY_DISTVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	x11 python
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://wiki.python.org/moin/TkInter
+HOMEPAGE=	https://wiki.python.org/moin/TkInter
 COMMENT=	Tkinter -- Python interface to Tcl/Tk
 LICENSE=	python-software-foundation
 
@@ -13,22 +13,20 @@ USE_GCC_RUNTIME=	yes
 
 EXTRACT_ELEMENTS=	${PYSUBDIR}/Modules/_tkinter.c \
 			${PYSUBDIR}/Modules/tkappinit.c
-
-MULTIARCH_DIRS.lib=	${PYLIB}/lib-dynload
-
 PYDISTUTILSPKG=		yes
 PY_PATCHPLIST=		yes
 PY_SETUP_SUBST+=	BLPREFIX=${LOCALBASE}
 PY_SETUP_SUBST+=	TCLRTPREFIX=${BUILDLINK_PREFIX.tcl}
 PY_SETUP_SUBST+=	TKRTPREFIX=${BUILDLINK_PREFIX.tk}
 PY_SETUP_SUBST+=	X11BASE=${X11BASE}
-PYSETUPINSTALLARGS+=	--install-lib ${PREFIX}/${PYLIB}/lib-dynload${LIBARCHSUFFIX}
+PYSETUPINSTALLARGS+=	--install-lib ${PREFIX}/${PYLIB}/lib-dynload
 
 .include "../../mk/bsd.prefs.mk"
 
 .if ${OPSYS} == "Darwin"
 PY_SETUP_SUBST+=	X11LIB=
 .else
+.include "../../x11/libX11/buildlink3.mk"
 PY_SETUP_SUBST+=	X11LIB=\'X11\'
 .endif
 
@@ -37,6 +35,9 @@ PY_SETUP_SUBST+=	X11LIB=\'X11\'
 .if ${_PYTHON_VERSION} >= 27
 EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/tkinter.h
 .endif
+#.if ${_PYTHON_VERSION} >= 38
+#EXTRACT_ELEMENTS+=	${PYSUBDIR}/Modules/clinic
+#.endif
 
 # ignore errors due to missing files (EXTRACT_ELEMENTS!)
 do-patch:
@@ -47,5 +48,4 @@ do-patch:
 .include "../../lang/python/srcdist.mk"
 .include "../../lang/tcl/buildlink3.mk"
 .include "../../x11/tk/buildlink3.mk"
-.include "../../x11/libX11/builtin.mk"
 .include "../../mk/bsd.pkg.mk"

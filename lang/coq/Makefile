@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	coq-8.5pl1
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	lang math
 MASTER_SITES=	http://coq.inria.fr/distrib/V${PKGVERSION_NOREV}/files/
 

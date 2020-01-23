@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.27 2019/11/08 12:24:31 adam Exp $
 bin/git
 bin/git-cvsserver
 bin/git-receive-pack
@@ -69,6 +69,7 @@ libexec/git-core/git-diff-index
 libexec/git-core/git-diff-tree
 libexec/git-core/git-difftool
 libexec/git-core/git-difftool--helper
+libexec/git-core/git-env--helper
 libexec/git-core/git-fast-export
 libexec/git-core/git-fast-import
 libexec/git-core/git-fetch
@@ -93,7 +94,7 @@ libexec/git-core/git-init
 libexec/git-core/git-init-db
 libexec/git-core/git-instaweb
 libexec/git-core/git-interpret-trailers
-libexec/git-core/git-legacy-rebase
+libexec/git-core/git-legacy-stash
 libexec/git-core/git-log
 libexec/git-core/git-ls-files
 libexec/git-core/git-ls-remote
@@ -132,10 +133,6 @@ libexec/git-core/git-quiltimport
 libexec/git-core/git-range-diff
 libexec/git-core/git-read-tree
 libexec/git-core/git-rebase
-libexec/git-core/git-rebase--am
-libexec/git-core/git-rebase--common
-libexec/git-core/git-rebase--interactive
-libexec/git-core/git-rebase--merge
 libexec/git-core/git-rebase--preserve-merges
 libexec/git-core/git-receive-pack
 libexec/git-core/git-reflog
@@ -152,13 +149,13 @@ libexec/git-core/git-replace
 libexec/git-core/git-request-pull
 libexec/git-core/git-rerere
 libexec/git-core/git-reset
+libexec/git-core/git-restore
 libexec/git-core/git-rev-list
 libexec/git-core/git-rev-parse
 libexec/git-core/git-revert
 libexec/git-core/git-rm
 libexec/git-core/git-send-email
 libexec/git-core/git-send-pack
-libexec/git-core/git-serve
 libexec/git-core/git-sh-i18n
 libexec/git-core/git-sh-i18n--envsubst
 libexec/git-core/git-sh-setup
@@ -175,6 +172,7 @@ libexec/git-core/git-stripspace
 libexec/git-core/git-submodule
 libexec/git-core/git-submodule--helper
 libexec/git-core/git-svn
+libexec/git-core/git-switch
 libexec/git-core/git-symbolic-ref
 libexec/git-core/git-tag
 libexec/git-core/git-unpack-file
@@ -211,6 +209,7 @@ libexec/git-core/mergetools/kompare
 libexec/git-core/mergetools/meld
 libexec/git-core/mergetools/opendiff
 libexec/git-core/mergetools/p4merge
+libexec/git-core/mergetools/smerge
 libexec/git-core/mergetools/tkdiff
 libexec/git-core/mergetools/tortoisemerge
 libexec/git-core/mergetools/vimdiff
@@ -227,6 +226,7 @@ share/examples/git/templates/hooks/fsmonitor-watchman.sample
 share/examples/git/templates/hooks/post-update.sample
 share/examples/git/templates/hooks/pre-applypatch.sample
 share/examples/git/templates/hooks/pre-commit.sample
+share/examples/git/templates/hooks/pre-merge-commit.sample
 share/examples/git/templates/hooks/pre-push.sample
 share/examples/git/templates/hooks/pre-rebase.sample
 share/examples/git/templates/hooks/pre-receive.sample
@@ -236,6 +236,7 @@ share/examples/git/templates/info/exclude
 share/locale/bg/LC_MESSAGES/git.mo
 share/locale/ca/LC_MESSAGES/git.mo
 share/locale/de/LC_MESSAGES/git.mo
+share/locale/el/LC_MESSAGES/git.mo
 share/locale/es/LC_MESSAGES/git.mo
 share/locale/fr/LC_MESSAGES/git.mo
 share/locale/is/LC_MESSAGES/git.mo
@@ -246,4 +247,3 @@ share/locale/ru/LC_MESSAGES/git.mo
 share/locale/sv/LC_MESSAGES/git.mo
 share/locale/vi/LC_MESSAGES/git.mo
 share/locale/zh_CN/LC_MESSAGES/git.mo
-@pkgdir share/examples/git/templates/branches

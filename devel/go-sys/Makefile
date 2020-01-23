@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.6 2018/06/12 17:50:24 bsiegert Exp $
+# $NetBSD: Makefile,v 1.20 2019/12/13 07:43:56 bsiegert Exp $
 #
 
-DISTNAME=		go-sys-0.0.20180308
-PKGREVISION=		2
+DISTNAME=		go-sys-0.0.20190308
+PKGREVISION=		8
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_GITHUB:=golang/}
 GITHUB_PROJECT=		sys
-GITHUB_TAG=		7dca6fe1f4
+GITHUB_TAG=		584f3b12f4
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
 HOMEPAGE=		http://golang.org/

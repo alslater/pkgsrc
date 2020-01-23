@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	merkaartor-0.17.2
-PKGREVISION=	33
+PKGREVISION=	34
 CATEGORIES=	geography
 MASTER_SITES=	http://merkaartor.be/attachments/download/253/
 EXTRACT_SUFX=	.tar.bz2

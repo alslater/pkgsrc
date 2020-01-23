@@ -1,4 +1,4 @@
-# $NetBSD: bsd.tools.mk,v 1.55 2015/11/25 13:05:47 jperkin Exp $
+# $NetBSD: bsd.tools.mk,v 1.59 2019/05/07 19:36:44 rillig Exp $
 #
 # Copyright (c) 2005, 2006 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -47,7 +40,7 @@
 # first when searching for executables.
 #
 TOOLS_DIR=	${WRKDIR}/.tools
-PREPEND_PATH+=	${TOOLS_DIR}/bin${BINARCHSUFFIX}
+PREPEND_PATH+=	${TOOLS_DIR}/bin
 
 TOOLS_SHELL?=		${SH}
 _TOOLS_WRAP_LOG=	${WRKLOG}
@@ -69,7 +62,7 @@ _TOOLS_TARGETS+=	release-tools-lock
 
 .PHONY: tools
 .if !target(tools)
-.  if exists(${_COOKIE.tools})
+.  if exists(${_COOKIE.tools}) && !${_CLEANING}
 tools:
 	@${DO_NADA}
 .  elif defined(_PKGSRC_BARRIER)
@@ -83,7 +76,7 @@ tools: barrier
 acquire-tools-lock: acquire-lock
 release-tools-lock: release-lock
 
-.if exists(${_COOKIE.tools})
+.if exists(${_COOKIE.tools}) && !${_CLEANING}
 ${_COOKIE.tools}:
 	@${DO_NADA}
 .else
@@ -97,13 +90,8 @@ ${_COOKIE.tools}: real-tools
 ### targets that do the actual tool creation.
 ###
 _REAL_TOOLS_TARGETS+=	tools-message
-.if defined(_MULTIARCH)
-_REAL_TOOLS_TARGETS+=	tools-vars-multi
-_REAL_TOOLS_TARGETS+=	override-tools-multi
-.else
 _REAL_TOOLS_TARGETS+=	tools-vars
 _REAL_TOOLS_TARGETS+=	override-tools
-.endif
 _REAL_TOOLS_TARGETS+=	post-tools
 _REAL_TOOLS_TARGETS+=	tools-cookie
 _REAL_TOOLS_TARGETS+=	error-check
@@ -137,16 +125,6 @@ tools-cookie:
 .PHONY: override-tools
 override-tools:
 	@${DO_NADA}
-
-.if defined(_MULTIARCH)
-.  for _tgt_ in tools-vars override-tools
-.PHONY: ${_tgt_}-multi
-${_tgt_}-multi:
-.    for _abi_ in ${MULTIARCH_ABIS}
-	@${MAKE} ${MAKE_FLAGS} ABI=${_abi_} WRKSRC=${WRKSRC}-${_abi_} ${_tgt_}
-.    endfor
-.  endfor
-.endif
 
 ######################################################################
 ### post-tools (PUBLIC, override)
@@ -187,7 +165,7 @@ _VARGROUPS+=		tools
 _USER_VARS.tools=	TOOLS_SHELL
 _PKG_VARS.tools=	USE_TOOLS TOOLS_BROKEN TOOLS_CREATE \
 	TOOLS_FAIL TOOLS_GNU_MISSING TOOLS_NOOP
-.for t in ${USE_TOOLS:C/:.*//} # XXX: There should be a variable _ALL_TOOLS
+.for t in ${USE_TOOLS:C/:.*//:O:u}
 .  for pv in \
 	TOOLS_ALIASES \
 	TOOLS_ARGS \
@@ -203,3 +181,4 @@ _PKG_VARS.tools=	USE_TOOLS TOOLS_BROKEN TOOLS_CREATE \
 _SYS_VARS.tools+=	${pv}.${t}
 .  endfor
 .endfor
+_SORTED_VARS.tools=	USE_TOOLS TOOLS_CREATE TOOLS_GNU_MISSING

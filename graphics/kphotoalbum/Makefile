@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		kphotoalbum-3.1.1
-PKGREVISION=		32
+PKGREVISION=		33
 CATEGORIES=		graphics
 MASTER_SITES=		http://ktown.kde.org/kphotoalbum/download/
 EXTRACT_SUFX=		.tar.bz2

@@ -1,16 +1,16 @@
-# $NetBSD: print-plist.mk,v 1.32 2016/07/25 21:57:23 wiz Exp $
-
-###
-### Automatic PLIST generation
-###  - files & symlinks first
-###  - empty directories are handled properly
-###  - dirs from mtree files are excluded
-###  - substitute for platform or package specifics substrings
-###
-### Usage:
-###  - make install
-###  - make print-PLIST | brain >PLIST
-###
+# $NetBSD: print-plist.mk,v 1.34 2018/03/11 14:53:10 rillig Exp $
+#
+# Automatic PLIST generation
+#  - files & symlinks first
+#  - empty directories are handled properly
+#  - dirs from mtree files are excluded
+#  - substitute for platform or package specifics substrings
+#
+# Usage:
+#  - make install
+#  - make print-PLIST | brain >PLIST
+#
+# Keywords: plist print-plist
 
 _PRINT_PLIST_AWK_SUBST={
 _PRINT_PLIST_AWK_SUBST+=						\
@@ -42,6 +42,9 @@ _PRINT_PLIST_AWK_IGNORE+=	|| ($$0 ~ /^.*\/fonts\.scale/)
     (defined(FONTS_DIRS.type1) && !empty(FONTS_DIRS.type1:M*)) || \
     (defined(FONTS_DIRS.x11) && !empty(FONTS_DIRS.x11:M*))
 _PRINT_PLIST_AWK_IGNORE+=	|| ($$0 ~ /^.*\/fonts\.cache-1/)
+.endif
+.if defined(ICON_THEMES)
+_PRINT_PLIST_AWK_IGNORE+=	|| ($$0 ~ /^share\/icons\/*\/icon-theme\.cache$$/)
 .endif
 
 # List the content of $PREFIX and emit "@pkgdir " statements for

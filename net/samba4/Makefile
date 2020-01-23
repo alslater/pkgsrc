@@ -1,7 +1,6 @@
-# $NetBSD: Makefile,v 1.81 2019/09/09 00:33:05 taca Exp $
+# $NetBSD: Makefile,v 1.85 2019/12/10 13:03:41 adam Exp $
 
-DISTNAME=	samba-4.10.8
-PKGREVISION=	1
+DISTNAME=	samba-4.11.4
 CATEGORIES=	net
 MASTER_SITES=	https://download.samba.org/pub/samba/stable/
 
@@ -58,7 +57,7 @@ FILES_SUBST+=		SMB_PID=${SMB_PID}
 USE_TOOLS+=		gmake mktemp perl:run pkg-config
 
 USE_GNU_ICONV=		yes	# FIXME: something doesn't work on NetBSD
-BROKEN_GETTEXT_DETECTION=yes
+BROKEN_GETTEXT_DETECTION= yes
 
 # Debugging
 #CONFIGURE_ARGS+=	-vvv
@@ -91,7 +90,6 @@ CONFIGURE_ARGS+=	--with-libiconv=${BUILDLINK_PREFIX.iconv}
 #CONFIGURE_ARGS+=	--bundled-libraries=com_err
 CONFIGURE_ARGS+=	--abi-check-disable
 CONFIGURE_ARGS+=	--disable-symbol-versions
-CONFIGURE_ARGS+=	--enable-gnutls
 .if defined(MAKE_JOBS) && !empty(MAKE_JOBS) && !(defined(MAKE_JOBS_SAFE) && !empty(MAKE_JOBS_SAFE:M[nN][oO]))
 CONFIGURE_ARGS+=	--jobs=${MAKE_JOBS}
 .else
@@ -101,6 +99,7 @@ CONFIGURE_ARGS+=	--without-gpgme
 
 # Depends on ncurses, explicitly disable for now.
 CONFIGURE_ARGS+=	--without-regedit
+CONFIGURE_ARGS+=	-vvv
 
 PY_PATCHPLIST=		yes
 MAKE_FLAGS+=		WAF_BINARY=${PYTHONBIN}\ ${WRKSRC}/buildtools/bin/waf
@@ -119,12 +118,10 @@ LDFLAGS.SunOS+=		-lsocket -lnsl -lsendfile
 
 .include "options.mk"
 
-.if ${_OPSYS_SHLIB_TYPE} == "dylib"
-PLIST_SUBST+=   SOEXT=dylib
-SAMBA_LIBEXT=   dylib
+.if ${SHLIB_TYPE} == "dylib"
+PLIST_SUBST+=	SOEXT=dylib
 .else
-PLIST_SUBST+=   SOEXT=so
-SAMBA_LIBEXT=   so
+PLIST_SUBST+=	SOEXT=so
 .endif
 
 .if !defined(PWD_MKDB)
@@ -190,6 +187,42 @@ post-install:
 		${DESTDIR}${PREFIX}/${EGDIR}
 	${INSTALL_DATA} ${WRKSRC}/examples/smb.conf.default \
 		${DESTDIR}${PREFIX}/${EGDIR}
+	# Conflicting PLIST with ldb
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbadd
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbadd
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbdel
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbedit
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbmodify
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbrename
+	${RM} -f ${DESTDIR}${PREFIX}/bin/ldbsearch
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbadd.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbdel.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbedit.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbmodify.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbrename.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man1/ldbsearch.1
+	${RM} -f ${DESTDIR}${PREFIX}/man/man3/ldb.3
+	${RM} -f ${DESTDIR}${PREFIX}/lib/python3.8/site-packages/_ldb_text.py
+	${RM} -f ${DESTDIR}${PREFIX}/lib/python3.8/site-packages/ldb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/python3.8/site-packages/samba/tests/smbd_fuzztest.py
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/asq.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/ldb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/mdb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/paged_searches.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/rdn_name.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/sample.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/server_sort.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/skel.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/ldb/tdb.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-cmdline-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-key-value-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-mdb-int-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-tdb-err-map-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb-tdb-int-samba4.so
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb.so.2
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libldb.so.2.0.8
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libpyldb-util.so.2
+	${RM} -f ${DESTDIR}${PREFIX}/lib/samba/private/libpyldb-util.so.2.0.8
 
 REPLACE_PERL+=		librpc/tables.pl
 REPLACE_PERL+=		pidl/pidl
@@ -221,6 +254,7 @@ BUILDLINK_API_DEPENDS.talloc+=	talloc>=2.1.9
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
+.include "../../net/avahi/buildlink3.mk"
 .include "../../security/gnutls/buildlink3.mk"
 .include "../../security/libgcrypt/buildlink3.mk"
 .include "../../textproc/jansson/buildlink3.mk"

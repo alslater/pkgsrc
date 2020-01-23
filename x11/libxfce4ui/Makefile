@@ -1,17 +1,17 @@
-# $NetBSD: Makefile,v 1.6 2016/08/03 10:22:23 adam Exp $
+# $NetBSD: Makefile,v 1.24 2019/08/17 18:35:12 gutteridge Exp $
 
-PKGREVISION= 1
 .include "../../meta-pkgs/xfce4/Makefile.common"
 
-DISTNAME=	libxfce4ui-4.13.0
+DISTNAME=	libxfce4ui-4.14.1
 CATEGORIES=	x11
-MASTER_SITES+=	http://archive.xfce.org/src/xfce/libxfce4ui/4.13/
+MASTER_SITES+=	http://archive.xfce.org/src/xfce/libxfce4ui/4.14/
 
 COMMENT=	Xfce widget library
 
 BUILD_DEFS+=		PKG_SYSCONFBASE
 
 CONFIGURE_ARGS+=	--enable-gtk3
+CONFIGURE_ARGS=		--with-vendor-info=${OPSYS}
 CONFIGURE_ARGS+=	--sysconfdir=${PKG_SYSCONFBASE}
 
 PKG_SYSCONFSUBDIR=	xdg
@@ -27,10 +27,12 @@ CONF_FILES=	${XFCE4_EGBASE}/xfconf/xfce-perchannel-xml/xfce4-keyboard-shortcuts.
 MAKE_DIRS+=	${XFCE4_EGBASE}/xfconf/xfce-perchannel-xml \
 		${PKG_SYSCONFDIR}/xfce4/xfconf/xfce-perchannel-xml
 
+USE_LANGUAGES=	c99
+
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
 .include "../../devel/xfce4-conf/buildlink3.mk"
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
-.include "../../x11/gtk3/buildlink3.mk"
+.include "../../x11/gtk2/buildlink3.mk"
 .include "../../x11/libxfce4util/buildlink3.mk"
 .include "../../x11/libSM/buildlink3.mk"
 .include "../../x11/startup-notification/buildlink3.mk"

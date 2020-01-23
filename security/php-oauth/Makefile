@@ -6,7 +6,7 @@ CATEGORIES+=		security
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
 COMMENT=		PHP oauth consumer extension
-PKGREVISION=		1
+PKGREVISION=		2
 LICENSE=		modified-bsd
 
 PHP_VERSIONS_ACCEPTED=	70

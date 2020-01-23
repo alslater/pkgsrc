@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.1 2015/07/26 13:53:58 youri Exp $
+@comment $NetBSD: PLIST,v 1.4 2019/10/12 10:51:02 gutteridge Exp $
 bin/xfce4-dict
 lib/xfce4/panel/plugins/libxfce4dict.la
 man/man1/xfce4-dict.1
@@ -6,6 +6,7 @@ share/applications/xfce4-dict.desktop
 share/icons/hicolor/scalable/apps/xfce4-dict.svg
 share/locale/ar/LC_MESSAGES/xfce4-dict.mo
 share/locale/ast/LC_MESSAGES/xfce4-dict.mo
+share/locale/be/LC_MESSAGES/xfce4-dict.mo
 share/locale/bg/LC_MESSAGES/xfce4-dict.mo
 share/locale/ca/LC_MESSAGES/xfce4-dict.mo
 share/locale/cs/LC_MESSAGES/xfce4-dict.mo
@@ -22,6 +23,7 @@ share/locale/gl/LC_MESSAGES/xfce4-dict.mo
 share/locale/he/LC_MESSAGES/xfce4-dict.mo
 share/locale/hr/LC_MESSAGES/xfce4-dict.mo
 share/locale/hu/LC_MESSAGES/xfce4-dict.mo
+share/locale/hy_AM/LC_MESSAGES/xfce4-dict.mo
 share/locale/id/LC_MESSAGES/xfce4-dict.mo
 share/locale/is/LC_MESSAGES/xfce4-dict.mo
 share/locale/it/LC_MESSAGES/xfce4-dict.mo
@@ -39,6 +41,7 @@ share/locale/pt/LC_MESSAGES/xfce4-dict.mo
 share/locale/pt_BR/LC_MESSAGES/xfce4-dict.mo
 share/locale/ru/LC_MESSAGES/xfce4-dict.mo
 share/locale/sk/LC_MESSAGES/xfce4-dict.mo
+share/locale/sl/LC_MESSAGES/xfce4-dict.mo
 share/locale/sq/LC_MESSAGES/xfce4-dict.mo
 share/locale/sr/LC_MESSAGES/xfce4-dict.mo
 share/locale/sv/LC_MESSAGES/xfce4-dict.mo

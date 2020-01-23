@@ -2,6 +2,7 @@
 
 DISTNAME=	dovecot-2.2-pigeonhole-0.4.16
 PKGNAME=	${DISTNAME:S/-2.2-/-/}
+PKGREVISION=	1
 CATEGORIES=	mail
 MASTER_SITES=	http://pigeonhole.dovecot.org/releases/2.2/
 

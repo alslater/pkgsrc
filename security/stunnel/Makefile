@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.104 2016/08/29 19:21:24 jym Exp $
 
 DISTNAME=		stunnel-5.35
+PKGREVISION=		1
 CATEGORIES=		security
 MASTER_SITES=		http://www.stunnel.org/downloads/
 

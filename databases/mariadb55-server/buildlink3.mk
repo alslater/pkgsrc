@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	mariadb-server
 MARIADB_SERVER_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.mariadb-server+=	mariadb-server>=5.5.42
-BUILDLINK_ABI_DEPENDS.mariadb-server?=	mariadb-server>=5.5.43nb1
+BUILDLINK_ABI_DEPENDS.mariadb-server?=	mariadb-server>=5.5.52nb1
 BUILDLINK_PKGSRCDIR.mariadb-server?=	../../databases/mariadb55-server
 BUILDLINK_LIBDIRS.mariadb-server?=	lib
 

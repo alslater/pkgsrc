@@ -1,12 +1,12 @@
-# $NetBSD: buildlink3.mk,v 1.13 2016/12/04 05:17:16 ryoon Exp $
+# $NetBSD: buildlink3.mk,v 1.28 2019/09/16 19:24:54 adam Exp $
 
 BUILDLINK_TREE+=	qt5-qtimageformats
 
 .if !defined(QT5_QTIMAGEFORMATS_BUILDLINK3_MK)
 QT5_QTIMAGEFORMATS_BUILDLINK3_MK:=
 
-BUILDLINK_API_DEPENDS.qt5-qtimageformats+=	qt5-qtimageformats>=5.5.1
-BUILDLINK_ABI_DEPENDS.qt5-qtimageformats+=	qt5-qtimageformats>=5.5.1nb6
+BUILDLINK_API_DEPENDS.qt5-qtimageformats+=	qt5-qtimageformats>=5.9.1
+BUILDLINK_ABI_DEPENDS.qt5-qtimageformats+=	qt5-qtimageformats>=5.13.1
 BUILDLINK_PKGSRCDIR.qt5-qtimageformats?=	../../x11/qt5-qtimageformats
 
 BUILDLINK_INCDIRS.qt5-qtimageformats+=	qt5/include

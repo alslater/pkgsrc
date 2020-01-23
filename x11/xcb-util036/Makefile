@@ -1,24 +1,24 @@
-# $NetBSD: Makefile,v 1.4 2013/12/11 12:23:53 rodent Exp $
+# $NetBSD: Makefile,v 1.6 2019/11/03 09:14:19 rillig Exp $
 #
 
 DISTNAME=	xcb-util-0.3.6
 PKGNAME=	xcb-util036-0.3.6
 PKGREVISION=	1
 CATEGORIES=	x11
-MASTER_SITES=	http://xcb.freedesktop.org/dist/
+MASTER_SITES=	https://xcb.freedesktop.org/dist/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://xcb.freedesktop.org/
+HOMEPAGE=	https://xcb.freedesktop.org/
 COMMENT=	XCB Utilities (old 0.3.6 release)
 LICENSE=	x11
 
-GNU_CONFIGURE=	yes
-GNU_CONFIGURE_PREFIX=	${PREFIX}/xcb-util036
-USE_TOOLS+=	gm4 gmake pkg-config
-USE_LIBTOOL=	yes
-LDFLAGS+=	${COMPILER_RPATH_FLAG}${PREFIX}/xcb-util036/lib
-#LIBS+=	${COMPILER_RPATH_FLAG}${PREFIX}/xcb-util036/lib
+GNU_CONFIGURE=			yes
+GNU_CONFIGURE_PREFIX=		${PREFIX}/xcb-util036
+USE_TOOLS+=			gm4 gmake pkg-config
+USE_LIBTOOL=			yes
+LDFLAGS+=			${COMPILER_RPATH_FLAG}${PREFIX}/xcb-util036/lib
+#LIBS+=				${COMPILER_RPATH_FLAG}${PREFIX}/xcb-util036/lib
 BUILDLINK_PASSTHRU_RPATHDIRS=	${PREFIX}/xcb-util036/lib
 
 PKGCONFIG_OVERRIDE+=	atom/xcb-atom.pc.in

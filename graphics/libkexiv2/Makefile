@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	libkexiv2-15.08.3
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	graphics
 COMMENT=	KDE wrapper around exiv2
 MASTER_SITES=	${MASTER_SITE_KDE:=applications/15.08.3/src/}

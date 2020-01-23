@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		vpnc-0.5.3
-PKGREVISION=		14
+PKGREVISION=		15
 CATEGORIES=		net security
 MASTER_SITES=		http://www.unix-ag.uni-kl.de/~massar/vpnc/
 

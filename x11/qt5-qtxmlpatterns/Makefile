@@ -1,11 +1,9 @@
-# $NetBSD: Makefile,v 1.16 2016/12/04 05:17:17 ryoon Exp $
+# $NetBSD: Makefile,v 1.36 2019/09/16 19:24:56 adam Exp $
 
-DISTNAME=	qtxmlpatterns-opensource-src-${QTVERSION}
+DISTNAME=	qtxmlpatterns-everywhere-src-${QTVERSION}
 PKGNAME=	qt5-qtxmlpatterns-${QTVERSION}
-PKGREVISION=	6
 COMMENT=	Qt5 module for XML Patterns
 
-#NO_CONFIGURE=		yes
 BUILD_TARGET=		sub-tools
 
 INSTALL_ENV+=		INSTALL_ROOT=${DESTDIR}
@@ -16,7 +14,7 @@ INSTALLATION_DIRS+=	lib/pkgconfig
 post-install:
 .for i in Qt5XmlPatterns.pc
 	cd ${DESTDIR}${PREFIX}/lib/pkgconfig && \
-	ln -f -s ${QTPREFIX}/lib/pkgconfig/${i} ${i}
+	${LN} -f -s ${QTPREFIX}/lib/pkgconfig/${i} ${i}
 .endfor
 
 .include "../../x11/qt5-qtbase/buildlink3.mk"

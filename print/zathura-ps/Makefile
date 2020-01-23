@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	zathura-ps-0.2.3
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	print
 MASTER_SITES=	http://pwmt.org/projects/zathura-ps/download/
 

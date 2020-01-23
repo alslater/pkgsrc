@@ -1,13 +1,14 @@
-# $NetBSD: Makefile,v 1.281 2016/09/13 13:45:52 prlw1 Exp $
+# $NetBSD: Makefile,v 1.311 2019/11/03 09:14:08 rillig Exp $
 
-DISTNAME=	gtk+-2.24.31
+DISTNAME=	gtk+-2.24.32
 PKGNAME=	${DISTNAME:S/gtk/gtk2/}
+PKGREVISION=	11
 CATEGORIES=	x11 gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gtk+/2.24/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gtk.org/
+HOMEPAGE=	https://www.gtk.org/
 COMMENT=	GIMP Toolkit v2 - libraries for building X11 user interfaces
 LICENSE=	gnu-lgpl-v2.1
 
@@ -20,10 +21,9 @@ CONFLICTS+=		gail-[0-9]*
 SUPERSEDES=		gail-[0-9]*
 
 USE_PKGLOCALEDIR=	yes
-USE_TOOLS+=		gmake msgfmt perl pkg-config
+USE_TOOLS+=		ggrep gmake msgfmt perl pkg-config
 USE_LANGUAGES=		c c++
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
 PTHREAD_AUTO_VARS=	yes
 
 GNU_CONFIGURE=		yes
@@ -46,29 +46,23 @@ PKGCONFIG_OVERRIDE+=	gtk+-unix-print-2.0.pc.in
 #PKGCONFIG_OVERRIDE+=	gdk-pixbuf-2.0.pc.in
 #PKGCONFIG_OVERRIDE+=	contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc.in
 
-INSTALLATION_DIRS+=	lib${LIBARCHSUFFIX}/gtk-2.0/immodules
-INSTALLATION_DIRS+=	lib${LIBARCHSUFFIX}/gtk-2.0/modules
-INSTALLATION_DIRS+=	lib${LIBARCHSUFFIX}/gtk-2.0/2.10.0/filesystems
+INSTALLATION_DIRS+=	lib/gtk-2.0/immodules
+INSTALLATION_DIRS+=	lib/gtk-2.0/modules
+INSTALLATION_DIRS+=	lib/gtk-2.0/2.10.0/filesystems
 
 REQD_DIRS+=		${PREFIX}/libdata/gtk-2.0
 
 BUILD_DIRS=		. demos/gtk-demo
 
+LDFLAGS.SunOS+=		-lintl
 # fix for 'only weak aliases are supported on darwin' error
 CONFIGURE_ARGS.Darwin+=	--disable-visibility
 
 .include "../../mk/bsd.prefs.mk"
 
-# gtk/Makefile.am hardcodes 'grep -o' so require GNU grep on platforms
-# which do not have it.
-.if ${OPSYS} == "SunOS"
-BUILD_DEPENDS+=		grep-[0-9]*:../../textproc/grep
-TOOLS_PATH.grep=	${PREFIX}/bin/ggrep
-.endif
-
 CPPFLAGS+=		-DPREFIX="\"${PREFIX}\""
 
-#SUBST_CLASSES+=		pthread
+#SUBST_CLASSES+=	pthread
 #SUBST_STAGE.pthread=	pre-configure
 #SUBST_MESSAGE.pthread=	Fixing pthread flags.
 #SUBST_SED.pthread=	-e 's,__PTHREAD_FLAGS__,${BUILDLINK_LDFLAGS.pthread},g'
@@ -80,7 +74,7 @@ SUBST_MESSAGE.iconcache=	Renaming gtk-icon-cache-update.
 SUBST_SED.iconcache=		-e 's,gtk-update-icon-cache,gtk2-update-icon-cache,g'
 SUBST_FILES.iconcache=		gtk/Makefile.in
 
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 2.24.22
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 2.24.22
 REPLACE_PYTHON=	gtk/gtk-builder-convert
 
 # We remove the module databases during post-install since we create them
@@ -90,9 +84,8 @@ post-install:
 	${RM} -f ${DESTDIR}${GTK_IMMODULES_DB}
 
 FILES_SUBST+=		GTK_UPDATE_ICON_CACHE="${PREFIX}/bin/gtk2-update-icon-cache"
-FILES_SUBST+=		ICON_THEME_DIR="${LOCALBASE}/share/icons/hicolor"
+FILES_SUBST+=		ICON_THEME_DIR="${LOCALBASE}/share/icons"
 INSTALL_TEMPLATES+=	../../x11/gtk2/files/icon-cache.tmpl
-PRINT_PLIST_AWK+=	/^share\/icons\/hicolor\/icon-theme.cache$$/ { next; }
 
 _BUILDING_GTK2=	yes
 .include "modules.mk"

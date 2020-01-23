@@ -2,6 +2,7 @@
 #
 
 COMMENT=		Postfix SMTP server LDAP backend module
+PKGREVISION=		1
 
 POSTFIX_LIB=		ldap
 POSTFIX_LIBDIR=		src/global

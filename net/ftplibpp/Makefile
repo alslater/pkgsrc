@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		ftplibpp-1.0.1
-PKGREVISION=		5
+PKGREVISION=		6
 CATEGORIES=		net devel
 MASTER_SITES=		http://download.berlios.de/kasablanca/
 

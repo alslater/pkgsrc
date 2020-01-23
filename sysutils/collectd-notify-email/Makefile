@@ -3,6 +3,7 @@
 COLLECTD_PACKAGE=	notify-email
 
 COMMENT=		Statistics collection daemon - notify_email plugin
+PKGREVISION=		1
 
 .include "../../sysutils/collectd/Makefile.common"
 

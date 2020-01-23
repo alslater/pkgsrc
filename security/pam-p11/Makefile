@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	pam_p11-0.1.5
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	security
 # This has a bad name and doesn't have generated auto* files.
 #MASTER_SITES=	https://github.com/OpenSC/pam_p11/archive/

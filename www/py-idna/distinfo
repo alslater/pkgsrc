@@ -1,4 +1,4 @@
-$NetBSD: distinfo,v 1.4 2016/04/08 15:23:33 wiz Exp $
+$NetBSD: distinfo,v 1.10 2018/12/10 11:03:10 wiz Exp $
 
 SHA1 (idna-2.8.tar.gz) = c1e59def26dac74a2ec53181032df76d40368657
 RMD160 (idna-2.8.tar.gz) = 8c7b40d7eefc237aa26845fb6b0e268693efea9b

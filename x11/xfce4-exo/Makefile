@@ -1,19 +1,18 @@
-# $NetBSD: Makefile,v 1.44 2016/08/03 10:22:25 adam Exp $
+# $NetBSD: Makefile,v 1.65 2019/12/16 00:44:34 gutteridge Exp $
 
-PKGREVISION= 2
 .include "../../meta-pkgs/xfce4/Makefile.common"
 
-VERSION=	0.10.7
+VERSION=	0.12.10
 DISTNAME=	exo-${VERSION}
 PKGNAME=	xfce4-exo-${VERSION}
 CATEGORIES=	x11
-MASTER_SITES=	http://archive.xfce.org/src/xfce/exo/0.10/
+MASTER_SITES=	http://archive.xfce.org/src/xfce/exo/${VERSION:R}/
 
-HOMEPAGE=	http://docs.xfce.org/xfce/exo/start
+HOMEPAGE=	https://docs.xfce.org/xfce/exo/start
 COMMENT=	Xfce extension library
 
-USE_TOOLS+=		perl:run
-REPLACE_PERL=		exo-helper/helpers/exo-compose-mail-1
+USE_TOOLS+=	perl:run
+REPLACE_PERL=	exo-helper/helpers/exo-compose-mail
 
 DEPENDS+=	p5-URI>=0:../../www/p5-URI
 
@@ -26,6 +25,7 @@ CONF_FILES=		${EGDIR}/helpers.rc ${PKG_SYSCONFDIR}/helpers.rc
 OWN_DIRS+=		${EGDIR}
 
 .include "../../sysutils/desktop-file-utils/desktopdb.mk"
+.include "../../x11/gtk2/buildlink3.mk"
 .include "../../x11/libxfce4ui/buildlink3.mk"
 .include "../../graphics/hicolor-icon-theme/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

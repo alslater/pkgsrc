@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	rtmpdump
 RTMPDUMP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.rtmpdump+=	rtmpdump>=2.3
-BUILDLINK_ABI_DEPENDS.rtmpdump?=	rtmpdump>=2.4nb3
+BUILDLINK_ABI_DEPENDS.rtmpdump?=	rtmpdump>=2.4nb4
 BUILDLINK_PKGSRCDIR.rtmpdump?=	../../net/rtmpdump
 
 .include "../../security/openssl/buildlink3.mk"

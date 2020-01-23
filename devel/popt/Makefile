@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.46 2014/10/09 14:06:30 wiz Exp $
+# $NetBSD: Makefile,v 1.48 2019/11/03 10:39:28 rillig Exp $
 #
 
 DISTNAME=	popt-1.16
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	devel
 MASTER_SITES=	http://rpm5.org/files/popt/
 
@@ -13,12 +13,11 @@ LICENSE=	mit
 
 CONFLICTS=		ORBit<=0.5.3
 
-USE_PKGLOCALEDIR=	yes
-GNU_CONFIGURE=		yes
-USE_TOOLS+=		gmake
-USE_LIBTOOL=		yes
-USE_MULTIARCH=		lib
-PKGCONFIG_OVERRIDE=	popt.pc
+USE_PKGLOCALEDIR=		yes
+GNU_CONFIGURE=			yes
+USE_TOOLS+=			gmake
+USE_LIBTOOL=			yes
+PKGCONFIG_OVERRIDE=		popt.pc
 PKGCONFIG_OVERRIDE_STAGE=	post-configure
 
 TEST_TARGET=		check

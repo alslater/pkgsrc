@@ -1,8 +1,8 @@
-# $NetBSD: platform.mk,v 1.2 2016/11/13 16:03:31 taca Exp $
+# $NetBSD: platform.mk,v 1.6 2019/11/03 19:04:06 rillig Exp $
 #
 
 #
-# Common definition for ruby*-base package (except ruby18-base).
+# Common definition for ruby*-base package.
 #
 
 .if !defined(_RUBY_PLATFORM_MK)
@@ -23,7 +23,7 @@ REQD_DIRS+=	${GEM_HOME}/doc
 SUBST_CLASSES+=		conf
 SUBST_STAGE.conf=	pre-install
 SUBST_FILES.conf=	lib/rubygems/config_file.rb
-SUBST_SED.conf=		-e "s|@PKG_SYSCONFDIR@|${PKG_SYSCONFDIR}|g"
+SUBST_VARS.conf=	PKG_SYSCONFDIR
 SUBST_MESSAGE.conf=	Fixing configuration files.
 
 #
@@ -82,6 +82,15 @@ CONFIGURE_ARGS+=	--disable-dtrace
 # built with dtrace enabled yet, so this problem is on 7.99.* only.)
 #
 .if ${OPSYS} == "NetBSD" && ${MACHINE_ARCH} == "i386"
+CONFIGURE_ARGS+=	--disable-dtrace
+.endif
+
+#
+# NetBSD
+#
+# dtrace support can cause problems with miniruby on arm.
+#
+.if !empty(MACHINE_PLATFORM:MNetBSD-*-*arm*)
 CONFIGURE_ARGS+=	--disable-dtrace
 .endif
 

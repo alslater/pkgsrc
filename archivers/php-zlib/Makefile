@@ -3,6 +3,7 @@
 MODNAME=		zlib
 CATEGORIES+=		archivers
 COMMENT=		PHP extension for zlib compression
+PKGREVISION=		1
 
 CONFLICTS=	php-zlib-[0-9]*
 

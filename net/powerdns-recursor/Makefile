@@ -2,6 +2,7 @@
 #
 
 DISTNAME=		pdns-recursor-4.1.0
+PKGREVISION=		1
 CATEGORIES=		net
 MASTER_SITES=		http://downloads.powerdns.com/releases/
 EXTRACT_SUFX=		.tar.bz2

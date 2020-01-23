@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	nspluginwrapper-1.4.4
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	www
 MASTER_SITES=	http://nspluginwrapper.org/download/ \
 		http://teokurebsd.org/netbsd/packages/distfiles/nspluginwrapper/

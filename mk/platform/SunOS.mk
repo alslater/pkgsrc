@@ -1,4 +1,4 @@
-# $NetBSD: SunOS.mk,v 1.73 2016/10/27 10:31:06 jperkin Exp $
+# $NetBSD: SunOS.mk,v 1.79 2018/11/12 14:22:58 jperkin Exp $
 #
 # Variable definitions for the SunOS/Solaris operating system.
 
@@ -85,6 +85,8 @@ BUILDLINK_TRANSFORM+=	rm:-Wl,--gc-sections
 BUILDLINK_TRANSFORM+=	rm:-Wl,--no-as-needed
 BUILDLINK_TRANSFORM+=	rm:-Wl,--warn-common
 BUILDLINK_TRANSFORM+=	rm:-Wl,--warn-shared-textrel
+BUILDLINK_TRANSFORM+=	rm:-Wl,-O1
+BUILDLINK_TRANSFORM+=	rm:-Wl,-O2
 BUILDLINK_TRANSFORM+=	rm:-Wl,-export-dynamic
 BUILDLINK_TRANSFORM+=	rm:-export-dynamic
 
@@ -96,6 +98,14 @@ BUILDLINK_TRANSFORM+=	opt:-Wl,--rpath:-Wl,-R
 BUILDLINK_TRANSFORM+=	rm:-mimpure-text
 .endif
 
+# The native curses implementations are reasonably old and can cause lots of
+# issues with software which assumes newer interfaces, so it's easier to just
+# use pkgsrc curses at this point.  Both curses and terminfo should be in sync
+# otherwise it's possible to end up with conflicting buildlink transforms.
+#
+_INCOMPAT_CURSES=		SunOS-*-*
+_OPSYS_PREFER.terminfo?=	pkgsrc
+
 # Solaris has /usr/include/iconv.h, but it's not GNU iconv, so mark it
 # incompatible.
 _INCOMPAT_ICONV=	SunOS-*-*
@@ -105,11 +115,11 @@ _STRIPFLAG_INSTALL?=	${_INSTALL_UNSTRIPPED:D:U-s}	# install(1) option to strip
 
 PKG_TOOLS_BIN?=		${LOCALBASE}/sbin
 
-.if ${MACHINE_ARCH} == "x86_64"
-LIBABISUFFIX=		/amd64
-.endif
-_OPSYS_SYSTEM_RPATH?=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}:/lib/64
-_OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX} /lib/64
+LIBABISUFFIX.sparc64=	/sparcv9
+LIBABISUFFIX.x86_64=	/amd64
+LIBABISUFFIX?=		${LIBABISUFFIX.${MACHINE_ARCH}}
+_OPSYS_SYSTEM_RPATH?=	/lib${LIBABISUFFIX}:/usr/lib${LIBABISUFFIX}
+_OPSYS_LIB_DIRS?=	/lib${LIBABISUFFIX} /usr/lib${LIBABISUFFIX}
 _OPSYS_INCLUDE_DIRS?=	/usr/include
 
 # Sun Studio support is untested at this time, but would be strongly desired.
@@ -117,25 +127,12 @@ _OPSYS_INCLUDE_DIRS?=	/usr/include
 _OPSYS_SUPPORTS_CWRAPPERS=	yes
 .endif
 
-# support FORTIFY (with GCC)
-_OPSYS_SUPPORTS_FORTIFY=yes
-
-# support stack protection (with GCC)
-_OPSYS_SUPPORTS_SSP=	yes
-
-_OPSYS_CAN_CHECK_SHLIBS=	yes # requires readelf
+_OPSYS_SUPPORTS_CTF=		yes # Compact Type Format conversion.
+_OPSYS_SUPPORTS_FORTIFY=	yes # Requires GCC
+_OPSYS_SUPPORTS_SSP?=		yes # Requires GCC
+_OPSYS_CAN_CHECK_SHLIBS=	yes # Requires readelf
 
 # check for maximum command line length and set it in configure's environment,
 # to avoid a test required by the libtool script that takes forever.
 # FIXME: Adjust to work on this system and enable the lines below.
 #_OPSYS_MAX_CMDLEN_CMD=	/sbin/sysctl -n kern.argmax
-
-# Order is important, installation is done in order so any parts of the package
-# which do not have per-ABI suffixes will retain the final ABI.
-MULTIARCH_ABIS=		64 32
-BINARCHSUFFIX.32=	/i86
-BINARCHSUFFIX.64=	/amd64
-INCARCHSUFFIX.32=	/i86
-INCARCHSUFFIX.64=	/amd64
-LIBARCHSUFFIX.32=
-LIBARCHSUFFIX.64=	/amd64

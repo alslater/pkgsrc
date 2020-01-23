@@ -1,13 +1,13 @@
-# $NetBSD: Makefile,v 1.6 2016/08/04 17:03:40 ryoon Exp $
+# $NetBSD: Makefile,v 1.20 2019/09/18 14:17:19 ryoon Exp $
 
 DISTNAME=	Integration-0.0.2
 PKGNAME=	deforaos-integration-0.0.2
-PKGREVISION=	3
+PKGREVISION=	16
 CATEGORIES=	x11
-MASTER_SITES=	http://www.defora.org/os/download/download/4425/
+MASTER_SITES=	https://www.defora.org/os/download/download/4425/
 
 MAINTAINER=	khorben@defora.org
-HOMEPAGE=	http://www.defora.org/
+HOMEPAGE=	https://www.defora.org/
 COMMENT=	DeforaOS desktop integration
 
 LICENSE=	gnu-gpl-v3

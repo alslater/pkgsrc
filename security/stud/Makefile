@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	stud-0.3p53
-PKGREVISION=	7
+PKGREVISION=	8
 CATEGORIES=	security
 MAINTAINER=	jym@NetBSD.org
 HOMEPAGE=	http://github.com/bumptech/stud

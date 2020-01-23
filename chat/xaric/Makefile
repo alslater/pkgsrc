@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	xaric-0.13.6
-PKGREVISION=	2
+PKGREVISION=	3
 CATEGORIES=	chat
 MASTER_SITES=	http://xaric.org/software/xaric/releases/
 

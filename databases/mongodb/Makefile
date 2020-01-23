@@ -2,6 +2,7 @@
 
 DISTNAME=	mongodb-src-r3.2.10
 PKGNAME=	${DISTNAME:S/src-r//:S/-rc/rc/}
+PKGREVISION=	1
 CATEGORIES=	databases
 MASTER_SITES=	http://fastdl.mongodb.org/src/
 

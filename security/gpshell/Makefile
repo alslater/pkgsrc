@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.2 2016/03/05 11:29:20 jperkin Exp $
 
 DISTNAME=	gpshell-1.4.4
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	security
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=globalplatform/GPShell/GPShell-${PKGVERSION_NOREV}/}
 

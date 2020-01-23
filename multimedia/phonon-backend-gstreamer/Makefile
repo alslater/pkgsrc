@@ -3,6 +3,7 @@
 DISTNAME=	phonon-backend-gstreamer-4.9.0
 
 COMMENT=	Multimedia API for KDE and QT - GStreamer backend
+PKGREVISION=	1
 
 .include "Makefile.common"
 

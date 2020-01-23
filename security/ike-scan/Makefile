@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.19 2016/03/05 11:29:21 jperkin Exp $
 
 DISTNAME=	ike-scan-1.9
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	security
 MASTER_SITES=	http://www.nta-monitor.com/tools/ike-scan/download/
 

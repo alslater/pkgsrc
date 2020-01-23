@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.3 2016/09/19 06:57:49 ryoon Exp $
+# $NetBSD: Makefile,v 1.6 2019/11/03 19:04:04 rillig Exp $
 
 # Note: Regen distinfo with PKG_OPTIONS.oracle-jre8+=oracle-jre-jce
 # Note: Update DOWNLOAD_NAME when you update the JRE version
@@ -33,7 +33,7 @@ WRKSRC=		${WRKDIR}/jre1.8.0_${UPDATE_NUMBER}.jre/Contents/Home
 WRKSRC=		${WRKDIR}/jre1.8.0_${UPDATE_NUMBER}
 .endif
 
-SFILES_MK=sfiles-${DIST_OS}-${EMUL_ARCH}.mk
+SFILES_MK=	sfiles-${DIST_OS}-${EMUL_ARCH}.mk
 
 .sinclude "${SFILES_MK}"
 
@@ -42,7 +42,6 @@ CONF_FILES+=	${JAVA_HOME}/lib/${file}.default ${JAVA_HOME}/lib/${file}
 .endfor
 
 CHECK_FILES_SKIP+=	${JAVA_HOME}/lib/${JAVA_ARCH}/client/classes.jsa
-CHECK_SHLIBS_SUPPORTED=	NO
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.oracle-jre8
 PKG_SUPPORTED_OPTIONS=	oracle-jre-jce
@@ -70,9 +69,9 @@ DISTFILES+=	jre-8u${UPDATE_NUMBER}-macosx-x64.tar.gz
 DISTFILES+=	jre-8u${UPDATE_NUMBER}-solaris-x64.tar.gz
 FETCH_MESSAGE=	"You must fetch the following files to generate distinfo:"
 FETCH_MESSAGE+=	""
-.for file in ${DISTFILES}
+.  for file in ${DISTFILES}
 FETCH_MESSAGE+=	"	${file}"
-.endfor
+.  endfor
 FETCH_MESSAGE+=	""
 FETCH_MESSAGE+=	"from:"
 FETCH_MESSAGE+=	"	${DOWNLOAD}"
@@ -85,7 +84,7 @@ FETCH_MESSAGE+=	"	or ${ARCHIVE}"
 .if defined(EMUL_IS_NATIVE) && ${OPSYS} != "SunOS" && ${OPSYS} != "Darwin"
 .  if ${X11_TYPE} == "native"
 X11_LIBDIR=	${X11BASE}/lib${LIBABISUFFIX}
-.    if ${_OPSYS_SHLIB_TYPE} == "dylib"
+.    if ${SHLIB_TYPE} == "dylib"
 X11_LIB=${X11_LIBDIR}/libX11.dylib
 .    else
 X11_LIB=${X11_LIBDIR}/libX11.so.6
@@ -95,11 +94,11 @@ PKG_FAIL_REASON+=	"${X11_LIB} does not exist.  Please install the" \
 			"X11 library packages for your system."
 .    endif
 .  else
-.  include "../../x11/libX11/buildlink3.mk"
-.  include "../../x11/libXext/buildlink3.mk"
-.  include "../../x11/libXi/buildlink3.mk"
-.  include "../../x11/libXt/buildlink3.mk"
-.  include "../../x11/libXtst/buildlink3.mk"
+.    include "../../x11/libX11/buildlink3.mk"
+.    include "../../x11/libXext/buildlink3.mk"
+.    include "../../x11/libXi/buildlink3.mk"
+.    include "../../x11/libXt/buildlink3.mk"
+.    include "../../x11/libXtst/buildlink3.mk"
 X11_LIBDIR=	${X11BASE}/lib
 .  endif
 

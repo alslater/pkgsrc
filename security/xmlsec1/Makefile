@@ -2,7 +2,7 @@
 #
 
 DISTNAME=		xmlsec1-1.2.19
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		security
 MASTER_SITES=		http://www.aleksey.com/xmlsec/download/
 

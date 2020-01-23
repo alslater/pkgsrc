@@ -1,26 +1,26 @@
-# $NetBSD: Makefile,v 1.36 2016/07/09 13:03:57 wiz Exp $
+# $NetBSD: Makefile,v 1.43 2019/11/03 17:12:03 rillig Exp $
 
 DISTNAME=		gst-python-0.10.22
 PKGNAME=		${PYPKGPREFIX}-${DISTNAME:S/gst-python/gstreamer0.10/}
-PKGREVISION=		4
+PKGREVISION=		5
 CATEGORIES=		multimedia
-MASTER_SITES=		http://gstreamer.freedesktop.org/src/gst-python/
+MASTER_SITES=		https://gstreamer.freedesktop.org/src/gst-python/
 EXTRACT_SUFX=		.tar.bz2
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
-HOMEPAGE=		http://gstreamer.freedesktop.org/
+HOMEPAGE=		https://gstreamer.freedesktop.org/
 COMMENT=		Python bindings for gstreamer0.10
 LICENSE=		gnu-lgpl-v2.1
 
 CONFLICTS=		gst-python-[0-9]*
 
-USE_PKGLOCALEDIR=	yes
-USE_LIBTOOL=		yes
-USE_TOOLS+=		pkg-config gmake
-GNU_CONFIGURE=		yes
-CONFIGURE_ENV+=		PYTHON=${PYTHONBIN}
-PY_PATCHPLIST=		yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 36 # not yet ported as of 0.10.22; use py-gobjects
+USE_PKGLOCALEDIR=		yes
+USE_LIBTOOL=			yes
+USE_TOOLS+=			pkg-config gmake
+GNU_CONFIGURE=			yes
+CONFIGURE_ENV+=			PYTHON=${PYTHONBIN}
+PY_PATCHPLIST=			yes
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 0.10.22; use py-gobjects
 
 PKGCONFIG_OVERRIDE+=	pkgconfig/gst-python.pc.in
 

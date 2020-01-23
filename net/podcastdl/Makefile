@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	podcastdl-0.3.0
-PKGREVISION=	5
+PKGREVISION=	6
 CATEGORIES=	net
 MASTER_SITES=	http://files.bebik.net/podcastdl/
 EXTRACT_SUFX=	.tgz

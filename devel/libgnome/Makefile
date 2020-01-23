@@ -1,21 +1,20 @@
-# $NetBSD: Makefile,v 1.110 2016/08/03 10:22:10 adam Exp $
+# $NetBSD: Makefile,v 1.121 2019/07/21 22:24:00 wiz Exp $
 #
 
 DISTNAME=	libgnome-2.32.1
-PKGREVISION=	25
+PKGREVISION=	35
 CATEGORIES=	devel gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/libgnome/2.32/}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.gnome.org/
+HOMEPAGE=	https://www.gnome.org/
 COMMENT=	Core GNOME2 library (non-graphical)
 LICENSE=	gnu-lgpl-v2
 
 GNU_CONFIGURE=		YES
 USE_TOOLS+=		gmake intltool msgfmt pkg-config
 USE_LIBTOOL=		YES
-USE_MULTIARCH=		lib
 USE_PKGLOCALEDIR=	YES
 
 PKGCONFIG_OVERRIDE=	libgnome/libgnome-2.0.pc.in

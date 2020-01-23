@@ -2,7 +2,7 @@
 #
 
 PKGNAME=	poco-data-${POCO_VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	databases
 
 COMMENT=	POCO C++ RDBMS Master Accessor libraries

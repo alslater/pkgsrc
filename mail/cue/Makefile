@@ -2,6 +2,7 @@
 
 DISTNAME=	cue-snap-20151214
 PKGNAME=	${DISTNAME:S/snap-//}
+PKGREVISION=	1
 CATEGORIES=	mail
 MASTER_SITES=	ftp://sh.wide.ad.jp/WIDE/free-ware/cue/snap/
 

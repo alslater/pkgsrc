@@ -1,4 +1,4 @@
-# $NetBSD: bsd.fetch-vars.mk,v 1.22 2015/09/13 15:03:57 joerg Exp $
+# $NetBSD: bsd.fetch-vars.mk,v 1.24 2019/11/22 19:30:23 rillig Exp $
 #
 # This Makefile fragment is included separately by bsd.pkg.mk and
 # defines some variables which must be defined earlier than where
@@ -39,8 +39,10 @@
 
 _VARGROUPS+=		fetch
 _USER_VARS.fetch=	DISTDIR DIST_PATH
-_PKG_VARS.fetch=	MASTER_SITES DIST_SUBDIR DISTFILES
+_PKG_VARS.fetch=	MASTER_SITES DIST_SUBDIR DISTFILES \
+			${DISTFILES:@distfile@SITES.${distfile}@}
 _SYS_VARS.fetch=	DEFAULT_DISTFILES
+_LISTED_VARS.fetch=	*S
 
 # The default DISTDIR is currently set in bsd.prefs.mk.
 #DISTDIR?=               ${PKGSRCDIR}/distfiles

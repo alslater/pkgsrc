@@ -2,7 +2,7 @@
 
 .include 	"Makefile.common"
 DISTNAME=	abiword-${ABIVERSION}
-PKGREVISION=	4
+PKGREVISION=	5
 CATEGORIES=	editors
 MASTER_SITES=	http://www.abiword.com/downloads/abiword/${PKGVERSION_NOREV}/source/
 

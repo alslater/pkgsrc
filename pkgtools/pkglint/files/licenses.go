@@ -1,38 +1,17 @@
-package main
+package pkglint
 
-import (
-	"io/ioutil"
-	"netbsd.org/pkglint/licenses"
-)
-
-func checkToplevelUnusedLicenses() {
-	usedLicenses := G.Pkgsrc.UsedLicenses
-	if usedLicenses == nil {
-		return
-	}
-
-	licensedir := G.Pkgsrc.File("licenses")
-	files, _ := ioutil.ReadDir(licensedir)
-	for _, licensefile := range files {
-		licensename := licensefile.Name()
-		licensepath := licensedir + "/" + licensename
-		if fileExists(licensepath) {
-			if !usedLicenses[licensename] {
-				NewLineWhole(licensepath).Warnf("This license seems to be unused.")
-			}
-		}
-	}
-}
+import "netbsd.org/pkglint/licenses"
 
 type LicenseChecker struct {
-	MkLine MkLine
+	MkLines *MkLines
+	MkLine  *MkLine
 }
 
 func (lc *LicenseChecker) Check(value string, op MkOperator) {
-	expanded := resolveVariableRefs(value) // For ${PERL5_LICENSE}
-	licenses := licenses.Parse(ifelseStr(op == opAssignAppend, "append-placeholder ", "") + expanded)
+	expanded := resolveVariableRefs(lc.MkLines, value) // For ${PERL5_LICENSE}
+	cond := licenses.Parse(condStr(op == opAssignAppend, "append-placeholder ", "") + expanded)
 
-	if licenses == nil {
+	if cond == nil {
 		if op == opAssign {
 			lc.MkLine.Errorf("Parse error for license condition %q.", value)
 		} else {
@@ -41,51 +20,43 @@ func (lc *LicenseChecker) Check(value string, op MkOperator) {
 		return
 	}
 
-	licenses.Walk(lc.checkNode)
+	cond.Walk(lc.checkNode)
 }
 
-func (lc *LicenseChecker) checkLicenseName(license string) {
-	var licenseFile string
+func (lc *LicenseChecker) checkName(license string) {
+	licenseFile := NewCurrPath("")
 	if G.Pkg != nil {
-		if licenseFileValue, ok := G.Pkg.varValue("LICENSE_FILE"); ok {
-			licenseFile = G.CurrentDir + "/" + lc.MkLine.ResolveVarsInRelativePath(licenseFileValue, false)
+		if mkline := G.Pkg.vars.FirstDefinition("LICENSE_FILE"); mkline != nil {
+			rel := mkline.ResolveVarsInRelativePath(NewRelPathString(mkline.Value()))
+			licenseFile = G.Pkg.File(NewPackagePath(rel))
 		}
 	}
-	if licenseFile == "" {
-		licenseFile = G.Pkgsrc.File("licenses/" + license)
-		if G.Pkgsrc.UsedLicenses != nil {
-			G.Pkgsrc.UsedLicenses[license] = true
-		}
+	if licenseFile.IsEmpty() {
+		licenseFile = G.Pkgsrc.File("licenses").JoinNoClean(NewRelPathString(license))
+		G.InterPackage.UseLicense(license)
 	}
 
-	if !fileExists(licenseFile) {
-		lc.MkLine.Warnf("License file %s does not exist.", cleanpath(licenseFile))
-	}
-
-	switch license {
-	case "fee-based-commercial-use",
-		"no-commercial-use",
-		"no-profit",
-		"no-redistribution",
-		"shareware":
-		lc.MkLine.Errorf("License %q must not be used.", license)
-		Explain(
-			"Instead of using these deprecated licenses, extract the actual",
-			"license from the package into the pkgsrc/licenses/ directory",
-			"and define LICENSE to that file name.  See the pkgsrc guide,",
-			"keyword LICENSE, for more information.")
+	if !licenseFile.IsFile() {
+		lc.MkLine.Errorf("License file %s does not exist.",
+			lc.MkLine.Rel(licenseFile))
+		lc.MkLine.Explain(
+			sprintf("Run %q to see which licenses the package uses.",
+				bmake("guess-license")),
+			"",
+			sprintf("For more information about licenses, %s.",
+				seeGuide("Handling licenses", "handling-licenses")))
 	}
 }
 
 func (lc *LicenseChecker) checkNode(cond *licenses.Condition) {
-	if license := cond.Name; license != "" && license != "append-placeholder" {
-		lc.checkLicenseName(license)
+	if name := cond.Name; name != "" && name != "append-placeholder" {
+		lc.checkName(name)
 		return
 	}
 
 	if cond.And && cond.Or {
 		lc.MkLine.Errorf("AND and OR operators in license conditions can only be combined using parentheses.")
-		Explain(
+		lc.MkLine.Explain(
 			"Examples for valid license conditions are:",
 			"",
 			"\tlicense1 AND license2 AND (license3 OR license4)",

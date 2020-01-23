@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	adtool-1.3.3
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	sysutils
 MASTER_SITES=	http://gp2x.org/adtool/
 

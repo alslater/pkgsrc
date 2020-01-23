@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	bunny-0.93
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	security
 MASTER_SITES=	http://bunny-the-fuzzer.googlecode.com/files/
 EXTRACT_SUFX=	.tgz

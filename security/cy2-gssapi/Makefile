@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.25 2016/12/12 14:22:03 wiz Exp $
 
 PKGNAME=	${DISTNAME:S/cyrus-sasl/cy2-gssapi/}
-PKGREVISION=	3
+PKGREVISION=	4
 COMMENT=	Cyrus SASL GSSAPI authentication plugin
 SASL_PLUGIN=	yes
 

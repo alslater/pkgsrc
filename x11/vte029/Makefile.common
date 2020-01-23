@@ -2,9 +2,9 @@
 #
 # used by x11/py-vte/Makefile
 
-DISTNAME=	vte-0.32.2
+DISTNAME=	vte-0.38.4
 PKGNAME=	${DISTNAME:S/vte/vte029/}
-MASTER_SITES=	${MASTER_SITE_GNOME:=sources/vte/0.32/}
+MASTER_SITES=	${MASTER_SITE_GNOME:=sources/vte/0.38/}
 EXTRACT_SUFX=	.tar.xz
 
 HOMEPAGE=	http://www.gnome.org/

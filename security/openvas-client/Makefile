@@ -2,7 +2,7 @@
 #
 
 DISTNAME=	openvas-client-2.0.1
-PKGREVISION=	27
+PKGREVISION=	28
 CATEGORIES=	security
 MASTER_SITES=	http://wald.intevation.org/frs/download.php/552/
 
