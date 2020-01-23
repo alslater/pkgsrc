@@ -10,4 +10,5 @@ SHA1 (patch-configure) = ef67202879c09f5c02700eac8dd451580c612db6
 SHA1 (patch-libxfsm_xfsm-shutdown-common.h) = da51714e0924a0ab28f7da1b161659763dff81d2
 SHA1 (patch-scripts_Makefile.in) = 042c3d9c632a57f9acfc8dab43aa6bca8ec69097
 SHA1 (patch-settings_xfce4-session.xml) = 7e990e73d8dab022f3ebd2d4daa24ebc8dcf95a1
+SHA1 (patch-xfce4-session_xfsm-shutdown-fallback.c) = 06798d0b2857a02c5b8200ed7a8d6717d2546ea3
 SHA1 (patch-xfsm-shutdown-helper_main.c) = db2dc4a7ce729b72092fa2777fd178cb3b7be258
