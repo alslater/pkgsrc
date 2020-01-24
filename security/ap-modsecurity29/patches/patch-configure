@@ -1,0 +1,74 @@
+$NetBSD$
+
+--- configure.orig	2017-07-18 18:46:13.000000000 +0000
++++ configure
+@@ -15715,7 +15715,7 @@ LUA_CPPFLAGS=""
+ LUA_LDADD=""
+ LUA_LDFLAGS=""
+ LUA_CONFIG=${PKG_CONFIG}
+-LUA_PKGNAMES="lua5.1 lua-5.1 lua_5.1 lua-51 lua_51 lua51 lua5 lua lua5.2 lua-5.2 lua_5.2 lua-52 lua_52 lua52 lua5.3 lua-5.3 lua_5.3 lua-53 lua_53 lua53 "
++LUA_PKGNAMES="lua53 lua_53 lua-53 lua_5.3 lua-5.3 lua5.3 lua52 lua_52 lua-52 lua_5.2 lua-5.2 lua5.2 lua lua5 lua51 lua_51 lua-51 lua_5.1 lua-5.1 lua5.1 "
+ LUA_SONAMES="so la sl dll dylib a"
+ 
+ 
+@@ -15796,7 +15796,39 @@ $as_echo "no" >&6; }
+ $as_echo_n "checking for lua install... " >&6; }
+     for x in ${test_paths}; do
+         for y in ${LUA_SONAMES}; do
+-            if test -e "${x}/liblua5.1.${y}"; then
++            if test -e "${x}/liblua5.3.${y}"; then
++                lua_lib_path="${x}"
++                lua_lib_name="lua5.3"
++                break
++            elif test -e "${x}/lib/liblua5.3.${y}"; then
++                lua_lib_path="${x}/lib"
++                lua_lib_name="lua5.3"
++                break
++            elif test -e "${x}/lib64/liblua5.3.${y}"; then
++                lua_lib_path="${x}/lib64"
++                lua_lib_name="lua5.3"
++                break
++            elif test -e "${x}/lib32/liblua5.3.${y}"; then
++                lua_lib_path="${x}/lib32"
++                lua_lib_name="lua5.3"
++                break
++            elif test -e "${x}/liblua51.${y}"; then
++                lua_lib_path="${x}"
++                lua_lib_name="lua53"
++                break
++            elif test -e "${x}/lib/liblua53.${y}"; then
++                lua_lib_path="${x}/lib"
++                lua_lib_name="lua53"
++                break
++            elif test -e "${x}/lib64/liblua53.${y}"; then
++                lua_lib_path="${x}/lib64"
++                lua_lib_name="lua53"
++                break
++            elif test -e "${x}/lib32/liblua53.${y}"; then
++                lua_lib_path="${x}/lib32"
++                lua_lib_name="lua53"
++                break
++            elif test -e "${x}/liblua5.1.${y}"; then
+                 lua_lib_path="${x}"
+                 lua_lib_name="lua5.1"
+                 break
+@@ -15853,7 +15885,7 @@ $as_echo_n "checking for lua install...
+             break
+         fi
+     done
+-    for x in ${test_paths}; do
++ for x in ${test_paths}; do
+         if test -e "${x}/include/lua.h"; then
+             lua_inc_path="${x}/include"
+             break
+@@ -16004,8 +16036,8 @@ $as_echo "no" >&6; }
+ $as_echo_n "checking for yajl install... " >&6; }
+     for x in ${test_paths}; do
+         for y in ${YAJL_SONAMES}; do
+-           if test -e "${x}/libyajl.${y}"; then
+-                yajl_lib_path="${x}/"
++           if test -e "${x}/lib/libyajl.${y}"; then
++                yajl_lib_path="${x}/lib"
+                 yajl_lib_name="yajl"
+                 break
+             else
