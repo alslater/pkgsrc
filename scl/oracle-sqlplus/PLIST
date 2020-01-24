@@ -1,0 +1,6 @@
+@comment $NetBSD$
+oracle/11/SQLPLUS_README
+oracle/11/glogin.sql
+oracle/11/libsqlplus.so
+oracle/11/libsqlplusic.so
+oracle/11/sqlplus

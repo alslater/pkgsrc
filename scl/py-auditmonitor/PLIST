@@ -1,0 +1,13 @@
+@comment $NetBSD$
+bin/auditmon${PYVERSSUFFIX}
+${PYSITELIB}/auditmonitor-0.2-py${PYVERSSUFFIX}.egg-info/PKG-INFO
+${PYSITELIB}/auditmonitor-0.2-py${PYVERSSUFFIX}.egg-info/SOURCES.txt
+${PYSITELIB}/auditmonitor-0.2-py${PYVERSSUFFIX}.egg-info/dependency_links.txt
+${PYSITELIB}/auditmonitor-0.2-py${PYVERSSUFFIX}.egg-info/requires.txt
+${PYSITELIB}/auditmonitor-0.2-py${PYVERSSUFFIX}.egg-info/top_level.txt
+${PYSITELIB}/auditmonitor/__init__.py
+${PYSITELIB}/auditmonitor/__init__.pyo
+${PYSITELIB}/auditmonitor/__init__.pyc
+${PYSITELIB}/auditmonitor/daemon.pyo
+${PYSITELIB}/auditmonitor/daemon.pyc
+${PYSITELIB}/auditmonitor/daemon.py
