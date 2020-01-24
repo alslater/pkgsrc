@@ -943,6 +943,7 @@ SUBDIR+=	spawn-fcgi
 SUBDIR+=	spdylay
 SUBDIR+=	sqtop
 SUBDIR+=	squid3
+SUBDIR+=	squid4
 SUBDIR+=	squidGuard
 SUBDIR+=	squidanalyzer
 SUBDIR+=	squidclamav
