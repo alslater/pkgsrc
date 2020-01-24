@@ -22,6 +22,7 @@ SUBDIR+=	aide06
 SUBDIR+=	amap
 SUBDIR+=	antonym
 SUBDIR+=	ap-modsecurity2
+SUBDIR+=	ap-modsecurity29
 SUBDIR+=	apg
 SUBDIR+=	argon2
 SUBDIR+=	arirang
