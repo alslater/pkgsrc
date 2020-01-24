@@ -1,7 +1,7 @@
-$NetBSD: patch-omniidl__be_dir.mk,v 1.1 2012/02/28 07:20:21 sbd Exp $
+$NetBSD$
 
---- omniidl_be/dir.mk.orig	2003-03-23 21:51:59.000000000 +0000
-+++ omniidl_be/dir.mk
+--- python3/omniidl_be/dir.mk.orig	2014-07-23 09:19:07.000000000 +0000
++++ python3/omniidl_be/dir.mk
 @@ -6,7 +6,10 @@ ifeq ($(PYTHON),)
  PYTHON = python
  endif
