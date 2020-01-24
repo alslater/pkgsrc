@@ -1,7 +1,8 @@
 # $NetBSD: Makefile,v 1.21 2019/11/03 11:45:46 rillig Exp $
 
-DISTNAME=		omniORB-4.1.7
-PKGREVISION=		2
+VERSION=		4.2.3
+DISTNAME=		omniORB-${VERSION}
+PKGNAME=		omniORB-${VERSION}
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=omniorb/}
 EXTRACT_SUFX=		.tar.bz2
@@ -33,6 +34,7 @@ OMNIORB_CONFIG=		${OMNIORB_ETCDIR}/omniORB.cfg
 CONFIGURE_ARGS+=	--with-omniORB-config=${OMNIORB_CONFIG:Q}
 #CONFIGURE_ARGS+=	--with-omniNames-logdir=
 #CONFIGURE_ARGS+=	--with-openssl
+CONFIGURE_ARGS+=        --with-openssl=${BUILDLINK_PREFIX.openssl}
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.omniORB
 PKG_SUPPORTED_OPTIONS=	inet6
@@ -45,7 +47,9 @@ CONFIGURE_ARGS+=--disable-ipv6
 
 PY_PATCHPLIST=			yes
 REPLACE_PYTHON+=		src/tool/omniidl/python/scripts/omniidlrun.py
-PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 4.1.7
+REPLACE_PYTHON+=	src/tool/omniidl/python3/scripts/omniidlrun.py
+
+PYTHON_VERSIONS_ACCEPTED= 38
 
 post-install:
 	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/share/examples/omniORB/
@@ -63,6 +67,7 @@ post-install:
 	${INSTALL_MAN} ${WRKSRC}/man/man1/* \
 		${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/
 
+.include "../../security/openssl/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
 .include "../../mk/pthread.buildlink3.mk"
