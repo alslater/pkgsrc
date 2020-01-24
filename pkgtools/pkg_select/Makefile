@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.23 2016/05/07 10:08:30 joerg Exp $
+# $NetBSD: Makefile,v 1.28 2019/09/09 10:03:21 nia Exp $
 #
 
 DISTNAME=	pkg_select-20090308
-PKGREVISION=	5
+PKGREVISION=	8
 CATEGORIES=	pkgtools
 MASTER_SITES=	ftp://ftp.NetBSD.org/pub/NetBSD/misc/imil/
 
@@ -10,7 +10,7 @@ MAINTAINER=	imil@gcu.info
 COMMENT=	Curses based pkgsrc system browser / manager
 LICENSE=	original-bsd
 
-USE_FEATURES+=		cdefs
+USE_FEATURES=		cdefs
 
 INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1
 INSTALLATION_DIRS+=	${EXAMPLEDIR} share/pkg_select
@@ -22,9 +22,9 @@ CONF_FILES=	${EXAMPLEDIR}/${PKGBASE}.conf.example	\
 .include "../../mk/compiler.mk"
 .if !empty(PKGSRC_COMPILER:Mclang)
 BUILDLINK_TRANSFORM+=	rm:-Wno-traditional
-.elif !empty(PKGSRC_COMPILER:Mgcc)
-CFLAGS+=		-Wno-error=unused-but-set-variable
 .endif
+
+BUILDLINK_TRANSFORM+=	rm:-Werror
 
 SUBST_CLASSES+=		path
 SUBST_STAGE.path=	pre-configure
@@ -38,6 +38,8 @@ SUBST_SED.path+=	-e "s|/usr/bin/make|${MAKE}|g"
 
 CFLAGS+=		-DPKGTOOLS_PATH=\"${PKG_TOOLS_BIN}\"
 
+LDFLAGS.SunOS+=		-lresolv -lsocket -lnsl
+
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/pkg_select ${DESTDIR}${PREFIX}/bin
 	${INSTALL_DATA} ${WRKSRC}/${PKGBASE}.conf.example 		\
@@ -49,5 +51,5 @@ do-install:
 	${INSTALL_MAN} ${WRKSRC}/pkg_select.1				\
 		${DESTDIR}${PREFIX}/${PKGMANDIR}/man1
 
-.include "../../devel/ncurses/buildlink3.mk"
+.include "../../mk/curses.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

@@ -1,7 +1,7 @@
 #!/bin/sh
-# R2pkg
+# $NetBSD: R2pkg.sh,v 1.13 2019/10/19 18:47:59 rillig Exp $
 #
-# Copyright (c) 2014,2015
+# Copyright (c) 2014,2015,2016,2017,2018,2019
 #	Brook Milligan.  All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -31,253 +31,279 @@
 #
 # Create an R package in the current directory
 #
-NAME="R2pkg"
-VERS="@VERS@"
 
-USAGE="${NAME} [-DVehqv] [-E editor] [package] -- create an R package for pkgsrc"
+set -u
 
-: ${CRAN_URL:=ftp://cran.r-project.org}
-: ${PKGEDITOR:=${EDITOR:=vi}}
+name="R2pkg"
+vers="@VERS@"
+
+r2pkg=$0
+
+usage="$name [-cDehqruVv] [-E editor] [-M maintainer] [package] -- create an R package for pkgsrc"
+
+: "${CRAN_URL:=ftp://cran.r-project.org}"
+: "${PKGEDITOR:=${EDITOR:=vi}}"
+: "${TMPDIR:=/tmp}"
 
 # Substituted by pkgsrc at pre-configure time.
-MAKE=@MAKE@
-ECHO=echo
-EDIT=1
-QUIET=0
-VERBOSE=0
+make=@MAKE@
+level=0
+maintainer_email="pkgsrc-users@NetBSD.org"
+pid=$$
+quiet=false
+recursive=false
+update=false
+use_editor=yes
+verbose=0
 
-while getopts DE:Vehqv f
+keep_description=no
+
+args=""
+while getopts cDehqruVvE:M:L:P: arg
 do
-    case $f in
-	D) DESCRIPTION=yes;;
-	E) PKGEDITOR=${OPTARG};;
-	V) echo "${NAME} v${VERS}"; exit 0;;
-	e) EDIT=0;;
-	h) echo ${USAGE}; exit 0;;
-	q) ECHO=":"; QUIET=1;;
-	v) VERBOSE=$((${VERBOSE}+1));;
-        \?) echo ${USAGE}; exit 1;;
+    case $arg in
+	# options without arguments
+	c) args="$args $arg"; update=false;;
+	D) args="$args $arg"; keep_description=yes;;
+	e) args="$args $arg"; use_editor=no;;
+	h) echo "$usage"; exit 0;;
+	q) args="$args $arg"; quiet=true;;
+	r) args="$args $arg"; recursive=true;;
+	u) args="$args $arg"; update=true;;
+	V) echo "$name v$vers"; exit 0;;
+	v) args="$args $arg"; verbose=$((verbose + 1));;
+	# options taking arguments
+	E) args="$args $arg $OPTARG"; PKGEDITOR=$OPTARG;;
+	M) args="$args $arg $OPTARG"; maintainer_email=$OPTARG;;
+	# options for recursion; only for internal use
+	L) level=$((OPTARG + 0));;
+	P) pid=$((OPTARG + 0));;
+	# unknown options
+	\?) echo "$usage" 1>&2; exit 1;;
     esac
 done
-shift `expr ${OPTIND} - 1`
+shift $((OPTIND - 1))
+
+# Update $args for recursive call
+args="$args -L $((level + 1)) -P $pid"
 
 if [ ${#} -eq 0 ]; then
-    read -p "package: " RPKG TAIL
-    if [ "X${TAIL}" != "X" ]; then
-	echo "Error: multiple package names given."
-	echo ${USAGE}
-	exit 1
-    fi
+    rpkg=$(basename "$(pwd)" | sed -e 's/^R-//')
 elif [ ${#} -eq 1 ]; then
-    RPKG=${1}
+    rpkg=$1
 else
-    echo ${USAGE}
+    echo "Error: multiple package names given." 1>&2
+    echo "$usage" 1>&2
     exit 1
 fi
 
-if [ ${VERBOSE} -eq 0 ]; then
-    STDOUT=">/dev/null 2>&1"
-    STDOUT2=">/dev/null 2>&1"
-elif [ ${VERBOSE} -eq 1 ]; then
-    STDOUT=""
-    STDOUT2=">/dev/null 2>&1"
+if [ $update = true ] && [ -r Makefile ]; then
+    banner_msg="[ $level ] ===> Updating R package R-$rpkg in $(pwd)"
 else
-    STDOUT=""
-    STDOUT2=""
+    banner_msg="[ $level ] ===> Creating R package R-$rpkg in $(pwd)"
 fi
 
-CRAN_PACKAGES=pub/R/web/packages
-RPKG_DESCRIPTION_URL=${CRAN_URL}/${CRAN_PACKAGES}/${RPKG}/DESCRIPTION
+packages_list=$TMPDIR/R2pkg.packages.$pid
+dependency_list=$TMPDIR/R2pkg.depends.$pid
+
+echo_verbose0() { echo "$@"; }
+echo_verbose1() { :; }
+show_verbose2() { "$@" >/dev/null; }
+quiet_curl="TRUE"
+if [ $quiet = true ]; then
+    echo_verbose0() { :; }
+elif [ $verbose -eq 1 ]; then
+    echo_verbose1() { echo "$@"; }
+elif [ $verbose -gt 1 ]; then
+    echo_verbose1() { echo "$@"; }
+    show_verbose2() { "$@"; }
+    quiet_curl="FALSE"
+fi
+
+rpkg_description_url=$CRAN_URL/pub/R/web/packages/$rpkg/DESCRIPTION
+
+exists ()
+{
+    case "$#,$*" in (1,*\**) return 1;; esac
+    return 0
+}
 
 check_for_R ()
 {
-    R_CMD="R --no-save ${STDOUT2}"
-    echo "q()" | eval ${R_CMD}
-    if [ ${?} -ne 0 ]; then
-	echo "ERROR: math/R package is not installed."
-	exit 1
-    fi
+    Rscript --no-save /dev/null && return
+    echo "ERROR: math/R package is not installed." 1>&2
+    exit 1
 }
 
-preserve_original_files ()
+check_for_no_recursion ()
+{
+    touch "$packages_list"
+    grep -E -q -e "$rpkg" "$packages_list" \
+	&& echo "ERROR: circular dependency" 1>&2
+    echo "$rpkg" >> "$packages_list"
+}
+
+preserve_original_content ()
 {
     [ -f DESCR ]    && mv DESCR DESCR.orig
     [ -f Makefile ] && mv Makefile Makefile.orig
+    [ -f buildlink3.mk ] && mv buildlink3.mk buildlink3.mk.orig
     [ -f distinfo ] && mv distinfo distinfo.orig
 }
 
 make_package ()
 {
-    R_CMD="R --no-save ${STDOUT2}"
-    [ "X${DESCRIPTION}" != "X" ] && DESCRIPTION_CMD="copy.description(connection)"
-    cat << EOF | eval ${R_CMD}
-one.line <- function(s) gsub(' *\n *',' ',s)
-pkg.vers <- function(s) gsub('_','.',s)
-field <- function(key,value) paste(key,'=\t',value,sep='')
-
-licenses <- list()
-licenses[['ACM']]           <- 'acm-license'
-licenses[['APACHE']]        <- 'apache-2.0'
-licenses[['ARTISTIC']]      <- 'artistic-2.0'
-licenses[['BSD-2']]         <- '2-clause-bsd'
-licenses[['GPL-2']]         <- 'gnu-gpl-v2'
-licenses[['GPL-3']]         <- 'gnu-gpl-v3'
-licenses[['GPL (>= 2)']]    <- 'gnu-gpl-v2'
-licenses[['GPL-2 | GPL-3']] <- 'gnu-gpl-v2 OR gnu-gpl-v3'
-licenses[['LGPL-2']]        <- 'gnu-lgpl-v2'
-licenses[['LGPL-2.1']]      <- 'gnu-lgpl-v2.1'
-licenses[['LGPL (>= 2)']]   <- 'gnu-lgpl-v2'
-licenses[['LUCENT']]        <- 'lucent'
-licenses[['MIT']]           <- 'mit'
-licenses[['POSTGRESQL']]    <- 'postgresql-license'
-
-paste2 <- function(s1,s2)
-{
-  if (is.na(s1) && is.na(s2)) return ('')
-  if (is.na(s1) && !is.na(s2)) return (s2)
-  if (!is.na(s1) && is.na(s2)) return (s1)
-  if (!is.na(s1) && !is.na(s2)) return (paste(s1,s2))
-}
-
-todo.license <- function(s)
-{
-  if (is.null(licenses[[s]]))
-    todo <- '# TODO: LICENSE'
-  else
-    todo <- 'LICENSE'
-  todo
-}
-
-pkgsrc.license <- function(s)
-{
-  license <- licenses[[s]]
-  if (is.null(license))
-    license <- s
-  license
-}
-
-package <- function(s) field('R_PKGNAME',one.line(s))
-version <- function(s) field('R_PKGVER',one.line(s))
-comment <- function(s) field('COMMENT',one.line(s))
-license <- function(s) field(todo.license(s),pkgsrc.license(s))
-
-categories <- function() paste('CATEGORIES=',paste(basename(dirname(getwd())),'R'),sep='	')
-description <- function(s) strwrap(s,width=71)
-
-depends <- function(s1,s2)
-{
-  s <- paste2(s1,s2)
-  imports <- na.omit(strsplit(one.line(s),', *')[[1]])
-  DEPENDS <- ''
-  if (length(imports) > 0)
-    {
-      for (i in 1:length(imports))
-        {
-          dependency <- strsplit(imports[i],' *\\\\( *')[[1]]
-          depends <- dependency[1]
-          depends.vers <- ifelse(length(dependency) == 2, dependency[2], '>=???')
-          depends.vers <- gsub(' ','',depends.vers)
-          depends.vers <- pkg.vers(gsub('\\\\)','',depends.vers))
-          depends.line <- paste('# DEPENDS+=\tR-',depends,depends.vers,':../../CATEGORY/R-',depends,sep='')
-          DEPENDS <- paste(DEPENDS,depends.line,sep='\n')
-        }
-      DEPENDS <- paste(DEPENDS,'',sep='\n')
-    }
-  DEPENDS
-}
-
-copy.description <- function(connection)
-{
-  description <- readLines(connection)
-  writeLines(description,con='DESCRIPTION')
-}
-
-connection <- url('${RPKG_DESCRIPTION_URL}')
-${DESCRIPTION_CMD}
-metadata <- read.dcf(connection, fields=c('Package','Version','Title','Description','License','Imports','Depends'))
-
-CVS          <- '# \$NetBSD\$'
-CATEGORIES   <- categories()
-MASTER.SITES <- 'MASTER_SITES=	\${MASTER_SITE_R_CRAN:=contrib/}'
-MAINTAINER   <- 'MAINTAINER=	pkgsrc-users@NetBSD.org'
-HOMEPAGE     <- 'HOMEPAGE=	\${R_HOMEPAGE_BASE}/${RPKG}/'
-COMMENT      <- comment(metadata[3])
-LICENSE      <- license(metadata[5])
-R_PKGNAME    <- package(metadata[1])
-R_PKGVER     <- version(metadata[2])
-DEPENDS      <- depends(metadata[6],metadata[7])
-INCLUDE.R    <- '.include "../../math/R/Makefile.extension"'
-INCLUDE.PKG  <- '.include "../../mk/bsd.pkg.mk"'
-
-DESCR        <- description(metadata[4])
-
-Makefile <- paste(CVS,
-                  '',
-                  CATEGORIES,
-                  MASTER.SITES,
-                  '',
-                  MAINTAINER,
-                  HOMEPAGE,
-                  COMMENT,
-                  LICENSE,
-                  '',
-                  R_PKGNAME,
-                  R_PKGVER,
-                  DEPENDS,
-                  INCLUDE.R,
-                  INCLUDE.PKG,
-                  sep='\n')
-
-write(Makefile,'Makefile')
-write(DESCR,'DESCR')
-EOF
-    if [ ${?} -ne 0 ]; then
-	echo "ERROR: parsing metadata failed."
-	exit 1
+    env LEVEL="$level" rpkg="$rpkg" PACKAGES_LIST="$packages_list" \
+	R2PKG="$r2pkg" ARGS="$args" RECURSIVE="$recursive" \
+	UPDATE="$update" DEPENDENCY_LIST="$dependency_list" \
+	MAINTAINER_EMAIL="$maintainer_email" \
+	RPKG_DESCRIPTION_URL="$rpkg_description_url" \
+	QUIET_CURL="$quiet_curl" \
+	LC_ALL="C" \
+	Rscript --no-save -e "source('@LIBDIR@/R2pkg.R'); main()"
+    retval=${?}
+    if [ $retval -ne 0 ]; then
+	echo "ERROR: making $rpkg package failed." 1>&2
     fi
+    return $retval
 }
 
 edit_Makefile ()
 {
-    [ ${EDIT} -eq 0 ] || ${PKGEDITOR} Makefile
+    if [ $use_editor = yes ] && [ -s Makefile ]; then
+	$PKGEDITOR Makefile
+    fi
 }
 
 edit_DESCR ()
 {
-    [ ${EDIT} -eq 0 ] || ${PKGEDITOR} DESCR
+    if [ $use_editor = yes ] && [ -s DESCR ]; then
+	$PKGEDITOR DESCR
+    fi
 }
 
 create_distinfo ()
 {
-    ${ECHO} "Fetching package ... "
-    MAKE_CMD="${MAKE} makesum ${STDOUT}"
-    eval ${MAKE_CMD}
+    echo_verbose1 "==> Fetching R-$rpkg ..."
+    show_verbose2 "$make" "makesum" || return $?
+    show_verbose2 "$make" "makepatchsum" || return $?
+    return 0
+}
+
+create_buildlink3_mk ()
+{
+    if [ -f buildlink3.mk.orig ]; then
+	PKGVERSION=$($make show-var VARNAME=PKGVERSION)
+	sed -E -e "/BUILDLINK_API_DEPENDS\./s/[[:digit:].]+$/$PKGVERSION/" \
+	    buildlink3.mk.orig > buildlink3.mk
+    fi
 }
 
 extract ()
 {
-    ${ECHO} "Extracting package ... "
-    MAKE_CMD="${MAKE} extract ${STDOUT}"
-    eval ${MAKE_CMD}
+    echo_verbose0 "[ $level ] Extracting R-$rpkg ..."
+    show_verbose2 env SKIP_DEPENDS=yes "$make" clean extract
 }
 
-cleanup ()
+check_license ()
 {
-    if [ -f DESCR.orig ] && cmp -s DESCR.orig DESCR; then
+    rm -f LICENSE
+    # echo '===> LICENSE files:'
+    if exists work/*/LICENSE; then
+	grep -v "^YEAR: " work/*/LICENSE \
+	    | grep -v "^COPYRIGHT HOLDER: " \
+	    | grep -v "^ORGANIZATION: " \
+	    > LICENSE
+	if [ -s LICENSE ]; then
+	    # ninka -d LICENSE
+	    cp work/*/LICENSE .
+	    printf '%s' "[ $level ] Current license: "
+	    grep LICENSE Makefile
+	    echo "[ $level ] Please check it against the following:"
+	    cat LICENSE
+	else
+	    rm LICENSE
+	    sed -E -e 's/[[:blank:]]+#[[:blank:]]+\+ file LICENSE[[:blank:]]+.*$//' Makefile > Makefile.$pid \
+		&& mv Makefile.$pid Makefile
+	    grep -q "file LICENSE" Makefile && echo "[ $level ] 'file LICENSE' in Makefile but no relevant license information"
+	fi
+    fi
+}
+
+check_copying ()
+{
+    exists work/*/COPYING && cp work/*/COPYING .
+    exists work/*/COPYING.lib && cp work/*/COPYING.lib .
+}
+
+cleanup_DESCR ()
+{
+    if [ -f DESCR ] && [ -f DESCR.orig ]; then
+	if diff --ignore-case --ignore-all-space --ignore-blank-lines DESCR.orig DESCR > /dev/null; then
+	    mv DESCR.orig DESCR
+	else
+	    mv DESCR DESCR.new
+	    mv DESCR.orig DESCR
+	fi
+    elif [ -f DESCR.orig ]; then
 	mv DESCR.orig DESCR
     fi
-    if [ -f Makefile.orig ] && cmp -s Makefile.orig Makefile; then
+}
+
+cleanup_Makefile ()
+{
+    if [ -f Makefile ] && [ -f Makefile.orig ]; then
+	diff --ignore-case --ignore-all-space --ignore-blank-lines Makefile.orig Makefile > /dev/null \
+	    && mv Makefile.orig Makefile
+    elif [ -f Makefile.orig ]; then
 	mv Makefile.orig Makefile
     fi
-    if [ -f distinfo.orig ] && cmp -s distinfo.orig distinfo; then
+}
+
+cleanup_buildlink3 ()
+{
+    if [ -f buildlink3.mk ] && [ -f buildlink3.mk.orig ]; then
+	diff --ignore-case --ignore-all-space --ignore-blank-lines buildlink3.mk.orig buildlink3.mk > /dev/null \
+	    && mv buildlink3.mk.orig buildlink3.mk
+    elif [ -f buildlink3.mk.orig ]; then
+	mv buildlink3.mk.orig buildlink3.mk
+    fi
+}
+
+cleanup_distinfo ()
+{
+    if [ -f distinfo ] && [ -f distinfo.orig ]; then
+	tail +2 distinfo.orig > $TMPDIR/distinfo.orig.$pid
+	tail +2 distinfo > $TMPDIR/distinfo.$pid
+	cmp -s $TMPDIR/distinfo.orig.$pid $TMPDIR/distinfo.$pid \
+	    && mv distinfo.orig distinfo
+	rm -f $TMPDIR/distinfo.orig.$pid $TMPDIR/distinfo.$pid
+    elif [ -f distinfo.orig ]; then
 	mv distinfo.orig distinfo
     fi
 }
 
+cleanup_misc_files ()
+{
+    [ "$keep_description" = "yes" ] || rm -f DESCRIPTION
+    [ $level -eq 0 ] && rm -f "$packages_list"
+    [ $level -eq 0 ] && rm -f "$dependency_list"
+}
+
+cleanup ()
+{
+    cleanup_DESCR
+    cleanup_Makefile
+    cleanup_buildlink3
+    cleanup_distinfo
+    cleanup_misc_files
+}
+
 messages ()
 {
-    if [ ${QUIET} -eq 0 ]; then
+    if [ $quiet = false ] && [ $level -eq 0 ]; then
 	cat << EOF
+
 Please do not forget the following:
 - check DESCR and edit as necessary.
 - check Makefile:
@@ -285,17 +311,50 @@ Please do not forget the following:
   o verify the LICENSE.
   o verify the DEPENDS, especially the categories.
 EOF
-	[ "X${DESCRIPTION}" != "X" ] && echo "- remove DESCRIPTION."
+	[ -f buildlink3.mk ] && echo "- check buildlink3.mk"
+
+	[ "$keep_description" = "yes" ] && echo "- remove DESCRIPTION."
+	if [ $recursive = true ]; then
+	    cat << EOF
+
+Recursive packages may have been created in ../../wip; please do the following:
+- edit each Makefile as follows (in addition to following the notes above):
+  o move recursively created packages to the appropriate category.
+  o fix the category in Makefile.
+  o fix the category of any dependencies.
+  o remove any extraneous dependencies.
+EOF
+	    if [ -s "$dependency_list" ]; then
+		tsort "$dependency_list" > depends
+		echo "- It may be useful to test these packages in the following order:"
+		awk 'BEGIN{printf(" ")} {printf(" R-%s",$0)}' depends && echo
+	    fi
+	fi
     fi
 }
 
-${ECHO} "Creating R package: ${RPKG} ... "
+echo_verbose0 "$banner_msg ..."
 check_for_R
-preserve_original_files
+check_for_no_recursion
+preserve_original_content
 make_package
-edit_Makefile
-edit_DESCR
-create_distinfo
-extract
-cleanup
+error=${?}
+if [ $error -eq 0 ]; then
+    edit_Makefile
+    error=${?}; [ $error -eq 0 ] || exit $error
+    edit_DESCR
+    error=${?}; [ $error -eq 0 ] || exit $error
+    create_distinfo
+    create_buildlink3_mk
+    extract
+    check_license
+    check_copying
+fi
 messages
+cleanup
+if [ $error -eq 0 ]; then
+    echo_verbose1 "$banner_msg: completed successfully"
+else
+    echo_verbose1 "$banner_msg: FAILED"
+fi
+exit $error

@@ -1,4 +1,4 @@
-# $NetBSD: rc.subr,v 1.13 2016/10/17 01:11:30 dholland Exp $
+# $NetBSD: rc.subr,v 1.16 2019/10/11 11:56:06 triaxx Exp $
 #
 # Copyright (c) 1997-2002 The NetBSD Foundation, Inc.
 # All rights reserved.
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-#        This product includes software developed by the NetBSD
-#        Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -132,7 +125,9 @@ case $_osname in
 		_RCCMD_chown="/bin/chown"
 #		_RCCMD_ci="/usr/bin/ci"			# not in Slackware 8.1
 #		_RCCMD_co="/usr/bin/co"			# not in Slackware 8.1
-		_RCCMD_nice=$(which nice)
+		if [ ! -f /etc/arch-release ] ; then	# which not in Arch
+			_RCCMD_nice=$(which nice)
+		fi
 #		_RCCMD_rcs="/usr/bin/rcs"		# not in Slackware 8.1
 #		_RCCMD_systrace="/bin/systrace"		# not in Slackware 8.1
 		_RCARG_ps="ax"
@@ -864,6 +859,9 @@ load_rc_config()
 	else
 		. /etc/rc.conf
 		_rc_conf_loaded=true
+	fi
+	if [ "$_osname" = "OpenBSD" ] && [ -f /etc/rc.conf.local ]; then
+		. /etc/rc.conf.local
 	fi
 	if [ -f /etc/rc.conf.d/"$_command" ]; then
 		. /etc/rc.conf.d/"$_command"

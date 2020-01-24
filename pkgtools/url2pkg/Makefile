@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.86 2016/09/27 17:10:09 wiz Exp $
+# $NetBSD: Makefile,v 1.110 2019/11/18 07:50:51 rillig Exp $
 
-PKGNAME=	url2pkg-2.28
+PKGNAME=	url2pkg-19.3.7
 CATEGORIES=	pkgtools
 
-MAINTAINER=	pkgsrc-users@NetBSD.org
+MAINTAINER=	rillig@NetBSD.org
 HOMEPAGE=	http://www.NetBSD.org/docs/pkgsrc/creating.html
 COMMENT=	Tool to automate initial steps in building a package
-LICENSE=	original-bsd
+LICENSE=	2-clause-bsd
 
 WRKSRC=		${WRKDIR}
 NO_CHECKSUM=	yes
@@ -15,26 +15,33 @@ USE_LANGUAGES=	# none
 USE_TOOLS+=	perl:run
 AUTO_MKDIRS=	yes
 
+TEST_DEPENDS+=	${PYPKGPREFIX}-test>=0:../../devel/py-test
+
 do-extract:
-	cd ${FILESDIR} && cp *.pl *.pm ${WRKSRC}/
+	${RUN} cd ${FILESDIR} && cp *.* ${WRKSRC}/
+
+do-test:
+	${RUN} cd ${WRKSRC} && env PKGSRCDIR=${PKGSRCDIR} MAKE=${MAKE:Q} \
+		${PREFIX}/bin/pytest-${PYVERSSUFFIX}
 
 .include "../../mk/bsd.prefs.mk"
 
 SUBST_CLASSES+=		up
 SUBST_STAGE.up=		do-configure
-SUBST_FILES.up=		url2pkg.pl MakeMaker.pm
-SUBST_SED.up=		-e 's,@MAKE@,'${MAKE:Q}',g'
-SUBST_SED.up+=		-e 's,@PERL@,${PERL5},g'
-SUBST_SED.up+=		-e 's,@PERLLIBDIR@,${PREFIX}/lib/url2pkg,g'
-.if defined(BATCH)
-SUBST_SED.up+=		-e 's,@PKGSRCDIR@,/usr/pkgsrc,g'
-.else
-SUBST_SED.up+=		-e 's,@PKGSRCDIR@,${PKGSRCDIR},g'
-.endif
+SUBST_MESSAGE.up=	Replacing variable placeholders
+SUBST_FILES.up=		MakeMaker.pm url2pkg.py
+SUBST_VARS.up=		MAKE PERL5 PKGSRCDIR PYTHONBIN
+SUBST_SED.up=		-e 's,@LIBDIR@,${PREFIX}/lib/url2pkg,g'
 
 do-install:
-	${INSTALL_SCRIPT} ${WRKSRC}/url2pkg.pl ${DESTDIR}${PREFIX}/bin/url2pkg
+	${INSTALL_SCRIPT} ${WRKSRC}/url2pkg.py ${DESTDIR}${PREFIX}/bin/url2pkg
 	${INSTALL_MAN} ${FILESDIR}/url2pkg.8 ${DESTDIR}${PREFIX}/${PKGMANDIR}/man8
+	${INSTALL_DATA} ${WRKSRC}/Build.pm ${DESTDIR}${PREFIX}/lib/url2pkg/Module/
 	${INSTALL_DATA} ${WRKSRC}/MakeMaker.pm ${DESTDIR}${PREFIX}/lib/url2pkg/ExtUtils/
+	${INSTALL_DATA} ${WRKSRC}/setuptools.py ${DESTDIR}${PREFIX}/lib/url2pkg/
+	${INSTALL_DATA} /dev/null ${DESTDIR}${PREFIX}/lib/url2pkg/distutils/__init__.py
+	${INSTALL_DATA} ${WRKSRC}/setuptools.py ${DESTDIR}${PREFIX}/lib/url2pkg/distutils/core.py
+	${INSTALL_DATA} ${WRKSRC}/setuptools.py ${DESTDIR}${PREFIX}/lib/url2pkg/distutils/extension.py
 
+.include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"

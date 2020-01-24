@@ -30,6 +30,17 @@
 # OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 # SUCH DAMAGE.
 
+function mark_restricted(PKG, dep, depend_list) {
+	if (PKG in restricted)
+		return
+
+	restricted[PKG] = 1
+
+	split(reverse_depends[PKG], depend_list, "[ \t]+")
+	for (dep in depend_list)
+		mark_restricted(depend_list[dep])
+}
+
 BEGIN {
 	meta_dir = ARGV[1]
 	pkg_sufx = ARGV[2]
@@ -41,9 +52,6 @@ BEGIN {
 			cur = substr($0, 9)
 			pkgs[cur] = cur
 		}
-
-		if ($0 ~ "^CATEGORIES=")
-			categories[cur] = substr($0, 12)
 
 		if ($0 ~ "^BUILD_STATUS=")
 			status[cur] = substr($0, 14)
@@ -64,21 +72,14 @@ BEGIN {
 		}
 	}
 
+	for (pkg in initial_restricted)
+		mark_restricted(pkg)
+
 	while ((getline pkg < success_file) > 0) {
 		# skip restricted packages
 		if (pkg in restricted)
 			continue;
-		# build category/file list
-		split(categories[pkg], cats, "[ \t]+")
-		cats[0] = "All"
-		for (cat_idx in cats) {
-			cat = cats[cat_idx]
-			if (!(cat in printed_cats)) {
-				print "+ " cat "/"
-				printed_cats[cat] = cat
-			}
-			print "+ " cat "/" pkg pkg_sufx
-		}
+		print "+ All/" pkg pkg_sufx
 	}
 	close(success_file)
 }

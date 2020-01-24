@@ -7,7 +7,6 @@
 # change in the pkg_* tools that pkgsrc relies on for proper operation.
 
 PKGNAME=		pkg_install-${VERSION}
-PKGREVISION=		1
 CATEGORIES=		pkgtools
 
 MAINTAINER=		agc@NetBSD.org
@@ -96,12 +95,6 @@ MESSAGE_SUBST+=		PKGVULNDIR=${PKG_DBDIR}			\
 			EGDIR=${EGDIR}
 
 .include "../../mk/compiler.mk"
-
-CHECK_SSP_SKIP+=        sbin/pkg_add
-CHECK_SSP_SKIP+=        sbin/pkg_admin
-CHECK_SSP_SKIP+=        sbin/pkg_create
-CHECK_SSP_SKIP+=        sbin/pkg_delete
-CHECK_SSP_SKIP+=        sbin/pkg_info
 
 .if !empty(CC_VERSION:Mclang*)
 MAKE_FLAGS+=		ACTIVE_CC=clang

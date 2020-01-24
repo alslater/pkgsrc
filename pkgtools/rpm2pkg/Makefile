@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.66 2015/10/11 10:56:44 tron Exp $
+# $NetBSD: Makefile,v 1.70 2019/11/30 23:31:30 rin Exp $
 
-PKGNAME=	rpm2pkg-3.2.3
+PKGNAME=	rpm2pkg-3.3.0
 CATEGORIES=	pkgtools
 NO_CHECKSUM=	yes
 
@@ -30,7 +30,9 @@ MAKE_FLAGS+=		ACTIVE_CC=clang
 
 .include "../../mk/bsd.prefs.mk"
 
-.if defined(PKG_DEVELOPER) && ${PKG_DEVELOPER} != "no"
+# using pkgsrc gcc8 fails to build with WARNS on NetBSD with:
+# .../stdlib.h:115:1: error: ignoring attribute ‘pure’ in declaration of a built-in function ‘abs’ because it conflicts with attribute ‘const’ [-Werror=attributes]
+.if defined(PKG_DEVELOPER) && ${PKG_DEVELOPER} != "no" && empty(CC_VERSION:Mgcc-[89]*)
 MAKE_ENV+=	WARNS=4
 .else
 MAKE_ENV+=	NOGCCERROR=yes
@@ -43,5 +45,6 @@ do-install:
 
 .include "../../archivers/bzip2/buildlink3.mk"
 .include "../../archivers/xz/buildlink3.mk"
+.include "../../archivers/zstd/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

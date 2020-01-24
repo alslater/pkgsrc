@@ -1,6 +1,6 @@
 # -*-perl-*-
 
-# Copyright (c) 2010 The NetBSD Foundation, Inc.
+# Copyright (c) 2010, 2019 The NetBSD Foundation, Inc.
 # All rights reserved.
 #
 # This code is derived from software contributed to The NetBSD Foundation
@@ -14,13 +14,6 @@
 # 2. Redistributions in binary form must reproduce the above copyright
 #    notice, this list of conditions and the following disclaimer in the
 #    documentation and/or other materials provided with the distribution.
-# 3. All advertising materials mentioning features or use of this software
-#    must display the following acknowledgement:
-# This product includes software developed by the NetBSD
-# Foundation, Inc. and its contributors.
-# 4. Neither the name of The NetBSD Foundation nor the names of its
-#    contributors may be used to endorse or promote products derived
-#    from this software without specific prior written permission.
 #
 # THIS SOFTWARE IS PROVIDED BY THE NETBSD FOUNDATION, INC. AND CONTRIBUTORS
 # ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
@@ -41,70 +34,95 @@
 
 package ExtUtils::MakeMaker;
 
-use strict;
-use warnings;
+require 5.013002;
 
-use constant conf_pkgsrcdir	=> '@PKGSRCDIR@';
+use strict;
+use warnings FATAL => 'all';
+
+my $url2pkg_pkgsrcdir = '@PKGSRCDIR@';
 
 BEGIN {
 	use Exporter;
 	use vars qw(@ISA @EXPORT);
 	@ISA = qw(Exporter);
-	@EXPORT = qw(WriteMakefile prompt);
 }
 
 # From lib/perl5/5.18.0/ExtUtils/MakeMaker.pm
 our $VERSION = '6.66';
 
 our $Verbose	= 0;	# exported
-our @EXPORT	= qw($Verbose $version);
-our @EXPORT_OK	= qw(&neatvalue);
+our @EXPORT	= qw(&WriteMakefile &prompt $Verbose $version);
+our @EXPORT_OK	= qw(&neatvalue &_sprintf562);
 
 # Finds and returns the category a given package lies in.
-# If the package does not exist, C<undef> is returned.
+# If the package does not exist, an empty string is returned.
 # If the package exists more than once, it is unspecified which
 # of the categories is returned.
-sub find_category($) {
+sub url2pkg_find_category($) {
 	my ($pkg) = @_;
-	my ($retval, $pkgsrcdir);
 
-	opendir(D, conf_pkgsrcdir) or die;
-	foreach my $cat (readdir(D)) {
-		next if ($cat =~ qr"^\.");
+	opendir(D, $url2pkg_pkgsrcdir) or die;
+	my @categories = readdir(D);
+	closedir(D) or die;
 
-		if (-d (conf_pkgsrcdir."/${cat}/${pkg}")) {
-			$retval = $cat;
+	foreach my $cat (@categories) {
+		next if $cat =~ qr"^\.";
+
+		if (-f "$url2pkg_pkgsrcdir/$cat/$pkg/Makefile") {
+			return $cat;
 		}
 	}
-	closedir(D);
-	return $retval;
+	return "";
+}
+
+sub url2pkg_write_dependency($$$) {
+	my ($type, $dep, $ver) = @_;
+
+	my $pkgbase = "p5-$dep" =~ s/::/-/gr;
+	my $category = url2pkg_find_category($pkgbase);
+
+	if ($category ne "") {
+		printf("%s\t%s>=%s:../../%s/%s\n", $type, $pkgbase, $ver, $category, $pkgbase);
+		return;
+	}
+
+	# If the package does not exist but the Perl module can be loaded, assume
+	# that it is a built-in module and no dependency declaration is needed.
+	return if eval("use $dep $ver; 1;");
+
+	printf("%s\t%s>=%s\n", $type, $pkgbase, $ver);
+}
+
+sub url2pkg_write_var($$) {
+	my ($varname, $value) = @_;
+	return unless defined($value) && $value ne "";
+	printf("var\t%s\t%s\n", $varname, $value);
+}
+
+sub url2pkg_write_cmd($$) {
+	my ($cmd, $arg) = @_;
+	printf("cmd\t%s\t%s\n", $cmd, $arg);
+}
+
+sub url2pkg_write_depends($$) {
+	my ($type, $deps) = @_;
+
+	return unless defined $deps;
+	foreach my $dep (sort(keys(%$deps))) {
+		url2pkg_write_dependency($type, $dep, $deps->{$dep});
+	}
 }
 
 sub WriteMakefile(%) {
 	my (%options) = @_;
 
-	if (exists($options{"PREREQ_PM"})) {
-		my $deps = $options{"PREREQ_PM"};
+	url2pkg_write_depends("DEPENDS", $options{"PREREQ_PM"});
+	url2pkg_write_depends("TEST_DEPENDS", $options{"TEST_DEPENDS"});
 
-		foreach my $dep (sort(keys(%{$deps}))) {
-			my ($ver, $pkgbase, $category);
-
-			$ver = $deps->{$dep};
-			($pkgbase = "p5-${dep}") =~ s/::/-/g;
-			$category = find_category($pkgbase);
-
-			if (defined($category)) {
-				printf("%s>=%s:../../%s/%s\n", $pkgbase, $ver, $category, $pkgbase);
-
-			} else {
-				# If the package does not exist but the
-				# Perl module can be loaded, assume that
-				# no extra dependency is needed. Otherwise fail.
-				if (!eval(sprintf("use %s %s; 1;", $dep, $ver))) {
-					die("$0: ERROR: No pkgsrc package found for dependency ${dep}>=${ver}.\n$@\n");
-				}
-			}
-		}
+	my $license = $options{"LICENSE"} || "";
+	if ($license ne "") {
+		url2pkg_write_cmd("license", $license);
+		url2pkg_write_cmd("license_default", "# TODO: $license (from Makefile.PL)");
 	}
 }
 
@@ -116,6 +134,10 @@ sub prompt(@) {
 
 sub neatvalue {
 	return;
+}
+
+sub _sprintf562 {
+	return sprintf(@_);
 }
 
 1;

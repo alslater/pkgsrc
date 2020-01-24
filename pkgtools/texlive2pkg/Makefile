@@ -1,8 +1,7 @@
-# $NetBSD: Makefile,v 1.3 2016/07/09 06:38:49 wiz Exp $
+# $NetBSD: Makefile,v 1.13 2019/09/13 13:45:22 rillig Exp $
 #
 
-PKGNAME=	texlive2pkg-1.1
-PKGREVISION=	1
+PKGNAME=	texlive2pkg-1.8
 CATEGORIES=	pkgtools
 
 MAINTAINER=	markd@NetBSD.org
@@ -11,9 +10,10 @@ COMMENT=	Tool to automate initial steps in building a texlive package
 LICENSE=	modified-bsd
 
 WRKSRC=			${WRKDIR}
+NO_CHECKSUM=		yes
 NO_BUILD=		yes
 USE_LANGUAGES=		# none
-USE_TOOLS+=		perl:run xzcat:run
+USE_TOOLS+=		ftp:run perl:run xzcat:run
 AUTO_MKDIRS=		yes
 
 SUBST_CLASSES+=		tools
@@ -21,6 +21,7 @@ SUBST_STAGE.tools=	pre-configure
 SUBST_MESSAGE.tools=	Substituting tool locations.
 SUBST_FILES.tools=	texlive2pkg.sh
 SUBST_VARS.tools=	DISTDIR MAKE PREFIX
+SUBST_SED.tools=	-e 's,@FTP@,${TOOLS_PATH.ftp},g'
 
 REPLACE_PERL+=		texlive.pkg texlive.pkg.doc
 

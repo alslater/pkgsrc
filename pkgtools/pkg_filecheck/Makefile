@@ -1,37 +1,37 @@
-# $NetBSD: Makefile,v 1.42 2016/07/09 06:38:48 wiz Exp $
+# $NetBSD: Makefile,v 1.47 2019/08/11 13:22:36 wiz Exp $
 #
 
-PKGNAME=		pkg_filecheck-0.4
-PKGREVISION=		6
-CATEGORIES=		pkgtools devel
+PKGNAME=	pkg_filecheck-0.4
+PKGREVISION=	8
+CATEGORIES=	pkgtools devel
 
-MAINTAINER=		pkgsrc-users@NetBSD.org
-#HOMEPAGE=		http://www.NetBSD.org/docs/pkgsrc/
-COMMENT=		Check for files not owned by any package
-LICENSE=		modified-bsd AND 2-clause-bsd
+MAINTAINER=	pkgsrc-users@NetBSD.org
+#HOMEPAGE=	http://www.NetBSD.org/docs/pkgsrc/
+COMMENT=	Check for files not owned by any package
+LICENSE=	modified-bsd AND 2-clause-bsd
 
 WRKSRC=		${WRKDIR}
 USE_TOOLS+=	perl:run
 USE_FEATURES=	fts_open
 
-USE_FEATURES+=		       nbcompat	     
-NBCOMPAT_CONFIGURE_ARGS+=      --enable-db   
-                                             
+USE_FEATURES+=	nbcompat
+NBCOMPAT_CONFIGURE_ARGS+= --enable-db
+
 FILES_SUBST+=	PKG_DBDIR=${PKG_DBDIR:Q}
 CONF_FILES=	${PREFIX}/share/examples/pkg_filecheck/pkg_filecheck.conf \
 		${PKG_SYSCONFDIR}/pkg_filecheck.conf
 
-INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1 ${PKGMANDIR}/man5 \
-			share/examples/pkg_filecheck
+INSTALLATION_DIRS= \
+	bin ${PKGMANDIR}/man1 ${PKGMANDIR}/man5 share/examples/pkg_filecheck
 
 SUBST_CLASSES+=		paths
 SUBST_FILES.paths=	builddb.pl builddb.1 pkg_filecheck.conf
 SUBST_FILES.paths+=	pkg_filecheck.conf.5 pkg_filecheck.c pkg_filecheck.1
-SUBST_SED.paths+=	-e 's,@PREFIX@,${PREFIX},g'
-SUBST_SED.paths+=	-e 's,@PERL5@,${PERL5},g'
-SUBST_SED.paths+=	-e 's,@PKG_DBDIR@,${PKG_DBDIR},g'
-SUBST_SED.paths+=	-e 's,@PKG_SYSCONFDIR@,${PKG_SYSCONFDIR},g'
-SUBST_STAGE.paths=	post-patch
+SUBST_VARS.paths=	PREFIX
+SUBST_VARS.paths+=	PERL5
+SUBST_VARS.paths+=	PKG_DBDIR
+SUBST_VARS.paths+=	PKG_SYSCONFDIR
+SUBST_STAGE.paths=	pre-configure
 
 post-extract:
 .for f in builddb.pl builddb.1 pkg_filecheck.conf pkg_filecheck.conf.5 \

@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.55 2016/12/12 14:22:03 wiz Exp $
+# $NetBSD: Makefile,v 1.76 2019/09/02 13:20:20 adam Exp $
 
 DISTNAME=	PackageKit-0.4.0
-PKGREVISION=	41
+PKGREVISION=	54
 PKGNAME=	${DISTNAME:S/PackageKit/packagekit/}
 CATEGORIES=	pkgtools
 MASTER_SITES=	http://www.freedesktop.org/software/PackageKit/releases/
@@ -35,8 +35,8 @@ CONF_FILES+=	${EGDIR}/org.freedesktop.PackageKit.conf \
 CONF_FILES+=	${EGDIR}/org.freedesktop.PackageKitTestBackend.conf \
 		${PKG_SYSCONFDIR}/dbus-1/system.d/org.freedesktop.PackageKitTestBackend.conf
 
-CHECK_INTERPRETER_SKIP+= lib/pm-utils/sleep.d/95packagekit \
-			 share/PackageKit/helpers/test_spawn/search-name.sh
+CHECK_INTERPRETER_SKIP+=	lib/pm-utils/sleep.d/95packagekit \
+				share/PackageKit/helpers/test_spawn/search-name.sh
 
 CONFIGURE_ARGS+=	--disable-qt
 CONFIGURE_ARGS+=	--with-security-framework=polkit
@@ -48,7 +48,7 @@ PKGCONFIG_OVERRIDE+=	data/packagekit-qt.pc.in
 PKGCONFIG_OVERRIDE+=	data/packagekit-glib.pc.in
 
 PY_PATCHPLIST=	yes
-PYTHON_VERSIONS_INCOMPATIBLE=	34 35 # not yet ported as of 0.4.0
+PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 0.4.0
 
 REPLACE_PYTHON=	backends/test/helpers/PackageKitDbusTest.py	\
 		lib/python/packagekit/client.py		\

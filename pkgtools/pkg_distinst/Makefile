@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.11 2016/07/09 06:38:48 wiz Exp $
+# $NetBSD: Makefile,v 1.14 2019/08/11 13:22:35 wiz Exp $
 
 PKGNAME=	pkg_distinst-0.02
-PKGREVISION=	5
+PKGREVISION=	7
 CATEGORIES=	pkgtools
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -16,9 +16,9 @@ AUTO_MKDIRS=	yes
 SUBST_CLASSES+=		di
 SUBST_STAGE.di=		do-configure
 SUBST_FILES.di=		pkg_distinst.pl
-SUBST_SED.di=		-e 's,@PERL5@,${PERL5},g'
-SUBST_SED.di+=		-e 's,@PKGSRCDIR@,${PKGSRCDIR},g'
-SUBST_SED.di+=		-e 's,@MAKE@,${MAKE},g'
+SUBST_VARS.di=		PERL5
+SUBST_VARS.di+=		PKGSRCDIR
+SUBST_VARS.di+=		MAKE
 SUBST_MESSAGE.di=	Fixing script for installation.
 
 do-extract:

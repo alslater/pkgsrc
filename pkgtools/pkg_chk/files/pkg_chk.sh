@@ -1,6 +1,6 @@
 #!@SH@ -e
 #
-# $Id: pkg_chk.sh,v 1.73 2014/04/23 00:01:01 abs Exp $
+# $Id: pkg_chk.sh,v 1.76 2019/11/10 10:25:43 triaxx Exp $
 #
 # TODO: Make -g check dependencies and tsort
 # TODO: Make -g list user-installed packages first, followed by commented
@@ -35,6 +35,7 @@
 PATH=${PATH}:/usr/sbin:/usr/bin
 
 SUMMARY_FILES="pkg_summary.bz2 pkg_summary.gz pkg_summary.txt"
+DO_CLEAN="CLEANDEPENDS=yes"
 
 bin_pkg_info2pkgdb()
     {
@@ -270,7 +271,7 @@ extract_variables()
 	fi
     fi
     if [ -z "$PKGCHK_UPDATE_CONF" ];then
-	PKGCHK_UPDATE_CONF=$PKGSRCDIR/pkgchk_update-$(hostname).conf
+	PKGCHK_UPDATE_CONF=$PKGSRCDIR/pkgchk_update-$(uname -n).conf
     fi
     }
 
@@ -470,7 +471,7 @@ determine_tags()
 	extract_make_vars Makefile OPSYS OS_VERSION MACHINE_ARCH
     fi
 
-    TAGS="$(hostname | ${SED} -e 's,\..*,,'),$(hostname),$OPSYS-$OS_VERSION-$MACHINE_ARCH,$OPSYS-$OS_VERSION,$OPSYS-$MACHINE_ARCH,$OPSYS,$OS_VERSION,$MACHINE_ARCH"
+    TAGS="$(uname -n | ${SED} -e 's,\..*,,'),$(uname -n),$OPSYS-$OS_VERSION-$MACHINE_ARCH,$OPSYS-$OS_VERSION,$OPSYS-$MACHINE_ARCH,$OPSYS,$OS_VERSION,$MACHINE_ARCH"
     if [ -f /usr/X11R7/lib/libX11.a -o -f /usr/X11R6/lib/libX11.a ];then
 	TAGS="$TAGS,x11"
     fi
@@ -665,7 +666,7 @@ pkg_install()
 	    unset PKG_PATH
 	fi
     elif [ -n "$opt_s" ]; then
-	run_cmd "cd $PKGSRCDIR/$PKGDIR && ${MAKE} update CLEANDEPENDS=yes"
+	run_cmd "cd $PKGSRCDIR/$PKGDIR && ${MAKE} update ${DO_CLEAN}"
     fi
 
     if [ -z "$opt_n" -a -z "$opt_q" -a ! -d $PKG_DBDIR/$PKGNAME ];then
@@ -758,6 +759,7 @@ usage()
 	-b	Use binary packages
 	-C conf Use pkgchk.conf file 'conf'
 	-D tags Comma separated list of additional pkgchk.conf tags to set
+	-d	do not clean the pkg build dirs
 	-f	Perform a 'make fetch' for all required packages
 	-g	Generate an initial pkgchk.conf file
 	-h	This help
@@ -803,18 +805,19 @@ verbose_var()
     }
 
 original_argv="$@" # just used for verbose output
-while getopts BC:D:L:P:U:abcfghiklNnpqrsuv ch; do
+while getopts BC:D:L:P:U:abcdfghiklNnpqrsuv ch; do
     case "$ch" in
 	a ) opt_a=1 ;;
 	B ) opt_B=1 ;;
 	b ) opt_b=1 ;;
 	C ) opt_C="$OPTARG" ;;
-	c ) opt_a=1 ; opt_q=1 ; echo "-c is deprecated - use -a -q" ;;
+	c ) opt_a=1 ; opt_q=1 ; echo "** -c deprecated - use -a -q" 1>&2 ;;
 	D ) opt_D="$OPTARG" ;;
+	d ) DO_CLEAN="NOCLEAN=yes" ;;
 	f ) opt_f=1 ;;
 	g ) opt_g=1 ;;
 	h ) opt_h=1 ;;
-	i ) opt_u=1 ; opt_q=1 ; echo "-i is deprecated - use -u -q" ;;
+	i ) opt_u=1 ; opt_q=1 ; echo "** -i deprecated - use -u -q" 1>&2 ;;
 	k ) opt_k=1 ;;
 	L ) opt_L="$OPTARG" ;;
 	l ) opt_l=1 ;;

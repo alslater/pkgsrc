@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.19 2016/11/21 14:04:35 marino Exp $
+# $NetBSD: Makefile,v 1.24 2019/09/07 23:30:45 nia Exp $
 
 DISTNAME=	pkg-1.9.99.4
+PKGREVISION=	1
 CATEGORIES=	pkgtools
 MASTER_SITES=	http://files.etoilebsd.net/pkg/
 EXTRACT_SUFX=	.tar.xz
@@ -15,13 +16,14 @@ GNU_CONFIGURE=	yes
 USE_CWRAPPERS=	no
 USE_LANGUAGES=	c
 
+LDFLAGS+=	-pthread
 CPPFLAGS+=	-D_LOCALBASE="\"${PREFIX}\""
 CPPFLAGS+=	-DPORTSDIR="\"${PKG.portsdir}\""
 CPPFLAGS+=	-DDEFAULT_VULNXML_URL="\"http://muscles.dragonflybsd.org/pkgsrc-vuxml/vuln.xml.bz2\""
 CFLAGS+=	-DSYSCONFDIR=\"${PKG_SYSCONFDIR}\"
 
 .if defined(DEBUG_PKGNG)
-CFLAGS:=	${CFLAGS:N-O2} -ggdb -O0
+CFLAGS:=		${CFLAGS:N-O2} -ggdb -O0
 _STRIPFLAG_INSTALL=	# don't strip
 .endif
 
@@ -49,7 +51,7 @@ OWN_DIRS=	${PKG_SYSCONFDIR}/bash_completion.d \
 		${PKG_SYSCONFDIR}/periodic/security \
 		${PKG_SYSCONFDIR}/periodic/weekly
 
-SUBST_CLASSES+=	manpages-prefix
+SUBST_CLASSES+=			manpages-prefix
 SUBST_STAGE.manpages-prefix=	pre-install
 SUBST_FILES.manpages-prefix=	docs/pkg-install.8 docs/pkg-repo.8
 SUBST_FILES.manpages-prefix+=	docs/pkg-search.8 docs/pkg-update.8
@@ -58,7 +60,7 @@ SUBST_FILES.manpages-prefix+=	docs/pkg.conf.5
 SUBST_SED.manpages-prefix+=	-e "s|/usr/local|${PREFIX}|g"
 SUBST_MESSAGE.manpages-prefix=	Correct the installation prefix in manual pages.
 
-SUBST_CLASSES+=	pkgconf-prefix
+SUBST_CLASSES+=			pkgconf-prefix
 SUBST_STAGE.pkgconf-prefix=	pre-install
 SUBST_FILES.pkgconf-prefix=	src/pkg.conf.sample
 SUBST_SED.pkgconf-prefix+=	-e "s|/usr/local|${PREFIX}|g"
@@ -79,7 +81,7 @@ SUBST_SED.portsdir=	-e "s|/usr/ports|${PKG.portsdir}|g" \
 SUBST_MESSAGE.portsdir=	Correct reference to FreeBSD portsdir.
 
 SUBST_CLASSES+=		config
-SUBST_STAGE.config=	post-patch
+SUBST_STAGE.config=	pre-configure
 SUBST_FILES.config=	libpkg/pkg_config.c
 SUBST_SED.config=	-e "s|/usr/ports|${PKG.portsdir}|g" \
 			-e "s|/var/db/pkg|${PKGNG_DBDIR}|g" \
@@ -87,10 +89,13 @@ SUBST_SED.config=	-e "s|/usr/ports|${PKG.portsdir}|g" \
 SUBST_MESSAGE.config=	Update pkg(8) defaults.
 
 SUBST_CLASSES+=		vuxml
-SUBST_STAGE.vuxml=	post-patch
+SUBST_STAGE.vuxml=	pre-configure
 SUBST_FILES.vuxml=	libpkg/pkg_audit.c
 SUBST_SED.vuxml=	-e "s|https://vuxml.FreeBSD.org/freebsd|http://muscles.dragonflybsd.org/pkgsrc-vuxml/reports|"
 SUBST_MESSAGE.vuxml=	Direct audit reports to Pkgsrc vuxml
+
+# Install manpages under ${PKGMANDIR}.
+INSTALL_MAKE_FLAGS+=	mandir=${PREFIX:Q}/${PKGMANDIR:Q}
 
 .if defined(PACKAGE_BUILDING) # set by Synth which has custom location, so use default path
 PKG.portsdir?=	/usr/pkgsrc
@@ -145,4 +150,5 @@ BUILDLINK_TRANSFORM+=	rm:-Wl,--enable-new-dtags
 .if ${OPSYS} != "FreeBSD" && ${OPSYS} != "DragonFly" && ${OPSYS} != "NetBSD"
 .include "../../archivers/libarchive/buildlink3.mk"
 .endif
+.include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

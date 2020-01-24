@@ -1,10 +1,9 @@
-# $NetBSD: Makefile,v 1.114 2016/10/01 18:42:53 kamil Exp $
+# $NetBSD: Makefile,v 1.119 2018/12/05 19:23:46 schmonz Exp $
 #
 
 COMMENT=	Tools for use in the packages collection
 
 SUBDIR+=	R2pkg
-SUBDIR+=	abiexec
 SUBDIR+=	autoswc
 SUBDIR+=	binpatch
 SUBDIR+=	bootstrap-extras
@@ -36,6 +35,8 @@ SUBDIR+=	pkg
 SUBDIR+=	pkg_alternatives
 SUBDIR+=	pkg_chk
 SUBDIR+=	pkg_comp
+SUBDIR+=	pkg_comp-cron
+SUBDIR+=	pkg_comp1
 SUBDIR+=	pkg_distinst
 SUBDIR+=	pkg_filecheck
 SUBDIR+=	pkg_install
@@ -61,9 +62,11 @@ SUBDIR+=	pkglint4
 SUBDIR+=	pkgse
 SUBDIR+=	pkgsrc-todo
 SUBDIR+=	pkgsurvey
+SUBDIR+=	pkgtasks
 SUBDIR+=	plist-utils
 SUBDIR+=	port2pkg
 #SUBDIR+=	prereq-readme	# Only used by the README.html generation
+SUBDIR+=	rc.d-boot
 SUBDIR+=	rc.subr
 SUBDIR+=	rcorder
 SUBDIR+=	rdigest

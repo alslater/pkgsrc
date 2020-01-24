@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.25 2016/07/09 06:38:48 wiz Exp $
+# $NetBSD: Makefile,v 1.31 2019/08/11 13:22:35 wiz Exp $
 
-PKGNAME=	lintpkgsrc-4.92
-PKGREVISION=	1
+PKGNAME=	lintpkgsrc-4.94
+PKGREVISION=	2
 CATEGORIES=	pkgtools
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -22,13 +22,14 @@ SUBST_CLASSES+=		lp
 SUBST_STAGE.lp=		post-configure
 SUBST_FILES.lp+=	lintpkgsrc.0 lintpkgsrc.1 lintpkgsrc.pl
 .if defined(BATCH)
-SUBST_SED.lp+=	-e s\|@PKGSRCDIR@\|/usr/pkgsrc\|g
+SUBST_SED.lp+=		-e 's;@PKGSRCDIR@;/usr/pkgsrc;g'
 .else
-SUBST_SED.lp+=	-e s\|@PKGSRCDIR@\|${PKGSRCDIR}\|g
+SUBST_VARS.lp+=		PKGSRCDIR
 .endif
-SUBST_SED.lp+=	-e s\|@PREFIX@\|${PREFIX}\|g
-SUBST_SED.lp+=	-e s\|@MAKE@\|${MAKE:Q}\|g
-SUBST_SED.lp+=	-e s\|@PERL@\|${PERL5:Q}\|g
+SUBST_VARS.lp+=		MAKE
+SUBST_VARS.lp+=		PERL5
+SUBST_VARS.lp+=		PKG_SYSCONFDIR
+SUBST_VARS.lp+=		PREFIX
 
 .include "../../mk/bsd.prefs.mk"
 

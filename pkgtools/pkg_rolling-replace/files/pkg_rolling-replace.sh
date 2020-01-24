@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $NetBSD: pkg_rolling-replace.sh,v 1.35 2015/04/14 11:40:31 wiz Exp $
+# $NetBSD: pkg_rolling-replace.sh,v 1.40 2019/08/27 19:30:36 gdt Exp $
 #<license>
 # Copyright (c) 2006 BBN Technologies Corp.  All rights reserved.
 #
@@ -151,7 +151,7 @@ OPC='rr>' # continuation
 # supported.  Newer versions may or may not work (patches welcome).
 check_packages_mismatched()
 {
-    ${PKG_CHK} -u -q $opt_B | while read line; do
+    ${PKG_CHK} -u -q $opt_B | egrep -v missing | while read line; do
         # duplicate output of pkg_chk to stderr (bypass $(...) or `...`)
         echo "${OPC} $line" 1>&2
 	# Look for the first thing that looks like pkg-version rather
@@ -419,8 +419,11 @@ while [ -n "$REPLACE_TODO" ]; do
     for pkg in $TSORTED; do
         if is_member $pkg $REPLACE_TODO; then
 	    pkgdir=$(${PKG_INFO} -Q PKGPATH $pkg)
-	    [ -n "$pkgdir" ] || abort "Couldn't extract PKGPATH from installed package $pkg"
-            break;
+	    if [ -n "$pkgdir" ]; then
+		break;
+	    else
+		error "Couldn't extract PKGPATH from installed package $pkg"
+	    fi
         fi
     done
     # loop should never exit without selecting a package
@@ -463,8 +466,9 @@ while [ -n "$REPLACE_TODO" ]; do
 	NEW_DEPENDS=
 	cd "$PKGSRCDIR/$pkgdir"
 	bdeps=$(@SETENV@ ${MAKE_SET_VARS} ${MAKE} show-depends VARNAME=BUILD_DEPENDS)
+	tdeps=$(@SETENV@ ${MAKE_SET_VARS} ${MAKE} show-depends VARNAME=TOOL_DEPENDS)
 	rdeps=$(@SETENV@ ${MAKE_SET_VARS} ${MAKE} show-depends)
-	for depver in $bdeps $rdeps; do
+	for depver in $bdeps $tdeps $rdeps; do
 	    dep=$(echo $depver | sed -e 's/[:[].*$/0/' -e 's/[<>]=/-/' \
 		-e 's/-[0-9][^-]*$//')
 	    if ! is_member $dep $OLD_DEPENDS $NEW_DEPENDS; then
@@ -496,6 +500,7 @@ while [ -n "$REPLACE_TODO" ]; do
     if [ -d "$PKGSRCDIR/$pkgdir" ]; then
 	cd "$PKGSRCDIR/$pkgdir";
     else
+	fail=1
         mark_as_failed $pkg
 	error "No package directory '$pkgdir' for $pkg."
     fi

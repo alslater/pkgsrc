@@ -1,7 +1,7 @@
-/* $NetBSD: base-wrapper.c,v 1.3 2016/11/27 11:46:45 joerg Exp $ */
+/* $NetBSD: base-wrapper.c,v 1.6 2017/10/27 20:59:59 khorben Exp $ */
 
 /*-
- * Copyright (c) 2007 Joerg Sonnenberger <joerg@NetBSD.org>.
+ * Copyright (c) 2007, 2017 Joerg Sonnenberger <joerg@NetBSD.org>.
  * All rights reserved.
  *
  * This code was developed as part of Google's Summer of Code 2007 program.
@@ -71,7 +71,7 @@ libtool_mode(struct arglist *args)
 		if (strcmp(arg->val, "--mode") == 0) {
 			arg = TAILQ_NEXT(arg, link);
 			if (arg == NULL || *arg->val == '-')
-				errx(255, "Misssing --mode argument");
+				errx(255, "Missing --mode argument");
 			mode = arg->val;
 			continue;
 		}
@@ -82,14 +82,14 @@ libtool_mode(struct arglist *args)
 		if (strcmp(arg->val, "--tag") == 0) {
 			arg = TAILQ_NEXT(arg, link);
 			if (arg == NULL || *arg->val == '-')
-				errx(255, "Misssing --tag argument");
+				errx(255, "Missing --tag argument");
 			continue;
 		}
 	}
 	if (arg == NULL)
 		return 1;
 	if (mode == NULL)
-		errx(255, "Misssing --mode=XXX");
+		errx(255, "Missing --mode=XXX");
 	
 	if (strcmp(mode, "compile") == 0 ||
 	    strcmp(mode, "link") == 0)
@@ -130,6 +130,13 @@ main(int argc, char **argv)
 		goto skip_transforms;
 #endif
 
+#if defined(WRAPPER_AS)
+	operation_mode_as();
+#elif defined(WRAPPER_LD)
+	operation_mode_ld(&args);
+#else
+	operation_mode_cc(&args);
+#endif
 	arglist_apply_config(&args);
 #if defined(WRAPPER_LD)
 	ldadd_ld(&args);

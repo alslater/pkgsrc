@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.16 2014/03/03 03:42:05 obache Exp $
+# $NetBSD: Makefile,v 1.19 2019/05/23 19:23:12 rillig Exp $
 #
 
 PKGNAME=	dfdisk-1.0
@@ -27,13 +27,13 @@ INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1 ${EGDIR}
 
 SUBST_CLASSES+=		paths
 SUBST_FILES.paths=	dfdisk.sh dfdisk.1 dfdisk.conf
-SUBST_SED.paths+=	-e 's,@PREFIX@,${PREFIX},g'
-SUBST_SED.paths+=	-e 's,@PKG_SYSCONFDIR@,${PKG_SYSCONFDIR},g'
-SUBST_SED.paths+=	-e 's,@PKGVERSION@,${PKGVERSION},g'
-SUBST_SED.paths+=	-e 's,@PKGBASE@,${PKGBASE},g'
-SUBST_SED.paths+=	-e 's,@FTP@,${FTP},g'
-SUBST_SED.paths+=	-e 's,@SH@,${SH},g'
-SUBST_STAGE.paths=	post-patch
+SUBST_VARS.paths=	PREFIX
+SUBST_VARS.paths+=	PKG_SYSCONFDIR
+SUBST_VARS.paths+=	PKGVERSION
+SUBST_VARS.paths+=	PKGBASE
+SUBST_VARS.paths+=	FTP
+SUBST_VARS.paths+=	SH
+SUBST_STAGE.paths=	pre-install
 
 post-extract:
 .for f in dfdisk.sh dfdisk.1 dfdisk.conf

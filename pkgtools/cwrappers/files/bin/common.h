@@ -1,7 +1,7 @@
-/* $NetBSD: common.h,v 1.5 2016/11/27 11:46:45 joerg Exp $ */
+/* $NetBSD: common.h,v 1.8 2017/11/07 16:49:22 khorben Exp $ */
 
 /*-
- * Copyright (c) 2009 Joerg Sonnenberger <joerg@NetBSD.org>.
+ * Copyright (c) 2009, 2017 Joerg Sonnenberger <joerg@NetBSD.org>.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,9 +43,20 @@ extern char *exec_path;
 extern char *exec_name;
 extern char *wrksrc;
 extern int debug;
-
 extern int rflag;
 extern int linking;
+
+enum operation_mode {
+	mode_unknown,
+	mode_preprocess,
+	mode_assemble,
+	mode_compile,
+	mode_link_executable,
+	mode_link_omagic,
+	mode_link_relocatable,
+	mode_link_shared
+};
+extern enum operation_mode current_operation_mode;
 
 TAILQ_HEAD(arglist, argument);
 
@@ -89,6 +100,9 @@ void	*xrealloc(void *, size_t);
 char	*xstrdup(const char *);
 char	*xstrndup(const char *, size_t);
 
+void	operation_mode_as(void);
+
+void	operation_mode_cc(struct arglist *);
 void	ldadd_cc(struct arglist *);
 void	normalise_cc(struct arglist *);
 void	cleanup_cc(struct arglist *args);
@@ -101,6 +115,7 @@ void	init_generic_transform(void);
 void	register_generic_transform(const char *);
 void	generic_transform_cc(struct arglist *);
 
+void	operation_mode_ld(struct arglist *);
 void	ldadd_ld(struct arglist *);
 void	normalise_ld(struct arglist *);
 void	generic_transform_ld(struct arglist *);

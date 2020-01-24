@@ -1,6 +1,6 @@
-#! @PERL@
+#!@PERL5@
 
-# $NetBSD: lintpkgsrc.pl,v 1.11 2016/03/12 09:06:29 wiz Exp $
+# $NetBSD: lintpkgsrc.pl,v 1.15 2017/12/15 10:54:59 adam Exp $
 
 # Written by David Brownlee <abs@netbsd.org>.
 #
@@ -23,9 +23,10 @@ use IPC::Open3;
 use Cwd 'realpath', 'getcwd';
 
 # Buildtime configuration
-my $conf_make      = '@MAKE@';
-my $conf_pkgsrcdir = '@PKGSRCDIR@';
-my $conf_prefix    = '@PREFIX@';
+my $conf_make       = '@MAKE@';
+my $conf_pkgsrcdir  = '@PKGSRCDIR@';
+my $conf_prefix     = '@PREFIX@';
+my $conf_sysconfdir = '@PKG_SYSCONFDIR@';
 
 my (
     $pkglist,                     # list of Pkg packages
@@ -613,6 +614,12 @@ sub get_default_makefile_vars() {
             $default_vars->{$var} = $vars->{$var};
         }
     }
+    elsif ( -f ${conf_sysconfdir} . '/mk.conf' && ( $vars = parse_makefile_vars(${conf_sysconfdir} . '/mk.conf') ) )
+    {
+        foreach my $var ( keys %{$vars} ) {
+            $default_vars->{$var} = $vars->{$var};
+        }
+    }
 
     if ( $opt{P} ) {
         $default_vars->{PKGSRCDIR} = realpath($opt{P});
@@ -656,7 +663,7 @@ sub invalid_version($) {
 
     # We handle {} here, everything else in package_globmatch
     while ( $pkgmatch = shift @todo ) {
-        if ( $pkgmatch =~ /(.*){([^{}]+)}(.*)/ ) {
+        if ( $pkgmatch =~ /(.*)\{([^{}]+)}(.*)/ ) {
             foreach ( split( ',', $2 ) ) {
                 push( @todo, "$1$_$3" );
             }
@@ -1399,7 +1406,7 @@ sub parse_eval_make_false($$) {
             $var = $${vars}{$varname};
             $var = parse_expand_vars( $var, $vars ) if defined $var;
 
-            $match =~ s/([.+])/\\$1/g;
+            $match =~ s/([{.+])/\\$1/g;
             $match =~ s/\*/.*/g;
             $match =~ s/\?/./g;
             $match = '^' . $match . '$';

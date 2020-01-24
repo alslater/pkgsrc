@@ -1,4 +1,4 @@
-/* $NetBSD: event.c,v 1.7 2015/09/08 13:57:36 joerg Exp $ */
+/* $NetBSD: event.c,v 1.9 2019/03/12 15:37:51 wiz Exp $ */
 
 /*-
  * Copyright (c) 2007, 2009 Joerg Sonnenberger <joerg@NetBSD.org>.
@@ -50,6 +50,8 @@
 #include <signal.h>
 
 #include "pbulk.h"
+
+static struct event *poll_loop_next = NULL;
 
 struct deferred_read_arg {
 	void *cb_arg;
@@ -206,6 +208,9 @@ event_add(struct event *ev, int fd, int do_write, int is_persistent,
 void
 event_del(struct event *ev)
 {
+	if (ev == poll_loop_next) {
+		poll_loop_next = LIST_NEXT(ev, ev_link);
+	}
 	LIST_REMOVE(ev, ev_link);
 	--active_events;
 }
@@ -269,7 +274,8 @@ signal_handler(int sig_id)
 	}
 
 	old_errno = errno;
-	write(signal_pipe[1], &buf, 1);
+	if (write(signal_pipe[1], &buf, 1)) {
+	}
 	errno = old_errno;
 }
 
@@ -302,7 +308,7 @@ void
 event_dispatch(void)
 {
 	struct timeval now;
-	struct event *ev, *next;
+	struct event *ev;
 	struct pollfd *iter, *last_iter;
 	int ret, timeout;
 
@@ -344,15 +350,18 @@ loop:
 	if (ret > 0) {
 		iter = poll_list;
 		for (ev = LIST_FIRST(&all_events);
-		    ret && iter < last_iter && ev && (next = LIST_NEXT(ev, ev_link), 1);
-		    ev = next, ++iter) {
+		    iter < last_iter && ev && (poll_loop_next = LIST_NEXT(ev, ev_link), 1);
+		    ev = poll_loop_next, ++iter) {
 			if (iter->revents) {
-				if (!ev->ev_persistent)
-					event_del(ev);
+				if (!ev->ev_persistent) {
+					--active_events;
+					LIST_REMOVE(ev, ev_link);
+				}
 				(*ev->ev_handler)(ev->ev_fd, ev->ev_arg);
 				--ret;
 			}
 		}
+		poll_loop_next = NULL;
 	}
 	goto loop;
 }
