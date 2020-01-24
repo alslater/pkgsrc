@@ -447,6 +447,7 @@ SUBDIR+=	ocsinventory-agent
 SUBDIR+=	ocsync
 SUBDIR+=	oidentd
 SUBDIR+=	oinkmaster
+SUBDIR+=	omniEvents
 SUBDIR+=	omniNotify
 SUBDIR+=	omniORB
 SUBDIR+=	openag
