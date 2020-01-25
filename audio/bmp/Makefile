@@ -21,6 +21,8 @@ PRINT_PLIST_AWK+=	/cdaudio/ { print "$${PLIST.cdaudio}" $$0; next }
 USE_LANGUAGES=		c c++
 LDFLAGS.NetBSD+=	-lstdc++ -lm
 
+LDFLAGS.SunOS+=		-L${LOCALBASE}/lib -lgmodule-2.0
+
 .include "../../audio/id3lib/buildlink3.mk"
 .include "../../audio/libvorbis/buildlink3.mk"
 .include "../../multimedia/libogg/buildlink3.mk"
