@@ -6,7 +6,7 @@ $NetBSD: patch-mono_utils_mono-threads-posix.c,v 1.2 2014/11/30 08:40:51 spz Exp
  {
  #ifdef HAVE_PTHREAD_SETNAME_NP
  	if (!name) {
-+#ifdef linux
++#if defined(linux) || defined(PLATFORM_SOLARIS)
  		pthread_setname_np (tid, "");
 +#else
 +		pthread_setname_np (tid, "%s", "");
@@ -16,7 +16,7 @@ $NetBSD: patch-mono_utils_mono-threads-posix.c,v 1.2 2014/11/30 08:40:51 spz Exp
  
  		strncpy (n, name, 16);
  		n [15] = '\0';
-+#ifdef linux
++#if defined(linux) || defined(PLATFORM_SOLARIS)
  		pthread_setname_np (tid, n);
 +#else
 +		pthread_setname_np (tid, "%s", n);
