@@ -35,7 +35,7 @@ DEPENDS+=	qt5-qtxmlpatterns-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtxmlpatterns
 .if ${OPSYS} == "Darwin"
 DEPENDS+=	qt5-qtmacextras-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtmacextras
 .else
-DEPENDS+=	qt5-qtwayland-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtwayland
+#DEPENDS+=	qt5-qtwayland-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtwayland
 DEPENDS+=	qt5-qtx11extras-${QTVERSION}{,nb[0-9]*}:../../x11/qt5-qtx11extras
 .endif
 
