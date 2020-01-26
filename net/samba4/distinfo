@@ -13,6 +13,7 @@ SHA1 (patch-docs-xml_wscript__build) = 5aa5cbf61882604b7ec9d19f0cd1537a23705ad0
 SHA1 (patch-dynconfig_wscript) = 1858e5fcca913f21aa3e7868d9760b9c40c9f5c4
 SHA1 (patch-lib_param_loadparm.h) = 0216b69d33d1e17260a446e11bee764116c52b18
 SHA1 (patch-lib_pthreadpool_pthreadpool.c) = c29490473063d6bdbe5c50780a21bf2869ae959f
+SHA1 (patch-lib_replace_system_select.h) = a1d17ab606c5d03119b486dc1ba3e6f0dc2d8a26
 SHA1 (patch-lib_replace_wscript) = 2a754e7310850b376d5881b82a8467041284fce9
 SHA1 (patch-lib_tdb_common_mutex.c) = 12dbcf870e6ba17ef7f92a8ce7f0b7462f820232
 SHA1 (patch-lib_tevent_tevent.c) = 4a20506e2bfbab85bad664299b884575326e73fd

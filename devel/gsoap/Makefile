@@ -1,8 +1,9 @@
 # $NetBSD: Makefile,v 1.14 2016/03/05 11:28:21 jperkin Exp $
 
-DISTNAME=		gsoap_2.7.17
+DISTNAME=		gsoap_2.8.63
 PKGNAME=		${DISTNAME:S/_/-/}
-PKGREVISION=		3
+PKGREVISION=		1
+#PKGREVISION=		1
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=gsoap2/}
 EXTRACT_SUFX=		.zip
@@ -13,7 +14,7 @@ COMMENT=		Tools for coding SOAP XML Web Services in C and C++
 
 MAKE_JOBS_SAFE=		no
 
-WRKSRC=			${WRKDIR}/gsoap-2.7
+WRKSRC=			${WRKDIR}/gsoap-2.8
 GNU_CONFIGURE=		yes
 USE_LANGUAGES=		c c++
 USE_TOOLS+=		yacc flex:run gmake pax
@@ -32,4 +33,17 @@ post-install:
 
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../security/openssl/buildlink3.mk"
+.if ${OS_VARIANT} == "OmniOS"
+.include "../../devel/flex/buildlink3.mk"
+.endif
 .include "../../mk/bsd.pkg.mk"
+
+.if ${OS_VARIANT} == "OmniOS"
+DEPENDS+=               flex-[0-9]*:../../devel/flex
+DEPENDS+=               byacc-[0-9]*:../../devel/byacc
+.endif
+
+CFLAGS=                -pipe -gdwarf-2 -march=core2
+
+
+

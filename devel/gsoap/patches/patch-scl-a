@@ -1,0 +1,13 @@
+--- gsoap/Makefile.in.orig	2015-07-07 12:15:31.914658604 +0100
++++ gsoap/Makefile.in	2015-07-08 08:12:24.631593837 +0100
+--- gsoap/Makefile.in.orig	2018-02-18 20:57:28.000000000 +0000
++++ gsoap/Makefile.in
+@@ -423,7 +423,7 @@ AM_CXXFLAGS = $(SOAPCPP2_DEBUG) -D$(plat
+ AM_CFLAGS = $(SOAPCPP2_DEBUG) -D$(platform)
+ 
+ # Install all soapcpp2 and wsdl2h files into ${prefix}/share/gsoap
+-nobase_pkgdata_DATA = $(top_srcdir)/gsoap/import/* $(top_srcdir)/gsoap/plugin/* $(top_srcdir)/gsoap/WS/* $(top_srcdir)/gsoap/custom/* $(top_srcdir)/gsoap/extras/*
++nobase_pkgdata_DATA = $(top_srcdir)/gsoap/import/* $(top_srcdir)/gsoap/plugin/* $(top_srcdir)/gsoap/WS/* $(top_srcdir)/gsoap/custom/* $(top_srcdir)/gsoap/extras/* $(top_srcdir)/gsoap/stdsoap2.cpp $(top_srcdir)/gsoap/dom.cpp
+ lib_LIBRARIES = libgsoap.a libgsoap++.a libgsoapck.a libgsoapck++.a libgsoapssl.a libgsoapssl++.a
+ libgsoap_a_SOURCES = stdsoap2.c dom.c
+ libgsoap_a_CFLAGS = $(SOAPCPP2_DEBUG) $(SOAPCPP2_NONAMESPACES) $(SOAPCPP2_NO_C_LOCALE) $(SOAPCPP2_IPV6) -D$(platform)
