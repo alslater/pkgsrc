@@ -2,9 +2,6 @@
 lib/pkgconfig/Qt5Designer.pc
 lib/pkgconfig/Qt5Help.pc
 lib/pkgconfig/Qt5UiTools.pc
-${PLIST.mac}qt5/bin/Assistant
-${PLIST.mac}qt5/bin/Designer
-${PLIST.mac}qt5/bin/Linguist
 ${PLIST.unix}qt5/bin/assistant
 ${PLIST.unix}qt5/bin/designer
 qt5/bin/lconvert
@@ -14,8 +11,6 @@ qt5/bin/lrelease
 qt5/bin/lrelease-pro
 qt5/bin/lupdate
 qt5/bin/lupdate-pro
-${PLIST.mac}qt5/bin/macchangeqt
-${PLIST.mac}qt5/bin/macdeployqt
 qt5/bin/pixeltool
 qt5/bin/qcollectiongenerator
 qt5/bin/qdbus
