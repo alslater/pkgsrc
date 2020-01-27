@@ -2,9 +2,9 @@
 lib/pkgconfig/Qt5Designer.pc
 lib/pkgconfig/Qt5Help.pc
 lib/pkgconfig/Qt5UiTools.pc
-qt5/bin/Assistant
-qt5/bin/Designer
-qt5/bin/Linguist
+${PLIST.mac}qt5/bin/Assistant
+${PLIST.mac}qt5/bin/Designer
+${PLIST.mac}qt5/bin/Linguist
 ${PLIST.unix}qt5/bin/assistant
 ${PLIST.unix}qt5/bin/designer
 qt5/bin/lconvert
@@ -14,8 +14,8 @@ qt5/bin/lrelease
 qt5/bin/lrelease-pro
 qt5/bin/lupdate
 qt5/bin/lupdate-pro
-qt5/bin/macchangeqt
-qt5/bin/macdeployqt
+${PLIST.mac}qt5/bin/macchangeqt
+${PLIST.mac}qt5/bin/macdeployqt
 qt5/bin/pixeltool
 qt5/bin/qcollectiongenerator
 qt5/bin/qdbus
@@ -264,8 +264,6 @@ qt5/lib/cmake/Qt5Designer/Qt5DesignerConfigVersion.cmake
 qt5/lib/cmake/Qt5Designer/Qt5Designer_QQuickWidgetPlugin.cmake
 qt5/lib/cmake/Qt5DesignerComponents/Qt5DesignerComponentsConfig.cmake
 qt5/lib/cmake/Qt5DesignerComponents/Qt5DesignerComponentsConfigVersion.cmake
-qt5/lib/cmake/Qt5DocTools/Qt5DocToolsConfig.cmake
-qt5/lib/cmake/Qt5DocTools/Qt5DocToolsConfigVersion.cmake
 qt5/lib/cmake/Qt5Help/Qt5HelpConfig.cmake
 qt5/lib/cmake/Qt5Help/Qt5HelpConfigExtras.cmake
 qt5/lib/cmake/Qt5Help/Qt5HelpConfigVersion.cmake
