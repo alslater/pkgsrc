@@ -245,6 +245,7 @@ ${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools
 ${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools/private/qgstutils_p.h
 ${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools/private/qgstvideobuffer_p.h
 ${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools/private/qgstvideorendererplugin_p.h
+${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools/private/gstvideoconnector_p.h
 ${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools/private/qgstvideorenderersink_p.h
 ${PLIST.unix}qt5/include/QtMultimediaGstTools/${PKGVERSION}/QtMultimediaGstTools/private/qvideosurfacegstsink_p.h
 ${PLIST.unix}qt5/include/QtMultimediaGstTools/QtMultimediaGstTools
