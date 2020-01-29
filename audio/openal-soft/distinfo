@@ -6,3 +6,5 @@ SHA512 (openal-soft-1.20.0.tar.bz2) = 7b103ffeeb8a6541d4bd31245ca5e34fec27d121fe
 Size (openal-soft-1.20.0.tar.bz2) = 587550 bytes
 SHA1 (patch-alc_alconfig.cpp) = 0539016dadf1827e5a86700c2db5a96479a8b70d
 SHA1 (patch-alc_backends_alsa.cpp) = 3ee7f86e544d9b33ccbe9422eb87b9540623053a
+SHA1 (patch-alc_backends_solaris.cpp) = 866a85a9e890f2a854c06bb99954cbc2b52ea814
+SHA1 (patch-include_AL_al.h) = 6858bacff5ba75e805e9c5156bd12cb2d7472441
