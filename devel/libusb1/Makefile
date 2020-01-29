@@ -36,7 +36,7 @@ CONFIGURE_ARGS.Linux+=	--disable-udev
 CONFIGURE_ARGS+=	--enable-tests-build
 #CONFIGURE_ARGS+=	--enable-examples-build
 
-LDFLAGS.SunOS+=		-lcmdutils # list_create(9F)
+LDFLAGS.SunOS+=		-L/usr/lib/amd64 -lcmdutils # list_create(9F)
 
 CONFLICTS=	libusbx-[0-9]*
 
