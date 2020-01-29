@@ -4,5 +4,6 @@ SHA1 (gdk-pixbuf-2.40.0.tar.xz) = 9396bd89c4647d8db2d02ef93c20c17dbce359d8
 RMD160 (gdk-pixbuf-2.40.0.tar.xz) = 409fc37578fbf1dea2abaefa715f74280b3ea0ab
 SHA512 (gdk-pixbuf-2.40.0.tar.xz) = 6512befd379494dbfd89a16fc4c92641842eb7b82fc820ec83a5b057526209947db646570db1124c073b0ef69c117bdf0f8d3fea807e302a4950db39187c35aa
 Size (gdk-pixbuf-2.40.0.tar.xz) = 5512160 bytes
+SHA1 (patch-docs_meson.build) = d55cefa6eb9bbea3e8b7efcfbdce7cc14701b578
 SHA1 (patch-gdk-pixbuf_gdk-pixbuf-scaled-anim.c) = 486db8d3f352b0d72b7074ba48f14ccbfa09deda
 SHA1 (patch-meson.build) = e98fcafc3a123e4af8f26ba93c3a21af5fa37e2b
