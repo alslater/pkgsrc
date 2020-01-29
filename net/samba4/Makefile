@@ -54,7 +54,7 @@ FILES_SUBST+=		SMB_PID=${SMB_PID}
 
 # mktemp is useful for the replacement adduser script, but don't require
 # a full dependency since it's not actually needed by samba.
-USE_TOOLS+=		gmake mktemp perl:run pkg-config
+USE_TOOLS+=		gmake mktemp perl:run pkg-config rpcgen
 
 USE_GNU_ICONV=		yes	# FIXME: something doesn't work on NetBSD
 BROKEN_GETTEXT_DETECTION= yes
