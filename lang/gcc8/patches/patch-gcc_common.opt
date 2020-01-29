@@ -1,0 +1,15 @@
+$NetBSD$
+
+--- gcc/common.opt.orig	2018-06-16 06:52:17.000000000 +0000
++++ gcc/common.opt
+@@ -1113,6 +1113,10 @@ fcode-hoisting
+ Common Report Var(flag_code_hoisting) Optimization
+ Enable code hoisting.
+ 
++fstrict-calling-conventions
++Common Report Var(flag_strict_calling_conventions) Init(1)
++Use strict ABI calling conventions even for static functions
++
+ fcombine-stack-adjustments
+ Common Report Var(flag_combine_stack_adjustments) Optimization
+ Looks for opportunities to reduce stack adjustments and stack references.
