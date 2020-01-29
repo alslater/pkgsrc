@@ -387,7 +387,7 @@
 
 		//Check if memory has been allocated
 		 if (strptr == NULL)
-			  return '\0' ;
+			  return NULL;
 		 else
 		 {
 			//Initialize the pointer to char with NULL
@@ -467,7 +467,7 @@
 
 			  //Check if memory has been allocated
 			  if (ebcdicStr == NULL)
-				   return '\0' ;
+				   return NULL ;
 			  ebcdicStr[0] = EBCDIC_ZERO ;
 			  ebcdicStr[1] = '\0' ;
 			  return ebcdicStr ;
@@ -507,7 +507,7 @@
 
 		 //Check if memory has been allocated
 		 if (ebcdicStr == NULL)
-			  return '\0' ;
+			  return NULL ;
 
 		 //Initialize the pointer to char with NULL
 		 memset(ebcdicStr,0, index+1);
@@ -588,7 +588,7 @@
 
          //Check if memory has been allocated
 		 if (ebcdicStr == NULL)
-			  return '\0' ;
+			  return NULL ;
 
 		 //Initialize the pointer to char with NULL
 		 memset(ebcdicStr,0, (((size>index)?size:index)+1));
@@ -678,7 +678,7 @@
 
     	  //Check if memory has been allocated
 		 if (ebcdicStr == NULL)
-			  return '\0' ;
+			  return NULL ;
 
 		 //Initialize the pointer to char with NULL
 		 memset(ebcdicStr,0, index+1);
@@ -739,7 +739,7 @@
 
 		  //Check if memory has been allocated
 		 if (ebcdicStr == NULL)
-			  return '\0' ;
+			  return NULL ;
 
 		 //Initialize the pointer to char with NULL
 		 memset(ebcdicStr,0, (((size>index)?size:index)+1));
