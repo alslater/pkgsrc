@@ -49,7 +49,7 @@ PY_PATCHPLIST=			yes
 REPLACE_PYTHON+=		src/tool/omniidl/python/scripts/omniidlrun.py
 REPLACE_PYTHON+=	src/tool/omniidl/python3/scripts/omniidlrun.py
 
-PYTHON_VERSIONS_ACCEPTED= 38
+PYTHON_VERSIONS_ACCEPTED= 36
 
 post-install:
 	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/share/examples/omniORB/
