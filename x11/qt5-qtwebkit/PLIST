@@ -105,8 +105,6 @@ qt5/lib/libWebCore.so.5.212.0
 qt5/lib/libWebKit2.${RUBY_DLEXT}
 qt5/lib/libWebKit2.so.5
 qt5/lib/libWebKit2.so.5.212.0
-qt5/lib/libbrotli.a
-qt5/lib/libwoff2.a
 qt5/lib/pkgconfig/Qt5WebKit.pc
 qt5/lib/pkgconfig/Qt5WebKitWidgets.pc
 qt5/libexec/QtWebNetworkProcess

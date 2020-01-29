@@ -40,6 +40,11 @@ CMAKE_ARGS+=		-DENABLE_API_TESTS=OFF
 CMAKE_ARGS+=		-DKDE_INSTALL_LIBEXECDIR=${CMAKE_INSTALL_PREFIX}/libexec
 #CMAKE_ARGS+=		-DLIBEXEC_INSTALL_DIR=${CMAKE_INSTALL_PREFIX}/libexec
 
+.if ${OPSYS} == "SunOS"
+CMAKE_ARGS+=		-DUSE_THIN_ARCHIVES:BOOL=OFF
+CMAKE_ARGS+=		-DUSE_LINKER_VERSION_SCRIPT:BOOL=OFF
+.endif
+
 GCC_REQD+=	4.9
 
 pre-configure:
@@ -72,6 +77,8 @@ BUILDLINK_TRANSFORM+=	rpath:${WRKSRC}/lib:${QTDIR}/lib
 LDFLAGS+=	-Wl,-no-keep-memory -Wl-reduce-memory
 .endif
 
+LDFLAGS.SunOS+=	-lsocket
+
 # 64-bit atomic ops are required
 .if ${MACHINE_ARCH} == "i386"
 CXXFLAGS+=	-march=i586
@@ -92,6 +99,7 @@ post-install:
 .include "../../textproc/hyphen/buildlink3.mk"
 .include "../../textproc/icu/buildlink3.mk"
 .include "../../textproc/libxslt/buildlink3.mk"
+.include "../../fonts/woff2/buildlink3.mk"
 .if ${OPSYS} != "Darwin"
 # https://github.com/GStreamer/gst-plugins-bad/commit/b9e15fddb14b2cde6470255794ef130523885e9f
 BUILDLINK_API_DEPENDS.gst-plugins1-base+=	gst-plugins1-base>=1.15.1
