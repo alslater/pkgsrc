@@ -23,6 +23,11 @@ M=	m
 M=
 .endif
 
+# SunOS does not have (or require) libutil
+.if ${OPSYS} == "SunOS"
+BUILDLINK_TRANSFORM+=               rm:-lutil
+.endif
+
 post-configure:
 	${ECHO} 'using python : ${PYVERSSUFFIX} :' \
 	    '${PREFIX}/bin/python${PYVERSSUFFIX} : ${PREFIX}/include/python${PYVERSSUFFIX}${M} ;' \
