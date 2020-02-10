@@ -9,7 +9,7 @@ CONFLICTS=		php-mcrypt-[0-9]*
 CONFIGURE_ARGS+=	--with-${MODNAME}=shared,${BUILDLINK_PREFIX.libmcrypt}
 
 # mcrypt is deprecated and removed in 7.1.x
-PHP_VERSIONS_ACCEPTED=	56 70
+PHP_VERSIONS_ACCEPTED=	56
 
 .include "../../lang/php/ext.mk"
 .include "../../security/libmcrypt/buildlink3.mk"
