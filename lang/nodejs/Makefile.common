@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.common,v 1.29 2019/12/09 20:03:51 adam Exp $
+# $NetBSD: Makefile.common,v 1.33 2020/03/11 09:22:49 jperkin Exp $
 # used by lang/nodejs/Makefile
 # used by lang/nodejs8/Makefile
 # used by lang/nodejs10/Makefile
@@ -15,12 +15,16 @@ LICENSE=	mit
 
 HAS_CONFIGURE=	yes
 USE_TOOLS+=	bash gmake pkg-config
-USE_LANGUAGES=	c c++
 
 PYTHON_FOR_BUILD_ONLY=		yes
-PYTHON_VERSIONS_ACCEPTED=	27 # not yet ported as of 0.10.24
 
-GCC_REQD+=		4.8
+#
+# Do not remove this unless you are absolutely certain that every python script
+# in every nodejs that we support is python3 ready.
+#
+PYTHON_VERSIONS_ACCEPTED=	27
+
+GCC_REQD+=		4.9.4
 
 CONFIG_SHELL=		${PYTHONBIN}
 CONFIGURE_ARGS+=	--prefix=${PREFIX}
@@ -77,6 +81,7 @@ post-install:
 .if ${OPSYS} != "Darwin"
 .include "../../devel/libexecinfo/buildlink3.mk"
 .endif
+BUILDLINK_API_DEPENDS.libuv+=	libuv>=1.23
 .include "../../devel/libuv/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/application.mk"
