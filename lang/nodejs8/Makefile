@@ -1,9 +1,9 @@
-# $NetBSD: Makefile,v 1.23 2019/12/29 15:40:32 adam Exp $
+# $NetBSD: Makefile,v 1.28 2020/03/11 09:22:50 jperkin Exp $
 
 DISTNAME=	node-v8.17.0
+PKGREVISION=	1
 
-# Stated by the changelog as of 8.2.0
-GCC_REQD+=	4.9.4
+USE_LANGUAGES=	c c++
 
 .include "options.mk"
 
