@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.21 2019/11/03 11:45:46 rillig Exp $
 
-VERSION=		4.2.3
+VERSION=		4.2.4
 DISTNAME=		omniORB-${VERSION}
 PKGNAME=		omniORB-${VERSION}
 CATEGORIES=		devel
