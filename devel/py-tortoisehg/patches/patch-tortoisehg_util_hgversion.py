@@ -7,7 +7,7 @@ $NetBSD: patch-tortoisehg_util_hgversion.py,v 1.1 2019/09/20 10:55:55 nros Exp $
      hgversion = version.get_version()
  
 -testedwith = '4.9 5.0'
-+testedwith = '4.9 5.0 5.1'
++testedwith = '4.9 5.0 5.1 5.2'
  
  def checkhgversion(v):
      """range check the Mercurial version"""

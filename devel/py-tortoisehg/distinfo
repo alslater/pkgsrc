@@ -5,5 +5,5 @@ RMD160 (tortoisehg-5.0.2.tar.gz) = 4416c61f2854d74682e14c9d079109b9f34cd524
 SHA512 (tortoisehg-5.0.2.tar.gz) = d33916cf3215360cada06de62db46e70c555b1f4cd509f0b863e2baa633e2c5df99f09f3a103444c30aa0a6e15e2acd7134f045cb3846cccc7b727482d94e650
 Size (tortoisehg-5.0.2.tar.gz) = 8002109 bytes
 SHA1 (patch-setup.py) = 8a8f2df84ed99481af7c95327a05354099c1c7c5
-SHA1 (patch-tortoisehg_util_hgversion.py) = 17ea2a2f90395a007e4a3841908d652bf33a0956
+SHA1 (patch-tortoisehg_util_hgversion.py) = 859838f8299c76b145343f61f9a6daa5caadb703
 SHA1 (patch-tortoisehg_util_paths.py) = 0fbe6b583b3d6d60f4c8d96f81d633f454230f81
