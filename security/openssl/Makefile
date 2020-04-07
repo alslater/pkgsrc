@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.246 2019/11/26 22:22:45 sevan Exp $
 
-DISTNAME=	openssl-1.1.1d
+DISTNAME=	openssl-1.1.1f
 CATEGORIES=	security
 MASTER_SITES=	https://www.openssl.org/source/
 
@@ -14,6 +14,8 @@ USE_GCC_RUNTIME=	yes
 USE_TOOLS+=		fgrep gmake makedepend perl
 BUILD_TARGET=		depend all
 TEST_TARGET=		tests
+
+MAKE_JOBS_SAFE=        	no 
 
 HAS_CONFIGURE=		yes
 CONFIGURE_SCRIPT=	./config
