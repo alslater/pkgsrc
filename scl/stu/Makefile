@@ -7,7 +7,7 @@
 # change in the pkg_* tools that pkgsrc relies on for proper operation.
 
 PKGNAME=		stu-1.0
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=		pkgtools
 
 MAINTAINER=		al.slater@scluk.com

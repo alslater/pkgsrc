@@ -12,13 +12,6 @@
 #define MAX_HASH_VALUE 510
 /* maximum key range = 511, duplicates = 177 */
 
-#ifdef __GNUC__
-__inline
-#else
-#ifdef __cplusplus
-inline
-#endif
-#endif
 static unsigned int
 isoCurrencyHash (str, len)
      register const char *str;
@@ -56,9 +49,6 @@ isoCurrencyHash (str, len)
   return asso_values[(unsigned char)str[len - 1]] + asso_values[(unsigned char)str[0]];
 }
 
-#ifdef __GNUC__
-__inline
-#endif
 LINKDLL const struct IsoCurrencyCode_t *
 isoCurrencyLookup (str, len)
      register const char *str;
