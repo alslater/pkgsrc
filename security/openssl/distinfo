@@ -5,3 +5,4 @@ RMD160 (openssl-1.1.1f.tar.gz) = e858b844fe68e679f9701acbcf514410e4189c73
 SHA512 (openssl-1.1.1f.tar.gz) = b00bd9b5ad5298fbceeec6bb19c1ab0c106ca5cfb31178497c58bf7e0e0cf30fcc19c20f84e23af31cc126bf2447d3e4f8461db97bafa7bd78f69561932f000c
 Size (openssl-1.1.1f.tar.gz) = 9792828 bytes
 SHA1 (patch-Configurations_unix-Makefile.tmpl) = aaa97373e60400eaefbaea09e7c3ed91b5ddb020
+SHA1 (patch-include_openssl_e__os2.h) = 55da249ff86ed00d0f111366f65a09d9073fdd29
