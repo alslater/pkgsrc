@@ -1,11 +1,11 @@
-# $NetBSD: Makefile,v 1.10 2019/08/11 13:21:20 wiz Exp $
+# $NetBSD: Makefile,v 1.19 2020/04/27 03:38:28 rillig Exp $
 
 GCC_PKGNAME=		gcc8
 .include		"version.mk"
 
 DISTNAME=	gcc-${GCC8_DIST_VERSION}
 PKGNAME=	${GCC_PKGNAME}-${GCC8_DIST_VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 ## When bumping the PKGREVISION of this package the PKGREVISION of
 ## lang/gcc8-libs needs to be bump to be at least 1 more than the
 ## PKGREVISION of this package!
@@ -14,7 +14,7 @@ MASTER_SITES=	${MASTER_SITE_GNU:=gcc/gcc-${GCC8_DIST_VERSION}/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://gcc.gnu.org/
+HOMEPAGE=	https://gcc.gnu.org/
 COMMENT=	The GNU Compiler Collection (GCC) - 8.0 Release Series
 LICENSE=	gnu-gpl-v2 AND gnu-gpl-v3 AND gnu-lgpl-v2 AND gnu-lgpl-v3
 
@@ -23,11 +23,12 @@ EXTRACT_ONLY=		${DEFAULT_DISTFILES}
 
 NOT_FOR_PLATFORM=	Interix-*-*
 
-USE_LANGUAGES=		c c++
-USE_TOOLS+=		gmake makeinfo sed:run tar:build python:build
+USE_LANGUAGES=		c99 c++
+USE_TOOLS+=		gmake makeinfo sed:run tar:build
 USE_TOOLS.NetBSD+=	gsed
 
 GNU_CONFIGURE=		yes
+GNU_CONFIGURE_STRICT=	no
 ## Build outside ${WRKSRC}
 OBJDIR=			../build
 CONFIGURE_DIRS=		${OBJDIR}
@@ -37,17 +38,11 @@ GCC_PREFIX=		${PREFIX}/${GCC_SUBPREFIX}
 GNU_CONFIGURE_PREFIX=	${GCC_PREFIX}
 INFO_FILES=		yes
 CONFIGURE_ARGS+=	--disable-libstdcxx-pch
-#CONFIGURE_ARGS+=	--with-system-zlib
 
 UNLIMIT_RESOURCES+=	datasize
 UNLIMIT_RESOURCES+=	stacksize
 
-SUBST_CLASSES+=		vars
-SUBST_MESSAGE.vars=	Setting target machine name path in ${SUBST_FILES.vars}
-SUBST_STAGE.vars=	pre-configure
-SUBST_FILES.vars=	gcc/Makefile.in
-SUBST_VARS.vars=	GCC_TARGET_MACHINE
-
+CHECK_PORTABILITY_SKIP+=	contrib/*
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -57,7 +52,7 @@ LANGS=			c
 LINKER_RPATH_FLAG:=	${LINKER_RPATH_FLAG:S/-rpath/& /}
 
 ## The Library rpath to use in end programs.
-LDFLAGS_FOR_TARGET=	${LDFLAGS:M${COMPILER_RPATH_FLAG}*:N*/usr/lib*}
+LDFLAGS_FOR_TARGET=	${LDFLAGS:M${COMPILER_RPATH_FLAG}*:N*/usr/lib*} ${LDFLAGS:M-Wl,-z*}
 
 # The "-static-libstdc++ -static-libgcc" flags are normally added to the
 # boot-ldflags by configure but because we are supply the boot-ldflags
@@ -114,16 +109,13 @@ CONFIGURE_ARGS.Darwin+=	--disable-multilib
 .if !empty(OSX_SDK_PATH)
 CONFIGURE_ARGS.Darwin+=	--with-sysroot=${OSX_SDK_PATH}
 .endif
-.if ${OPSYS} == "NetBSD"
-CONFIGURE_ARGS+=	--with-gnu-ld --with-ld=/usr/bin/ld
-CONFIGURE_ARGS+=	--with-gnu-as --with-as=/usr/bin/as
-MAKE_ENV+=		ac_cv_func_clock_gettime=yes
-MAKE_ENV+=		ac_cv_func_gethostbyname_r=no
-MAKE_ENV+=		ac_cv_func_freelocale=no
-MAKE_ENV+=		ac_cv_func_newlocale=no
-MAKE_ENV+=		ac_cv_func_uselocale=no
-.endif
-
+CONFIGURE_ARGS.NetBSD+=	--with-gnu-ld --with-ld=/usr/bin/ld
+CONFIGURE_ARGS.NetBSD+=	--with-gnu-as --with-as=/usr/bin/as
+MAKE_ENV.NetBSD+=	ac_cv_func_clock_gettime=yes
+MAKE_ENV.NetBSD+=	ac_cv_func_gethostbyname_r=no
+MAKE_ENV.NetBSD+=	ac_cv_func_freelocale=no
+MAKE_ENV.NetBSD+=	ac_cv_func_newlocale=no
+MAKE_ENV.NetBSD+=	ac_cv_func_uselocale=no
 MAKE_ENV.SunOS+=	ac_cv_func_mkostemp=no
 
 CONFIGURE_ARGS.DragonFly+=	--disable-bootstrap
@@ -139,7 +131,6 @@ CONFIGURE_ARGS+=	--with-arch=nocona --with-tune=nocona --with-fpmath=sse
 .if !empty(MACHINE_PLATFORM:MDarwin-[0-8].*-*)
 CONFIGURE_ARGS+=	--with-dwarf2
 .endif
-
 
 # ${WRKSRC}/fixincludes/ looks for sed and compiles the path to sed into
 # a binary so we need to make sure we give it the installed sed and not
@@ -184,7 +175,7 @@ TEST_DEPENDS+=	dejagnu-[0-9]*:../../devel/dejagnu
 post-test:
 	${RUN} cd ${WRKSRC} && cd ${OBJDIR} &&		\
 	${SHELL} ${WRKSRC}/contrib/test_summary >${WRKDIR}/test_summary.log
-	@${INFO_MSG} "Test summary are available in ${WRKDIR}/test_summary.log"
+	${INFO_MSG} "Test summary are available in ${WRKDIR}/test_summary.log"
 
 post-install:
 	${TEST} -f ${DESTDIR}${GCC_PREFIX}/bin/cc || \
@@ -195,11 +186,19 @@ post-install:
 .endif
 
 GENERATE_PLIST+= \
-	cd ${DESTDIR}${PREFIX} && 					\
-	${FIND} ${GCC_SUBPREFIX} \( -type f -o -type l \) -print | ${SORT} ;
+	cd ${DESTDIR}${PREFIX} && \
+	${FIND} ${GCC_SUBPREFIX} \( -type f -o -type l \) -print | ${SORT};
 
-#.include "../../devel/zlib/buildlink3.mk"
-#.include "../../lang/python/application.mk"
+CHECK_BUILTIN.zlib:=	yes
+.include "../../devel/zlib/builtin.mk"
+CHECK_BUILTIN.zlib:=	no
+.if !empty(USE_BUILTIN.zlib:M[yY][eE][sS])
+CONFIGURE_ARGS+=	--with-system-zlib
+.include "../../devel/zlib/buildlink3.mk"
+.else
+CONFIGURE_ARGS+=	--without-system-zlib
+.endif
+.include "../../lang/python/application.mk"
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
