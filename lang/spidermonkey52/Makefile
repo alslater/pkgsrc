@@ -30,6 +30,8 @@ CONFIGURE_ARGS+=	--disable-jemalloc
 CONFIGURE_ARGS+=	--disable-debug-symbols
 CONFIGURE_ARGS+=	--enable-strip
 
+CFLAGS+=		-Wno-format-overflow
+
 CONFIGURE_DIRS=		js/src
 
 PKGCONFIG_OVERRIDE+=	js/src/ctypes/libffi/libffi.pc.in
