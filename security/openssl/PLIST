@@ -3553,6 +3553,7 @@ man/man3/X509_check_ip.3
 man/man3/X509_check_ip_asc.3
 man/man3/X509_check_issued.3
 man/man3/X509_check_private_key.3
+man/man3/X509_check_purpose.3
 man/man3/X509_cmp.3
 man/man3/X509_cmp_current_time.3
 man/man3/X509_cmp_time.3
@@ -7516,6 +7517,7 @@ share/doc/openssl/html/man3/X509_check_ip.html
 share/doc/openssl/html/man3/X509_check_ip_asc.html
 share/doc/openssl/html/man3/X509_check_issued.html
 share/doc/openssl/html/man3/X509_check_private_key.html
+share/doc/openssl/html/man3/X509_check_purpose.html
 share/doc/openssl/html/man3/X509_cmp.html
 share/doc/openssl/html/man3/X509_cmp_current_time.html
 share/doc/openssl/html/man3/X509_cmp_time.html
