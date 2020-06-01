@@ -1,0 +1,14 @@
+$NetBSD$
+
+--- gst-libs/gst/app/Makefile.in.orig	2020-05-16 08:29:45.267303737 +0000
++++ gst-libs/gst/app/Makefile.in
+@@ -473,7 +473,8 @@ lib_LTLIBRARIES = libgstapp-@GST_MAJORMI
+ glib_enum_define = GST_APP
+ glib_gen_prefix = __gst_app
+ glib_gen_basename = gstapp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++H := \#
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ built_sources = gstapp-marshal.c
+ built_headers = gstapp-marshal.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)

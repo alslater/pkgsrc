@@ -1,0 +1,14 @@
+$NetBSD$
+
+--- gst/tcp/Makefile.in.orig	2020-05-16 08:29:45.629622663 +0000
++++ gst/tcp/Makefile.in
+@@ -471,7 +471,8 @@ glib_enum_headers = gsttcp.h
+ glib_enum_define = GST_TCP
+ glib_gen_prefix = gst_tcp
+ glib_gen_basename = gsttcp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++H := \#
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ built_sources = gsttcp-enumtypes.c gsttcp-marshal.c
+ built_headers = gsttcp-enumtypes.h gsttcp-marshal.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)

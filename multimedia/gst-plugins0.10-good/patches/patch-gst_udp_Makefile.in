@@ -1,0 +1,14 @@
+$NetBSD$
+
+--- gst/udp/Makefile.in.orig	2012-02-21 00:09:02.000000000 +0000
++++ gst/udp/Makefile.in
+@@ -498,7 +498,8 @@ glib_enum_headers = gstudp.h
+ glib_enum_define = GST_UDP
+ glib_gen_prefix = gst_udp
+ glib_gen_basename = gstudp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++H := \#
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ built_sources = gstudp-enumtypes.c gstudp-marshal.c
+ built_headers = gstudp-enumtypes.h gstudp-marshal.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)

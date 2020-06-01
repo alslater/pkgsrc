@@ -1,0 +1,14 @@
+$NetBSD$
+
+--- gst/playback/Makefile.in.orig	2020-05-16 08:29:45.602064704 +0000
++++ gst/playback/Makefile.in
+@@ -569,7 +569,8 @@ noinst_HEADERS = \
+ BUILT_SOURCES = $(built_headers) $(built_sources)
+ EXTRA_DIST = gstplay-marshal.list
+ CLEANFILES = $(BUILT_SOURCES)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++H := \#
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+ 
