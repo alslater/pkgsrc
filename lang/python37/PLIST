@@ -2706,6 +2706,9 @@ lib/python${PY_VER_SUFFIX}/test/dataclass_module_2.pyo
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2_str.py
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2_str.pyc
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2_str.pyo
+lib/python${PY_VER_SUFFIX}/test/dataclass_textanno.py
+lib/python${PY_VER_SUFFIX}/test/dataclass_textanno.pyc
+lib/python${PY_VER_SUFFIX}/test/dataclass_textanno.pyo
 lib/python${PY_VER_SUFFIX}/test/datetimetester.py
 lib/python${PY_VER_SUFFIX}/test/datetimetester.pyc
 lib/python${PY_VER_SUFFIX}/test/datetimetester.pyo
