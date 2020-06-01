@@ -2744,6 +2744,9 @@ lib/python${PY_VER_SUFFIX}/test/dataclass_module_2.pyc
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2.pyo
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2_str.py
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2_str.pyc
+lib/python${PY_VER_SUFFIX}/test/dataclass_textanno.py
+lib/python${PY_VER_SUFFIX}/test/dataclass_textanno.pyc
+lib/python${PY_VER_SUFFIX}/test/dataclass_textanno.pyo
 lib/python${PY_VER_SUFFIX}/test/dataclass_module_2_str.pyo
 lib/python${PY_VER_SUFFIX}/test/datetimetester.py
 lib/python${PY_VER_SUFFIX}/test/datetimetester.pyc
@@ -3972,6 +3975,9 @@ lib/python${PY_VER_SUFFIX}/test/test_importlib/__main__.pyo
 lib/python${PY_VER_SUFFIX}/test/test_importlib/abc.py
 lib/python${PY_VER_SUFFIX}/test/test_importlib/abc.pyc
 lib/python${PY_VER_SUFFIX}/test/test_importlib/abc.pyo
+lib/python${PY_VER_SUFFIX}/test/test_importlib/stubs.py
+lib/python${PY_VER_SUFFIX}/test/test_importlib/stubs.pyc
+lib/python${PY_VER_SUFFIX}/test/test_importlib/stubs.pyo
 lib/python${PY_VER_SUFFIX}/test/test_importlib/builtin/__init__.py
 lib/python${PY_VER_SUFFIX}/test/test_importlib/builtin/__init__.pyc
 lib/python${PY_VER_SUFFIX}/test/test_importlib/builtin/__init__.pyo
