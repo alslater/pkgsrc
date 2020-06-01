@@ -1,0 +1,34 @@
+$NetBSD$
+
+--- gst-libs/gst/tag/Makefile.in.orig	2019-09-23 10:02:36.000000000 +0000
++++ gst-libs/gst/tag/Makefile.in
+@@ -17,12 +17,13 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+ #glib_gen_basename=colorbalance
+ #glib_gen_decl_banner=GST_EXPORT
+-#glib_gen_decl_include=\#include <gst/foo/foo-prelude.h>
++#glib_gen_decl_include=$(H)include <gst/foo/foo-prelude.h>
+ 
+ 
+ 
+@@ -670,12 +671,12 @@ glib_enum_define = GST_TAG
+ glib_gen_prefix = gst_tag
+ glib_gen_basename = tag
+ glib_gen_decl_banner = GST_TAG_API
+-glib_gen_decl_include = \#include <gst/tag/tag-prelude.h>
++glib_gen_decl_include = $(H)include <gst/tag/tag-prelude.h>
+ glib_enum_headers = tag.h gsttagdemux.h
+ built_sources = tag-enumtypes.c
+ built_headers = tag-enumtypes.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ libgsttaginclude_HEADERS = \
+ 	tag.h tag-prelude.h gsttagdemux.h gsttagmux.h xmpwriter.h
+ 

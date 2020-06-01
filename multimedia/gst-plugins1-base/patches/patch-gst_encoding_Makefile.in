@@ -1,0 +1,22 @@
+$NetBSD$
+
+--- gst/encoding/Makefile.in.orig	2019-09-23 10:02:37.000000000 +0000
++++ gst/encoding/Makefile.in
+@@ -24,7 +24,7 @@
+ #glib_gen_decl_banner=GST_EXPORT
+ #glib_gen_decl_include=\#include <gst/foo/foo-prelude.h>
+ 
+-
++H := \#
+ VPATH = @srcdir@
+ am__is_gnu_make = { \
+   if test -z '$(MAKELEVEL)'; then \
+@@ -628,7 +628,7 @@ noinst_HEADERS = \
+ 	gstsmartencoder.h	\
+ 	gststreamcombinerpad.h
+ 
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ all: all-am
+ 
+ .SUFFIXES:

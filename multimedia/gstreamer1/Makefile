@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.46 2019/11/14 15:25:31 wiz Exp $
 
-DISTNAME=	gstreamer-1.16.1
+DISTNAME=	gstreamer-1.16.2
 PKGNAME=	${DISTNAME:S/gstreamer/gstreamer1/}
 CATEGORIES=	multimedia
 MASTER_SITES=	https://gstreamer.freedesktop.org/src/gstreamer/
@@ -20,6 +20,8 @@ FLEX_REQD=		2.5.31
 
 .include "options.mk"
 
+LDFLAGS.SunOS+=	-lsocket
+
 PKGCONFIG_OVERRIDE+=	pkgconfig/gstreamer-controller.pc.in
 PKGCONFIG_OVERRIDE+=	pkgconfig/gstreamer-check.pc.in
 PKGCONFIG_OVERRIDE+=	pkgconfig/gstreamer-net.pc.in
@@ -28,3 +30,4 @@ PKGCONFIG_OVERRIDE+=	pkgconfig/gstreamer-base.pc.in
 
 .include "../../devel/glib2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
+

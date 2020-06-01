@@ -1,0 +1,30 @@
+$NetBSD$
+
+--- gst-libs/gst/rtp/Makefile.in.orig	2019-09-23 10:02:36.000000000 +0000
++++ gst-libs/gst/rtp/Makefile.in
+@@ -17,12 +17,13 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+ #glib_gen_basename=colorbalance
+ #glib_gen_decl_banner=GST_EXPORT
+-#glib_gen_decl_include=\#include <gst/foo/foo-prelude.h>
++#glib_gen_decl_include=$(H)include <gst/foo/foo-prelude.h>
+ 
+ 
+ 
+@@ -669,8 +670,8 @@ glib_enum_define = gst_rtp
+ glib_enum_headers = $(libgstrtpinclude_HEADERS)
+ glib_gen_basename = gstrtp
+ glib_gen_decl_banner = GST_RTP_API
+-glib_gen_decl_include = \#include <gst/rtp/rtp-prelude.h>
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++glib_gen_decl_include = $(H)include <gst/rtp/rtp-prelude.h>
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstRtp-@GST_API_VERSION@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstrtpinclude_HEADERS)) \

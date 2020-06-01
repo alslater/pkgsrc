@@ -1,0 +1,34 @@
+$NetBSD$
+
+--- gst-libs/gst/app/Makefile.in.orig	2019-09-23 10:02:35.000000000 +0000
++++ gst-libs/gst/app/Makefile.in
+@@ -17,12 +17,13 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
++H := \#
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+ #glib_gen_basename=colorbalance
+ #glib_gen_decl_banner=GST_EXPORT
+-#glib_gen_decl_include=\#include <gst/foo/foo-prelude.h>
++#glib_gen_decl_include=$(H)include <gst/foo/foo-prelude.h>
+ 
+ 
+ 
+@@ -608,12 +609,12 @@ glib_enum_define = GST_APP
+ glib_gen_prefix = __gst_app
+ glib_gen_basename = app
+ glib_gen_decl_banner = GST_APP_API
+-glib_gen_decl_include = \#include <gst/app/app-prelude.h>
++glib_gen_decl_include = $(H)include <gst/app/app-prelude.h>
+ glib_enum_headers = gstappsrc.h
+ built_sources = app-enumtypes.c
+ built_headers = app-enumtypes.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ libgstapp_@GST_API_VERSION@_la_SOURCES = gstappsrc.c gstappsink.c
+ nodist_libgstapp_@GST_API_VERSION@_la_SOURCES = $(BUILT_SOURCES)
+ libgstapp_@GST_API_VERSION@_la_CFLAGS = $(GST_PLUGINS_BASE_CFLAGS) \
