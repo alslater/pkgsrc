@@ -1,45 +1,27 @@
 $NetBSD$
 
---- gcc/config/i386/i386.c.orig	2019-02-14 07:38:52.000000000 +0000
+--- gcc/config/i386/i386.c.orig	2020-03-04 08:30:00.000000000 +0000
 +++ gcc/config/i386/i386.c
-@@ -819,6 +819,9 @@ static unsigned int ix86_minimum_incomin
- 
- static enum calling_abi ix86_function_abi (const_tree);
+@@ -121,6 +121,8 @@ static void ix86_emit_restore_reg_using_
+    : (mode) == DImode ? 3					\
+    : 4)
  
 +static int ix86_nsaved_args (void);
-+static rtx pro_epilogue_adjust_stack (rtx, rtx, rtx, int, bool);
-+
- 
- #ifndef SUBTARGET32_DEFAULT_CPU
- #define SUBTARGET32_DEFAULT_CPU "i386"
-@@ -4444,7 +4447,7 @@ ix86_option_override_internal (bool main
-     }
++static rtx_def* pro_epilogue_adjust_stack (rtx, rtx, rtx, int, bool);
  
-   /* Keep nonleaf frame pointers.  */
--  if (opts->x_flag_omit_frame_pointer)
-+  if (0)
-     opts->x_target_flags &= ~MASK_OMIT_LEAF_FRAME_POINTER;
-   else if (TARGET_OMIT_LEAF_FRAME_POINTER_P (opts->x_target_flags))
-     opts->x_flag_omit_frame_pointer = 1;
-@@ -4493,6 +4496,9 @@ ix86_option_override_internal (bool main
+ /* Set by -mtune.  */
+ const struct processor_costs *ix86_tune_cost = NULL;
+@@ -4385,6 +4387,9 @@ ix86_option_override_internal (bool main
        &= ~((OPTION_MASK_ISA_BMI | OPTION_MASK_ISA_BMI2 | OPTION_MASK_ISA_TBM)
  	   & ~opts->x_ix86_isa_flags_explicit);
  
-+  if (!TARGET_64BIT && TARGET_SAVE_ARGS)
-+    warning (0, "-msave-args is ignored in 32-bit mode");
++  if (!TARGET_64BIT_P (opts->x_ix86_isa_flags) && TARGET_SAVE_ARGS)
++    error ("-msave-args makes no sense in the 32-bit mode");
 +
    /* Validate -mpreferred-stack-boundary= value or default it to
       PREFERRED_STACK_BOUNDARY_DEFAULT.  */
    ix86_preferred_stack_boundary = PREFERRED_STACK_BOUNDARY_DEFAULT;
-@@ -6747,6 +6753,7 @@ ix86_function_regparm (const_tree type,
- 	 and callee not, or vice versa.  Instead look at whether the callee
- 	 is optimized or not.  */
-       if (target && opt_for_fn (target->decl, optimize)
-+          && !flag_strict_calling_conventions
- 	  && !(profile_flag && !flag_fentry))
- 	{
- 	  cgraph_local_info *i = &target->local;
-@@ -10769,7 +10776,7 @@ ix86_can_use_return_insn_p (void)
+@@ -10681,7 +10686,7 @@ ix86_can_use_return_insn_p (void)
  
    struct ix86_frame &frame = cfun->machine->frame;
    return (frame.stack_pointer_offset == UNITS_PER_WORD
@@ -48,17 +30,17 @@ $NetBSD$
  }
  
  /* Value should be nonzero if functions must have frame pointers.
-@@ -10793,6 +10800,9 @@ ix86_frame_pointer_required (void)
+@@ -10705,6 +10710,9 @@ ix86_frame_pointer_required (void)
    if (TARGET_32BIT_MS_ABI && cfun->calls_setjmp)
      return true;
  
-+  if (TARGET_64BIT && TARGET_SAVE_ARGS)
++  if (TARGET_SAVE_ARGS)
 +    return true;
 +
    /* Win64 SEH, very large frames need a frame-pointer as maximum stack
       allocation is 4GB.  */
    if (TARGET_64BIT_MS_ABI && get_frame_size () > SEH_MAX_FRAME_SIZE)
-@@ -11718,6 +11728,7 @@ ix86_compute_frame_layout (void)
+@@ -11630,6 +11638,7 @@ ix86_compute_frame_layout (void)
  
    frame->nregs = ix86_nsaved_regs ();
    frame->nsseregs = ix86_nsaved_sseregs ();
@@ -66,21 +48,21 @@ $NetBSD$
  
    /* 64-bit MS ABI seem to require stack alignment to be always 16,
       except for function prologues, leaf functions and when the defult
-@@ -11786,7 +11797,8 @@ ix86_compute_frame_layout (void)
+@@ -11698,7 +11707,8 @@ ix86_compute_frame_layout (void)
      }
  
    frame->save_regs_using_mov
 -    = (TARGET_PROLOGUE_USING_MOVE && m->use_fast_prologue_epilogue
 +    = ((TARGET_FORCE_SAVE_REGS_USING_MOV ||
-+       (TARGET_PROLOGUE_USING_MOVE && m->use_fast_prologue_epilogue))
++	(TARGET_PROLOGUE_USING_MOVE && m->use_fast_prologue_epilogue))
         /* If static stack checking is enabled and done with probes,
  	  the registers need to be saved before allocating the frame.  */
         && flag_stack_check != STATIC_BUILTIN_STACK_CHECK);
-@@ -11806,6 +11818,13 @@ ix86_compute_frame_layout (void)
+@@ -11718,6 +11728,13 @@ ix86_compute_frame_layout (void)
    /* The traditional frame pointer location is at the top of the frame.  */
    frame->hard_frame_pointer_offset = offset;
  
-+  if (TARGET_64BIT && TARGET_SAVE_ARGS)
++  if (TARGET_SAVE_ARGS)
 +    {
 +      offset += frame->nmsave_args * UNITS_PER_WORD;
 +      offset += (frame->nmsave_args % 2) * UNITS_PER_WORD;
@@ -90,7 +72,7 @@ $NetBSD$
    /* Register save area */
    offset += frame->nregs * UNITS_PER_WORD;
    frame->reg_save_offset = offset;
-@@ -11944,7 +11963,7 @@ ix86_compute_frame_layout (void)
+@@ -11856,7 +11873,7 @@ ix86_compute_frame_layout (void)
    /* Size prologue needs to allocate.  */
    to_allocate = offset - frame->sse_reg_save_offset;
  
@@ -99,7 +81,7 @@ $NetBSD$
        || (TARGET_64BIT && to_allocate >= HOST_WIDE_INT_C (0x80000000))
        /* If stack clash probing needs a loop, then it needs a
  	 scratch register.  But the returned register is only guaranteed
-@@ -11963,7 +11982,11 @@ ix86_compute_frame_layout (void)
+@@ -11875,7 +11892,11 @@ ix86_compute_frame_layout (void)
      {
        frame->red_zone_size = to_allocate;
        if (frame->save_regs_using_mov)
@@ -112,10 +94,12 @@ $NetBSD$
        if (frame->red_zone_size > RED_ZONE_SIZE - RED_ZONE_RESERVE)
  	frame->red_zone_size = RED_ZONE_SIZE - RED_ZONE_RESERVE;
      }
-@@ -11994,6 +12017,20 @@ ix86_compute_frame_layout (void)
+@@ -11906,6 +11927,23 @@ ix86_compute_frame_layout (void)
  	  frame->hard_frame_pointer_offset = frame->stack_pointer_offset - 128;
  	}
      }
++
++
 +  if (getenv("DEBUG_FRAME_STUFF") != NULL)
 +    {
 +      printf("nmsave_args: %d\n", frame->nmsave_args);
@@ -129,15 +113,16 @@ $NetBSD$
 +      printf("arg_save_offset: %llx\n", frame->arg_save_offset);
 +      printf("reg_save_offset: %llx\n", frame->reg_save_offset);
 +      printf("sse_reg_save_offset: %llx\n", frame->sse_reg_save_offset);
++
 +    }
  }
  
  /* This is semi-inlined memory_address_length, but simplified
-@@ -12210,6 +12247,23 @@ ix86_emit_save_regs (void)
+@@ -12122,6 +12160,24 @@ ix86_emit_save_regs (void)
    unsigned int regno;
    rtx_insn *insn;
  
-+  if (TARGET_64BIT && TARGET_SAVE_ARGS)
++  if (TARGET_SAVE_ARGS)
 +    {
 +      int i;
 +      int nsaved = ix86_nsaved_args ();
@@ -154,10 +139,11 @@ $NetBSD$
 +				   GEN_INT (-UNITS_PER_WORD), -1, false);
 +    }
 +
++
    for (regno = FIRST_PSEUDO_REGISTER - 1; regno-- > 0; )
      if (GENERAL_REGNO_P (regno) && ix86_save_reg (regno, true, true))
        {
-@@ -12296,10 +12350,30 @@ ix86_emit_save_reg_using_mov (machine_mo
+@@ -12208,9 +12264,30 @@ ix86_emit_save_reg_using_mov (machine_mo
  /* Emit code to save registers using MOV insns.
     First register is stored at CFA - CFA_OFFSET.  */
  static void
@@ -166,8 +152,8 @@ $NetBSD$
  {
    unsigned int regno;
 +  HOST_WIDE_INT cfa_offset = frame->arg_save_offset;
- 
-+  if (TARGET_64BIT && TARGET_SAVE_ARGS)
++
++  if (TARGET_SAVE_ARGS)
 +    {
 +      int i;
 +      int nsaved = ix86_nsaved_args ();
@@ -186,10 +172,10 @@ $NetBSD$
 +    }
 +
 +  cfa_offset = frame->reg_save_offset;
+ 
    for (regno = 0; regno < FIRST_PSEUDO_REGISTER; regno++)
      if (GENERAL_REGNO_P (regno) && ix86_save_reg (regno, true, true))
-       {
-@@ -13784,7 +13858,7 @@ ix86_expand_prologue (void)
+@@ -13696,7 +13773,7 @@ ix86_expand_prologue (void)
  	}
      }
  
@@ -198,7 +184,15 @@ $NetBSD$
    sse_registers_saved = (frame.nsseregs == 0);
    save_stub_call_needed = (m->call_ms2sysv);
    gcc_assert (sse_registers_saved || !save_stub_call_needed);
-@@ -13837,7 +13911,7 @@ ix86_expand_prologue (void)
+@@ -13716,6 +13793,7 @@ ix86_expand_prologue (void)
+ 	{
+ 	  ix86_emit_save_regs ();
+ 	  int_registers_saved = true;
++
+ 	  gcc_assert (m->fs.sp_offset == frame.reg_save_offset);
+ 	}
+ 
+@@ -13749,7 +13827,7 @@ ix86_expand_prologue (void)
  	       && (! TARGET_STACK_PROBE
  		   || frame.stack_pointer_offset < CHECK_STACK_LIMIT))
  	{
@@ -207,7 +201,7 @@ $NetBSD$
  	  int_registers_saved = true;
  	}
      }
-@@ -14129,7 +14203,7 @@ ix86_expand_prologue (void)
+@@ -14041,7 +14119,7 @@ ix86_expand_prologue (void)
      }
  
    if (!int_registers_saved)
@@ -216,11 +210,27 @@ $NetBSD$
    if (!sse_registers_saved)
      ix86_emit_save_sse_regs_using_mov (frame.sse_reg_save_offset);
    else if (save_stub_call_needed)
-@@ -14778,6 +14852,35 @@ ix86_expand_epilogue (int style)
+@@ -14076,6 +14154,7 @@ ix86_expand_prologue (void)
+      relative to the value of the stack pointer at the end of the function
+      prologue, and moving instructions that access redzone area via frame
+      pointer inside push sequence violates this assumption.  */
++  /* XXX: We may wish to do this when SAVE_ARGS in general */
+   if (frame_pointer_needed && frame.red_zone_size)
+     emit_insn (gen_memory_blockage ());
+ 
+@@ -14459,6 +14538,7 @@ ix86_expand_epilogue (int style)
+ 
+   /* See the comment about red zone and frame
+      pointer usage in ix86_expand_prologue.  */
++  /* XXX: We may want to do this when SAVE_ARGS in general */
+   if (frame_pointer_needed && frame.red_zone_size)
+     emit_insn (gen_memory_blockage ());
+ 
+@@ -14690,6 +14770,36 @@ ix86_expand_epilogue (int style)
        ix86_emit_restore_regs_using_pop ();
      }
  
-+  if (TARGET_64BIT && TARGET_SAVE_ARGS) {
++  if (TARGET_SAVE_ARGS) {
 +    /*
 +     * For each saved argument, emit a restore note, to make sure it happens
 +     * correctly within the shrink wrapping (I think).
@@ -249,10 +259,11 @@ $NetBSD$
 +    gcc_assert(m->fs.fp_valid);
 +  }
 +
++
    /* If we used a stack pointer and haven't already got rid of it,
       then do so now.  */
    if (m->fs.fp_valid)
-@@ -15831,6 +15934,18 @@ ix86_cannot_force_const_mem (machine_mod
+@@ -15743,6 +15853,19 @@ ix86_cannot_force_const_mem (machine_mod
    return !ix86_legitimate_constant_p (mode, x);
  }
  
@@ -262,11 +273,12 @@ $NetBSD$
 +static int
 +ix86_nsaved_args (void)
 +{
-+  if (TARGET_64BIT && TARGET_SAVE_ARGS)
++  if (TARGET_SAVE_ARGS)
 +    return crtl->args.info.regno - cfun->returns_struct;
 +  else
 +    return 0;
 +}
++
 +
  /*  Nonzero if the symbol is marked as dllimport, or as stub-variable,
      otherwise zero.  */

@@ -6,9 +6,9 @@ BUILDLINK_TREE+=	gcc8-libs
 GCC8_LIBS_BUILDLINK3_MK:=
 
 .if !empty(USE_PKGSRC_GCC_RUNTIME:M[Yy][Ee][Ss])
-BUILDLINK_API_DEPENDS.gcc8-libs+=	gcc8-libs>=8.3.0
+BUILDLINK_API_DEPENDS.gcc8-libs+=	gcc8-libs>=8.4.0
 .else
-BUILDLINK_API_DEPENDS.gcc8-libs+=	{gcc8,gcc8-libs}>=8.3.0
+BUILDLINK_API_DEPENDS.gcc8-libs+=	{gcc8,gcc8-libs}>=8.4.0
 .endif
 BUILDLINK_PKGSRCDIR.gcc8-libs=		../../lang/gcc8-libs
 BUILDLINK_DEPMETHOD.gcc8-libs?=		full

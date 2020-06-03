@@ -5,7 +5,7 @@ GCC_PKGNAME=		gcc8
 
 DISTNAME=	gcc-${GCC8_DIST_VERSION}
 PKGNAME=	${GCC_PKGNAME}-${GCC8_DIST_VERSION}
-PKGREVISION=	2
+PKGREVISION=	1
 ## When bumping the PKGREVISION of this package the PKGREVISION of
 ## lang/gcc8-libs needs to be bump to be at least 1 more than the
 ## PKGREVISION of this package!
@@ -24,7 +24,7 @@ EXTRACT_ONLY=		${DEFAULT_DISTFILES}
 NOT_FOR_PLATFORM=	Interix-*-*
 
 USE_LANGUAGES=		c99 c++
-USE_TOOLS+=		gmake makeinfo sed:run tar:build
+USE_TOOLS+=		gmake makeinfo sed:run tar:build python:build
 USE_TOOLS.NetBSD+=	gsed
 
 GNU_CONFIGURE=		yes
@@ -41,6 +41,15 @@ CONFIGURE_ARGS+=	--disable-libstdcxx-pch
 
 UNLIMIT_RESOURCES+=	datasize
 UNLIMIT_RESOURCES+=	stacksize
+
+FILES_SUBST+=		GCC8_DIST_VERSION=${GCC8_DIST_VERSION}
+FILES_SUBST+=		MACHINE_GNU_PLATFORM=${MACHINE_GNU_PLATFORM}
+
+SUBST_CLASSES+=		vars
+SUBST_MESSAGE.vars=	Setting target machine name path in ${SUBST_FILES.vars}
+SUBST_STAGE.vars=	pre-configure
+SUBST_FILES.vars=	gcc/Makefile.in
+SUBST_VARS.vars=	MACHINE_GNU_PLATFORM
 
 CHECK_PORTABILITY_SKIP+=	contrib/*
 
@@ -198,7 +207,7 @@ CONFIGURE_ARGS+=	--with-system-zlib
 .else
 CONFIGURE_ARGS+=	--without-system-zlib
 .endif
-.include "../../lang/python/application.mk"
+#.include "../../lang/python/application.mk"
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

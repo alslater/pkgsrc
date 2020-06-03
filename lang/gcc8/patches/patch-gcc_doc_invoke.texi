@@ -1,0 +1,15 @@
+$NetBSD$
+
+--- gcc/doc/invoke.texi.orig	2020-03-04 08:30:00.000000000 +0000
++++ gcc/doc/invoke.texi
+@@ -14628,6 +14628,10 @@ dynamically linked.  This is the default
+ Generate code for the large code model.  This makes no assumptions about
+ addresses and sizes of sections.  Programs can be statically linked only.
+ 
++@item -msave-args
++@opindex msave-args
++Save integer-sized arguments on the stack on function entry.
++
+ @item -mstrict-align
+ @opindex mstrict-align
+ Avoid generating memory accesses that may not be aligned on a natural object

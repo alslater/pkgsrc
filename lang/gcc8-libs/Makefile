@@ -8,7 +8,7 @@ PKGNAME=	${GCC_PKGNAME}-libs-${GCC8_DIST_VERSION}
 
 ## The PKGREVISION of this package needs to be at least 1 more than the
 ## PKGREVISION of the lang/gcc8 package so that with the dependence pattern
-## '{gcc8,gcc8-libs}>=8.2.*' pkg_add will choose gcc8-libs over gcc8.
+## '{gcc8,gcc8-libs}>=8.4.*' pkg_add will choose gcc8-libs over gcc8.
 PKGREVISION=	1
 
 CATEGORIES=	lang
