@@ -1,20 +1,21 @@
-# $NetBSD: Makefile,v 1.127 2019/11/04 21:43:37 rillig Exp $
+# $NetBSD: Makefile,v 1.133 2020/06/02 08:34:35 adam Exp $
 
-DISTNAME=	icu4c-64_2-src
+DISTNAME=	icu4c-67_1-src
 PKGNAME=	${DISTNAME:S/4c//:S/-src//:S/_/./g}
-PKGREVISION=	1
 CATEGORIES=	textproc
-MASTER_SITES=	http://download.icu-project.org/files/icu4c/${PKGVERSION_NOREV}/
+MASTER_SITES=	${MASTER_SITE_GITHUB:=unicode-org/}
 EXTRACT_SUFX=	.tgz
+GITHUB_PROJECT=	icu
+GITHUB_RELEASE=	release-67-1
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://www.icu-project.org/
+HOMEPAGE=	http://site.icu-project.org/
 COMMENT=	Robust and full-featured Unicode services
 LICENSE=	mit
 
 WRKSRC=			${WRKDIR}/icu/source
 USE_LANGUAGES=		c99 c++
-USE_TOOLS+=		gmake
+USE_TOOLS+=		gmake pkg-config
 GCC_REQD+=		4.8
 TEST_TARGET=		check
 UNLIMIT_RESOURCES+=	datasize
@@ -23,6 +24,8 @@ CONFIGURE_ARGS+=	--enable-static
 CONFIGURE_ENV+=		U_MAKE=${TOOLS_GMAKE}
 
 CHECK_SSP_SKIP=		lib/libicudata.so*
+
+PYTHON_FOR_BUILD_ONLY=	tool
 
 .include "../../mk/pthread.buildlink3.mk"
 
@@ -93,12 +96,7 @@ PLIST_SUBST+=		MH_NAME=mh-qnx
 PLIST_SUBST+=		MH_NAME=mh-unknown
 .endif
 
-PKGCONFIG_OVERRIDE+=		config/icu-i18n.pc
-PKGCONFIG_OVERRIDE+=		config/icu-io.pc
-PKGCONFIG_OVERRIDE+=		config/icu-le.pc
-PKGCONFIG_OVERRIDE+=		config/icu-lx.pc
-PKGCONFIG_OVERRIDE+=		config/icu-uc.pc
-PKGCONFIG_OVERRIDE+=		config/icu.pc
+PKGCONFIG_OVERRIDE+=		config/icu*.pc
 PKGCONFIG_OVERRIDE_STAGE=	post-build
 
 # work around ICU-20533 (build failure on big endian machines)
