@@ -1,9 +1,9 @@
-$NetBSD: distinfo,v 1.6 2020/02/24 16:02:40 adam Exp $
+$NetBSD: distinfo,v 1.12 2020/06/03 08:42:41 adam Exp $
 
-SHA1 (node-v12.16.1.tar.gz) = 60ae368b800b3f4080eb0858f00b1138a83db159
-RMD160 (node-v12.16.1.tar.gz) = 177740c7bde6940bcd260c10be365ce2081778ec
-SHA512 (node-v12.16.1.tar.gz) = 117908922565a86a15f55456e6b62b2d826db175189b03b3890e04d7d65388ccae88b9b6ddc97e700e0821b60b40e3a658eabf17251c4e89ef84d506b0c3d84d
-Size (node-v12.16.1.tar.gz) = 52290732 bytes
+SHA1 (node-v12.18.0.tar.gz) = 64ae33910c22fbca45979944b7bb01e6fd72788d
+RMD160 (node-v12.18.0.tar.gz) = d300996ae8390687a0011595f02f25bc10eb815d
+SHA512 (node-v12.18.0.tar.gz) = fc47292b7bb13996e6162261ae3341be2414f32b0a76c5d73d3404eb4439bbdbf9415301270b52507b38bc28b431690ba026ab399f39ff1147a9719cb294692f
+Size (node-v12.18.0.tar.gz) = 52416819 bytes
 SHA1 (patch-common.gypi) = a3fa3b5b974f910b3c8fea640ded4dca262e1ba8
 SHA1 (patch-deps_cares_cares.gyp) = 22b44f2ac59963f694dfe4f4585e08960b3dec32
 SHA1 (patch-deps_uv_common.gypi) = d38a9c8d9e3522f15812aec2f5b1e1e636d4bab3
@@ -17,10 +17,9 @@ SHA1 (patch-deps_v8_src_compiler_types.h) = 2a212282ab9d71e98ae56827fdb1d9778a60
 SHA1 (patch-deps_v8_src_zone_zone.h) = 651b49d242dac8f713cccc101147ccf61f828ecb
 SHA1 (patch-deps_v8_tools_run-llprof.sh) = 39aa3faf77492ef8dd35b411b7b0e4605b469af3
 SHA1 (patch-node.gypi) = 4a104dba6c22702211009bc60a6be6f87554e2fa
-SHA1 (patch-src_cares__wrap.cc) = a26a162f130468cbc0650a33b27b71377d273704
+SHA1 (patch-src_cares__wrap.cc) = 76a56a757ccaa81bb744890253e694333d66cb73
 SHA1 (patch-src_inspector__agent.cc) = 2ec2a7be459648700488096f467a4ae6af5a9d91
 SHA1 (patch-src_node__postmortem__metadata.cc) = 9938482d724ad6636af5dc3fa719ec26ed8539ff
-SHA1 (patch-tools_gyp_pylib_gyp_common.py) = bee542fb268000fca1709429e5e3053fcfb085d1
 SHA1 (patch-tools_gyp_pylib_gyp_generator_make.py) = be3cc1aaa85c3d59b6f2758df813cb5ad8d8f74e
 SHA1 (patch-tools_gyp_pylib_gyp_xcode__emulation.py) = 15937c419f3226ab280c7bcd5d726773cb5add57
 SHA1 (patch-tools_install.py) = 8058eb63387971b97a1c3573d1875befeb873e77

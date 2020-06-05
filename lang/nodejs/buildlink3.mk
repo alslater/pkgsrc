@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.8 2020/01/24 18:55:49 adam Exp $
+# $NetBSD: buildlink3.mk,v 1.12 2020/06/02 08:22:45 adam Exp $
 
 BUILDLINK_TREE+=	nodejs
 
@@ -6,7 +6,7 @@ BUILDLINK_TREE+=	nodejs
 NODEJS_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.nodejs+=	nodejs>=10
-BUILDLINK_ABI_DEPENDS.nodejs?=	nodejs>=10.15.3nb2
+BUILDLINK_ABI_DEPENDS.nodejs?=	nodejs>=14.3.0nb1
 BUILDLINK_PKGSRCDIR.nodejs?=	../../lang/nodejs
 
 .include "../../mk/bsd.fast.prefs.mk"
@@ -26,7 +26,7 @@ BUILDLINK_API_DEPENDS.libuv+=	libuv>=1.23
 pkgbase := nodejs
 .include "../../mk/pkg-build-options.mk"
 
-.if !empty(PKG_BUILD_OPTIONS.nodejs:Mopenssl)
+.if ${PKG_BUILD_OPTIONS.nodejs:Mopenssl}
 .  include "../../security/openssl/buildlink3.mk"
 .endif
 
