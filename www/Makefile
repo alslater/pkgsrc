@@ -217,6 +217,7 @@ SUBDIR+=	neon
 SUBDIR+=	netscape
 SUBDIR+=	netsurf
 SUBDIR+=	nghttp2
+SUBDIR+=	nghttp2-tools
 SUBDIR+=	nginx
 SUBDIR+=	nginx-devel
 SUBDIR+=	nostromo
