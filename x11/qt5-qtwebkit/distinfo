@@ -18,6 +18,7 @@ SHA1 (patch-Source_WTF_wtf_InlineASM.h) = 85d7e458bab18723f9c0fa42015b69f34169e7
 SHA1 (patch-Source_WTF_wtf_MathExtras.h) = 7dac41bf3e50944e49c3e3c29d482d2c3300665d
 SHA1 (patch-Source_WTF_wtf_Platform.h) = 73e8b07e8d7e718abe986a12b9f0b903dfcc4765
 SHA1 (patch-Source_WTF_wtf_ThreadIdentifierDataPthreads.cpp) = bfa570aa20e3508c77bbaebed051821a33f36209
+SHA1 (patch-Source_WebCore_dom_Document.cpp) = 02f672ad6d47ca76799583a331d78554f60700ba
 SHA1 (patch-Source_WebCore_page_NavigatorBase.cpp) = e8972f4b703a9ff45ce313609d2540f89064b4ff
 SHA1 (patch-Source_WebCore_platform_graphics_cpu_arm_filters_FELightingNEON.cpp) = dd409929936955ad31b8ec0902067e2f23c054a2
 SHA1 (patch-Source_WebCore_platform_graphics_surfaces_GraphicsSurface.h) = d1d986afd5525143fc786a959240a72167f03352
