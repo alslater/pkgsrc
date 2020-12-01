@@ -1,7 +1,18 @@
 $NetBSD: distinfo,v 1.36 2019/11/14 15:25:31 wiz Exp $
 
-SHA1 (gst-plugins-base-1.16.1.tar.xz) = e906442fd99376ce2384a634637ede9fd8515fc3
-RMD160 (gst-plugins-base-1.16.1.tar.xz) = c199e0f94832fa91347c1532372bba94d0269420
-SHA512 (gst-plugins-base-1.16.1.tar.xz) = ce65b5d63d3ac6c20b051d477d09515bfb1c2e4b10c58346180265bdc4ae44dd9833727b5eea5fe9c409a3cd8874429be23654c7a5c23e881c0e8f9e89fb32c9
-Size (gst-plugins-base-1.16.1.tar.xz) = 3934908 bytes
+SHA1 (gst-plugins-base-1.16.2.tar.xz) = 7c650c99cd02f8ebc66d7b980a6b33663c71a89d
+RMD160 (gst-plugins-base-1.16.2.tar.xz) = 7013e114ed94abe195ae4669a029ea5493015152
+SHA512 (gst-plugins-base-1.16.2.tar.xz) = f28e71bba8ba25d4f18ba3a196f057721151f1ebf1309d808bd6771a3f9a68facfa1970dc4353b6f2fd1e8945edf5272854d328ea11ef399544f8b330f754a42
+Size (gst-plugins-base-1.16.2.tar.xz) = 3939868 bytes
+SHA1 (patch-common_glib-gen.mak) = 91df21010d1b8bbe8c39179d8550a9d598a4bd0c
+SHA1 (patch-common_gst-glib-gen.mak) = 854b7eb7914e75404e81d90df20011c38865f588
 SHA1 (patch-configure) = ccc8c761bf9bae23c97c6085e221d1a387acd651
+SHA1 (patch-gst-libs_gst_app_Makefile.in) = a86ab82ddfee1621b0302da2999ff71a2f391aea
+SHA1 (patch-gst-libs_gst_audio_Makefile.in) = a8331e440b2ad58b24e38cbc9b14ac7ccecb23ef
+SHA1 (patch-gst-libs_gst_gl_Makefile.in) = c46ac09bd997bcd8b346042822ca53121b63c670
+SHA1 (patch-gst-libs_gst_pbutils_Makefile.in) = 507f11c9742df989d2ea92f12fe2774dde8991f6
+SHA1 (patch-gst-libs_gst_rtp_Makefile.in) = ff0f3f04cb01e39fb6f00dff83f67dc73ca1e327
+SHA1 (patch-gst-libs_gst_rtsp_Makefile.in) = 8f1b388631590a6842a1515a631c290dc7de48c9
+SHA1 (patch-gst-libs_gst_tag_Makefile.in) = a3804328c03283b9cfa07062ada84c7313742161
+SHA1 (patch-gst-libs_gst_video_Makefile.in) = 836a844122f663f431063e000d9394a6ce1d04cf
+SHA1 (patch-gst_encoding_Makefile.in) = 1d931416b6a2eb69d61e6bce90cd43f0a5574b44

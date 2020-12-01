@@ -1,0 +1,16 @@
+$NetBSD$
+
+--- gst-libs/gst/audio/Makefile.in.orig	2020-05-16 08:29:45.282227012 +0000
++++ gst-libs/gst/audio/Makefile.in
+@@ -543,8 +543,10 @@ libgstaudio_@GST_MAJORMINOR@_la_LIBADD =
+   $(top_builddir)/gst-libs/gst/interfaces/libgstinterfaces-@GST_MAJORMINOR@.la \
+   $(GST_BASE_LIBS) $(GST_LIBS)
+ 
++H := \#
++
+ libgstaudio_@GST_MAJORMINOR@_la_LDFLAGS = $(GST_LIB_LDFLAGS) $(GST_ALL_LDFLAGS) $(GST_LT_LDFLAGS)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstAudio-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstaudio_@GST_MAJORMINOR@include_HEADERS)) \

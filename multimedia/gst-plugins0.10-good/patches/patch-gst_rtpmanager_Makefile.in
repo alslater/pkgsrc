@@ -1,0 +1,14 @@
+$NetBSD$
+
+--- gst/rtpmanager/Makefile.in.orig	2012-02-21 00:09:01.000000000 +0000
++++ gst/rtpmanager/Makefile.in
+@@ -501,7 +501,8 @@ plugin_LTLIBRARIES = libgstrtpmanager.la
+ glib_enum_define = GST_RTP_BIN
+ glib_gen_prefix = gst_rtp_bin
+ glib_gen_basename = gstrtpbin
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++hash:=\#
++enum_headers=$(foreach h,$(glib_enum_headers),\n$(hash)include \"$(h)\")
+ built_sources = gstrtpbin-marshal.c
+ built_headers = gstrtpbin-marshal.h
+ BUILT_SOURCES = $(built_sources) $(built_headers)

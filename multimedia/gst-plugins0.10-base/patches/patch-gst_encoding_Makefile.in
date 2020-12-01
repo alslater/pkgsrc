@@ -1,0 +1,31 @@
+$NetBSD$
+
+--- gst/encoding/Makefile.in.orig	2012-02-20 23:33:20.000000000 +0000
++++ gst/encoding/Makefile.in
+@@ -18,6 +18,8 @@
+ # these are the variables your Makefile.am should set
+ # the example is based on the colorbalance interface
+ 
+++H := \#
++
+ #glib_enum_headers=$(colorbalance_headers)
+ #glib_enum_define=GST_COLOR_BALANCE
+ #glib_gen_prefix=gst_color_balance
+@@ -440,7 +442,7 @@ infodir = @infodir@
+ install_sh = @install_sh@
+ libdir = @libdir@
+ libexecdir = @libexecdir@
+-localedir = @localedir@
++localedir = /opt/essiell2019/lib/locale
+ localstatedir = @localstatedir@
+ mandir = @mandir@
+ mkdir_p = @mkdir_p@
+@@ -493,7 +495,7 @@ noinst_HEADERS = \
+ BUILT_SOURCES = $(built_headers) $(built_sources)
+ EXTRA_DIST = gstencode-marshal.list
+ CLEANFILES = $(BUILT_SOURCES)
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ all: $(BUILT_SOURCES)
+ 	$(MAKE) $(AM_MAKEFLAGS) all-am
+ 

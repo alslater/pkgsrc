@@ -1,0 +1,14 @@
+$NetBSD$
+
+--- gst-libs/gst/rtsp/Makefile.in.orig	2020-05-16 08:29:45.409032762 +0000
++++ gst-libs/gst/rtsp/Makefile.in
+@@ -517,7 +517,8 @@ glib_gen_prefix = __gst_rtsp
+ glib_enum_define = gst_rtsp
+ glib_enum_headers = gstrtspdefs.h
+ glib_gen_basename = gstrtsp
+-enum_headers = $(foreach h,$(glib_enum_headers),\n\#include \"$(h)\")
++H := \#
++enum_headers = $(foreach h,$(glib_enum_headers),\n$(H)include \"$(h)\")
+ @HAVE_INTROSPECTION_TRUE@BUILT_GIRSOURCES = GstRtsp-@GST_MAJORMINOR@.gir
+ @HAVE_INTROSPECTION_TRUE@gir_headers = $(patsubst %,$(srcdir)/%, \
+ @HAVE_INTROSPECTION_TRUE@	$(libgstrtspinclude_HEADERS)) \
