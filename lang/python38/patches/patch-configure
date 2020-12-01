@@ -4,9 +4,9 @@ Fix linking on Darwin; don't use -stack_size.
 Changes for consistency across pkgsrc platforms.
 Simplify _sysconfigdata to include only platform name.
 
---- configure.orig	2019-10-14 13:34:47.000000000 +0000
+--- configure.orig	2020-09-23 12:36:32.000000000 +0000
 +++ configure
-@@ -9526,7 +9526,6 @@ then
+@@ -9536,7 +9536,6 @@ then
  		# to ensure that tests don't crash
  		# Note: This matches the value of THREAD_STACK_SIZE in
  		# thread_pthread.h
@@ -14,20 +14,20 @@ Simplify _sysconfigdata to include only platform name.
  
  		if test "$enable_framework"
  		then
-@@ -14271,10 +14270,10 @@ _ACEOF
+@@ -14303,10 +14302,10 @@ _ACEOF
  if ac_fn_c_try_compile "$LINENO"; then :
  
  
--if grep noonsees conftest.$ac_objext >/dev/null ; then
-+if strings -a conftest.$ac_objext | grep noonsees >/dev/null ; then
+-if $GREP noonsees conftest.$ac_objext >/dev/null ; then
++if strings -a conftest.$ac_objext | $GREP noonsees >/dev/null ; then
    ax_cv_c_float_words_bigendian=yes
  fi
--if grep seesnoon conftest.$ac_objext >/dev/null ; then
-+if strings -a conftest.$ac_objext | grep seesnoon >/dev/null ; then
+-if $GREP seesnoon conftest.$ac_objext >/dev/null ; then
++if strings -a conftest.$ac_objext | $GREP seesnoon >/dev/null ; then
    if test "$ax_cv_c_float_words_bigendian" = unknown; then
      ax_cv_c_float_words_bigendian=no
    else
-@@ -15160,8 +15159,6 @@ fi
+@@ -15192,8 +15191,6 @@ fi
  
  
  case $ac_sys_system in
@@ -36,7 +36,7 @@ Simplify _sysconfigdata to include only platform name.
      *)
  	EXT_SUFFIX=${SHLIB_SUFFIX};;
  esac
-@@ -15181,11 +15178,7 @@ else
+@@ -15213,11 +15210,7 @@ else
  fi
  
  
