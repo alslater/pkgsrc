@@ -1,9 +1,8 @@
-# $NetBSD: Makefile,v 1.293 2016/10/28 16:10:51 jperkin Exp $
+# $NetBSD: Makefile,v 1.317 2020/02/11 20:40:27 triaxx Exp $
 
-PKGREVISION= 1
 .include "../../mail/postfix/Makefile.common"
 
-COMMENT=	Postfix SMTP server and tools
+COMMENT=	Fast, easy to administer, and secure mail transfer agent
 
 CONFLICTS+=	courier-mta-[0-9]* fastforward>=0.51nb2 sendmail-[0-9]*
 CONFLICTS+=	esmtp>=1.2 nullmailer-[0-9]*
@@ -49,8 +48,8 @@ CONF_FILES_PERMS=	# empty
 
 SUBST_CLASSES+=		paths
 SUBST_FILES.paths=	${WRKDIR}/mailer.conf
-SUBST_SED.paths+=	-e 's,@PREFIX@,${PREFIX},g'
-SUBST_STAGE.paths=	post-patch
+SUBST_VARS.paths=	PREFIX
+SUBST_STAGE.paths=	pre-configure
 
 INSTALLATION_DIRS+=	${LIBEXECDIR} ${METADIR} ${SHLIBDIR} ${EXAMPLEDIR} ${DOCDIR}
 
@@ -68,8 +67,7 @@ do-install:
 .if !empty(PKG_OPTIONS:Msasl)
 	${INSTALL_DATA} ${WRKDIR}/smtpd.conf ${DESTDIR}${EXAMPLEDIR}
 .endif
-	cd ${WRKSRC} && ${SETENV} LD_LIBRARY_PATH=${WRKSRC}/lib sh		\
-		./postfix-install -non-interactive				\
+	cd ${WRKSRC} && ${SH} ./postfix-install -non-interactive \
 		${DESTDIR_INSTALLOPTIONS} config_directory="${EXAMPLEDIR}"
 	${INSTALL_DATA} ${WRKDIR}/mailer.conf \
 		${DESTDIR}${EXAMPLEDIR}/mailer.conf
@@ -77,5 +75,8 @@ do-install:
 		${DESTDIR}${PREFIX}/sbin/qshape
 	${INSTALL_MAN} ${WRKSRC}/man/man1/qshape.1 \
 		${DESTDIR}${PREFIX}/${PKGMANDIR}/man1
+.for dir in ${POSTFIX_QUEUE_SUBDIR}
+	${RMDIR} ${DESTDIR}${POSTFIX_QUEUE_DIR}/${dir}
+.endfor
 
 .include "../../mk/bsd.pkg.mk"

@@ -1,4 +1,4 @@
-# $NetBSD: options.mk,v 1.40 2015/09/08 14:03:04 fhajny Exp $
+# $NetBSD: options.mk,v 1.41 2019/07/16 15:18:28 triaxx Exp $
 
 # Global and legacy options
 
