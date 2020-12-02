@@ -1,11 +1,9 @@
-# $NetBSD: Makefile,v 1.112 2016/12/12 16:17:53 wiz Exp $
-#
-# used by databases/sqlite3-tcl/Makefile
+# $NetBSD: Makefile,v 1.137 2020/11/05 09:06:45 ryoon Exp $
 
-#PKGREVISION= 0
 PKGREVISION= 1
 .include "Makefile.common"
 
+DISTNAME=	sqlite-autoconf-${SQLITE3_DISTVERSION}
 PKGNAME=	sqlite3-${SQLITE3_VERSION}
 CATEGORIES=	databases
 
@@ -15,7 +13,6 @@ COMMENT=	SQL Database Engine in a C Library
 .include "options.mk"
 
 USE_LIBTOOL=		yes
-USE_MULTIARCH=		bin lib
 USE_TOOLS+=		gmake
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--disable-static-shell
@@ -51,6 +48,7 @@ LIBS+=			${BUILDLINK_LDADD.dl}
 LDFLAGS.SCO_SV+=	-lpthread
 .endif
 
+.include "../../mk/pthread.buildlink3.mk"
 .include "../../mk/readline.buildlink3.mk"
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

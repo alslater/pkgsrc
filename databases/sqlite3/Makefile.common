@@ -1,8 +1,15 @@
-# $NetBSD: Makefile.common,v 1.50 2016/10/22 00:18:39 kamil Exp $
+# $NetBSD: Makefile.common,v 1.72 2020/08/19 05:48:37 adam Exp $
+#
+# used by databases/sqlite3/Makefile
+# used by databases/sqlite3-docs/Makefile
+# used by databases/sqlite3-tcl/Makefile
+# used by devel/lemon/Makefile
 
-DISTNAME=	sqlite-autoconf-${SQLITE3_DISTVERSION}
+SQLITE3_DISTVERSION=	3330000
+SQLITE3_VERSION=	3.33.0
 
-HOMEPAGE=	http://www.sqlite.org/
+MASTER_SITES=	http://www.sqlite.org/2020/
+MASTER_SITES+=	http://www.hwaci.com/sw/sqlite/2020/
+
+HOMEPAGE?=	http://www.sqlite.org/
 LICENSE=	public-domain
-
-.include "../../databases/sqlite3/Makefile.version"
