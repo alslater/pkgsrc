@@ -1,4 +1,4 @@
-# $NetBSD: Makefile.common,v 1.33 2019/08/29 01:05:20 taca Exp $
+# $NetBSD: Makefile.common,v 1.39 2020/03/15 22:52:04 adam Exp $
 #
 # when updating to a new release, update ABI depends in
 # the buildlink3.mk file as well, since the plugins' version
@@ -11,7 +11,7 @@
 # used by mail/dovecot2-pgsql/Makefile
 # used by mail/dovecot2-sqlite/Makefile
 
-DISTNAME=	dovecot-2.3.8
+DISTNAME=	dovecot-2.3.10
 CATEGORIES=	mail
 MASTER_SITES=	https://dovecot.org/releases/${PKGVERSION_NOREV:R}/
 
@@ -53,10 +53,6 @@ TEST_TARGET=	check
 # implementation details.
 CONFIGURE_ARGS.SunOS+=	--with-ioloop=poll
 CONFIGURE_ARGS.SunOS+=	--with-notify=none
-
-# Sharing sources between binary and lib triggers libtool bugs
-# mv: rename .deps/auth-stats.Tpo to .deps/auth-stats.Po: No such file or directory
-#MAKE_JOBS_SAFE=	no
 
 .include "options.mk"
 

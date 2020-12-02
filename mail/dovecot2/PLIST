@@ -1,6 +1,7 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.69 2020/03/15 22:52:04 adam Exp $
 bin/doveadm
 bin/doveconf
+bin/dovecot-sysreport
 bin/dsync
 include/dovecot/access-lookup.h
 include/dovecot/acl-api-private.h
@@ -26,7 +27,6 @@ include/dovecot/auth-master-connection.h
 include/dovecot/auth-master.h
 include/dovecot/auth-penalty.h
 include/dovecot/auth-policy.h
-include/dovecot/auth-postfix-connection.h
 include/dovecot/auth-request-handler.h
 include/dovecot/auth-request-stats.h
 include/dovecot/auth-request-var-expand.h
@@ -41,7 +41,6 @@ include/dovecot/backtrace-string.h
 include/dovecot/base32.h
 include/dovecot/base64.h
 include/dovecot/bits.h
-include/dovecot/bloomfilter.h
 include/dovecot/bsearch-insert-pos.h
 include/dovecot/buffer.h
 include/dovecot/byteorder.h
@@ -406,6 +405,7 @@ include/dovecot/mdbox-storage.h
 include/dovecot/mdbox-sync.h
 include/dovecot/mech-otp-skey-common.h
 include/dovecot/mech-plain-common.h
+include/dovecot/mech-scram.h
 include/dovecot/mech.h
 include/dovecot/memarea.h
 include/dovecot/mempool.h
@@ -430,7 +430,6 @@ include/dovecot/mmap-util.h
 include/dovecot/module-context.h
 include/dovecot/module-dir.h
 include/dovecot/mountpoint.h
-include/dovecot/murmurhash3.h
 include/dovecot/mycrypt.h
 include/dovecot/net.h
 include/dovecot/nfs-workarounds.h
@@ -725,6 +724,7 @@ man/man1/doveadm-who.1
 man/man1/doveadm.1
 man/man1/doveconf.1
 man/man1/dovecot-lda.1
+man/man1/dovecot-sysreport.1
 man/man1/dovecot.1
 man/man1/dsync.1
 man/man7/doveadm-search-query.7
@@ -1058,4 +1058,3 @@ share/examples/dovecot/dovecot-openssl.cnf
 share/examples/dovecot/dovecot-sql.conf.ext
 share/examples/dovecot/dovecot.conf
 share/examples/dovecot/mkcert.sh
-@pkgdir etc/dovecot
