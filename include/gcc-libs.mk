@@ -12,6 +12,7 @@
 .if !empty(PKGPATH:Marchivers/bsdtar) \
  || !empty(PKGPATH:Marchivers/pax) \
  || !empty(PKGPATH:Mdevel/binutils) \
+ || !empty(PKGPATH:Mdevel/zlib) \
  || !empty(PKGPATH:Mdevel/gmake) \
  || !empty(PKGPATH:Mdevel/nbpatch) \
  || !empty(PKGPATH:Mjoyent/ctftools) \
