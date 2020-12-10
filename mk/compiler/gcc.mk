@@ -396,6 +396,9 @@ _LANGUAGES.gcc=		# empty
 _LANGUAGES.gcc+=	${LANGUAGES.gcc:M${_lang_}}
 .endfor
 
+_WRAP_EXTRA_ARGS.cc+=	-fcommon
+CWRAPPERS_PREPEND.cc+=	-fcommon
+
 .if !empty(USE_LANGUAGES:Mc99)
 _WRAP_EXTRA_ARGS.CC+=	-std=gnu99
 CWRAPPERS_APPEND.cc+=	-std=gnu99
@@ -976,7 +979,7 @@ CC_VERSION=		${_GCC_PKG}
 .endif
 
 # The user can choose the level of stack smashing protection.
-.if !empty(CC_VERSION:Mgcc-[4-9]*)
+.if empty(CC_VERSION:Mgcc-[1-3].*)
 .  if ${PKGSRC_USE_SSP} == "all"
 _SSP_CFLAGS=		-fstack-protector-all
 .  elif ${PKGSRC_USE_SSP} == "strong"
