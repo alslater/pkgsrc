@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.246 2019/11/26 22:22:45 sevan Exp $
 
-DISTNAME=	openssl-1.1.1g
+DISTNAME=	openssl-1.1.1h
+#PKGREVISION=	1
 CATEGORIES=	security
 MASTER_SITES=	https://www.openssl.org/source/
 
@@ -11,16 +12,16 @@ LICENSE=	openssl
 
 USE_GCC_RUNTIME=	yes
 
-USE_TOOLS+=		fgrep gmake makedepend perl
+USE_MULTIARCH=		bin lib
+USE_TOOLS+=		fgrep gmake makedepend perl:run
 BUILD_TARGET=		depend all
 TEST_TARGET=		tests
-
-MAKE_JOBS_SAFE=        	no 
 
 HAS_CONFIGURE=		yes
 CONFIGURE_SCRIPT=	./config
 CONFIGURE_ARGS+=	--prefix=${PREFIX}
 CONFIGURE_ARGS+=	--openssldir=${PKG_SYSCONFDIR}
+CONFIGURE_ARGS+=	--libdir=lib${LIBARCHSUFFIX}
 CONFIGURE_ARGS+=	shared
 
 .include "options.mk"
@@ -44,24 +45,14 @@ INSTALLATION_DIRS+=	share/examples/openssl
 # work the other way around.  The lib/engines-1.1 plugins also need special
 # handling.
 #
-OPSYSVARS+=		SOEXT
-SOEXT.Darwin=		dylib
-SOEXT.*=		so
-PLIST_SUBST+=		SOEXT=${SOEXT}
+.include "../../mk/bsd.prefs.mk"
+.if ${_OPSYS_SHLIB_TYPE} == "dylib"
+SHLIB_EXT=	dylib
+.else
+SHLIB_EXT=	so
+.endif
 
-PRINT_PLIST_AWK+=	/^lib\/engines/ { gsub(/\.${SOEXT}$$/, ".$${SOEXT}"); }
-
-#
-# Get rid of ridiculous namespace collisions like passwd.1 and just leave the
-# openssl-*.1 style variants.  On a more practical note this avoids creating
-# a conflict with moreutils (ts.1).
-#
-post-install:
-	cd ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1;			\
-	for f in openssl-*; do						\
-		${RM} -f $${f};						\
-		${MV} `${ECHO} $${f} | ${SED} -e 's/openssl-//'` $${f};	\
-	done
+#PRINT_PLIST_AWK+=	/^lib\/engines/ { gsub(/\.${SHLIB_EXT}$$/, ".$${SHLIB_EXT}"); }
 
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

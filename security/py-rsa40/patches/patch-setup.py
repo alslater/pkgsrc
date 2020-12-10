@@ -1,4 +1,4 @@
-$NetBSD: patch-setup.py,v 1.2 2018/10/23 09:55:09 jperkin Exp $
+$NetBSD: patch-setup.py,v 1.1 2020/09/01 04:06:11 wiz Exp $
 
 Pull in fix from https://github.com/sybrenstuvel/python-rsa/pull/122/files
 

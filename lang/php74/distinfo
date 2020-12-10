@@ -4,6 +4,7 @@ SHA1 (php-7.4.11.tar.xz) = 79e7bed05b2878e1f25d6a59dae0ea075645ffde
 RMD160 (php-7.4.11.tar.xz) = 85f9886e0cc6837d70b386306bf12602b9cd9637
 SHA512 (php-7.4.11.tar.xz) = 9bdd29a4a6c1ac55ed75d8fb2203ae5ef41992c518cb7e3b84cf74db62b03cfbe0ef4ea5614a684a37fcd2ae727376022ce49ed3ff32fc3a728e2f1e2474fb92
 Size (php-7.4.11.tar.xz) = 10302076 bytes
+SHA1 (patch-Zend_zend.c) = 785286eeefc77957b4887fb8110f89db7fd888cc
 SHA1 (patch-configure) = 5e9c9c06f6d819d5ba2832d648f41363f40f3108
 SHA1 (patch-disable-filter-url) = 0a2c19c18f089448a8d842e99738b292ab9e5640
 SHA1 (patch-ext_phar_Makefile.frag) = 53ea5c58b0bc27d236118d5750a74b1cba43e5dd
