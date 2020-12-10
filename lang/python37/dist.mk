@@ -1,6 +1,6 @@
 # $NetBSD: dist.mk,v 1.6 2019/10/16 07:04:04 adam Exp $
 
-PY_DISTVERSION=	3.7.7
+PY_DISTVERSION=	3.7.9
 DISTNAME=	Python-${PY_DISTVERSION}
 EXTRACT_SUFX=	.tar.xz
 DISTINFO_FILE=	${.CURDIR}/../../lang/python37/distinfo

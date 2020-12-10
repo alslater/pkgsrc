@@ -1,4 +1,4 @@
-# $NetBSD: pyversion.mk,v 1.130 2019/10/15 16:50:10 adam Exp $
+# $NetBSD: pyversion.mk,v 1.132 2020/10/10 20:19:47 adam Exp $
 
 # This file determines which Python version is used as a dependency for
 # a package.
@@ -8,7 +8,7 @@
 # PYTHON_VERSION_DEFAULT
 #	The preferred Python version to use.
 #
-#	Possible values: 27 36 37 38
+#	Possible values: 27 36 37 38 39
 #	Default: 37
 #
 # === Infrastructure variables ===
@@ -27,13 +27,13 @@
 #	order of the entries matters, since earlier entries are
 #	preferred over later ones.
 #
-#	Possible values: 38 37 36 27
-#	Default: 38 37 36 27
+#	Possible values: 39 38 37 36 27
+#	Default: 39 38 37 36 27
 #
 # PYTHON_VERSIONS_INCOMPATIBLE
 #	The Python versions that are NOT acceptable for the package.
 #
-#	Possible values: 27 36 37 38
+#	Possible values: 27 36 37 38 39
 #	Default: (empty)
 #
 # PYTHON_FOR_BUILD_ONLY
@@ -85,7 +85,7 @@ BUILD_DEFS+=		PYTHON_VERSION_DEFAULT
 BUILD_DEFS_EFFECTS+=	PYPACKAGE
 
 PYTHON_VERSION_DEFAULT?=		37
-PYTHON_VERSIONS_ACCEPTED?=		38 37 36 27
+PYTHON_VERSIONS_ACCEPTED?=		39 38 37 36 27
 PYTHON_VERSIONS_INCOMPATIBLE?=		# empty by default
 
 # transform the list into individual variables
@@ -212,5 +212,25 @@ CMAKE_ARGS+=		-DPYTHON_INCLUDE_DIR:PATH=${BUILDLINK_DIR}/${PYINC}
 CMAKE_ARGS+=		-DPYTHON_INCLUDE_PATH:PATH=${BUILDLINK_DIR}/${PYINC}
 CMAKE_ARGS+=		-DPYTHON_EXECUTABLE:FILEPATH=${PYTHONBIN}
 .endif
+
+_VARGROUPS+=		pyversion
+_USER_VARS.pyversion=	PYTHON_VERSION_DEFAULT
+_PKG_VARS.pyversion=	\
+	PYTHON_VERSIONS_ACCEPTED PYTHON_VERSIONS_INCOMPATIBLE		\
+	PYTHON_SELF_CONFLICT PYTHON_FOR_BUILD_ONLY USE_CMAKE
+_SYS_VARS.pyversion=	\
+	PYTHON_VERSION_REQD PYPACKAGE PYVERSSUFFIX PYPKGSRCDIR		\
+	PYPKGPREFIX PYTHONBIN PYTHONCONFIG PY_COMPILE_ALL		\
+	PY_COMPILE_O_ALL PYINC PYLIB PYSITELIB CMAKE_ARGS
+_USE_VARS.pyversion=	\
+	PKGNAME_REQD PKGNAME_OLD LOCALBASE PREFIX BUILDLINK_DIR PKGNAME
+_DEF_VARS.pyversion=	\
+	CONFLICTS MULTI PLIST_VARS BUILDLINK_API_DEPENDS.${PYPACKAGE}	\
+	PYDEPENDENCY PLIST.py2x PLIST.py3x PTHREAD_OPTS TOOL_DEPENDS	\
+	TEST_DEPENDS BUILDLINK_DEPMETHOD.python PRINT_PLIST_AWK ALL_ENV	\
+	_PYTHON_VERSIONS_ACCEPTED _PYTHON_VERSION
+_IGN_VARS.pyversion=	_PYTHON_*
+_LISTED_VARS.pyversion=	*_ARGS
+_SORTED_VARS.pyversion=	*_DEPENDS *_ENV
 
 .endif	# PYTHON_PYVERSION_MK

@@ -6,11 +6,11 @@ Assume panel_library is correct; this is a fix for ncurses' gnupanel
   which will get transformed to panel in buildlink.
 Also look for uuid/uuid.h.
 
---- setup.py.orig	2019-10-14 13:34:47.000000000 +0000
+--- setup.py.orig	2020-09-23 12:36:32.000000000 +0000
 +++ setup.py
 @@ -10,7 +10,7 @@ import sys
  import sysconfig
- from glob import glob
+ from glob import glob, escape
  
 -from distutils import log
 +from distutils import log, text_file

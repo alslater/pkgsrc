@@ -2995,6 +2995,7 @@ lib/python${PY_VER_SUFFIX}/test/randv3.pck
 lib/python${PY_VER_SUFFIX}/test/re_tests.py
 lib/python${PY_VER_SUFFIX}/test/re_tests.pyc
 lib/python${PY_VER_SUFFIX}/test/re_tests.pyo
+lib/python${PY_VER_SUFFIX}/test/recursion.tar
 lib/python${PY_VER_SUFFIX}/test/regrtest.py
 lib/python${PY_VER_SUFFIX}/test/regrtest.pyc
 lib/python${PY_VER_SUFFIX}/test/regrtest.pyo
