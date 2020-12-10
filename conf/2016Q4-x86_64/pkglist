@@ -1,3 +1,4 @@
+converters/pstotext
 databases/hiredis
 databases/mysql56-client
 databases/mysql56-server
@@ -9,6 +10,7 @@ databases/postgresql95-docs
 databases/postgresql95-server
 databases/py-elasticsearch
 databases/py-postgresql
+databases/py-peewee
 databases/py-psycopg2
 databases/py-pymysql
 databases/py-redis-py
@@ -65,6 +67,7 @@ lang/python27
 lang/python36
 lang/python37
 lang/python38
+lang/python39
 lang/rust
 lang/sun-jre7
 lang/sun-jdk7
@@ -79,6 +82,7 @@ meta-pkgs/boost
 #meta-pkgs/gnome
 meta-pkgs/mate
 meta-pkgs/modular-xorg
+meta-pkgs/php56-extensions
 meta-pkgs/php72-extensions
 meta-pkgs/php73-extensions
 meta-pkgs/php74-extensions
@@ -98,10 +102,12 @@ net/omniEvents42
 net/omniORB
 net/omniORB42
 net/proftpd
+net/py-awscli
 net/py-boto
 net/py-dns
 net/py-omniORBpy
 net/py-omniORBpy42
+net/py-suds
 net/py-twisted
 net/py-twisted-docs
 net/rabbitmq
@@ -137,6 +143,7 @@ security/stunnel
 shells/bash
 shells/pdksh
 shells/zsh
+sysutils/ansible
 sysutils/beats
 sysutils/bsdinstall
 sysutils/coreutils
