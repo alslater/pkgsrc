@@ -12,7 +12,7 @@ databases/py-elasticsearch
 databases/py-postgresql
 databases/py-psycopg2
 databases/py-pymysql
-databases/py-redis-py
+databases/py-redis
 databases/py-sqlite3
 databases/py-cx_Oracle
 databases/redis
@@ -48,8 +48,6 @@ graphics/gnome-icon-theme
 graphics/gnome-icon-theme-symbolic
 graphics/gnome-icon-theme-extras
 lang/clang
-lang/gcc8
-lang/gcc8-libs
 lang/llvm
 lang/mono
 lang/nawk
@@ -106,7 +104,7 @@ net/rsync
 net/samba4
 net/socat
 net/tightvnc
-net/unison
+net/unison2.51
 net/vpnc
 pkgtools/bootstrap-mk-files
 pkgtools/pkg_alternatives
@@ -143,6 +141,7 @@ sysutils/rsyslog-elasticsearch
 sysutils/rsyslog-gnutls
 sysutils/rsyslog-rabbitmq
 sysutils/top
+sysutils/znapzend
 textproc/antiword
 textproc/catdoc
 textproc/glimpse
@@ -166,13 +165,13 @@ www/squid4
 www/squidGuard
 www/squidview
 x11/gdm
-x11/gnome-terminal
 x11/gtk2-engines
 x11/gtk2-theme-switch
 x11/gtk3
 x11/qt4
 x11/qt5
 x11/qt5-qscintilla
+x11/mate-terminal
 x11/xauth
 x11/xinit
 x11/xscreensaver
