@@ -52,11 +52,13 @@ PKG_SHLIBTOOL=		${TOOLS_BASEDIR}/bin/shlibtool
 # We also need to configure gstrip for STRIP_DEBUG.
 #
 TOOLS_PLATFORM.ctfconvert=	${TOOLS_BASEDIR}/onbld/bin/i386/ctfconvert-altexec
-TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
+#TOOLS_PLATFORM.gstrip=		${TOOLS_BASEDIR}/bin/gstrip
+TOOLS_PLATFORM.gstrip=		/usr/bin/gstrip
 
 #
 # rpcgen isn't always available as it requires smartos-build-tools, but if a
 # package is calling rpcgen then it is going to fail anyway and this makes it
 # easier to find.
 #
-TOOLS_PATH.rpcgen=		${TOOLS_BASEDIR}/bin/rpcgen
+#TOOLS_PATH.rpcgen=		${TOOLS_BASEDIR}/bin/rpcgen
+TOOLS_PATH.rpcgen=		/usr/bin/rpcgen
