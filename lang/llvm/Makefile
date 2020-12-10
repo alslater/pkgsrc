@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.48 2019/11/11 19:22:28 nia Exp $
+# $NetBSD: Makefile,v 1.60 2020/11/07 21:26:41 he Exp $
 #
 # when updating this, please also update:
 # devel/include-what-you-use
@@ -6,7 +6,6 @@
 # devel/lldb
 # devel/polly
 # lang/clang
-# lang/clang-static-analyzer
 # lang/clang-tools-extra
 # lang/compiler-rt
 # lang/libcxx
@@ -22,19 +21,19 @@
 # Always update all */buildlink3.mk to require the latest stable release
 # version in BUILDLINK_API_DEPENDS, as there is no backwards compatibility
 
-DISTNAME=	llvm-9.0.0.src
-PKGREVISION=	2
+.include "version.mk"
+
+DISTNAME=	llvm-${LLVM_VERSION}.src
 PKGNAME=	${DISTNAME:S/.src//}
+PKGREVISION=	3
 CATEGORIES=	lang devel
-MASTER_SITES=	http://releases.llvm.org/${PKGVERSION_NOREV}/
-EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://llvm.org/
+HOMEPAGE=	https://llvm.org/
 COMMENT=	Low Level Virtual Machine compiler infrastructure
 LICENSE=	apache-2.0
 
-USE_LANGUAGES=		c c++11
+USE_LANGUAGES=		c c++14
 USE_CMAKE=		yes
 GCC_REQD+=		5.1
 PYTHON_FOR_BUILD_ONLY=	yes
@@ -67,8 +66,7 @@ REPLACE_PYTHON+=	utils/*.py
 REPLACE_PYTHON+=	utils/Misc/zkill
 REPLACE_PYTHON+=	utils/bisect
 REPLACE_PYTHON+=	utils/clang-parse-diagnostics-file
-REPLACE_PYTHON+=	utils/git/find-rev
-REPLACE_PYTHON+=	utils/lit/tests/Inputs/googletest-format/DummySubDir/OneTest
+REPLACE_PYTHON+=	utils/lit/tests/Inputs/googletest-format/DummySubDir/OneTest.py
 REPLACE_PYTHON+=	utils/llvm-build/llvm-build
 REPLACE_PYTHON+=	utils/llvm-compilers-check
 REPLACE_PYTHON+=	utils/llvm-lit/llvm-lit.in
@@ -81,7 +79,6 @@ TEST_ENV+=		LD_LIBRARY_PATH=${WRKDIR}/build/lib
 SUBST_CLASSES.SunOS+=	linkmap
 SUBST_STAGE.linkmap=	pre-configure
 SUBST_FILES.linkmap=	tools/lto/lto.exports
-SUBST_FILES.linkmap+=	tools/opt-remarks/OptRemarks.exports
 SUBST_FILES.linkmap+=	tools/remarks-shlib/Remarks.exports
 SUBST_SED.linkmap=	-e '/^LLVM/d'
 

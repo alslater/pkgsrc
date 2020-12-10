@@ -1,11 +1,11 @@
-# $NetBSD: Makefile,v 1.21 2019/11/03 19:04:03 rillig Exp $
+# $NetBSD: Makefile,v 1.24 2020/10/20 06:34:23 jperkin Exp $
 
-DISTNAME=	libunwind-9.0.0.src
-PKGREVISION=	1
+.include "../../lang/llvm/version.mk"
+
+DISTNAME=	libunwind-${LLVM_VERSION}.src
 PKGNAME=	${DISTNAME:S/.src//}
+PKGREVISION=	1
 CATEGORIES=	lang devel
-MASTER_SITES=	http://releases.llvm.org/${PKGVERSION_NOREV}/
-EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 #HOMEPAGE=	http://libunwind.llvm.org/
@@ -32,6 +32,7 @@ post-extract:
 	${MKDIR} ${WRKDIR}/build
 
 post-install:
+	${RM} -f ${WRKSRC}/include/__libunwind_config.h.orig
 	cd ${WRKSRC}/include && ${PAX} -rw . ${DESTDIR}${PREFIX}/include
 
 BUILDLINK_DEPMETHOD.llvm=	build
