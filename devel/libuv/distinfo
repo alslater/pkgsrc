@@ -1,11 +1,9 @@
-$NetBSD: distinfo,v 1.57 2020/05/23 09:27:10 adam Exp $
+$NetBSD: distinfo,v 1.62 2020/10/02 12:22:34 adam Exp $
 
-SHA1 (libuv-1.38.0.tar.gz) = 612052697972341ffdc226307c43f455dc3716a9
-RMD160 (libuv-1.38.0.tar.gz) = 81291cc8951eda3b64152b8a730801ba40977438
-SHA512 (libuv-1.38.0.tar.gz) = da9af33ec17f46f2390661f84e942115c442e665cb63ba5637eb12d2cb0b034889e0d816f261abe7fff3b4d0b44ab8bb63c81f3ec1917325cf0ca93e01921641
-Size (libuv-1.38.0.tar.gz) = 1261216 bytes
+SHA1 (libuv-1.40.0.tar.gz) = ce3e37e8a5c42f905bfa2364f3894173f14beee1
+RMD160 (libuv-1.40.0.tar.gz) = 5daaa8631c4715c88657c4b90ec89ed5fd5e0a38
+SHA512 (libuv-1.40.0.tar.gz) = 14a6880e636e9d046e1f4c86061d7ca5fe0cdae0efb0c6fec6b6ad03b17c626da479d6cc1ae84da281ec04a75e0d56fa99ef25164432cdb246cf59f0964a7e8b
+Size (libuv-1.40.0.tar.gz) = 1274587 bytes
 SHA1 (patch-autogen.sh) = a5f48189bfb17624c545a80626ea311b7755d232
-SHA1 (patch-configure.ac) = 1b215764f1b326df0a89a20cd07e295e55469781
-SHA1 (patch-src_unix_fs.c) = 15b464be3e31c0934732c537c4163b5b96665f63
-SHA1 (patch-src_unix_netbsd.c) = 4bea4eda43c4256b5281bc798a46d29690917d27
-SHA1 (patch-src_unix_thread.c) = 7a9a5d19025bb7bb8968a9f5c5e0c67f37021b89
+SHA1 (patch-src_unix_fs.c) = d5afe699254210d9724bf2d02ea4563a92666d4f
+SHA1 (patch-src_unix_netbsd.c) = 071a2a853f9a73dc72e24d63316aa21b28669469
