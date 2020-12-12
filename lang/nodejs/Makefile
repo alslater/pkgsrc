@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.184 2020/06/03 08:41:24 adam Exp $
+# $NetBSD: Makefile,v 1.201 2020/11/17 11:01:40 adam Exp $
 
-DISTNAME=	node-v14.4.0
+DISTNAME=	node-v14.15.1
 EXTRACT_SUFX=	.tar.xz
 
 USE_LANGUAGES=	c gnu++14
@@ -11,7 +11,6 @@ USE_LANGUAGES=	c gnu++14
 MAKE_ENV+=	LD_LIBRARY_PATH=${PREFIX}/lib
 
 CONFIGURE_ARGS+=	--shared-nghttp2
-CONFIGURE_ARGS+=	--shared-openssl
 CONFIGURE_ARGS+=	--with-intl=system-icu
 
 CHECK_PORTABILITY_SKIP+=	tools/macos-installer/pkgbuild/npm/scripts/preinstall
@@ -25,7 +24,16 @@ CXXFLAGS+=	-mstackrealign
 
 .include "options.mk"
 
+# Node turns on -latomic for arm, mips and ppc.
+.if !empty(MACHINE_ARCH:M*arm*) || \
+    !empty(MACHINE_ARCH:M*powerpc*) || \
+    !empty(MACHINE_ARCH:M*mips*)
+.include "../../devel/libatomic/buildlink3.mk"
+.endif
+
 .include "../../lang/nodejs/Makefile.common"
 .include "../../textproc/icu/buildlink3.mk"
+# Requires nghttp2_option_set_max_settings
+BUILDLINK_API_DEPENDS.nghttp2+=	nghttp2>=1.41.0
 .include "../../www/nghttp2/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
