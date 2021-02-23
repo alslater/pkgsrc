@@ -41,8 +41,8 @@
 function shquote(IN, out) {
 	out = IN;
 	gsub("\\\\", "\\\\", out);
-	gsub("\\\n", "\\n", out);
-	gsub("\\\t", "\\t", out);
+	gsub("\n", "\\n", out);
+	gsub("\t", "\\t", out);
 	gsub(" ", "\\ ", out);
 	gsub("'", "\\'", out);
 	gsub("`", "\\`", out);
