@@ -1,6 +1,7 @@
-# $NetBSD: Makefile,v 1.28 2019/12/10 22:26:34 adam Exp $
+# $NetBSD: Makefile,v 1.38 2020/12/04 20:45:40 nia Exp $
 
-DISTNAME=	ansible-2.9.2
+DISTNAME=	ansible-2.9.13
+PKGREVISION=	1
 CATEGORIES=	sysutils python
 MASTER_SITES=	https://releases.ansible.com/ansible/
 
@@ -25,9 +26,9 @@ REPLACE_PYTHON=		test/lib/ansible_test/_data/*.py
 REPLACE_PYTHON+=	test/lib/ansible_test/_data/*/*.py
 REPLACE_PYTHON+=	test/lib/ansible_test/_data/*/*/*.py
 
-CHECK_INTERPRETER_SKIP+=${PYSITELIB}/ansible_test/_data/requirements/sanity.ps1
-CHECK_INTERPRETER_SKIP+=${PYSITELIB}/ansible_test/_data/sanity/pslint/pslint.ps1
-CHECK_INTERPRETER_SKIP+=${PYSITELIB}/ansible_test/_data/sanity/validate-modules/validate_modules/ps_argspec.ps1
+CHECK_INTERPRETER_SKIP+=	${PYSITELIB}/ansible_test/_data/requirements/sanity.ps1
+CHECK_INTERPRETER_SKIP+=	${PYSITELIB}/ansible_test/_data/sanity/pslint/pslint.ps1
+CHECK_INTERPRETER_SKIP+=	${PYSITELIB}/ansible_test/_data/sanity/validate-modules/validate_modules/ps_argspec.ps1
 
 SUBST_CLASSES+=		paths
 SUBST_STAGE.paths=	pre-configure
