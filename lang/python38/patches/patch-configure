@@ -4,9 +4,9 @@ Fix linking on Darwin; don't use -stack_size.
 Changes for consistency across pkgsrc platforms.
 Simplify _sysconfigdata to include only platform name.
 
---- configure.orig	2020-09-23 12:36:32.000000000 +0000
+--- configure.orig	2021-02-19 10:28:41.000000000 +0000
 +++ configure
-@@ -9536,7 +9536,6 @@ then
+@@ -9561,7 +9561,6 @@ then
  		# to ensure that tests don't crash
  		# Note: This matches the value of THREAD_STACK_SIZE in
  		# thread_pthread.h
@@ -14,7 +14,7 @@ Simplify _sysconfigdata to include only platform name.
  
  		if test "$enable_framework"
  		then
-@@ -14303,10 +14302,10 @@ _ACEOF
+@@ -14328,10 +14327,10 @@ _ACEOF
  if ac_fn_c_try_compile "$LINENO"; then :
  
  
@@ -27,16 +27,16 @@ Simplify _sysconfigdata to include only platform name.
    if test "$ax_cv_c_float_words_bigendian" = unknown; then
      ax_cv_c_float_words_bigendian=no
    else
-@@ -15192,8 +15191,6 @@ fi
+@@ -15215,7 +15214,7 @@ _ACEOF
  
+ fi
  
- case $ac_sys_system in
--    Linux*|GNU*|Darwin|VxWorks)
--	EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX};;
-     *)
- 	EXT_SUFFIX=${SHLIB_SUFFIX};;
- esac
-@@ -15213,11 +15210,7 @@ else
+-EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX}
++EXT_SUFFIX=${SHLIB_SUFFIX}
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking LDVERSION" >&5
+ $as_echo_n "checking LDVERSION... " >&6; }
+@@ -15232,11 +15231,7 @@ else
  fi
  
  
