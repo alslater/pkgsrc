@@ -52,6 +52,7 @@ pre-configure:
 
 # wcstof(3) etc. is used in C++ code.
 CFLAGS.NetBSD+=		-D_NETBSD_SOURCE
+CFLAGS+= 		-DU_DEFINE_FALSE_AND_TRUE=1
 
 ## for GL_GLEXT_LEGACY with GL/gl.h error, GL_ARB_shader_objects is not defined.
 #BUILDLINK_TRANSFORM+=	rm:-Wundef
