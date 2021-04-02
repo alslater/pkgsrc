@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.191 2018/01/01 21:18:12 adam Exp $
 
-DISTNAME=	curl-7.73.0
+DISTNAME=	curl-7.75.0
 #PKGREVISION=	1
 PKGREVISION=	1
 CATEGORIES=	www
