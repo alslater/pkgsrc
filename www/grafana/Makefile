@@ -27,6 +27,9 @@ CHECK_RELRO_SKIP+=		bin/grafana-server
 
 USE_TOOLS+=			pax
 
+ULIMIT_CMD_cputime=	ulimit -s unlimited
+NO_CHECKSUM=	yes
+
 PUBLICDIR=	${PREFIX}/share/grafana/public
 DATADIR=	${VARBASE}/lib/grafana/data
 PLUGINDIR=	${VARBASE}/lib/grafana/plugins
