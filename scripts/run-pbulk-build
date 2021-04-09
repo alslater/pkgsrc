@@ -105,6 +105,8 @@ ret=$?
 # Attempt to automatically report scan failures.
 #
 if [ $ret -ne 0 ]; then
+	echo "pbulk returned error $ret"
+
 	matchfile=/tmp/no-match-$$.txt
 	grep "No.match" ${BULKLOG_BASEDIR}/${BULKLOG_DIR}/meta/presolve-err.log >${matchfile} 2>/dev/null
 	if [ -s ${matchfile} ]; then
