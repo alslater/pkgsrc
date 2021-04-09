@@ -11,7 +11,8 @@
 # used by mail/dovecot2-pgsql/Makefile
 # used by mail/dovecot2-sqlite/Makefile
 
-DISTNAME=	dovecot-2.3.13
+DISTNAME=	dovecot-2.3.14
+PKGREVISION=	1
 CATEGORIES=	mail
 MASTER_SITES=	https://dovecot.org/releases/${PKGVERSION_NOREV:R}/
 
