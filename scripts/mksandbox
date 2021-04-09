@@ -51,7 +51,7 @@ fi
 #
 # Create system loopback mounts.
 #
-for dir in /dev /lib /sbin /usr; do
+for dir in /dev /lib /sbin /usr ; do
 	mkdir -p ${chrootdir}${dir}
 	mount -F lofs -r ${dir} ${chrootdir}${dir}
 done
@@ -227,7 +227,7 @@ if [ -n "${TOOLS_BOOTSTRAP}" ]; then
 	esac
 	/usr/sbin/chroot ${chrootdir} /bin/bash -c "
 		${CMD_TAR} -zxf ${LOCAL_PACKAGE_BASEDIR}/${BOOTSTRAP_PBULK_DIR}/${TOOLS_BOOTSTRAP} -C /
-		export PATH=$PATH:/usr/gnu/i386-pc-solaris2.11/bin:/opt/gcc-7/bin
+		export PATH=$PATH:/usr/gnu/x86_64-pc-solaris2.11/bin:
 		export PKG_SKIP_SMF=yes
 		if [ ${USE_LOCAL_PKG_PATH} = yes ]; then
 			/usr/bin/sed -i '/PKG_PATH/d' ${TOOLS_BASEDIR}/etc/pkg_install.conf
