@@ -4,9 +4,9 @@ Fix linking on Darwin; don't use -stack_size.
 Changes for consistency across pkgsrc platforms.
 Simplify _sysconfigdata to include only platform name.
 
---- configure.orig	2021-04-02 10:32:10.000000000 +0000
+--- configure.orig	2021-02-19 10:28:41.000000000 +0000
 +++ configure
-@@ -9549,7 +9549,6 @@ then
+@@ -9561,7 +9561,6 @@ then
  		# to ensure that tests don't crash
  		# Note: This matches the value of THREAD_STACK_SIZE in
  		# thread_pthread.h
@@ -14,29 +14,29 @@ Simplify _sysconfigdata to include only platform name.
  
  		if test "$enable_framework"
  		then
-@@ -14316,10 +14315,10 @@ _ACEOF
+@@ -14328,10 +14327,10 @@ _ACEOF
  if ac_fn_c_try_compile "$LINENO"; then :
  
  
--if grep noonsees conftest.$ac_objext >/dev/null ; then
-+if strings -a conftest.$ac_objext | grep noonsees >/dev/null ; then
+-if $GREP noonsees conftest.$ac_objext >/dev/null ; then
++if strings -a conftest.$ac_objext | $GREP noonsees >/dev/null ; then
    ax_cv_c_float_words_bigendian=yes
  fi
--if grep seesnoon conftest.$ac_objext >/dev/null ; then
-+if strings -a conftest.$ac_objext | grep seesnoon >/dev/null ; then
+-if $GREP seesnoon conftest.$ac_objext >/dev/null ; then
++if strings -a conftest.$ac_objext | $GREP seesnoon >/dev/null ; then
    if test "$ax_cv_c_float_words_bigendian" = unknown; then
      ax_cv_c_float_words_bigendian=no
    else
-@@ -15204,7 +15203,7 @@ _ACEOF
- fi
+@@ -15215,7 +15214,7 @@ _ACEOF
  
+ fi
  
 -EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX}
 +EXT_SUFFIX=${SHLIB_SUFFIX}
  
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking LDVERSION" >&5
  $as_echo_n "checking LDVERSION... " >&6; }
-@@ -15221,11 +15220,7 @@ else
+@@ -15232,11 +15231,7 @@ else
  fi
  
  
