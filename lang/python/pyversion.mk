@@ -136,7 +136,9 @@ PKG_FAIL_REASON+=	"No valid Python version"
 # Additional CONFLICTS
 .if ${PYTHON_SELF_CONFLICT:U:tl} == "yes"
 .  for i in ${PYTHON_VERSIONS_ACCEPTED:N${_PYTHON_VERSION}}
+.    if empty(PYTHON_VERSIONS_INCOMPATIBLE:M${i})
 CONFLICTS+=	${PKGNAME:S/py${_PYTHON_VERSION}/py${i}/:C/-[0-9].*$/-[0-9]*/}
+.    endif
 .  endfor
 .endif # PYCONFLICTS
 
