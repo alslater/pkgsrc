@@ -1,7 +1,7 @@
-$NetBSD: distinfo,v 1.14 2016/04/15 10:15:15 wiz Exp $
+$NetBSD: distinfo,v 1.19 2020/01/27 10:42:12 wiz Exp $
 
-SHA1 (dbus-python-1.2.4.tar.gz) = 078a76d760ba649991b0ac0ae2eaeda41c00ca5b
-RMD160 (dbus-python-1.2.4.tar.gz) = 05e7ac1d0f3dd49a097b126a04456cf2c8d5db7c
-SHA512 (dbus-python-1.2.4.tar.gz) = efdd9d96a8b56e813c93208d34777f1ca2db96c076d31f13afbcaec3c7770a16a623d5531fe23443130c555240949802503f171f2064d45eee97546d6251304b
-Size (dbus-python-1.2.4.tar.gz) = 612112 bytes
-SHA1 (patch-aa) = b3d1bcbdd252c8a286a00f982ed73a8458cf19d2
+SHA1 (dbus-python-1.2.16.tar.gz) = de05308c75baa2ce5434de73d60428c005ac0cc1
+RMD160 (dbus-python-1.2.16.tar.gz) = ea5fa85fab091e77e45cd93d5a978d9d9bb85a04
+SHA512 (dbus-python-1.2.16.tar.gz) = e76c00c5fd3fe6884e4c24f258987fd3b80d21bd4e0f96aa8fda152078a860b62321324f6efcbfe7226d5ab2521a14b5bda7cf2468d2cae5f376c124a71aa05c
+Size (dbus-python-1.2.16.tar.gz) = 576701 bytes
+SHA1 (patch-aa) = bcbcabf858eca13948dc874316d18da4ef36b6de
