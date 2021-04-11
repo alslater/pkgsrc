@@ -1,6 +1,6 @@
-$NetBSD: distinfo,v 1.14 2016/12/15 09:42:49 adam Exp $
+$NetBSD: distinfo,v 1.19 2021/04/06 15:27:29 adam Exp $
 
-SHA1 (Pygments-2.1.3.tar.gz) = ecc79e8a3cd5abbaffe33f78061be70a34ebe994
-RMD160 (Pygments-2.1.3.tar.gz) = 164f2442fa402b7c9d34bfc39cca3f1f4e13b984
-SHA512 (Pygments-2.1.3.tar.gz) = f6885abfa0033dc2b8894649c7a4626165af01e69268344f002efdfc536c776a9af86be4e76e5905bd31cb78096e1ed3c16d9dd4b29c6a97b4c9cc1bfd7a5b67
-Size (Pygments-2.1.3.tar.gz) = 2116434 bytes
+SHA1 (Pygments-2.8.1.tar.gz) = 0e0be7ffffa9e9d407464e2950d11e04c5d5b912
+RMD160 (Pygments-2.8.1.tar.gz) = a48c0fb74a87563a79e748a9d22242692baa629a
+SHA512 (Pygments-2.8.1.tar.gz) = 223835c78615207ad590d364ba9a0f4bc9b5815baa080e60b9b71ce7b8e1ebfcc7a292d2a2b1cd358c08d820fc89e02c4060876d37ee17fd9e2759c9a0dcc80c
+Size (Pygments-2.8.1.tar.gz) = 4000119 bytes
