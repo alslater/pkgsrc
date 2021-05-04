@@ -1,30 +1,48 @@
-# $NetBSD: Makefile,v 1.14 2016/10/26 14:28:16 fhajny Exp $
+# $NetBSD: Makefile,v 1.75 2021/03/20 06:59:28 adam Exp $
 
-DISTNAME=	peewee-2.10.1
+DISTNAME=	peewee-3.14.4
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-CATEGORIES=	databases
-MASTER_SITES=	${MASTER_SITE_GITHUB:=coleifer/}
+CATEGORIES=	databases python
+MASTER_SITES=	${MASTER_SITE_PYPI:=p/peewee/}
 
-MAINTAINER=	filip@joyent.com
-HOMEPAGE=	http://www.peewee-orm.com/
+MAINTAINER=	pkgsrc-users@NetBSD.org
+HOMEPAGE=	http://docs.peewee-orm.com/
 COMMENT=	Small, expressive ORM for PostgreSQL, MySQL and SQLite
 LICENSE=	mit
 
-GITHUB_PROJECT=	peewee
+DEPENDS+=	${PYPKGPREFIX}-sqlite3-[0-9]*:../../databases/py-sqlite3
 
-USE_LANGUAGES=	c
-USE_TOOLS+=	bash
+PYTHON_VERSIONED_DEPENDENCIES=	sphinx:build
 
+MAKE_FLAGS+=	SPHINXBUILD=sphinx-build-${PYVERSSUFFIX}
+
+FILES_SUBST+=	PKGMANDIR=${PKGMANDIR}
 MESSAGE_SUBST+=	PYPKGPREFIX=${PYPKGPREFIX}
 
-REPLACE_BASH+=		playhouse/berkeley_build.sh
 REPLACE_PYTHON+=	pwiz.py
 
-PYTHON_VERSIONS_ACCEPTED=  27
+SUBST_CLASSES+=		lpath
+SUBST_STAGE.lpath=	pre-configure
+SUBST_FILES.lpath=	setup.py
+SUBST_VARS.lpath=	BUILDLINK_PREFIX.sqlite3
 
-PYDISTUTILSPKG=		yes
+INSTALLATION_DIRS+=	${PKGMANDIR}/man1
 
+# Let Cython re-generate these files. Fixes build with Python 3.9.
+pre-configure:
+	${RM} ${WRKSRC}/playhouse/_sqlite_ext.c ${WRKSRC}/playhouse/_sqlite_udf.c
+
+post-build:
+	cd ${WRKSRC}/docs && ${BUILD_MAKE_CMD} man
+
+post-install:
+	cd ${DESTDIR}${PREFIX}/bin && ${MV} pwiz.py pwiz-${PYVERSSUFFIX} || ${TRUE}
+	${INSTALL_MAN} ${WRKSRC}/docs/_build/man/peewee.1 \
+		${DESTDIR}${PREFIX}/${PKGMANDIR}/man1/peewee-${PYVERSSUFFIX}.1
+
+.include "../../databases/sqlite3/buildlink3.mk"
 .include "../../devel/py-cython/buildlink3.mk"
 .include "../../lang/python/application.mk"
-.include "../../lang/python/extension.mk"
+.include "../../lang/python/egg.mk"
+.include "../../lang/python/versioned_dependencies.mk"
 .include "../../mk/bsd.pkg.mk"
