@@ -26,6 +26,8 @@ SUBST_SED.df=		-e 's:thg_logo:${PREFIX}${thg_icon}:1'
 INSTALLATION_DIRS+=	share/applications
 INSTALLATION_DIRS+=	share/doc/tortoisehg
 
+PYTHON_VERSIONS_INCOMPATIBLE=	27
+
 PYTHON_SELF_CONFLICT=	yes
 
 PYTHON_VERSIONED_DEPENDENCIES=	pygments
