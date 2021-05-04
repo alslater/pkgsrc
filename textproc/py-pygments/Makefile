@@ -1,24 +1,27 @@
-# $NetBSD: Makefile,v 1.26 2017/01/03 13:23:04 jperkin Exp $
+# $NetBSD: Makefile,v 1.33 2021/04/06 15:27:29 adam Exp $
 
-DISTNAME=	Pygments-2.1.3
+DISTNAME=	Pygments-2.8.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
 CATEGORIES=	textproc python
 MASTER_SITES=	${MASTER_SITE_PYPI:=P/Pygments/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://pygments.org/
+HOMEPAGE=	https://pygments.org/
 COMMENT=	Python syntax highlighter
 LICENSE=	2-clause-bsd
 
-# test dependencies
-BUILD_DEPENDS+=	${PYPKGPREFIX}-nose-[0-9]*:../../devel/py-nose
-# can't depend on sphinx since sphinx depends on pygments
-#BUILD_DEPENDS+=	${PYPKGPREFIX}-sphinx-[0-9]*:../../textproc/py-sphinx
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../textproc/py-test
 
-USE_LANGUAGES=		# none
+USE_LANGUAGES=	# none
+
+PYTHON_VERSIONS_INCOMPATIBLE=	27
 
 post-install:
-	${MV} ${DESTDIR}${PREFIX}/bin/pygmentize ${DESTDIR}${PREFIX}/bin/pygmentize${PYVERSSUFFIX} || ${TRUE}
+	cd ${DESTDIR}${PREFIX}/bin && \
+	${MV} pygmentize pygmentize-${PYVERSSUFFIX} || ${TRUE}
+
+do-test:
+	cd ${WRKSRC} && pytest-${PYVERSSUFFIX} tests
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

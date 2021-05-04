@@ -35,6 +35,7 @@ share/locale/ia/LC_MESSAGES/newt.mo
 share/locale/id/LC_MESSAGES/newt.mo
 share/locale/it/LC_MESSAGES/newt.mo
 share/locale/ja/LC_MESSAGES/newt.mo
+share/locale/ka/LC_MESSAGES/newt.mo
 share/locale/km/LC_MESSAGES/newt.mo
 share/locale/kn/LC_MESSAGES/newt.mo
 share/locale/ko/LC_MESSAGES/newt.mo
@@ -76,6 +77,6 @@ share/locale/xh/LC_MESSAGES/newt.mo
 share/locale/zh_CN/LC_MESSAGES/newt.mo
 share/locale/zh_TW/LC_MESSAGES/newt.mo
 lib/pkgconfig/libnewt.pc
-${PYSITELIB}/_snackmodule.la
+${PYSITELIB}/_snack.la
 ${PYSITELIB}/snack.py
 man/man1/whiptail.1

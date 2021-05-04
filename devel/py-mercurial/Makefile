@@ -1,4 +1,6 @@
-# $NetBSD: Makefile,v 1.10 2016/07/02 11:09:37 wiz Exp $
+# $NetBSD: Makefile,v 1.51 2021/03/17 11:23:52 wiz Exp $
+#
+# Changelog sometimes at: https://www.mercurial-scm.org/wiki/WhatsNew
 
 DISTNAME=	mercurial-${VERSION}
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
@@ -11,27 +13,37 @@ COMMENT=	Fast, lightweight source control management system
 LICENSE=	gnu-gpl-v2 OR gnu-gpl-v3 # OR newer
 
 # with this dependency, two zip test cases start working
-# http://bz.selenic.com/show_bug.cgi?id=4483
-# http://bz.selenic.com/show_bug.cgi?id=4485
-#BUILD_DEPENDS+=	unzip-[0-9]*:../../archivers/unzip
+# https://bz.mercurial-scm.org/show_bug.cgi?id=4483
+# https://bz.mercurial-scm.org/show_bug.cgi?id=4485
+BUILD_DEPENDS+=	unzip-[0-9]*:../../archivers/unzip
 DEPENDS+=	${PYPKGPREFIX}-curses-[0-9]*:../../devel/py-curses
+# via xmlrpc from python itself, used in mercurial/pycompat.py
+DEPENDS+=	${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 
-USE_TOOLS+=			gmake msgfmt
+TEST_DEPENDS+=	${PYPKGPREFIX}-sqlite3-[0-9]*:../../databases/py-sqlite3
+
+USE_TOOLS+=	gmake msgfmt
 
 INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1 ${PKGMANDIR}/man5
 INSTALLATION_DIRS+=	share/doc/mercurial
 
-# Only single script is installed, so handle both multi archs.
-SUBST_CLASSES+=		libdir
-SUBST_STAGE.libdir=	pre-configure
-SUBST_FILES.libdir=	${WRKSRC}/hg
-SUBST_SED.libdir=	-e 's|@LIBDIR32@|${PREFIX}/${PYSITELIB.32}|'
-SUBST_SED.libdir+=	-e 's|@LIBDIR64@|${PREFIX}/${PYSITELIB.64}|'
+.include "version.mk"
+.include "options.mk"
 
-.include "Makefile.version"
+# Known test failures as of 5.7
+# https://bz.mercurial-scm.org/show_bug.cgi?id=6429
+USE_TOOLS+=		bash:test
+# Two tests use "python":
+# test-convert-cvs.t
+# test-merge-tools.t
+# https://bz.mercurial-scm.org/show_bug.cgi?id=6480
+# test-archive.t:
+# https://bz.mercurial-scm.org/show_bug.cgi?id=6499
+#
+# Ran 868 tests, 80 skipped, 3 failed.
 
-do-test:
-	cd ${WRKSRC} && make tests PYTHON=${PYTHONBIN}
+TEST_TARGET=		tests
+TEST_MAKE_FLAGS+=	PYTHON=${PYTHONBIN} TESTFLAGS=${_MAKE_JOBS:Q}
 
 post-install:
 	${INSTALL_DATA} ${WRKSRC}/doc/*.1  ${DESTDIR}${PREFIX}/${PKGMANDIR}/man1

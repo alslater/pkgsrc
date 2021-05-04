@@ -1,12 +1,12 @@
-# $NetBSD: Makefile,v 1.1 2016/05/05 11:15:33 richard Exp $
+# $NetBSD: Makefile,v 1.8 2020/03/17 20:05:53 adam Exp $
 
-DISTNAME=	wrapt-1.10.8
+DISTNAME=	wrapt-1.12.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-CATEGORIES=	devel
+CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=w/wrapt/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://github.com/GrahamDumpleton/wrapt
+HOMEPAGE=	https://github.com/GrahamDumpleton/wrapt
 COMMENT=	Python module for decorators, wrappers and monkey patching
 LICENSE=	2-clause-bsd
 

@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.104 2016/09/09 03:12:03 dholland Exp $
+# $NetBSD: Makefile,v 1.106 2019/05/21 20:55:02 wiz Exp $
 
-.include "../../devel/py-mercurial/Makefile.version"
+.include "../../devel/py-mercurial/version.mk"
 
 PKGNAME=	mercurial-${VERSION}
 CATEGORIES=	devel scm
@@ -15,8 +15,6 @@ LICENSE=	gnu-gpl-v2 OR gnu-gpl-v3 # OR newer
 DEPENDS+=	${PYPKGPREFIX}-mercurial>=${VERSION}:../../devel/py-mercurial
 
 META_PACKAGE=	yes
-
-PYTHON_VERSIONS_ACCEPTED:	27
 
 .include "../../lang/python/pyversion.mk"
 .include "../../mk/bsd.pkg.mk"

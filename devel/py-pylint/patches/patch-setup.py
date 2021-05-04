@@ -1,23 +1,15 @@
-$NetBSD: patch-setup.py,v 1.1 2017/03/01 13:08:44 fhajny Exp $
+$NetBSD: patch-setup.py,v 1.4 2021/02/22 09:24:34 adam Exp $
 
-Add PYVERSSUFFIX to scripts.
+Fix file encoding.
 
---- setup.py.orig	2017-01-22 13:12:37.000000000 +0000
+--- setup.py.orig	2021-02-21 16:16:02.000000000 +0000
 +++ setup.py
-@@ -140,11 +140,11 @@ def install(**kwargs):
-             kwargs['install_requires'] = install_requires
-             kwargs['dependency_links'] = dependency_links
-         kwargs['entry_points'] = {'console_scripts': [
--            'pylint = pylint:run_pylint',
--            'pylint-gui = pylint:run_pylint_gui',
--            'epylint = pylint:run_epylint',
--            'pyreverse = pylint:run_pyreverse',
--            'symilar = pylint:run_symilar',
-+            'pylint' + sys.version[0:3] + ' = pylint:run_pylint',
-+            'pylint-gui' + sys.version[0:3] + ' = pylint:run_pylint_gui',
-+            'epylint' + sys.version[0:3] + ' = pylint:run_epylint',
-+            'pyreverse' + sys.version[0:3] + ' = pylint:run_pyreverse',
-+            'symilar' + sys.version[0:3] + ' = pylint:run_symilar',
-         ]}
-     kwargs['packages'] = packages
-     cmdclass = {'install_lib': MyInstallLib,
+@@ -57,7 +57,7 @@ __docformat__ = "restructuredtext en"
+ base_dir = os.path.dirname(__file__)
+ 
+ __pkginfo__: Dict[str, Any] = {}
+-with open(os.path.join(base_dir, "pylint", "__pkginfo__.py")) as pkginfo_fp:
++with open(os.path.join(base_dir, "pylint", "__pkginfo__.py"), encoding="utf-8") as pkginfo_fp:
+     exec(pkginfo_fp.read(), __pkginfo__)
+ scripts = __pkginfo__.get("scripts", [])
+ data_files = __pkginfo__.get("data_files", None)

@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.7 2016/12/19 09:01:48 wiz Exp $
+# $NetBSD: Makefile,v 1.9 2018/09/27 20:30:02 tnn Exp $
 
-DISTNAME=	mccabe-0.5.3
+DISTNAME=	mccabe-0.6.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=m/mccabe/}
@@ -11,9 +11,7 @@ COMMENT=	Mccabe plugin for the Python program checker flake8
 LICENSE=	mit
 
 .include "../../lang/python/pyversion.mk"
-.if ${_PYTHON_VERSION} > 30
 BUILD_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
-.endif
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

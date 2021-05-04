@@ -23,7 +23,6 @@ REPLACE_BASH+=	usr/share/byobu/tests/*
 
 REPLACE_PERL+=			usr/lib/byobu/include/*
 REPLACE_PYTHON+=		usr/lib/byobu/include/*
-PYTHON_VERSIONS_ACCEPTED=	27 # py-newt
 
 EGDIR=			share/examples/byobu
 CONFIGURE_ARGS+=	--sysconfdir=${PREFIX}/${EGDIR}
