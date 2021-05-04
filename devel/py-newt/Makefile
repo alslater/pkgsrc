@@ -1,8 +1,7 @@
 # $NetBSD: Makefile,v 1.19 2019/11/03 10:18:28 rillig Exp $
 
-DISTNAME=	newt-0.52.16
+DISTNAME=	newt-0.52.21
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-PKGREVISION=	2
 CATEGORIES=	devel
 MASTER_SITES=	https://releases.pagure.org/newt/
 
@@ -19,7 +18,6 @@ USE_LIBTOOL=		yes
 PKGCONFIG_OVERRIDE+=	libnewt.pc.in
 
 PY_PATCHPLIST=		yes
-PYTHON_VERSIONS_ACCEPTED= 27
 
 pre-configure:
 	cd ${WRKSRC}; \

@@ -3,7 +3,7 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
 * Libtoolized
 * Use configure.ac's Python version
 
---- Makefile.in.orig	2013-08-06 15:46:42.000000000 +0000
+--- Makefile.in.orig	2019-05-27 12:57:40.000000000 +0000
 +++ Makefile.in
 @@ -16,7 +16,7 @@ SOEXT = so
  PYTHONVERS = @PYTHONVERS@
@@ -46,12 +46,12 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
  SHAREDDIR = shared
  SHAREDOBJS = $(patsubst %,$(SHAREDDIR)/%, $(LIBOBJS))
  
-@@ -65,59 +63,61 @@ else
+@@ -65,74 +63,74 @@ else
  TARGET=depend $(PROGS)
  endif
  
--all:	$(TARGET) _snackmodule.$(SOEXT)
-+all:	$(TARGET) _snackmodule.la
+-all:	$(TARGET) _snack.$(SOEXT)
++all:	$(TARGET) _snack.la
  
  test:	test.o $(LIBNEWT)
 -	$(CC) -g -o test test.o $(LIBNEWT) $(LDFLAGS) $(LIBS)
@@ -73,8 +73,8 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
 -	$(CC) -g -o showkey showkey.o $(LIBNEWT) $(LDFLAGS) $(LIBS)
 +	${LIBTOOL} --mode=link $(CC) -g -o showkey showkey.o $(LIBNEWT) $(LDFLAGS) $(LIBS)
  
--_snackmodule.$(SOEXT):   snackmodule.c $(LIBNEWTSH)
-+_snackmodule.la:   snackmodule.c $(LIBNEWT)
+-_snack.$(SOEXT):   snack.c $(LIBNEWTSH)
++_snack.la:   snack.c $(LIBNEWT)
  	@[ -n "$(PYTHONVERS)" ] && for ver in $(PYTHONVERS); do \
 -		pyconfig=$$ver-config; \
 +		pyconfig=python$$ver-config; \
@@ -89,12 +89,12 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
  		PIFLAGS=`$$pyconfig --includes`; \
  		PLDFLAGS=`$$pyconfig --ldflags`; \
  		PLFLAGS=`$$pyconfig --libs`; \
--		echo $(CC) $(SHCFLAGS) $(CPPFLAGS) $$PIFLAGS $$PCFLAGS -c -o $$ver/snackmodule.o snackmodule.c; \
--		$(CC) $(SHCFLAGS) $(CPPFLAGS) $$PIFLAGS $$PCFLAGS -c -o $$ver/snackmodule.o snackmodule.c; \
--		echo $(CC) --shared $$PLDFLAGS $$PLFLAGS $(LDFLAGS) -o $$ver/_snackmodule.$(SOEXT) $$ver/snackmodule.o -L.  -lnewt $(LIBS); \
--		$(CC) --shared $$PLDFLAGS $$PLFLAGS $(LDFLAGS) -o $$ver/_snackmodule.$(SOEXT) $$ver/snackmodule.o -L.  -lnewt $(LIBS); \
-+		${LIBTOOL} --mode=compile $(CC) $(SHCFLAGS) $(CPPFLAGS) $$PIFLAGS $$PCFLAGS -c -o python$$ver/snackmodule.lo snackmodule.c; \
-+		${LIBTOOL} --mode=link $(CC) -module -shared $$PLDFLAGS $$PLFLAGS $(LDFLAGS) -o python$$ver/_snackmodule.la python$$ver/snackmodule.lo libnewt.la $(LIBS) -rpath ${PREFIX}/lib/python$$ver/site-packages ; \
+-		echo $(CC) $(SHCFLAGS) $(CPPFLAGS) $$PIFLAGS $$PCFLAGS -c -o $$ver/snack.o snack.c; \
+-		$(CC) $(SHCFLAGS) $(CPPFLAGS) $$PIFLAGS $$PCFLAGS -c -o $$ver/snack.o snack.c; \
+-		echo $(CC) --shared $$PLDFLAGS $$PLFLAGS $(LDFLAGS) -o $$ver/_snack.$(SOEXT) $$ver/snack.o -L.  -lnewt $(LIBS); \
+-		$(CC) --shared $$PLDFLAGS $$PLFLAGS $(LDFLAGS) -o $$ver/_snack.$(SOEXT) $$ver/snack.o -L.  -lnewt $(LIBS); \
++		${LIBTOOL} --mode=compile $(CC) $(SHCFLAGS) $(CPPFLAGS) $$PIFLAGS $$PCFLAGS -c -o python$$ver/snack.lo snack.c; \
++		${LIBTOOL} --mode=link $(CC) -module --shared $$PLDFLAGS $$PLFLAGS $(LDFLAGS) -o python$$ver/_snack.la python$$ver/snack.lo libnewt.la $(LIBS) -rpath ${PREFIX}/lib/python$$ver/site-packages; \
  	done || :
  	touch $@
  
@@ -129,14 +129,12 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
  		$(SHAREDDIR)/*.o *.$(SOEXT)*
  
  depend:
-@@ -126,15 +126,13 @@ depend:
- $(SHAREDDIR):
- 	mkdir -p $(SHAREDDIR)
+ 	$(CC) $(CFLAGS) $(CPPFLAGS) -M $(SOURCES) > .depend
  
 -sharedlib: $(LIBNEWTSH)
 +sharedlib: $(LIBNEWT)
  
--$(LIBNEWTSH): $(SHAREDDIR) $(SHAREDOBJS)
+-$(LIBNEWTSH): $(SHAREDOBJS)
 -	$(CC) -shared -o $(LIBNEWTSH) $(SHLIBFLAGS) $(SHAREDOBJS) $(LDFLAGS) $(LIBS)
 -	ln -fs $(LIBNEWTSONAME) libnewt.$(SOEXT)
 -	ln -fs $(LIBNEWTSH) $(LIBNEWTSONAME)
@@ -144,13 +142,14 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
 +	${LIBTOOL} --mode=compile $(CC) $(SHCFLAGS) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
  
 -$(SHAREDDIR)/%.o : %.c
--	$(CC) $(SHCFLAGS) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 +$(SHAREDDIR)/%.lo : %.c
+ 	@mkdir -p $(SHAREDDIR)
+-	$(CC) $(SHCFLAGS) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
 +	${LIBTOOL} --mode=compile $(CC) $(SHCFLAGS) -c $(CFLAGS) $(CPPFLAGS) -o $@ $<
  
  install: $(LIBNEWT) install-sh whiptail
  	[ -d $(instroot)/$(bindir) ] || install -m 755 -d $(instroot)/$(bindir)
-@@ -143,22 +141,19 @@ install: $(LIBNEWT) install-sh whiptail
+@@ -141,22 +139,19 @@ install: $(LIBNEWT) install-sh whiptail
  	[ -d $(instroot)/$(man1dir) ] || install -m 755 -d $(instroot)/$(man1dir)
  	[ -d $(instroot)/$(pkgconfigdir) ] || install -m 755 -d $(instroot)/$(pkgconfigdir)
  	install -m 644 newt.h $(instroot)/$(includedir)
@@ -162,8 +161,8 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
  	make -C po datadir=$(instroot)/$(datadir) install
  	install -m 644 libnewt.pc $(instroot)/$(pkgconfigdir)
  
--install-sh: sharedlib $(WHIPTCLSO) _snackmodule.$(SOEXT)
-+install-sh: sharedlib $(WHIPTCLSO) _snackmodule.la
+-install-sh: sharedlib $(WHIPTCLSO) _snack.$(SOEXT)
++install-sh: sharedlib $(WHIPTCLSO) _snack.la
  	[ -d $(instroot)/$(libdir) ] || install -m 755 -d $(instroot)/$(libdir)
 -	install -m 755 $(LIBNEWTSH) $(instroot)/$(libdir)
 -	ln -sf $(LIBNEWTSONAME) $(instroot)/$(libdir)/libnewt.$(SOEXT)
@@ -173,11 +172,11 @@ $NetBSD: patch-Makefile.in,v 1.1 2014/01/01 06:55:23 ryoon Exp $
 +	[ -n "$(WHIPTCLSO)" ] && ${LIBTOOL} --mode=install install -m 755 whiptcl.la $(instroot)/$(libdir) || :
  	[ -n "$(PYTHONVERS)" ] && for ver in $(PYTHONVERS) ; do \
 -	   [ -d $(instroot)/$(libdir)/$$ver/site-packages ] || install -m 755 -d $(instroot)/$(libdir)/$$ver/site-packages ;\
--	   install -m 755 $$ver/_snackmodule.$(SOEXT) $(instroot)/$(libdir)/$$ver/site-packages ;\
+-	   install -m 755 $$ver/_snack.$(SOEXT) $(instroot)/$(libdir)/$$ver/site-packages ;\
 -	   install -m 644 snack.py $(instroot)/$(libdir)/$$ver/site-packages ;\
-+	   [ -d $(instroot)/$(libdir)/python$$ver/site-packages ] || install -m 755 -d $(instroot)/$(libdir)/python$$ver/site-packages ;\
-+	   ${LIBTOOL} --mode=install install -m 755 python$$ver/_snackmodule.la $(instroot)/$(libdir)/python$$ver/site-packages ;\
-+	   install -m 644 snack.py $(instroot)/$(libdir)/python$$ver/site-packages ;\
++	[ -d $(instroot)/$(libdir)/python$$ver/site-packages ] || install -m 755 -d $(instroot)/$(libdir)/python$$ver/site-packages ;\
++	${LIBTOOL} --mode=install install -m 755 python$$ver/_snack.la $(instroot)/$(libdir)/python$$ver/site-packages ;\
++	install -m 644 snack.py $(instroot)/$(libdir)/python$$ver/site-packages ;\
  	done || :
  
- Makefile: newt.spec
+ Makefile: configure.ac
