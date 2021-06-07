@@ -1,0 +1,6 @@
+$NetBSD: distinfo,v 1.2 2015/11/04 00:35:32 agc Exp $
+
+SHA1 (suds-py3-1.4.4.1.tar.gz) = b7782eff310da573bf0a8fad8197eb4cf3057e85
+RMD160 (suds-py3-1.4.4.1.tar.gz) = 4fc863590d9dde422b451067e1fe109c477ecea0
+SHA512 (suds-py3-1.4.4.1.tar.gz) = 5fe26353ab4d2f5571c007888c69f3d0aa4b502f6f41612979ec004797f69fd81c5757bd276c937fb58f26ff45bd995071336da70153bfb34fcc84e98cf7b579
+Size (suds-py3-1.4.4.1.tar.gz) = 84972 bytes
