@@ -6,7 +6,7 @@ COMMENT=		PHP extension for the sodium crypto algorithms library
 
 CONFIGURE_ARGS+=	--with-${MODNAME}=${BUILDLINK_PREFIX.libsodium}
 
-PHP_VERSIONS_ACCEPTED=	72 73 74
+PHP_VERSIONS_INCOMPATIBLE=	56
 
 .include "../../lang/php/ext.mk"
 .include "../../security/libsodium/buildlink3.mk"
