@@ -6,18 +6,18 @@ Assume panel_library is correct; this is a fix for ncurses' gnupanel
   which will get transformed to panel in buildlink.
 Also look for uuid/uuid.h.
 
---- setup.py.orig	2020-09-23 12:36:32.000000000 +0000
+--- setup.py.orig	2021-06-28 10:08:34.000000000 +0000
 +++ setup.py
-@@ -10,7 +10,7 @@ import sys
- import sysconfig
+@@ -11,7 +11,7 @@ import sysconfig
  from glob import glob, escape
+ import _osx_support
  
 -from distutils import log
 +from distutils import log, text_file
  from distutils.command.build_ext import build_ext
  from distutils.command.build_scripts import build_scripts
  from distutils.command.install import install
-@@ -24,7 +24,7 @@ from distutils.spawn import find_executa
+@@ -25,7 +25,7 @@ from distutils.spawn import find_executa
  TEST_EXTENSIONS = True
  
  # This global variable is used to hold the list of modules to be disabled.
@@ -26,7 +26,7 @@ Also look for uuid/uuid.h.
  
  
  def get_platform():
-@@ -645,15 +645,15 @@ class PyBuildExt(build_ext):
+@@ -630,15 +630,15 @@ class PyBuildExt(build_ext):
                          add_dir_to_list(dir_list, directory)
  
      def configure_compiler(self):
@@ -51,7 +51,7 @@ Also look for uuid/uuid.h.
          self.add_multiarch_paths()
          self.add_ldflags_cppflags()
  
-@@ -912,8 +912,6 @@ class PyBuildExt(build_ext):
+@@ -897,8 +897,6 @@ class PyBuildExt(build_ext):
          # use the same library for the readline and curses modules.
          if 'curses' in readline_termcap_library:
              curses_library = readline_termcap_library
@@ -60,7 +60,7 @@ Also look for uuid/uuid.h.
          # Issue 36210: OSS provided ncurses does not link on AIX
          # Use IBM supplied 'curses' for successful build of _curses
          elif AIX and self.compiler.find_library_file(self.lib_dirs, 'curses'):
-@@ -1015,8 +1013,7 @@ class PyBuildExt(build_ext):
+@@ -1000,8 +998,7 @@ class PyBuildExt(build_ext):
          # If the curses module is enabled, check for the panel module
          # _curses_panel needs some form of ncurses
          skip_curses_panel = True if AIX else False
@@ -70,7 +70,7 @@ Also look for uuid/uuid.h.
              self.add(Extension('_curses_panel', ['_curses_panel.c'],
                                 include_dirs=curses_includes,
                                 define_macros=curses_defines,
-@@ -1263,6 +1260,31 @@ class PyBuildExt(build_ext):
+@@ -1248,6 +1245,31 @@ class PyBuildExt(build_ext):
          dbm_order = ['gdbm']
          # The standard Unix dbm module:
          if not CYGWIN:
@@ -102,7 +102,7 @@ Also look for uuid/uuid.h.
              config_args = [arg.strip("'")
                             for arg in sysconfig.get_config_var("CONFIG_ARGS").split()]
              dbm_args = [arg for arg in config_args
-@@ -1274,7 +1296,7 @@ class PyBuildExt(build_ext):
+@@ -1259,7 +1281,7 @@ class PyBuildExt(build_ext):
              dbmext = None
              for cand in dbm_order:
                  if cand == "ndbm":
@@ -111,7 +111,7 @@ Also look for uuid/uuid.h.
                          # Some systems have -lndbm, others have -lgdbm_compat,
                          # others don't have either
                          if self.compiler.find_library_file(self.lib_dirs,
-@@ -1674,6 +1696,8 @@ class PyBuildExt(build_ext):
+@@ -1659,6 +1681,8 @@ class PyBuildExt(build_ext):
      def detect_uuid(self):
          # Build the _uuid module if possible
          uuid_incs = find_file("uuid.h", self.inc_dirs, ["/usr/include/uuid"])
@@ -120,7 +120,7 @@ Also look for uuid/uuid.h.
          if uuid_incs is not None:
              if self.compiler.find_library_file(self.lib_dirs, 'uuid'):
                  uuid_libs = ['uuid']
-@@ -2081,10 +2105,7 @@ class PyBuildExt(build_ext):
+@@ -2055,10 +2079,7 @@ class PyBuildExt(build_ext):
              sources = ['_decimal/_decimal.c']
              depends = ['_decimal/docstrings.h']
          else:
@@ -132,7 +132,7 @@ Also look for uuid/uuid.h.
              libraries = ['m']
              sources = [
                '_decimal/_decimal.c',
-@@ -2424,7 +2445,7 @@ def main():
+@@ -2403,7 +2424,7 @@ def main():
            # If you change the scripts installed here, you also need to
            # check the PyBuildScripts command above, and change the links
            # created by the bininstall target in Makefile.pre.in
