@@ -3,8 +3,11 @@
 MODNAME=		enchant
 CATEGORIES+=		textproc
 COMMENT=		PHP extension for ENCHANT (spelling) support
+PKGREVISION=		1
 
 CONFIGURE_ARGS+=	--with-enchant=shared,${BUILDLINK_PREFIX.enchant}
+
+USE_PHP_EXT_PATCHES=	yes
 
 BUILDLINK_API_DEPENDS.enchant+=	enchant>=1.2.4
 
