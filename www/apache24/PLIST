@@ -33,6 +33,7 @@ include/httpd/http_log.h
 include/httpd/http_main.h
 include/httpd/http_protocol.h
 include/httpd/http_request.h
+include/httpd/http_ssl.h
 include/httpd/http_vhost.h
 include/httpd/httpd.h
 include/httpd/mod_auth.h
@@ -600,6 +601,7 @@ share/httpd/manual/filter.html.tr.utf8
 share/httpd/manual/getting-started.html
 share/httpd/manual/getting-started.html.en
 share/httpd/manual/getting-started.html.fr.utf8
+share/httpd/manual/getting-started.html.ru.utf8
 share/httpd/manual/glossary.html
 share/httpd/manual/glossary.html.de
 share/httpd/manual/glossary.html.en
@@ -722,6 +724,7 @@ share/httpd/manual/index.html.ja.utf8
 share/httpd/manual/index.html.ko.euc-kr
 share/httpd/manual/index.html.pt-br
 share/httpd/manual/index.html.tr.utf8
+share/httpd/manual/index.html.ru.utf8
 share/httpd/manual/index.html.zh-cn.utf8
 share/httpd/manual/install.html
 share/httpd/manual/install.html.de
@@ -1348,7 +1351,6 @@ share/httpd/manual/new_features_2_0.html.fr.utf8
 share/httpd/manual/new_features_2_0.html.ja.utf8
 share/httpd/manual/new_features_2_0.html.ko.euc-kr
 share/httpd/manual/new_features_2_0.html.pt-br
-share/httpd/manual/new_features_2_0.html.ru.koi8-r
 share/httpd/manual/new_features_2_0.html.tr.utf8
 share/httpd/manual/new_features_2_2.html
 share/httpd/manual/new_features_2_2.html.en
