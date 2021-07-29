@@ -1,16 +1,15 @@
-# $NetBSD: Makefile,v 1.37 2016/09/12 15:43:00 taca Exp $
+# $NetBSD: Makefile,v 1.59 2021/07/21 13:51:35 taca Exp $
 #
 
-DISTNAME=	PEAR-1.10.7
+DISTNAME=	PEAR-1.10.12
 PKGNAME=	${PHP_PKG_PREFIX}-${DISTNAME:S/PEAR/pear/}
-PKGREVISION=	1
+PKGREVISION=	5
 CATEGORIES=	lang
 MASTER_SITES=	http://download.pear.php.net/package/
 EXTRACT_SUFX=	.tgz
-DIST_SUBDIR=	pear20151210
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://pear.php.net/
+HOMEPAGE=	https://pear.php.net/
 COMMENT=	PEAR Base System for PHP
 LICENSE=	2-clause-bsd
 
@@ -34,12 +33,12 @@ PEAR_SRCS=		${DISTNAME}${EXTRACT_SUFX}
 DISTFILES+=		${PEAR_SRCS}
 EXTRACT_ONLY+=		${PEAR_SRCS}
 
-ARCHIVE_SRCS=		Archive_Tar-1.4.5${EXTRACT_SUFX}
+ARCHIVE_SRCS=		Archive_Tar-1.4.14${EXTRACT_SUFX}
 ARCHIVE_WRKSRC=		${WRKDIR}/${ARCHIVE_SRCS:S/${EXTRACT_SUFX}//}
 DISTFILES+=		${ARCHIVE_SRCS}
 EXTRACT_ONLY+=		${ARCHIVE_SRCS}
 
-CONSOLE_SRCS=		Console_Getopt-1.4.1${EXTRACT_SUFX}
+CONSOLE_SRCS=		Console_Getopt-1.4.3${EXTRACT_SUFX}
 CONSOLE_WRKSRC=		${WRKDIR}/${CONSOLE_SRCS:S/${EXTRACT_SUFX}//}
 DISTFILES+=		${CONSOLE_SRCS}
 EXTRACT_ONLY+=		${CONSOLE_SRCS}
@@ -47,29 +46,29 @@ EXTRACT_ONLY+=		${CONSOLE_SRCS}
 STRUCTURES_SRCS=	Structures_Graph-1.1.1${EXTRACT_SUFX}
 DISTFILES+=		${STRUCTURES_SRCS}
 
-XMLUTIL_SRCS=		XML_Util-1.4.3${EXTRACT_SUFX}
+XMLUTIL_SRCS=		XML_Util-1.4.5${EXTRACT_SUFX}
 DISTFILES+=		${XMLUTIL_SRCS}
 
 #
 # end of base components
 
 SUBST_CLASSES+=		config
-SUBST_STAGE.config=	post-patch
+SUBST_STAGE.config=	pre-configure
 SUBST_FILES.config=	install/go-pear.php
-SUBST_SED.config=	-e "s|@WRKSRC@|${WRKSRC}|g"
-SUBST_SED.config+=	-e "s|@PREFIX@|${PREFIX}|g"
+SUBST_VARS.config=	WRKSRC
+SUBST_VARS.config+=	PREFIX
 SUBST_MESSAGE.config=	Fixing configuration files.
 
-REPLACE_SH+=		script/pear.sh
+REPLACE_SH+=		scripts/pear.sh
 
 INSTALLATION_DIRS+=	share/examples/pear
 
-post-extract:
+pre-patch:
 	${RM} ${WRKSRC}/INSTALL
 	${MKDIR} ${WRKSRC}/install
 	${MKDIR} ${BUNDLE}
 	${CP} ${FILESDIR}/go-pear.php ${WRKSRC}/install
-	${CP} ${FILESDIR}/PEAR.php ${BUNDLE}
+	${CP} ${WRKSRC}/PEAR.php ${BUNDLE}
 
 do-build:
 .for f in ${DISTFILES}
@@ -85,7 +84,4 @@ do-install:
 		${DESTDIR}${PREFIX}/share/examples/pear/pear.conf
 
 .include "${PHPPKGSRCDIR}/buildlink3.mk"
-
-BUILDLINK_API_DEPENDS.php+=	php>=5.2.1nb2
-
 .include "../../mk/bsd.pkg.mk"
