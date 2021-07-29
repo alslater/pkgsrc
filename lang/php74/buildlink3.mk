@@ -6,8 +6,11 @@ BUILDLINK_TREE+=	php
 PHP_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.php+=	php>=7.4.0<7.5
-BUILDLINK_ABI_DEPENDS.php+=	php>=7.4.0<7.5
+BUILDLINK_ABI_DEPENDS.php+=	php>=7.4.16nb1
 BUILDLINK_PKGSRCDIR.php?=	../../lang/php74
+
+pkgbase := php
+.include "../../mk/pkg-build-options.mk"
 
 .include "../../textproc/libxml2/buildlink3.mk"
 .endif # PHP_BUILDLINK3_MK
