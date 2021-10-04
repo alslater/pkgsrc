@@ -1,9 +1,6 @@
-$NetBSD: distinfo,v 1.99 2021/03/17 11:23:52 wiz Exp $
+$NetBSD: distinfo,v 1.106 2021/09/12 10:22:57 wiz Exp $
 
-SHA1 (mercurial-5.7.1.tar.gz) = 44f2d2dbdbebeb86358d9e6bac0867f43ae06178
-RMD160 (mercurial-5.7.1.tar.gz) = 3f059122baa88a4cbfa0ec16681b07f560b624df
-SHA512 (mercurial-5.7.1.tar.gz) = d887e2525f49e6b5bbf0f898b96bf9398b69f6b379c27090606469ff716b02989a346447cb37e62ab31a93ed58013ace17ec26e05f63fce225d8d6ca6214f966
-Size (mercurial-5.7.1.tar.gz) = 7900727 bytes
-SHA1 (patch-D8574) = 56cecc1c83558803186e84d90ef67b4dce68f8e9
-SHA1 (patch-rust_hg-core_src_lib.rs) = 38dc2a8c5f5ba9318cfa89e408cc7322e8429b8f
-SHA1 (patch-tests_test-transaction-rollback-on-sigpipe.t) = 8d7152cf2c913fa418cd0dfd179358f2f6aa9ed5
+SHA1 (mercurial-5.9.1.tar.gz) = bdc2f4ed081346ca9c343b8031e7a8a974017c3f
+RMD160 (mercurial-5.9.1.tar.gz) = d25686f9c34044b19c5dfac20a5f947d01786f06
+SHA512 (mercurial-5.9.1.tar.gz) = 2fe734ff707a73d2537af0b0c98e1142fa52b41f7ec4d5572cc5a8479f2d081e69de8b3dd136915d84cde4283f239e0519435c1dfd861824e3021c4c78cd305f
+Size (mercurial-5.9.1.tar.gz) = 8120006 bytes
