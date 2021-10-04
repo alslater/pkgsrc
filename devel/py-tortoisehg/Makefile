@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.72 2021/04/06 14:23:25 adam Exp $
+# $NetBSD: Makefile,v 1.75 2021/05/20 09:32:37 wiz Exp $
 
-DISTNAME=		tortoisehg-5.7
+DISTNAME=		tortoisehg-5.8
 PKGNAME=		${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=		devel python
 MASTER_SITES=		https://www.mercurial-scm.org/release/tortoisehg/targz/
@@ -9,6 +9,8 @@ MAINTAINER=		pkgsrc-users@NetBSD.org
 HOMEPAGE=		https://tortoisehg.bitbucket.io/
 COMMENT=		GUI for Mercurial
 LICENSE=		gnu-gpl-v2
+
+USE_TOOLS+=		pax
 
 REPLACE_PYTHON+=	thg
 
@@ -42,7 +44,7 @@ pre-build:
 post-install:
 	${INSTALL_DATA} ${WRKSRC}/contrib/thg.desktop ${DESTDIR}${PREFIX}/share/applications/thg.desktop
 	${INSTALL_DATA} ${WRKSRC}/COPYING.txt ${DESTDIR}${PREFIX}/share/doc/tortoisehg
-	cd ${WRKSRC}/doc/build && pax -pp -rw html ${DESTDIR}${PREFIX}/share/doc/tortoisehg
+	cd ${WRKSRC}/doc/build && ${PAX} -pp -rw html ${DESTDIR}${PREFIX}/share/doc/tortoisehg
 
 .include "../../lang/python/application.mk"
 .include "../../lang/python/distutils.mk"
