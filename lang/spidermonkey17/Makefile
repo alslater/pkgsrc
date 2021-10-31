@@ -28,6 +28,9 @@ CONFIGURE_DIRS=		js/src
 PKGCONFIG_OVERRIDE+=	js/src/ctypes/libffi/libffi.pc.in
 PKGCONFIG_OVERRIDE+=	js/src/js.pc.in
 
+CHECK_SSP_SKIP+=	bin/js17
+CHECK_SSP_SKIP+=	lib/libmozjs-17.0.so	
+
 TEST_TARGET=		check
 
 .include "../../mk/bsd.prefs.mk"
