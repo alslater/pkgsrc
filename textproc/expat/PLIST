@@ -5,6 +5,10 @@ include/expat_config.h
 include/expat_external.h
 lib/libexpat.la
 lib/pkgconfig/expat.pc
+lib/cmake/${DISTNAME}/expat-config-version.cmake
+lib/cmake/${DISTNAME}/expat-config.cmake
+lib/cmake/${DISTNAME}/expat-noconfig.cmake
+lib/cmake/${DISTNAME}/expat.cmake
 share/doc/expat/AUTHORS
 share/doc/expat/changelog
 share/doc/expat/reference.html
