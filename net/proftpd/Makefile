@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.88 2019/10/07 19:29:47 christos Exp $
+# $NetBSD: Makefile,v 1.93 2021/10/16 19:46:41 tm Exp $
 
-PKGREVISION= 1
+#PKGREVISION= 2
 .include "../../net/proftpd/Makefile.common"
 
 COMMENT=	Highly configurable FTP server software
@@ -54,8 +54,7 @@ INSTALLATION_DIRS+=	share/doc/proftpd
 INSTALLATION_DIRS+=	share/examples/proftpd
 
 post-install:
-.for i in NEWS README.md README.IPv6 README.LDAP README.PAM README.capabilities \
-          README.classes README.controls README.facl README.modules
+.for i in NEWS README.md README.LDAP README.modules
 	${INSTALL_DATA} ${WRKSRC}/${i} ${DESTDIR}${PREFIX}/share/doc/proftpd
 .endfor
 .for i in Configuration.html faq.html license.txt
