@@ -11,7 +11,7 @@ dprintf is not availble on SunOS (illumos)
 +#if defined(__sun)
 +#include <stdarg.h>
 +
-+int dprintf(int fd, const char *restrict format, ...) {
++int dprintf(int fd, const char * format, ...) {
 +    va_list ap;
 +    FILE *f = fdopen(fd, "w");
 +    if (!f) {
