@@ -1208,6 +1208,8 @@ share/httpd/manual/mod/mod_slotmem_plain.html.fr.utf8
 share/httpd/manual/mod/mod_slotmem_shm.html
 share/httpd/manual/mod/mod_slotmem_shm.html.en
 share/httpd/manual/mod/mod_slotmem_shm.html.fr.utf8
+share/httpd/manual/mod/mod_tls.html
+share/httpd/manual/mod/mod_tls.html.en
 share/httpd/manual/mod/mod_so.html
 share/httpd/manual/mod/mod_so.html.en
 share/httpd/manual/mod/mod_so.html.fr.utf8
