@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.3 2015/02/10 22:47:33 wiz Exp $
 
-VERSION=	22.2.4
+VERSION=	22.5.3
 DISTNAME=	autojump-${VERSION}
 PKGREVISION=	1
 CATEGORIES=	shells
