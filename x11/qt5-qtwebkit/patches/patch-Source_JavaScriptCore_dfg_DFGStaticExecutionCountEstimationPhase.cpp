@@ -7,7 +7,7 @@ $NetBSD$
                  continue;
  
 -            block->executionCount = pow(10, m_graph.m_naturalLoops->loopDepth(block));
-+            block->executionCount = pow((double)10, m_graph.m_naturalLoops->loopDepth(block));
++            block->executionCount = pow((double)10, (double)m_graph.m_naturalLoops->loopDepth(block));
          }
          
          // Estimate branch weights based on execution counts. This isn't quite correct. It'll
