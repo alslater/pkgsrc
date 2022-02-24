@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.8 2021/02/20 08:53:23 wiz Exp $
+@comment $NetBSD$
 bin/c_rehash
 bin/openssl
 include/openssl/aes.h
@@ -3780,6 +3780,8 @@ man/man3/d2i_X509_REQ_fp.3
 man/man3/d2i_X509_REVOKED.3
 man/man3/d2i_X509_SIG.3
 man/man3/d2i_X509_VAL.3
+man/man3/d2i_X509_bio.3
+man/man3/d2i_X509_fp.3
 man/man3/i2d_ACCESS_DESCRIPTION.3
 man/man3/i2d_ADMISSIONS.3
 man/man3/i2d_ADMISSION_SYNTAX.3
@@ -3974,6 +3976,8 @@ man/man3/i2d_X509_REQ_fp.3
 man/man3/i2d_X509_REVOKED.3
 man/man3/i2d_X509_SIG.3
 man/man3/i2d_X509_VAL.3
+man/man3/i2d_X509_bio.3
+man/man3/i2d_X509_fp.3
 man/man3/i2d_re_X509_CRL_tbs.3
 man/man3/i2d_re_X509_REQ_tbs.3
 man/man3/i2d_re_X509_tbs.3
