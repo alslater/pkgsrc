@@ -7,14 +7,14 @@ $NetBSD$
              {
                /* subei! r0, n */
 -              sp_offset += (int) pow (2, G_FLD (inst->v, 6, 3));
-+              sp_offset += (int) pow (2.0, G_FLD (inst->v, 6, 3));
++              sp_offset += (int) pow ((double)2, (double)G_FLD (inst->v, 6, 3));
              }
            else if (G_FLD (inst->v, 14, 7) == 0xc0
                     && G_FLD (inst->v, 2, 0) == 0x0)
              {
                /* addei! r0, n */
 -              sp_offset -= (int) pow (2, G_FLD (inst->v, 6, 3));
-+              sp_offset -= (int) pow (2.0, G_FLD (inst->v, 6, 3));
++              sp_offset -= (int) pow ((double)2, (double)G_FLD (inst->v, 6, 3));
              }
          }
        else
