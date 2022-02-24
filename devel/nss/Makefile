@@ -43,6 +43,16 @@ BUILDLINK_TRANSFORM+=	rm:-ansi
 
 MAKE_ENV.Linux+=	FREEBL_NO_DEPEND=0
 
+CHECK_SSP_SKIP+= lib/nss/libfreebl3.so
+CHECK_SSP_SKIP+= lib/nss/libnss3.so
+CHECK_SSP_SKIP+= lib/nss/libnssckbi-testlib.so
+CHECK_SSP_SKIP+= lib/nss/libnssckbi.so
+CHECK_SSP_SKIP+= lib/nss/libnssdbm3.so
+CHECK_SSP_SKIP+= lib/nss/libnssutil3.so
+CHECK_SSP_SKIP+= lib/nss/libsmime3.so
+CHECK_SSP_SKIP+= lib/nss/libsoftokn3.so
+CHECK_SSP_SKIP+= lib/nss/libssl3.so
+
 .if ${OBJECT_FMT} == "ELF"
 SO_SUFFIX=		so
 .elif ${OBJECT_FMT} == "Mach-O"
