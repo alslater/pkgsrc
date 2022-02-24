@@ -14,3 +14,4 @@ SHA512 (llvm-9.0.0.src.tar.xz) = 1bb3341e1d231559b948f1505b33c2e2e03989f9b8bbfef
 Size (llvm-9.0.0.src.tar.xz) = 32994768 bytes
 SHA1 (patch-src_experimental_memory__resource.cpp) = 15e2431f92b41d814008e83d918e27248db065e1
 SHA1 (patch-src_filesystem_directory__iterator.cpp) = 90ebbb80e4ec161405397d6d7c5d1d19a7284325
+SHA1 (patch-src_support_solaris_xlocale.cpp) = 528863786ee977cdc7fb5915e05edad2cedbcf3f
