@@ -16,11 +16,10 @@
 # used by databases/postgresql95-pltcl/Makefile
 # used by databases/postgresql95-server/Makefile
 
-DISTNAME=	postgresql-9.5.9
+DISTNAME=	postgresql-9.5.25
 CATEGORIES=	databases
 MASTER_SITES=	${MASTER_SITE_PGSQL:=source/v${PKGVERSION_NOREV}/}
 EXTRACT_SUFX=	.tar.bz2
-PKGREVISION=	2
 
 MAINTAINER?=	adam@NetBSD.org
 HOMEPAGE=	https://www.postgresql.org/

@@ -15,6 +15,7 @@ share/locale/ko/LC_MESSAGES/plpython-9.5.mo
 share/locale/pl/LC_MESSAGES/plpython-9.5.mo
 share/locale/pt_BR/LC_MESSAGES/plpython-9.5.mo
 share/locale/ru/LC_MESSAGES/plpython-9.5.mo
+share/locale/sv/LC_MESSAGES/plpython-9.5.mo
 share/locale/zh_CN/LC_MESSAGES/plpython-9.5.mo
 @comment as of 9.5.1 installation of these is not dependent on python version
 share/postgresql/extension/hstore_plpython2u--1.0.sql
