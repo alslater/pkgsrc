@@ -3,10 +3,12 @@
 # used by textproc/libxml2/Makefile
 # used by textproc/py-libxml2/Makefile
 
-DISTNAME=	libxml2-2.9.12
+DISTNAME=	libxml2-2.9.13
+
+EXTRACT_SUFX=	.tar.xz
+
 CATEGORIES=	textproc
-MASTER_SITES=	ftp://xmlsoft.org/libxml2/
-MASTER_SITES+=	http://xmlsoft.org/sources/
+MASTER_SITES=   https://download.gnome.org/sources/libxml2/2.9/
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://xmlsoft.org/
