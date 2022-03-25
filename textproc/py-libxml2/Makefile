@@ -16,7 +16,7 @@ SUBST_CLASSES+=		setup
 SUBST_MESSAGE.setup=	Fixing hardcoded paths.
 SUBST_STAGE.setup=	pre-build
 SUBST_FILES.setup=	python/setup.py
-SUBST_SED.setup=	-e "/ROOT/s,'/usr','${BUILDLINK_PREFIX.libxml2}',g"
+SUBST_SED.setup=	-e "/ROOT/s,'/usr/local','${BUILDLINK_PREFIX.libxml2}',g"
 SUBST_SED.setup+=	-e "/^\"/s,/usr/include,${BUILDLINK_PREFIX.iconv}/include,g"
 SUBST_SED.setup+=	-e "/^\"/s,/usr/local/include,${BUILDLINK_PREFIX.iconv}/include,g"
 
@@ -35,7 +35,7 @@ EGG_NAME=	${DISTNAME:S/-/_python-/}
 
 BUILD_DEPENDS+=	${PYPKGPREFIX}-expat>=0:../../textproc/py-expat
 
-.include "../../lang/python/distutils.mk"
+.include "../../lang/python/egg.mk"
 .include "../../converters/libiconv/buildlink3.mk"
 BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=${PKGVERSION_NOREV}
 .include "../../textproc/libxml2/buildlink3.mk"
