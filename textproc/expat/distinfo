@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.33 2019/09/15 13:13:47 nia Exp $
 
-SHA1 (expat-2.4.1.tar.gz) = 171c635c757e0ac9005f72b9578af021fddbcfb3
-RMD160 (expat-2.4.1.tar.gz) = 11e80cd41990a2b574c77e9e36b040d1711dc0fc
-SHA512 (expat-2.4.1.tar.gz) = 7390bf8d6b3e99f3bccc5c3d92f21d02c0b8ed29f1f9556e18dbae7caa813814b4fd7bd7aa2d711da27c97141d4a627b481b18ac57cef2c2438b78bac1c31203
-Size (expat-2.4.1.tar.gz) = 697439 bytes
+SHA1 (expat-2.4.7.tar.gz) = 835df20eae25146e483565c8823b49f34cee1f58
+RMD160 (expat-2.4.7.tar.gz) = 62002533aeba7b7948401f0e82603f402580ba81
+SHA512 (expat-2.4.7.tar.gz) = d83f631e90b4baee02a2279e69729260ba152e8e1274562183dc07b0dabf2c42481f5b2a48963b59a3d1b2ccee48f61f821b254461efbb4afad8abeb175df088
+Size (expat-2.4.7.tar.gz) = 710430 bytes
