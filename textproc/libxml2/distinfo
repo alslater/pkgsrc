@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.131.4.1 2020/01/27 10:13:42 bsiegert Exp $
 
-SHA1 (libxml2-2.9.13.tar.xz) = 7dced00d88181d559ee76c6d8ef4571eb1bd0b26
-RMD160 (libxml2-2.9.13.tar.xz) = dc9922afb45d2e7ba4840d13ce784a48d664687c
-SHA512 (libxml2-2.9.13.tar.xz) = fc51980cb9222bd3b5242f73d28b55fa15a80e68e52e1c45274f1eda11500ed385853209edb3b2a1f06b9de0be304c159a9bd898c7d84b0899eacb00723d98b5
-Size (libxml2-2.9.13.tar.xz) = 3243336 bytes
+SHA1 (libxml2-2.9.14.tar.xz) = 4a46f37be1aaa33daac49b4dfb51eebe85d805a8
+RMD160 (libxml2-2.9.14.tar.xz) = 1feadd3f7e3a801f1fc1b9f4e90054f2f2c8fc33
+SHA512 (libxml2-2.9.14.tar.xz) = d08e6cafb289c499fdc5b3a12181e032a34f7a249bc66758859f964d3e71e19fd69be79921e1a9d8ab1e692d15b13f5fae95eeb10c3236974d89e218f5107606
+Size (libxml2-2.9.14.tar.xz) = 3129968 bytes
 SHA1 (patch-Makefile.in) = 705d9327f34d5c646a99f0581a9dcc8bca7fd468
 SHA1 (patch-catalog.c) = 34afe787f6012b460a85be993048e133907a1621
 SHA1 (patch-configure) = 8e781d86c5475939bfa3fd436edfc62b8e19a5f6
