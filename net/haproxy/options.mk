@@ -1,8 +1,10 @@
-# $NetBSD: options.mk,v 1.7 2019/08/03 20:37:19 morr Exp $
+# $NetBSD: options.mk,v 1.10 2021/05/21 08:36:57 adam Exp $
 
-PKG_OPTIONS_VAR=	PKG_OPTIONS.haproxy
-PKG_SUPPORTED_OPTIONS=	pcre ssl deviceatlas lua prometheus
-PKG_SUGGESTED_OPTIONS=	pcre ssl
+PKG_OPTIONS_VAR=		PKG_OPTIONS.haproxy
+PKG_SUPPORTED_OPTIONS=		lua prometheus ssl
+PKG_OPTIONS_OPTIONAL_GROUPS=	regex
+PKG_OPTIONS_GROUP.regex=	pcre pcre2 pcre2-jit
+PKG_SUGGESTED_OPTIONS=		pcre ssl
 
 .include "../../mk/bsd.options.mk"
 
@@ -14,14 +16,24 @@ PKG_SUGGESTED_OPTIONS=	pcre ssl
 BUILD_MAKE_FLAGS+=	USE_PCRE=1
 .endif
 
+.if !empty(PKG_OPTIONS:Mpcre2)
+.  include "../../devel/pcre2/buildlink3.mk"
+BUILD_MAKE_FLAGS+=	USE_PCRE2=1
+.endif
+
+.if !empty(PKG_OPTIONS:Mpcre2-jit)
+.  include "../../devel/pcre2/buildlink3.mk"
+BUILD_MAKE_FLAGS+=	USE_PCRE2_JIT=1
+.endif
+
 ###
 ### Use LUA
 ###
 .if !empty(PKG_OPTIONS:Mlua)
+LUA_VERSIONS_ACCEPTED=	53
 .  include "../../lang/lua/luaversion.mk"
 BUILD_MAKE_FLAGS+=	USE_LUA=1
-BUILD_MAKE_FLAGS+=	LUA_VERSION_ACCEPTED=53
-BUILD_MAKE_FLAGS+=	LUA_INC=${PREFIX}/${LUA_INCDIR}
+BUILD_MAKE_FLAGS+=	LUA_LIB_NAME=lua5.3
 .  include "../../lang/lua/buildlink3.mk"
 .endif
 
@@ -29,27 +41,7 @@ BUILD_MAKE_FLAGS+=	LUA_INC=${PREFIX}/${LUA_INCDIR}
 ### Use Prometheus
 ###
 .if !empty(PKG_OPTIONS:Mprometheus)
-BUILD_MAKE_FLAGS+=	EXTRA_OBJS="contrib/prometheus-exporter/service-prometheus.o"
-.endif
-
-
-###
-### Support DeviceAtlas detection.
-###
-.if !empty(PKG_OPTIONS:Mpcre) && !empty(PKG_OPTIONS:Mdeviceatlas)
-DEVICEATLAS_VERSION=	2.1
-DEVICEATLAS_DISTFILE=	deviceatlas-enterprise-c-${DEVICEATLAS_VERSION}
-DISTFILES=		${DISTNAME}.tar.gz ${DEVICEATLAS_DISTFILE}.zip
-DEVICEATLAS_HOMEPAGE=	https://www.deviceatlas.com/deviceatlas-haproxy-module
-
-BUILD_MAKE_FLAGS+=	USE_DEVICEATLAS=1 DEVICEATLAS_SRC=../${DEVICEATLAS_DISTFILE}
-
-.  if !exists(${DISTDIR}/${DEVICEATLAS_DISTFILE}.zip)
-FETCH_MESSAGE=		"Please fetch ${DEVICEATLAS_DISTFILE}.zip manually from"
-FETCH_MESSAGE+=		"${DEVICEATLAS_HOMEPAGE}"
-FETCH_MESSAGE+=		"and put into"
-FETCH_MESSAGE+=		"${DISTDIR}"
-.  endif
+BUILD_MAKE_FLAGS+=	USE_PROMEX=1
 .endif
 
 ###
