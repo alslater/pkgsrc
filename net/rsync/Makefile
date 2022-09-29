@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.103 2015/12/23 19:53:24 ryoon Exp $
 
-DISTNAME=	rsync-3.1.2
+DISTNAME=	rsync-3.2.5
 CATEGORIES=	net
 MASTER_SITES=	http://rsync.samba.org/ftp/rsync/ \
 		http://rsync.samba.org/ftp/rsync/old-versions/  \
@@ -13,12 +13,15 @@ LICENSE=	gnu-gpl-v3
 
 INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1 ${PKGMANDIR}/man5 share/doc/rsync
 
+USE_TOOLS+=		bash:run
 GNU_CONFIGURE=		yes
-CONFIGURE_ARGS+=	--with-included-popt
 CONFIGURE_ARGS+=	--with-rsyncd-conf=${PKG_SYSCONFDIR}/rsyncd.conf
+CONFIGURE_ARGS+=	--with-included-zlib=no
 TEST_TARGET=		test
 
 PKG_SYSCONFSUBDIR=	rsync
+
+REPLACE_BASH=		rsync-ssl
 
 RCD_SCRIPTS=		rsyncd
 RCD_SCRIPT_SRC.rsyncd=	files/rsyncd.sh
@@ -32,8 +35,14 @@ SUBST_SED.paths=	-e 's|/etc/rsyncd|${PKG_SYSCONFDIR}/rsyncd|g'
 SUBST_SED.paths+=	-e 's|/usr/bin/rsync|${PREFIX}/bin/rsync|g'
 
 post-install:
-	${INSTALL_DATA} ${WRKSRC}/README ${WRKSRC}/tech_report.tex \
+	${INSTALL_DATA} ${WRKSRC}/README.md ${WRKSRC}/tech_report.tex \
 		${DESTDIR}${PREFIX}/share/doc/rsync
 
+.include "../../archivers/lz4/buildlink3.mk"
+.include "../../archivers/zstd/buildlink3.mk"
 .include "../../converters/libiconv/buildlink3.mk"
+.include "../../devel/popt/buildlink3.mk"
+.include "../../devel/xxhash/buildlink3.mk"
+.include "../../devel/zlib/buildlink3.mk"
+.include "../../security/openssl/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
