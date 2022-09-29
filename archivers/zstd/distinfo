@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.33 2022/01/23 22:04:33 wiz Exp $
 
-BLAKE2s (zstd-1.5.2.tar.gz) = 2d03dcfcd9775c58f07f860b16b6a4774291d1ec962af6d6a8f653405c015ab1
+SHA1 (zstd-1.5.2.tar.gz) = 8ddf671abb68fd7ed2c655e84753c0e899477455
+RMD160 (zstd-1.5.2.tar.gz) = d61d3958d5ff6948520b72c122a35140b0ca71b3
 SHA512 (zstd-1.5.2.tar.gz) = e107508a41fca50845cc2494e64adaba93efb95a2fa486fc962510a8ba4b2180d93067cae9870f119e88e5e8b28a046bc2240b0b23cdd8933d1fb1a6a9668c1e
 Size (zstd-1.5.2.tar.gz) = 1950967 bytes
 SHA1 (patch-Makefile) = 35159f44eb1d212395a53a27de60d3d1a5d3d014
