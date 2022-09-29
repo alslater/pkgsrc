@@ -15,7 +15,7 @@ NO_CONFIGURE=	YES
 SUBST_CLASSES+=		setup
 SUBST_MESSAGE.setup=	Fixing hardcoded paths.
 SUBST_STAGE.setup=	pre-build
-SUBST_FILES.setup=	python/setup.py
+SUBST_FILES.setup=	python/setup.py.in
 SUBST_SED.setup=	-e "/ROOT/s,'/usr/local','${BUILDLINK_PREFIX.libxml2}',g"
 SUBST_SED.setup+=	-e "/^\"/s,/usr/include,${BUILDLINK_PREFIX.iconv}/include,g"
 SUBST_SED.setup+=	-e "/^\"/s,/usr/local/include,${BUILDLINK_PREFIX.iconv}/include,g"
@@ -23,6 +23,9 @@ SUBST_SED.setup+=	-e "/^\"/s,/usr/local/include,${BUILDLINK_PREFIX.iconv}/includ
 BUILDLINK_TRANSFORM.Darwin+=	opt:-bundle:-dynamiclib
 
 .include "../../mk/bsd.prefs.mk"
+
+post-extract:
+	${CP} files/setup.py ${WRKSRC}/python/setup.py
 
 .if ${OPSYS} == "Darwin"
 post-install: fix-darwin-install-name
