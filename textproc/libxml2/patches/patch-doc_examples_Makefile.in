@@ -2,14 +2,14 @@ $NetBSD: patch-doc_examples_Makefile.in,v 1.1 2019/01/09 19:09:03 adam Exp $
 
 Don't install html files.
 
---- doc/examples/Makefile.in.orig	2022-02-20 12:11:09.000000000 +0000
+--- doc/examples/Makefile.in.orig	2022-08-29 13:20:52.000000000 +0000
 +++ doc/examples/Makefile.in
-@@ -975,7 +975,7 @@ uninstall-am:
+@@ -905,7 +905,7 @@ rebuild:
  
  install-data-local: 
- 	$(MKDIR_P) $(DESTDIR)$(HTML_DIR)/examples
--	-$(INSTALL) -m 0644 $(srcdir)/*.html $(srcdir)/*.c $(srcdir)/*.xml $(srcdir)/*.xsl $(srcdir)/*.res $(DESTDIR)$(HTML_DIR)/examples/
-+	-$(INSTALL) -m 0644 $(srcdir)/*.c $(srcdir)/*.xml $(srcdir)/*.xsl $(srcdir)/*.res $(DESTDIR)$(HTML_DIR)/examples/
+ 	$(MKDIR_P) $(DESTDIR)$(docdir)/examples
+-	-$(INSTALL) -m 0644 $(srcdir)/*.html $(srcdir)/*.c $(DESTDIR)$(docdir)/examples/
++	-$(INSTALL) -m 0644 $(srcdir)/*.c $(DESTDIR)$(docdir)/examples/
  
- clean-local:
- 	test -f Makefile.am || rm -f test?.xml
+ uninstall-local:
+ 	rm -f $(DESTDIR)$(docdir)/examples/*.c

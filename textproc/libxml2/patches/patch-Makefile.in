@@ -2,14 +2,14 @@ $NetBSD: patch-Makefile.in,v 1.1 2019/01/09 19:09:03 adam Exp $
 
 Move EXAMPLES_DIR to fit pkgsrc.
 
---- Makefile.in.orig	2022-02-20 12:11:09.000000000 +0000
+--- Makefile.in.orig	2022-08-29 13:20:52.000000000 +0000
 +++ Makefile.in
-@@ -877,7 +877,7 @@ cmake_DATA = libxml2-config.cmake
+@@ -791,7 +791,7 @@ cmake_DATA = libxml2-config.cmake
  #
  # Install the tests program sources as examples 
  #
--EXAMPLES_DIR = $(docdir)/examples
-+EXAMPLES_DIR = $(datadir)/examples/libxml2
+-examplesdir = $(docdir)/examples
++examplesdir = $(datadir)/examples
+ examples_DATA = xmllint.c
  
  #
- # Coverage support, largely borrowed from libvirt

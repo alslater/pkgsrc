@@ -1,16 +1,14 @@
 $NetBSD: distinfo,v 1.131.4.1 2020/01/27 10:13:42 bsiegert Exp $
 
-SHA1 (libxml2-2.9.14.tar.xz) = 4a46f37be1aaa33daac49b4dfb51eebe85d805a8
-RMD160 (libxml2-2.9.14.tar.xz) = 1feadd3f7e3a801f1fc1b9f4e90054f2f2c8fc33
-SHA512 (libxml2-2.9.14.tar.xz) = d08e6cafb289c499fdc5b3a12181e032a34f7a249bc66758859f964d3e71e19fd69be79921e1a9d8ab1e692d15b13f5fae95eeb10c3236974d89e218f5107606
-Size (libxml2-2.9.14.tar.xz) = 3129968 bytes
-SHA1 (patch-Makefile.in) = 705d9327f34d5c646a99f0581a9dcc8bca7fd468
-SHA1 (patch-catalog.c) = 34afe787f6012b460a85be993048e133907a1621
-SHA1 (patch-configure) = 8e781d86c5475939bfa3fd436edfc62b8e19a5f6
-SHA1 (patch-doc_examples_Makefile.in) = 975dda7ca3a5a85e388a07c223c7e5aedf8f0297
+SHA1 (libxml2-2.10.2.tar.xz) = 96c3a8709efd8c916bd05efa36cd9565612b4f36
+RMD160 (libxml2-2.10.2.tar.xz) = c464042a3b0541c46d65332169cb8178627cefa9
+SHA512 (libxml2-2.10.2.tar.xz) = c26ee428ae2fae2326fcaec156ed36c5f5d63aeb4839d626f6544a3fad158a1602e9dc0d542b2f947e6a8de0c09ff130da2626a30aec27446ce09614f78466b5
+Size (libxml2-2.10.2.tar.xz) = 2636304 bytes
+SHA1 (patch-Makefile.in) = efe1097eea39555ade3438b8a8e9b9fdda58bb13
+SHA1 (patch-configure) = e3e1bec887e1a9fa4fb4f6d563280ca434658227
+SHA1 (patch-doc_examples_Makefile.in) = 32f554320726063d22146750be8c5532a46f6dc3
 SHA1 (patch-encoding.c) = 6cf0a7d421828b9f40a4079ee85adb791c54d096
 SHA1 (patch-python_libxml.c) = cfa07b4f3dfddb501c2ba210bb32b8ee14e3df9d
 SHA1 (patch-python_libxml.py) = 869a72ae5ba2e27e6d46552878890acb22337675
-SHA1 (patch-python_libxml2.py) = 209d105b0f3aedb834091390a7c6819705108e34
-SHA1 (patch-python_setup.py) = a15fbbcfba99b61abb88408bc7c0961e17a4c1f3
-SHA1 (patch-xmlcatalog.c) = d65b7e3be9694147e96ce4bb70a1739e2279ba81
+SHA1 (patch-python_setup.py.in) = 28e52a097a4766093ad8dbb5cb03cc56079d53c1
+SHA1 (patch-xmlcatalog.c) = 0efdea450dfd568b892cbdd97009ac52268a3940
