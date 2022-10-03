@@ -1,3 +1,5 @@
+CFLAGS+= -pipe -O2 -march=sandybridge -fno-aggressive-loop-optimizations
+
 PKG_OPTIONS.qt4-libs += gtk2
 PKG_OPTIONS.memcached += -dtrace
 PKG_OPTIONS.qt5 += -llvm

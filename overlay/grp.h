@@ -62,6 +62,7 @@ extern struct group *fgetgrent_r(FILE *, struct group *, char *, int);
 
 extern struct group *fgetgrent(FILE *);		/* MT-unsafe */
 extern int initgroups(const char *, gid_t);
+extern int getgrouplist(const char *, gid_t, gid_t *, int *);
 #endif /* defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX) */
 
 #if defined(__EXTENSIONS__) || !defined(__XOPEN_OR_POSIX) || defined(_XPG4_2)

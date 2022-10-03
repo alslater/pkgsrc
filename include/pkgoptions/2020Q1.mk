@@ -103,6 +103,8 @@ PYTHON_VERSION_DEFAULT=		38
 RUBY_RAILS_DEFAULT=		42
 RUBY_VERSION_DEFAULT=		26
 
+PYTHON_VERSION_DEFAULT.omniORB=		36
+
 #
 # XXX: This doesn't really belong here, move somewhere more sensible
 #
