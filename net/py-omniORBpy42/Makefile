@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.11 2016/07/09 13:04:01 wiz Exp $
 
-DISTNAME=	omniORBpy-4.2.4
+DISTNAME=	omniORBpy-4.2.5
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 #PKGREVISION=	1
 CATEGORIES=	devel python
@@ -19,7 +19,7 @@ MAKE_FILE=	GNUmakefile
 
 PYTHON_SELF_CONFLICT=	yes
 
-PYTHON_VERSIONS_ACCEPTED= 36 37 38
+PYTHON_VERSIONS_ACCEPTED= 39
 
 post-install:
 	${FIND} ${DESTDIR}${PREFIX}/${PYSITELIB} -name "__pycache__" | xargs rm -rf
