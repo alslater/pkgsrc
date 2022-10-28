@@ -2,7 +2,7 @@
 
 VERSION=	0.7
 DISTNAME=	auditmonitor-${VERSION}
-PKGREVISION=	1
+PKGREVISION=	2
 PKGNAME=    auditmonitor-${VERSION}
 CATEGORIES=	scl python
 MASTER_SITES=	${MASTER_SITE_GITHUB:=alslater/}
@@ -16,7 +16,7 @@ COMMENT=	BSM Audit Monitor
 
 WRKSRC=     ${WRKDIR}/auditmonitor-${VERSION}
 
-PYTHON_VERSIONS_ACCEPTED= 38
+PYTHON_VERSIONS_ACCEPTED= 39
 
 SMF_NAME=	auditmonitor
 
