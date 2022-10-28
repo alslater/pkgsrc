@@ -1,9 +1,9 @@
 # $NetBSD: Makefile,v 1.13 2016/07/09 13:03:59 wiz Exp $
 
-VERSION=		4.2.4
+VERSION=		4.2.5
 DISTNAME=		omniORB-${VERSION}
 PKGNAME=		omniORB42-${VERSION}
-#PKGREVISION=		1
+PKGREVISION=		1
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=omniorb/}
 EXTRACT_SUFX=		.tar.bz2
@@ -51,7 +51,7 @@ CONFIGURE_ARGS+=--disable-ipv6
 PY_PATCHPLIST=		yes
 REPLACE_PYTHON+=	src/tool/omniidl/python/scripts/omniidlrun.py
 REPLACE_PYTHON+=	src/tool/omniidl/python3/scripts/omniidlrun.py
-PYTHON_VERSIONS_ACCEPTED= 36
+PYTHON_VERSIONS_ACCEPTED= 39
 
 post-install:
 	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/share/examples/omniORB/
