@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.55 2017/04/04 08:57:33 adam Exp $
 
-DISTNAME=	zlib-1.2.12
-PKGREVISION=	1
+DISTNAME=	zlib-1.2.13
+#PKGREVISION=	1
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_SOURCEFORGE:=libpng/}
 MASTER_SITES+=	http://zlib.net/
