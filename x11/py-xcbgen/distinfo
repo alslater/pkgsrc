@@ -5,3 +5,4 @@ RMD160 (xcb-proto-1.13.tar.bz2) = d085d1be1844009f08442113a83b7fdffeae8325
 SHA512 (xcb-proto-1.13.tar.bz2) = 002aa2aa0ad503977e03419c6f136f1e3aa8c787916830ce6d6be8f81ca99edc1d8fc5f71ce8c592b490cc767bf6567695f0bafe55fe3f743076bcddbaac07f7
 Size (xcb-proto-1.13.tar.bz2) = 151981 bytes
 SHA1 (patch-ae) = ae3eae2c5ebf88bfc33a04f688f5c243c1475605
+SHA1 (patch-xcbgen_align.py) = 81a5e7a7724fa336c181354420988d8262e78ad2
