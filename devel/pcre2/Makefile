@@ -1,10 +1,9 @@
 # $NetBSD: Makefile,v 1.15 2019/11/26 10:17:55 wiz Exp $
 
-DISTNAME=	pcre2-10.34
+DISTNAME=	pcre2-10.40
 CATEGORIES=	devel
-MASTER_SITES=	ftp://ftp.pcre.org/pub/pcre/
-MASTER_SITES+=	https://ftp.pcre.org/pub/pcre/
-MASTER_SITES+=	${MASTER_SITE_SOURCEFORGE:=pcre/}
+MASTER_SITES=   ${MASTER_SITE_GITHUB:=PhilipHazel/}
+GITHUB_RELEASE= ${DISTNAME}
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
