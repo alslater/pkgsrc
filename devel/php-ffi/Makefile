@@ -5,7 +5,7 @@ CATEGORIES+=		textproc
 COMMENT=		PHP extension for Foreign Function Interface
 LICENSE=		php
 
-PHP_VERSIONS_ACCEPTED=	74 80
+PHP_VERSIONS_ACCEPTED=	74 80 81
 
 USE_PHP_EXT_PATCHES=	yes
 

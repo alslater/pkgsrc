@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.20 2019/11/03 09:14:16 rillig Exp $
 
 DISTNAME=	xcb-proto-1.13
+PKGREVISION=	1
 PKGNAME=	${PYPKGPREFIX}-xcbgen-1.13
 CATEGORIES=	x11
 MASTER_SITES=	https://xcb.freedesktop.org/dist/
