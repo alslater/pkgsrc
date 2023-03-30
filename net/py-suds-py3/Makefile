@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.8 2016/07/09 13:04:01 wiz Exp $
 
-DISTNAME=	suds-py3-1.4.4.1
+DISTNAME=	suds-py3-1.4.5.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	net python
 MASTER_SITES=	${MASTER_SITE_PYPI:=s/suds-py3/}
