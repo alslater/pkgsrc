@@ -89,8 +89,8 @@ PHPVERSION_MK=	defined
 # Define each PHP's version.
 PHP56_VERSION=	5.6.40
 PHP74_VERSION=	7.4.32
-PHP80_VERSION=	8.0.27
-PHP81_VERSION=	8.1.14
+PHP80_VERSION=	8.0.28
+PHP81_VERSION=	8.1.16
 
 # Define initial release of major version.
 PHP56_RELDATE=	20140828
