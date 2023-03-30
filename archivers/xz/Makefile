@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.28 2018/09/02 21:03:22 maya Exp $
 
-DISTNAME=	xz-5.2.8
+DISTNAME=	xz-5.4.1
 CATEGORIES=	archivers
 MASTER_SITES=	https://tukaani.org/xz/
 EXTRACT_SUFX=	.tar.bz2
