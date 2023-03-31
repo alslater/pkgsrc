@@ -1,4 +1,4 @@
-# $NetBSD: egg.mk,v 1.30 2020/09/01 03:58:08 wiz Exp $
+# $NetBSD: egg.mk,v 1.39 2022/09/06 09:05:59 nia Exp $
 #
 # Common logic to handle Python Eggs
 #
@@ -6,25 +6,25 @@
 .include "../../lang/python/pyversion.mk"
 
 # This file should be included to package python "distributions" which
-# use setuptools to create an egg.  Some distributions use distutils,
-# which creates an egg-info file; those should use distutils.mk
+# use setuptools to create an egg.
+#
+# For wheel (*.whl) support, look at wheel.mk.
 
 EGG_NAME?=	${DISTNAME:C/-([^0-9])/_\1/g}
 EGG_INFODIR?=	${EGG_NAME}-py${PYVERSSUFFIX}.egg-info
 
-PYDISTUTILSPKG=	yes
-PY_PATCHPLIST=	yes
+PYDISTUTILSPKG?=	yes
+PY_PATCHPLIST?=		yes
 
-# True eggs always have an egg-info directory, and thus there is no
-# PLIST conditional (as in distutils.mk for old versions of python).
-# Note that we substitute EGG_INFODIR rather than EGG_FILE, because
-# the egg information in an egg comprises multiple files in an
+# True eggs always have an egg-info directory. egg.mk can also
+# be used for distutils packages, in which case there will be no
 # egg-info directory.
 
-# The PLIST substitution of EGG_NAME is not necessary. However, it
-# is convenient. See lang/ruby/gem.mk and PLIST files for ruby gem
-# packages to understand other examples of this feature in non-python
-# packages.
+# Please note that some packages do not provide this directory
+# with the last setuptools version that supports python 2.7.
+# In this case, the ${EGG_INFODIR} lines in the PLIST need to
+# be prefixed with ${PLIST.py3x} - please always test with both
+# python 2.7 and the current python 3.x default!
 
 PLIST_SUBST+=	EGG_NAME=${EGG_NAME}-py${PYVERSSUFFIX}
 PLIST_SUBST+=	EGG_INFODIR=${EGG_INFODIR}
@@ -35,26 +35,31 @@ PRINT_PLIST_AWK+=	{ gsub(/${EGG_NAME}-py${PYVERSSUFFIX:S,.,\.,g}-nspkg.pth/, \
 PRINT_PLIST_AWK+=	{ gsub(/${PYVERSSUFFIX:S,.,\.,g}/, \
 			       "$${PYVERSSUFFIX}") }
 
-_PYSETUPTOOLSINSTALLARGS=	--single-version-externally-managed
+USE_PKG_RESOURCES?=	no
 
-# py-setuptools depends on a couple py-* packages that need to be installed
-# beforehand. Of course, those can not be built and installed using py-setuptools
-# itself; so use the setuptools version included with python itself for installing
-# them.
+# py-setuptools needs to be bootstrapped from python itself, without using
+# py-setuptools.
 BOOTSTRAP_SETUPTOOLS?=	no
 .if ${BOOTSTRAP_SETUPTOOLS} == "yes"
-BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
+TOOL_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 do-build: ensurepip
 .PHONY: ensurepip
 
 ensurepip:
 	${SETENV} ${MAKE_ENV} ${PYTHONBIN} -m ensurepip --user
 .else
-.  if ${PYVERSSUFFIX} == "2.7"
-DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:../../devel/py-setuptools44
+.  if "${PYVERSSUFFIX}" == "2.7"
+SETUPTOOLS_PATH=../../devel/py-setuptools44
 .  else
-DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:../../devel/py-setuptools
+SETUPTOOLS_PATH=../../devel/py-setuptools
 .  endif
+.  if "${USE_PKG_RESOURCES}" == "yes"
+# when packages use pkg_resources, setuptools is needed at runtime
+DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:${SETUPTOOLS_PATH}
+.  endif
+# in all cases (in particular, for cross-compilation), setuptools
+# also needs to be a tool dependency
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:${SETUPTOOLS_PATH}
 .endif
 
 INSTALLATION_DIRS+=	${PYSITELIB}

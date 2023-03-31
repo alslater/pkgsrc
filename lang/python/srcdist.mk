@@ -1,4 +1,4 @@
-# $NetBSD: srcdist.mk,v 1.40 2020/01/08 13:44:41 joerg Exp $
+# $NetBSD: srcdist.mk,v 1.42 2022/09/06 09:05:59 nia Exp $
 
 .include "../../lang/python/pyversion.mk"
 
@@ -7,7 +7,7 @@
 PYSUBDIR=	${DISTNAME}
 WRKSRC=		${WRKDIR}/${PYSUBDIR}
 
-.if defined(PYDISTUTILSPKG)
+.if !empty(PYDISTUTILSPKG:M[yY][eE][sS])
 # This is used for standard modules shipped with Python but build as
 # separate packages.
 
@@ -20,4 +20,10 @@ python-std-patchsetup:
 		<${FILESDIR}/setup.py >${WRKSRC}/setup.py
 
 post-patch: python-std-patchsetup
+
+python-std-setuptools-cleanup:
+	${RM} -rf ${DESTDIR}/${PREFIX}/${PYLIB}/lib-dynload/UNKNOWN*
+
+post-install: python-std-setuptools-cleanup
+
 .endif

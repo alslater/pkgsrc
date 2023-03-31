@@ -1,4 +1,4 @@
-# $NetBSD: pyversion.mk,v 1.132 2020/10/10 20:19:47 adam Exp $
+# $NetBSD: pyversion.mk,v 1.142 2022/10/02 22:58:52 gdt Exp $
 
 # This file determines which Python version is used as a dependency for
 # a package.
@@ -8,8 +8,8 @@
 # PYTHON_VERSION_DEFAULT
 #	The preferred Python version to use.
 #
-#	Possible values: 27 36 37 38 39
-#	Default: 37
+#	Possible values: 27 37 38 39 310
+#	Default: 310
 #
 # === Infrastructure variables ===
 #
@@ -27,13 +27,13 @@
 #	order of the entries matters, since earlier entries are
 #	preferred over later ones.
 #
-#	Possible values: 39 38 37 36 27
-#	Default: 39 38 37 36 27
+#	Possible values: 310 39 38 37 27
+#	Default: 310 39 38 37 27
 #
 # PYTHON_VERSIONS_INCOMPATIBLE
 #	The Python versions that are NOT acceptable for the package.
 #
-#	Possible values: 27 36 37 38 39
+#	Possible values: 27 37 38 39 310
 #	Default: (empty)
 #
 # PYTHON_FOR_BUILD_ONLY
@@ -84,8 +84,8 @@ PYTHON_VERSION_REQD?=	${PKGNAME_OLD:C/(^.*-|^)py([0-9][0-9])-.*/\2/}
 BUILD_DEFS+=		PYTHON_VERSION_DEFAULT
 BUILD_DEFS_EFFECTS+=	PYPACKAGE
 
-PYTHON_VERSION_DEFAULT?=		37
-PYTHON_VERSIONS_ACCEPTED?=		39 27
+PYTHON_VERSION_DEFAULT?=		310
+PYTHON_VERSIONS_ACCEPTED?=		310 39 38 37 27
 PYTHON_VERSIONS_INCOMPATIBLE?=		# empty by default
 
 # transform the list into individual variables
@@ -100,7 +100,7 @@ _PYTHON_VERSIONS_ACCEPTED+=	${pv}
 # choose a python version where to add,
 # try to be intelligent
 #
-# if a version is explicitely required, take it
+# if a version is explicitly required, take it
 .if defined(PYTHON_VERSION_REQD)
 # but check if it is acceptable first, error out otherwise
 .  if defined(_PYTHON_VERSION_${PYTHON_VERSION_REQD}_OK)
@@ -131,6 +131,8 @@ MULTI+=	PYTHON_VERSION_REQD=${_PYTHON_VERSION}
 .if !defined(_PYTHON_VERSION)
 _PYTHON_VERSION=	none
 PKG_FAIL_REASON+=	"No valid Python version"
+PYPKGPREFIX=		none
+PYVERSSUFFIX=		none
 .endif
 
 # Additional CONFLICTS
@@ -188,13 +190,9 @@ PY_COMPILE_ALL= \
 PY_COMPILE_O_ALL= \
 	${PYTHONBIN} -O ${PREFIX}/lib/python${PYVERSSUFFIX}/compileall.py -q
 
-.if exists(${PYTHONBIN})
-PYINC!=	${PYTHONBIN} -c "import distutils.sysconfig; \
-	print (distutils.sysconfig.get_python_inc(0, \"\"))" || ${ECHO} ""
-PYLIB!=	${PYTHONBIN} -c "import distutils.sysconfig; \
-	print (distutils.sysconfig.get_python_lib(0, 1, \"\"))" || ${ECHO} ""
-PYSITELIB!=	${PYTHONBIN} -c "import distutils.sysconfig; \
-	print (distutils.sysconfig.get_python_lib(0, 0, \"\"))" || ${ECHO} ""
+PYINC=		include/python${PYVERSSUFFIX}
+PYLIB=		lib/python${PYVERSSUFFIX}
+PYSITELIB=	${PYLIB}/site-packages
 
 PRINT_PLIST_AWK+=	/^${PYINC:S|/|\\/|g}/ \
 			{ gsub(/${PYINC:S|/|\\/|g}/, "$${PYINC}") }
@@ -202,10 +200,22 @@ PRINT_PLIST_AWK+=	/^${PYSITELIB:S|/|\\/|g}/ \
 			{ gsub(/${PYSITELIB:S|/|\\/|g}/, "$${PYSITELIB}") }
 PRINT_PLIST_AWK+=	/^${PYLIB:S|/|\\/|g}/ \
 			{ gsub(/${PYLIB:S|/|\\/|g}/, "$${PYLIB}") }
-.endif
 
 ALL_ENV+=		PYTHON=${PYTHONBIN}
 .if defined(USE_CMAKE)
+# used by FindPython
+CMAKE_ARGS+=		-DPython_EXECUTABLE:FILEPATH=${PYTHONBIN}
+CMAKE_ARGS+=		-DPython_INCLUDE_DIR:PATH=${BUILDLINK_DIR}/${PYINC}
+# used by FindPython2
+.  if !empty(_PYTHON_VERSION:M2*)
+CMAKE_ARGS+=		-DPython2_EXECUTABLE:FILEPATH=${PYTHONBIN}
+CMAKE_ARGS+=		-DPython2_INCLUDE_DIR:PATH=${BUILDLINK_DIR}/${PYINC}
+.  endif
+# used by FindPython3
+.  if !empty(_PYTHON_VERSION:M3*)
+CMAKE_ARGS+=		-DPython3_EXECUTABLE:FILEPATH=${PYTHONBIN}
+CMAKE_ARGS+=		-DPython3_INCLUDE_DIR:PATH=${BUILDLINK_DIR}/${PYINC}
+.  endif
 # used by FindPythonInterp.cmake and FindPythonLibs.cmake
 CMAKE_ARGS+=		-DPYVERSSUFFIX:STRING=${PYVERSSUFFIX}
 # set this explicitly, as by default it will prefer the built in framework
