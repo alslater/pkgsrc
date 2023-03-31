@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.9 2016/03/05 11:27:54 jperkin Exp $
+# $NetBSD: buildlink3.mk,v 1.10 2020/01/18 21:48:23 jperkin Exp $
 
 BUILDLINK_TREE+=	libssh2
 

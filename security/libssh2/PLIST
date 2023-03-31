@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.8 2019/07/09 10:42:59 nia Exp $
 include/libssh2.h
 include/libssh2_publickey.h
 include/libssh2_sftp.h
