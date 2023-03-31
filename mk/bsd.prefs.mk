@@ -93,6 +93,19 @@ OS_VERSION=		${_OS_VERSION_CMD:sh}
 MAKEFLAGS+=		OS_VERSION=${OS_VERSION:Q}
 .endif
 
+#
+# OPSYS_VERSION differs from OS_VERSION in that it should always evaluate to
+# an integer, allowing arithmetic expressions to simplify make(1) tests.  The
+# default command is likely correct for most OS, those that need to can set
+# it to a custom command in the later OPSYS-specific section.
+#
+.if !defined(OPSYS_VERSION)
+_OPSYS_VERSION_CMD=	${UNAME} -r | \
+			awk -F. '{major=int($$1); minor=int($$2); if (minor>=100) minor=99; patch=int($$3); if (patch>=100) patch=99; printf "%02d%02d%02d", major, minor, patch}'
+OPSYS_VERSION=		${_OPSYS_VERSION_CMD:sh}
+MAKEFLAGS+=		OPSYS_VERSION=${OPSYS_VERSION:Q}
+.endif
+
 # Preload these for architectures not in all variations of bsd.own.mk,
 # which do not match their GNU names exactly.
 GNU_ARCH.aarch64eb?=	aarch64_be
