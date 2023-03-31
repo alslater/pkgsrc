@@ -1,7 +1,8 @@
-# $NetBSD: Makefile,v 1.99 2020/02/27 13:46:39 jperkin Exp $
+# $NetBSD: Makefile,v 1.109 2022/06/28 11:34:10 wiz Exp $
 
 DISTNAME=	erlang-${DIST_VERSION_MAJOR}.${DIST_VERSION_MINOR}${!empty(DIST_VERSION_PATCH):?.:}${DIST_VERSION_PATCH}
 PKGNAME=	${DISTNAME:S/OTP-/erlang-/}
+PKGREVISION=	2
 CATEGORIES=	lang
 MASTER_SITES=	${MASTER_SITE_GITHUB:=erlang/}
 GITHUB_PROJECT=	otp
@@ -18,6 +19,10 @@ WRKSRC=		${WRKDIR}/otp-${GITHUB_TAG}
 GNU_CONFIGURE=	yes
 USE_TOOLS+=	autoconf awk gmake perl:run flex
 
+# "This run-time was supposed be compiled with all code below 2Gb,
+# but the instruction 'allocate_tt' is located at 00000001c586f34c."
+MKPIE_SUPPORTED=	no
+
 .include "../../mk/bsd.prefs.mk"
 
 .if !empty(MACHINE_ARCH:M*armv6*) || !empty(MACHINE_ARCH:M*armv7*)
@@ -33,8 +38,6 @@ PTHREAD_OPTS+=		require native
 CONFIGURE_ARGS+=	--enable-threads
 
 MAKE_ENV+=		DESTDIR=${DESTDIR}
-
-do-configure-post-hook: replace-interpreter
 
 REPLACE_INTERPRETER+=	escript
 REPLACE.escript.old=	.*escript
