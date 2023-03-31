@@ -1,12 +1,12 @@
-$NetBSD: patch-src_bootstrap_bootstrap.py,v 1.3 2018/11/27 15:45:23 adam Exp $
+$NetBSD: patch-src_bootstrap_bootstrap.py,v 1.13 2022/10/10 20:34:15 he Exp $
 
 Use `uname -p` on NetBSD, as that is reliable and sensible there.
-Do not use debuginfo; optimize 'bootstrap' instead.
 Handle earmv7hf for NetBSD.
+Default to non-verbose compilation.
 
---- src/bootstrap/bootstrap.py.orig	2018-11-07 03:22:38.000000000 +0000
+--- src/bootstrap/bootstrap.py.orig	2021-02-10 17:36:44.000000000 +0000
 +++ src/bootstrap/bootstrap.py
-@@ -196,6 +196,11 @@ def default_build_triple():
+@@ -278,6 +278,11 @@ def default_build_triple(verbose):
          'OpenBSD': 'unknown-openbsd'
      }
  
@@ -18,7 +18,15 @@ Handle earmv7hf for NetBSD.
      # Consider the direct transformation first and then the special cases
      if ostype in ostype_mapper:
          ostype = ostype_mapper[ostype]
-@@ -275,10 +280,12 @@ def default_build_triple():
+@@ -331,6 +336,7 @@ def default_build_triple(verbose):
+     cputype_mapper = {
+         'BePC': 'i686',
+         'aarch64': 'aarch64',
++        'aarch64eb': 'aarch64',
+         'amd64': 'x86_64',
+         'arm64': 'aarch64',
+         'i386': 'i686',
+@@ -369,10 +375,12 @@ def default_build_triple(verbose):
              ostype = 'linux-androideabi'
          else:
              ostype += 'eabihf'
@@ -32,12 +40,12 @@ Handle earmv7hf for NetBSD.
          else:
              ostype += 'eabihf'
      elif cputype == 'mips':
-@@ -622,7 +629,7 @@ class RustBuild(object):
-         env["LIBRARY_PATH"] = os.path.join(self.bin_root(), "lib") + \
-             (os.pathsep + env["LIBRARY_PATH"]) \
-             if "LIBRARY_PATH" in env else ""
--        env["RUSTFLAGS"] = "-Cdebuginfo=2 "
-+        env["RUSTFLAGS"] = "-Copt-level=2 "
- 
-         build_section = "target.{}".format(self.build_triple())
-         target_features = []
+@@ -791,7 +799,7 @@ class RustBuild(object):
+                 self.cargo()))
+         args = [self.cargo(), "build", "--manifest-path",
+                 os.path.join(self.rust_root, "src/bootstrap/Cargo.toml")]
+-        for _ in range(0, self.verbose):
++        for _ in range(1, self.verbose):
+             args.append("--verbose")
+         if self.use_locked_deps:
+             args.append("--locked")

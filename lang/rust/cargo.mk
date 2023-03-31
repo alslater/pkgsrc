@@ -1,4 +1,4 @@
-# $NetBSD: cargo.mk,v 1.10 2019/12/03 16:29:39 minskim Exp $
+# $NetBSD: cargo.mk,v 1.30 2022/05/24 09:51:51 nia Exp $
 #
 # Common logic that can be used by packages that depend on cargo crates
 # from crates.io. This lets existing pkgsrc infrastructure fetch and verify
@@ -9,44 +9,78 @@
 #
 # CARGO_CRATE_DEPENDS+=	sha1-0.20
 # .include "../../lang/rust/cargo.mk"
-# do-build:
-# 	cargo build --locked --frozen
-#
 #
 # If modifying the list of dependencies, re-run the build once without
-# --locked --frozen to generate a new valid Cargo.lock.
+# --offline in CARGO_ARGS to generate a new valid Cargo.lock.
+# e.g: make CARGO_ARGS="build --release" build
 #
-# a list of CARGO_CRATE_DEPENDS can be generated via "make show-cargo-depends".
+# a list of CARGO_CRATE_DEPENDS can be generated via
+#      make print-cargo-depends > cargo-depends.mk
 #
 # See also www/geckodriver for a full example.
 
 MASTER_SITES?=	-${MASTER_SITE_CRATESIO}${PKGBASE}/${PKGVERSION_NOREV}/download
 
-BUILD_DEPENDS+=	rust-[0-9]*:../../lang/rust
+CHECK_SSP_SUPPORTED=	no
 
-USE_TOOLS+=		bsdtar digest
+.include "../../lang/rust/rust.mk"
+
+USE_TOOLS+=		bsdtar
 CARGO_VENDOR_DIR=	${WRKDIR}/vendor
+CARGO_WRKSRC?=		${WRKSRC}
 
 DISTFILES?=			${DEFAULT_DISTFILES}
-.for _crate in ${CARGO_CRATE_DEPENDS}
-DISTFILES+=			${_crate}.crate
-SITES.${_crate}.crate+=		-${MASTER_SITE_CRATESIO}${_crate:C/-[0-9]+\.[0-9.]+.*$//}/${_crate:C/^.*-([0-9]+\.[0-9.]+.*)$/\1/}/download
-EXTRACT_DIR.${_crate}.crate?=	${CARGO_VENDOR_DIR}
+.for crate in ${CARGO_CRATE_DEPENDS}
+DISTFILES+=			${crate}.crate
+SITES.${crate}.crate+=		-${MASTER_SITE_CRATESIO}${crate:C/-[0-9]+\.[0-9.]+.*$//}/${crate:C/^.*-([0-9]+\.[0-9.]+.*)$/\1/}/download
+EXTRACT_DIR.${crate}.crate?=	${CARGO_VENDOR_DIR}
 .endfor
+
+.include "../../mk/bsd.prefs.mk"
+# Triggers NetBSD ld.so bug (PR toolchain/54192)
+# See Makefile for further information.
+.if ${OPSYS} == "NetBSD" && ${OPSYS_VERSION} < 099957
+MAKE_JOBS_SAFE=	no
+.endif
 
 post-extract: cargo-vendor-crates
 .PHONY: cargo-vendor-crates
 cargo-vendor-crates:
 	@${STEP_MSG} "Extracting local cargo crates"
-	${RUN}${MKDIR} ${WRKSRC}/.cargo
-	${RUN}${PRINTF} "[source.crates-io]\nreplace-with = \"vendored-sources\"\n[source.vendored-sources]\ndirectory = \"${CARGO_VENDOR_DIR}\"\n" > ${WRKSRC}/.cargo/config
+	${RUN}${MKDIR} ${CARGO_WRKSRC}/.cargo
+	${RUN}${PRINTF} "[source.crates-io]\nreplace-with = \"vendored-sources\"\n[source.vendored-sources]\ndirectory = \"${CARGO_VENDOR_DIR}\"\n" > ${CARGO_WRKSRC}/.cargo/config
 	${RUN}${MKDIR} ${CARGO_VENDOR_DIR}
-.for _crate in ${CARGO_CRATE_DEPENDS}
+.for crate in ${CARGO_CRATE_DEPENDS}
 	${RUN}${PRINTF} '{"package":"%s","files":{}}'	\
-	  $$(${DIGEST} sha256 < ${_DISTDIR}/${_crate}.crate) \
-	  > ${CARGO_VENDOR_DIR}/${_crate}/.cargo-checksum.json
+	  `${DIGEST} sha256 < ${_DISTDIR}/${crate}.crate` \
+	  > ${CARGO_VENDOR_DIR}/${crate}/.cargo-checksum.json
 .endfor
 
+# Legacy name
 .PHONY: show-cargo-depends
-show-cargo-depends:
-	${RUN}${AWK} '/^\"checksum/ { print "CARGO_CRATE_DEPENDS+=\t" $$2 "-" $$3""; next } ' ${WRKSRC}/Cargo.lock
+show-cargo-depends: print-cargo-depends
+
+.PHONY: print-cargo-depends
+print-cargo-depends:
+	${RUN}${AWK} 'BEGIN {print "# $$Net" "BSD$$"; print;}		\
+		/^name = / { split($$3, a, "\""); name=a[2]; }		\
+		/^version = / { split($$3, a, "\""); vers=a[2]; }	\
+		/^source = / {						\
+			print "CARGO_CRATE_DEPENDS+=\t" name "-" vers;	\
+			}' ${CARGO_WRKSRC}/Cargo.lock
+
+DEFAULT_CARGO_ARGS=	build --offline --release -j${_MAKE_JOBS_N}	\
+			  ${CARGO_NO_DEFAULT_FEATURES:M[yY][eE][sS]:C/[yY][eE][sS]/--no-default-features/}	\
+			  ${CARGO_FEATURES:C/.*/--features/W}	\
+			  ${CARGO_FEATURES:S/ /,/Wg}
+CARGO_ARGS?=		${DEFAULT_CARGO_ARGS}
+
+MAKE_ENV+=		RUSTFLAGS=${RUSTFLAGS:Q}
+
+.if !target(do-build)
+do-build: do-cargo-build
+.endif
+
+.PHONY: do-cargo-build
+do-cargo-build:
+	${RUN} cd ${CARGO_WRKSRC} && ${SETENV} ${MAKE_ENV} ${PREFIX}/bin/cargo ${CARGO_ARGS}
