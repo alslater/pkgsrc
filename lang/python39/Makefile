@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.6 2020/12/08 14:30:40 adam Exp $
+# $NetBSD: Makefile,v 1.22 2022/09/07 15:33:19 adam Exp $
 
 .include "dist.mk"
 
@@ -36,15 +36,45 @@ PTHREAD_OPTS+=	require
 
 .include "../../mk/bsd.prefs.mk"
 
+.if !empty(USE_CROSS_COMPILE:M[yY][eE][sS])
+TOOL_DEPENDS+=		${PKGNAME}:../../${PKGPATH}
+# XXX copied from ../../lang/python/pyversion.mk to avoid including it
+# XXX should use NATIVE_PREFIX but we don't have that
+CONFIGURE_ARGS+=	PYTHON_FOR_BUILD=${PREFIX:Q}/bin/python3.9
+CONFIGURE_ARGS+=	MACHDEP=${PY_PLATNAME}
+CONFIGURE_ARGS+=	\
+	_PYTHON_HOST_PLATFORM=${LOWER_OPSYS}-${MACHINE_GNU_ARCH}
+CONFIGURE_ARGS+=	ac_sys_system=${OPSYS}
+.  if ${OPSYS} == "OSF1"
+CONFIGURE_ARGS+=	ac_cv_buggy_getaddrinfo=true
+.  else
+CONFIGURE_ARGS+=	ac_cv_buggy_getaddrinfo=false
+.  endif
+CONFIGURE_ARGS.NetBSD+=	ac_cv_file__dev_ptmx=yes
+CONFIGURE_ARGS.NetBSD+=	ac_cv_file__dev_ptc=no
+MAKE_ENV+=		\
+	_PYTHON_HOST_PLATFORM=${LOWER_OPSYS}-${MACHINE_GNU_ARCH}
+MAKE_ENV+=		_PYTHON_PROJECT_BASE=${WRKSRC:Q}
+.endif
+
 # http://bugs.python.org/issue13241
-.if !empty(MACHINE_PLATFORM:MDarwin-10.*)
+.if !empty(MACHINE_PLATFORM:MDarwin-1[12].*)
 PKGSRC_COMPILER=	clang
 PKG_CC=			clang
 PKG_CXX=		clang++
 .endif
 
-# fdatasync()
-LIBS.SunOS+=		-lrt
+# Used in socketmodule.c to determine if a sethostname declaration is required
+CFLAGS.SunOS+=		-DPKGSRC_OPSYS_VERSION=${OPSYS_VERSION}
+LIBS.SunOS+=		-lrt	# fdatasync()
+LIBS.SunOS+=		-luuid
+.if ${OPSYS} == "SunOS" && ${OPSYS_VERSION} < 051100
+SUBST_CLASSES+=		setup
+SUBST_MESSAGE.setup=	Replacing crypt with crypt_i
+SUBST_STAGE.setup=	pre-configure
+SUBST_FILES.setup=	setup.py
+SUBST_SED.setup=	-e "s,'crypt','crypt_i',"
+.endif
 
 PY_VER_SUFFIX=		3.9
 
@@ -139,6 +169,8 @@ REPLACE_FILES.python+=	Lib/turtledemo/yinyang.py
 REPLACE_FILES.python+=	Lib/uu.py
 REPLACE_FILES.python+=	Lib/webbrowser.py
 
+REPLACE_SH+=		Misc/python-config.sh.in
+
 # XXX: It might be needed to add manually more paths like ${PREFIX}/qt5/lib
 # Test: python -c 'from ctypes.util import find_library; print(find_library("ffi"));'
 SUBST_CLASSES+=		findlib
@@ -173,10 +205,20 @@ post-configure:
 	touch ${WRKSRC}/Include/opcode.h
 
 .if ${OPSYS} == "HPUX"
-post-install:
+post-install: hpux-postinstall
+.PHONY: hpux-postinstall
+hpux-postinstall:
 	${LN} -fs ${DESTDIR}${PREFIX}/lib/libpython3.9.sl \
 		${DESTDIR}${PREFIX}/lib/libpython3.9.sl.1.0
 .endif
+
+INSTALLATION_DIRS+=	lib/python${PY_VER_SUFFIX}/site-packages
+
+pre-install: setuptools-preinstall
+.PHONY: setuptools-preinstall
+setuptools-preinstall:
+	${INSTALL_DATA} ${.CURDIR}/../../devel/py-setuptools/files/_distutils_system_mod \
+		${DESTDIR}${PREFIX}/lib/python${PY_VER_SUFFIX}/site-packages/_distutils_system_mod.py
 
 # needed to make devel/py-readline pick up the correct readline implementation
 BUILDLINK_DEPMETHOD.readline=		build
