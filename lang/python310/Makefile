@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.15 2022/08/02 18:27:22 adam Exp $
+# $NetBSD: Makefile,v 1.16 2022/09/06 19:13:24 adam Exp $
 
 .include "dist.mk"
 
@@ -40,7 +40,7 @@ PTHREAD_OPTS+=	require
 TOOL_DEPENDS+=		${PKGNAME}:../../${PKGPATH}
 # XXX copied from ../../lang/python/pyversion.mk to avoid including it
 # XXX should use NATIVE_PREFIX but we don't have that
-CONFIGURE_ARGS+=	PYTHON_FOR_BUILD=${PREFIX:Q}/bin/python3.10
+CONFIGURE_ARGS+=	PYTHON_FOR_BUILD=${PREFIX}/bin/python3.10
 CONFIGURE_ARGS+=	MACHDEP=${PY_PLATNAME}
 CONFIGURE_ARGS+=	\
 	_PYTHON_HOST_PLATFORM=${LOWER_OPSYS}-${MACHINE_GNU_ARCH}
@@ -54,7 +54,7 @@ CONFIGURE_ARGS.NetBSD+=	ac_cv_file__dev_ptmx=yes
 CONFIGURE_ARGS.NetBSD+=	ac_cv_file__dev_ptc=no
 MAKE_ENV+=		\
 	_PYTHON_HOST_PLATFORM=${LOWER_OPSYS}-${MACHINE_GNU_ARCH}
-MAKE_ENV+=		_PYTHON_PROJECT_BASE=${WRKSRC:Q}
+MAKE_ENV+=		_PYTHON_PROJECT_BASE=${WRKSRC}
 .endif
 
 # http://bugs.python.org/issue13241
@@ -68,6 +68,13 @@ PKG_CXX=		clang++
 CFLAGS.SunOS+=		-DPKGSRC_OPSYS_VERSION=${OPSYS_VERSION}
 LIBS.SunOS+=		-lrt	# fdatasync()
 LIBS.SunOS+=		-luuid
+.if ${OPSYS} == "SunOS" && ${OPSYS_VERSION} < 051100
+SUBST_CLASSES+=		setup
+SUBST_MESSAGE.setup=	Replacing crypt with crypt_i
+SUBST_STAGE.setup=	pre-configure
+SUBST_FILES.setup=	setup.py
+SUBST_SED.setup=	-e "s,'crypt','crypt_i',"
+.endif
 
 PY_VER_SUFFIX=		3.10
 
