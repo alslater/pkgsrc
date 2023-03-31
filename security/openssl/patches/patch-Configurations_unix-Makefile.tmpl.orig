@@ -5,14 +5,14 @@ Do not install HTML documentation.
 Avoid -B $NUM argument to m4 (ignored by most m4 implementations, not
 supported by others)
 
---- Configurations/unix-Makefile.tmpl.orig	2023-03-14 12:59:07.000000000 +0000
+--- Configurations/unix-Makefile.tmpl.orig	2023-03-30 11:14:09.483621773 +0000
 +++ Configurations/unix-Makefile.tmpl
 @@ -311,9 +311,10 @@ MODULESDIR=$(libdir)/ossl-modules
  # libraries and applications
  LIBRPATH=$(libdir)
  
 -MANDIR=$(INSTALLTOP)/share/man
-+MANDIR=$(INSTALLTOP)/$(PKGMANDIR)
++MANDIR=$(INSTALLTOP)/share/$(PKGMANDIR)
  DOCDIR=$(INSTALLTOP)/share/doc/$(BASENAME)
  HTMLDIR=$(DOCDIR)/html
 +EXAMPLEDIR=$(INSTALLTOP)/share/examples/openssl

@@ -7,8 +7,7 @@ OPENSSL_BUILDLINK3_MK:=
 
 .include "../../mk/bsd.fast.prefs.mk"
 
-BUILDLINK_API_DEPENDS.openssl+=	openssl>=1.1.1
-BUILDLINK_ABI_DEPENDS.openssl+=	openssl>=1.1.1dnb2
+BUILDLINK_API_DEPENDS.openssl+=	openssl>=3.1.0
 BUILDLINK_PKGSRCDIR.openssl?=	../../security/openssl
 
 # Ensure that -lcrypt comes before -lcrypto when linking so that the
