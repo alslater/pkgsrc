@@ -38,6 +38,7 @@
 # Keywords: build make
 
 _VARGROUPS+=		build
+_DEF_VARS.build=	_MAKE_JOBS_N
 _USER_VARS.build=	MAKE_JOBS BUILD_ENV_SHELL
 _PKG_VARS.build=	MAKE_ENV MAKE_FLAGS BUILD_MAKE_FLAGS BUILD_TARGET MAKE_JOBS_SAFE
 _SYS_VARS.build=	BUILD_MAKE_CMD
@@ -55,10 +56,15 @@ BUILD_MAKE_CMD= \
 
 .if defined(MAKE_JOBS_SAFE) && !empty(MAKE_JOBS_SAFE:M[nN][oO])
 _MAKE_JOBS=	# nothing
+_MAKE_JOBS_N=	1
 .elif defined(MAKE_JOBS.${PKGPATH})
 _MAKE_JOBS=	-j${MAKE_JOBS.${PKGPATH}}
+_MAKE_JOBS_N=	${MAKE_JOBS.${PKGPATH}}
 .elif defined(MAKE_JOBS)
 _MAKE_JOBS=	-j${MAKE_JOBS}
+_MAKE_JOBS_N=	${MAKE_JOBS}
+.else
+_MAKE_JOBS_N=	1
 .endif
 
 ######################################################################
