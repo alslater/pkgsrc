@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.22 2019/10/21 11:17:47 adam Exp $
+# $NetBSD: Makefile,v 1.34 2022/09/08 05:08:52 adam Exp $
 
-DISTNAME=	cryptography_vectors-2.8
+DISTNAME=	cryptography_vectors-38.0.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	security python
 MASTER_SITES=	${MASTER_SITE_PYPI:=c/cryptography_vectors/}
@@ -11,6 +11,8 @@ COMMENT=	Cryptographic test vectors
 LICENSE=	apache-2.0 OR modified-bsd
 
 USE_LANGUAGES=	# none
+
+PYTHON_VERSIONS_INCOMPATIBLE=	27
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"
