@@ -1,22 +1,43 @@
-# $NetBSD: Makefile,v 1.16 2016/09/12 17:44:14 adam Exp $
+# $NetBSD: Makefile,v 1.42 2022/01/05 15:41:29 wiz Exp $
 
-DISTNAME=	CherryPy-8.1.0
+DISTNAME=	CherryPy-18.2.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
+PKGREVISION=	2
 CATEGORIES=	www python
 MASTER_SITES=	${MASTER_SITE_PYPI:=C/CherryPy/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	http://www.cherrypy.org/
-COMMENT=	CherryPy is a pythonic, object-oriented HTTP framework
+COMMENT=	Pythonic, object-oriented HTTP framework
 LICENSE=	modified-bsd
 
-USE_LANGUAGES=		# none
+DEPENDS+=	${PYPKGPREFIX}-cheroot>=6.2.4:../../www/py-cheroot
+DEPENDS+=	${PYPKGPREFIX}-contextlib2-[0-9]*:../../devel/py-contextlib2
+DEPENDS+=	${PYPKGPREFIX}-more-itertools-[0-9]*:../../devel/py-more-itertools
+DEPENDS+=	${PYPKGPREFIX}-portend>=2.1.1:../../net/py-portend
+DEPENDS+=	${PYPKGPREFIX}-simplejson-[0-9]*:../../converters/py-simplejson
+DEPENDS+=	${PYPKGPREFIX}-six>=1.11.0:../../lang/py-six
+DEPENDS+=	${PYPKGPREFIX}-zc.lockfile-[0-9]*:../../devel/py-zc.lockfile
+BUILD_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm-[0-9]*:../../devel/py-setuptools_scm
+TEST_DEPENDS+=	${PYPKGPREFIX}-coverage-[0-9]*:../../devel/py-coverage
+TEST_DEPENDS+=	${PYPKGPREFIX}-path.py-[0-9]*:../../devel/py-path.py
+TEST_DEPENDS+=	${PYPKGPREFIX}-requests-toolbelt-[0-9]*:../../devel/py-requests-toolbelt
+TEST_DEPENDS+=	${PYPKGPREFIX}-test>=2.8:../../devel/py-test
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-cov-[0-9]*:../../devel/py-test-cov
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-sugar-[0-9]*:../../devel/py-test-sugar
 
-REPLACE_PYTHON=		cherrypy/cherryd
-REPLACE_PYTHON+=	cherrypy/test/sessiondemo.py
+USE_LANGUAGES=	# none
 
-DEPENDS+=	${PYPKGPREFIX}-setuptools_scm-[0-9]*:../../devel/py-setuptools_scm
+PYTHON_VERSIONS_INCOMPATIBLE=	27
 
-.include "../../lang/python/application.mk"
+USE_PKG_RESOURCES=	yes
+
+post-install:
+	cd ${DESTDIR}${PREFIX}/bin && \
+	${MV} cherryd cherryd-${PYVERSSUFFIX} || ${TRUE}
+
+do-test:
+	cd ${WRKSRC} && pytest-${PYVERSSUFFIX}
+
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"
