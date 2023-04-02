@@ -1,7 +1,5 @@
-$NetBSD: distinfo,v 1.1 2017/02/28 20:54:09 fhajny Exp $
+$NetBSD: distinfo,v 1.21 2021/11/09 10:17:02 adam Exp $
 
-SHA1 (isort-4.2.5.tar.gz) = a38bb8af9f882c101a0b1b04a8d746f66672ce03
-RMD160 (isort-4.2.5.tar.gz) = bd8e921d3694dc258d36eb226ba6d575dcb4e55e
-SHA512 (isort-4.2.5.tar.gz) = ddc8e859bb421e4179315d74896958c8279394d42a75494db5dc22c58422994aa249b63c03645626a021ccf9142941bde51ad400256ab1c6be29da8110375f40
-Size (isort-4.2.5.tar.gz) = 36361 bytes
-SHA1 (patch-setup.py) = 2d658729d243ecf5c6e5af13f14f7fda009e322a
+BLAKE2s (isort-5.10.1.tar.gz) = 7d8b06243bed8ff59481e3042c2f65fbd5dc83a06ad744a6e65d7694c5dc5763
+SHA512 (isort-5.10.1.tar.gz) = ac02a1ae0138a6d85c06335a286c16def68cfe17915a94b3838a7b9f216f435d16244f3519d04f51ec77f9d68d649d6126c0a6316b7b868ff1f1390bc61ca0d2
+Size (isort-5.10.1.tar.gz) = 174062 bytes
