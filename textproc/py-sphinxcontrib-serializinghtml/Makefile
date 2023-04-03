@@ -1,7 +1,8 @@
-# $NetBSD: Makefile,v 1.1 2019/10/21 20:50:34 adam Exp $
+# $NetBSD: Makefile,v 1.8 2022/01/04 20:55:07 wiz Exp $
 
-DISTNAME=	sphinxcontrib-serializinghtml-1.1.3
+DISTNAME=	sphinxcontrib-serializinghtml-1.1.5
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+PKGREVISION=	1
 CATEGORIES=	textproc python
 MASTER_SITES=	${MASTER_SITE_PYPI:=s/sphinxcontrib-serializinghtml/}
 
@@ -18,7 +19,7 @@ USE_LANGUAGES=	# none
 PYTHON_VERSIONS_INCOMPATIBLE=	27	# py-sphinx
 
 do-test:
-	cd ${WRKSRC} && pytest-${PYVERSSUFFIX} tests
+	cd ${WRKSRC} && ${SETENV} ${TEST_ENV} pytest-${PYVERSSUFFIX} tests
 
 .include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

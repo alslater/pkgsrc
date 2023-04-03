@@ -1,7 +1,8 @@
-# $NetBSD: Makefile,v 1.1 2019/10/21 20:54:10 adam Exp $
+# $NetBSD: Makefile,v 1.3 2022/01/04 20:55:07 wiz Exp $
 
-DISTNAME=	sphinxcontrib-qthelp-1.0.2
+DISTNAME=	sphinxcontrib-qthelp-1.0.3
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+PKGREVISION=	1
 CATEGORIES=	textproc python
 MASTER_SITES=	${MASTER_SITE_PYPI:=s/sphinxcontrib-qthelp/}
 
