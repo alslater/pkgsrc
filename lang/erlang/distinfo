@@ -1,16 +1,20 @@
 $NetBSD: distinfo,v 1.93 2021/10/26 10:51:34 nia Exp $
 
-BLAKE2s (erlang-23.3.4.tar.gz) = 0d5bd1b844360c384314ca2e1f1922ab4e94b410be6bae5212ff1952c5b86b02
-SHA512 (erlang-23.3.4.tar.gz) = c8c5a9676163058276c703a0db0373508fad0ed9dff0aa9806ce59115ca766ff1d343c5a3917a920b249655fe188b974482ff378e9173c9fe00ea3907e618da5
-Size (erlang-23.3.4.tar.gz) = 56664814 bytes
+SHA1 (erlang-25.3.tar.gz) = 0922892c4a83a5c1b7bd31c6e4abc1bbcaffffc5
+RMD160 (erlang-25.3.tar.gz) = 2a4901e3b626ed98b3942564344d98bcc25f6aae
+SHA512 (erlang-25.3.tar.gz) = cf104918917e33db250b48aaad3c098899739358035d764ea2ee1fc9ba7937504190752163ce8430bdbfc576ce2c2533d4f50fc8f0994ff155e3df188a8db99e
+Size (erlang-25.3.tar.gz) = 60060354 bytes
 SHA1 (patch-ab) = 5f1602f3a49c05fd4c45884a7cd6be8d3f287ac3
 SHA1 (patch-ay) = f5f1accdb11e404ba4779b056228431e3080e4cd
-SHA1 (patch-erts_aclocal.m4) = 3812a0feda06eb7c6ff02b5ac7125284ad5df2cb
 SHA1 (patch-erts_emulator_drivers_common_inet__drv.c) = e34674aea2fa5092b5215944cb5639738df647bb
-SHA1 (patch-erts_emulator_nifs_common_prim__net__nif.c) = 39a3c134f17ede852a736494f035c8ce01b0ed4b
+SHA1 (patch-erts_emulator_nifs_common_prim__net__nif.c) = da39a3ee5e6b4b0d3255bfef95601890afd80709
 SHA1 (patch-erts_emulator_sys_unix_sys__uds.c) = ee131143c177b2bc1453d94097cbf6b3d3cfb899
 SHA1 (patch-erts_etc_unix_run__erl.c) = dbcd6819949874da19daa554335567c444d7abe2
 SHA1 (patch-erts_lib__src_common_erl__printf.c) = 31ab5c501d62f021e7570a925dcc75d38605ae41
-SHA1 (patch-lib_crypto_c__src_Makefile.in) = 0ab1db36c03999524e933d60f913ff5608b0622e
-SHA1 (patch-lib_tools_c__src_Makefile.in) = 4fa1ef2ace4fc64efdb6b3acd24decf031ae778d
+SHA1 (patch-lib_common__test_test__server_configure) = 14974d752da4c5c2f47277762111205bf0120a6c
+SHA1 (patch-lib_crypto_c__src_Makefile.in) = 0c5c8b37338b3872f6421a57b19135890d00aa4d
+SHA1 (patch-lib_crypto_configure) = f6212746f408557599280a09f5289c2ee1143f41
+SHA1 (patch-lib_erl__interface_configure) = 39ffb178d4b00b02203330f6bfe1e62471a0fdf5
+SHA1 (patch-lib_megaco_configure) = 9c868f30534f2d10187ebddf9c111995835a091a
+SHA1 (patch-make_configure) = f454c28b02bdff0b2aae8beb4f48492a062ab565
 SHA1 (patch-make_output.mk.in) = d7b3da58bfb471d52c41242e2a03d1598ce24e62

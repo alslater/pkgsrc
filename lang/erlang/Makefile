@@ -21,7 +21,7 @@ USE_TOOLS+=	autoconf awk gmake perl:run flex
 
 # "This run-time was supposed be compiled with all code below 2Gb,
 # but the instruction 'allocate_tt' is located at 00000001c586f34c."
-MKPIE_SUPPORTED=	no
+#MKPIE_SUPPORTED=	no
 
 .include "../../mk/bsd.prefs.mk"
 
@@ -61,6 +61,10 @@ TEST_MAKE_FLAGS=	ERL_TOP=${WRKSRC}
 SMF_NAME=		epmd
 
 CONFIGURE_ARGS.DragonFly+=	--disable-sctp
+
+CFLAGS+=-Wno-deprecated-declarations 
+
+CHECK_INTERPRETER_SKIP+= lib/erlang/lib/edoc-1.2/bin/edoc
 
 ###
 ### XXX There may be others here.

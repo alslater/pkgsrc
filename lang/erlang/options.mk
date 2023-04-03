@@ -39,7 +39,7 @@ CONFIGURE_ARGS+=	--without-javac
 # is supplied, and these should remain in the general PLIST.
 .if !empty(PKG_OPTIONS:Merlang-hipe)
 CONFIGURE_ARGS+=	--enable-hipe
-PLIST_SRC+=		PLIST.hipe
+#PLIST_SRC+=		PLIST.hipe
 USE_TOOLS+=		gm4	# needs -P
 .else
 CONFIGURE_ARGS+=	--disable-hipe

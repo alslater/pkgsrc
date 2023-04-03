@@ -1,3 +1,3 @@
-# $NetBSD: versions.mk,v 1.26 2021/05/20 13:54:55 triaxx Exp $
+# $NetBSD$
 # Do not edit, regenerate using 'make versions'
-_VERSIONS=	compiler 7.6.9 diameter 2.2.4 erts 11.2.2 asn1 5.0.15 common_test 1.20.2 crypto 4.9 debugger 5.0 dialyzer 4.3.1 edoc 0.12 eldap 1.2.9 erl_docgen 1.0.2 erl_interface 4.0.3 et 1.6.4 eunit 2.6 ftp 1.0.5 hipe 4.0.1 inets 7.3.2 jinterface 1.11.1 kernel 7.3.1 megaco 3.19.5 mnesia 4.19 observer 2.9.5 odbc 2.13.3 os_mon 2.6.1 parsetools 2.2 public_key 1.10 reltool 0.8 runtime_tools 1.16.1 sasl 4.0.2 snmp 5.8 ssh 4.11.1 ssl 10.3.1 stdlib 3.14.2 syntax_tools 2.5 tftp 1.0.2 tools 3.4.4 wx 1.9.3 xmerl 1.3.27
+_VERSIONS=	common_test 1.24 compiler 8.2.4 crypto 5.1.3 debugger 5.3.1 dialyzer 5.0.5 erl_interface 5.3.1 erts 13.2 eunit 2.8.2 ftp 1.1.4 inets 8.3 jinterface 1.13.2 kernel 8.5.4 megaco 4.4.3 mnesia 4.21.4 os_mon 2.8.1 public_key 1.13.3 reltool 0.9.1 snmp 5.13.4 ssh 4.15.3 ssl 10.9 stdlib 4.3 syntax_tools 3.0.1 tftp 1.0.4 xmerl 1.3.31 asn1 5.0.21 diameter 2.2.7 edoc 1.2 eldap 1.2.10 erl_docgen 1.4 et 1.6.5 observer 2.14 odbc 2.14 parsetools 2.4.1 runtime_tools 1.19 sasl 4.2 tools 3.5.3 wx 2.2.1

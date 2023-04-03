@@ -1,0 +1,13 @@
+$NetBSD$
+
+--- lib/common_test/test_server/configure.orig	2023-03-06 13:35:28.000000000 +0000
++++ lib/common_test/test_server/configure
+@@ -3877,7 +3877,7 @@ fi
+ 
+ 	SHLIB_CFLAGS="-KPIC"
+ 	SHLIB_LD="/usr/ccs/bin/ld"
+-	SHLIB_LDFLAGS="$no_mXX_LDFLAGS -G -z text"
++	SHLIB_LDFLAGS="$no_mXX_LDFLAGS -shared -z text"
+ 	if test X${enable_m64_build} = Xyes; then
+ 	   SHLIB_LDFLAGS="-64 $SHLIB_LDFLAGS"
+ 	fi
