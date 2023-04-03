@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.68 2022/06/30 11:18:43 nia Exp $
 
-DISTNAME=	rabbitmq-server-3.9.16
+DISTNAME=	rabbitmq-server-3.10.20
 PKGNAME=	${DISTNAME:S/-server//}
 PKGREVISION=	1
 CATEGORIES=	net
@@ -99,6 +99,7 @@ CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-streams
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-tanzu
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmq-upgrade
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmqctl
+CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/vmware-rabbitmq
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/sbin/cuttlefish
 
 MAKE_ENV+=		MANDIR="${PREFIX}/${PKGMANDIR}"
