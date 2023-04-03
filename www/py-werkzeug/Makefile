@@ -1,47 +1,42 @@
-# $NetBSD: Makefile,v 1.16 2019/10/11 16:29:17 adam Exp $
+# $NetBSD: Makefile,v 1.22 2022/08/05 11:44:30 adam Exp $
 
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
 
 COMMENT=	Python WSGI Utility Library
 
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
+PYTHON_VERSIONS_INCOMPATIBLE=	27
 
-REPLACE_PYTHON=		examples/cookieauth.py
-REPLACE_PYTHON+=	examples/manage-coolmagic.py
-REPLACE_PYTHON+=	examples/manage-couchy.py
-REPLACE_PYTHON+=	examples/manage-cupoftee.py
-REPLACE_PYTHON+=	examples/manage-i18nurls.py
-REPLACE_PYTHON+=	examples/manage-plnt.py
-REPLACE_PYTHON+=	examples/manage-shorty.py
-REPLACE_PYTHON+=	examples/manage-simplewiki.py
-REPLACE_PYTHON+=	examples/manage-webpylike.py
+DEPENDS+=	${PYPKGPREFIX}-markupsafe>=2.1.1:../../textproc/py-markupsafe
+# optional
+#DEPENDS+=	${PYPKGPREFIX}-cryptography-[0-9]*:../../security/py-cryptography
+#DEPENDS+=	${PYPKGPREFIX}-greenlet-[0-9]*:../../devel/py-greenlet
+#DEPENDS+=	${PYPKGPREFIX}-watchdog-[0-9]*:../../sysutils/py-watchdog
+TEST_DEPENDS+=	${PYPKGPREFIX}-ephemeral_port_reserve-[0-9]*:../../net/py-ephemeral_port_reserve
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-timeout-[0-9]*:../../devel/py-test-timeout
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-xprocess-[0-9]*:../../devel/py-test-xprocess
+
+REPLACE_PYTHON+=	examples/manage-*.py
 REPLACE_PYTHON+=	examples/upload.py
-REPLACE_PYTHON+=	examples/contrib/sessions.py
 REPLACE_PYTHON+=	tests/multipart/test_collect.py
 
-PYSETUPTESTTARGET=	pytest
-
-EGDIR=		share/examples/${PKGBASE}
-
-PLIST_SUBST+=	EGDIR=${EGDIR}
-
+EGDIR=			share/examples/${PKGBASE}
+PLIST_SUBST+=		EGDIR=${EGDIR}
 INSTALLATION_DIRS+=	${EGDIR}
+PRINT_PLIST_AWK+=	{ gsub(/${EGDIR:S,/,\\/,g}/, "$${EGDIR}") }
+
+USE_TOOLS+=	pax
 
 post-install:
-.for i in console.png less.png more.png source.png
-	${CHMOD} ${SHAREMODE} \
-	    ${DESTDIR}${PREFIX}/${PYSITELIB}/werkzeug/debug/shared/${i}
-.endfor
+	${CHMOD} ${SHAREMODE} ${DESTDIR}${PREFIX}/${PYSITELIB}/werkzeug/debug/shared/*.png
 	cd ${WRKSRC}/examples && ${PAX} -rwppm . ${DESTDIR}${PREFIX}/${EGDIR}
-.for i in manage-coolmagic.py manage-couchy.py manage-cupoftee.py \
-    manage-i18nurls.py manage-plnt.py manage-shorty.py manage-simplewiki.py \
-    manage-webpylike.py
-	${CHMOD} ${SHAREMODE} ${DESTDIR}${PREFIX}/${EGDIR}/${i}
-.endfor
-.for i in down.png up.png
-	${CHMOD} ${SHAREMODE} ${DESTDIR}${PREFIX}/${EGDIR}/cupoftee/shared/${i}
-.endfor
+	${CHMOD} ${SHAREMODE} ${DESTDIR}${PREFIX}/${EGDIR}/*.py
+	${CHMOD} ${SHAREMODE} ${DESTDIR}${PREFIX}/${EGDIR}/cupoftee/shared/*.png
+
+TEST_ENV+=	PYTHONPATH=${WRKSRC}/build/lib
+
+do-test:
+	cd ${WRKSRC} && ${SETENV} ${TEST_ENV} pytest-${PYVERSSUFFIX}
 
 .include "../../www/py-werkzeug/Makefile.common"
 
