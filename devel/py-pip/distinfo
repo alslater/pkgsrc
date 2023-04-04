@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.47 2022/08/10 09:17:47 adam Exp $
 
-BLAKE2s (pip-22.2.2.tar.gz) = 560a05e0c1dd154ac976e2f639eb605ecd2d24a26c0da8aa9dd30e725344cde4
+SHA1 (pip-22.2.2.tar.gz) = ed6e6d191a686b4f989a1dbb2640737a1123f24f
+RMD160 (pip-22.2.2.tar.gz) = b26367749415fba1d9e34b582c479326a871ba2a
 SHA512 (pip-22.2.2.tar.gz) = ac782df874288d6435bd891361fa38cbf5c2c01b01acfb6dfe1bfbc746e3b6ecdbc3cb31967e41399f042967acac0124284f8c0c51645d302d865629560d8d42
 Size (pip-22.2.2.tar.gz) = 2036373 bytes
 SHA1 (patch-src_pip___internal_build__env.py) = 3dfa58c2014ca51c01715b7f2fcd3e7b56eb388a

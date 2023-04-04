@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.13 2021/11/22 09:46:58 adam Exp $
 
-BLAKE2s (packaging-21.3.tar.gz) = 3b174e17f0f21375a7b36ae330f1daba6f5cc35fc79ff51b504c1a1091f34ed8
+SHA1 (packaging-21.3.tar.gz) = b8caff3bec760723db6af4092c68075e22bdb769
+RMD160 (packaging-21.3.tar.gz) = 45ed4b85bf4ef2069e07dd2922849f7edf98363a
 SHA512 (packaging-21.3.tar.gz) = 2e3aa276a4229ac7dc0654d586799473ced9761a83aa4159660d37ae1a2a8f30e987248dd0e260e2834106b589f259a57ce9936eef0dcc3c430a99ac6b663e05
 Size (packaging-21.3.tar.gz) = 84848 bytes

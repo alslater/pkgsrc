@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.72 2022/09/26 13:24:14 adam Exp $
 
-BLAKE2s (peewee-3.15.3.tar.gz) = 3e260e8ebf283b64aa7625446e14267fb2394376d21f15ba2613211f4b36cfdf
+SHA1 (peewee-3.15.3.tar.gz) = 412bdee84032110a9fc568da60298f9b28324eab
+RMD160 (peewee-3.15.3.tar.gz) = fb08f32b75975959fa122655fe244b2067e3c198
 SHA512 (peewee-3.15.3.tar.gz) = e6e566893e0bccdc90cbb106e21c306ef5ba39217446bbb25eed0f7e23b077805a53f9c071172ba163be6a626a3a68976e3939391afb39facba2aef11c5eae4e
 Size (peewee-3.15.3.tar.gz) = 858649 bytes
 SHA1 (patch-setup.py) = 59788f77a576274de46a2c090a9a0a6ede0e1166

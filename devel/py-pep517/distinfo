@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.8 2022/08/01 07:52:59 adam Exp $
 
-BLAKE2s (pep517-0.13.0-py3-none-any.whl) = 8c777e7dd683e0f33c81beb5b43f788f75c114fbd5a1e1163473e90f862decc5
+SHA1 (pep517-0.13.0-py3-none-any.whl) = 8216d79413d65bfbdb45a11ab8905928a34bbf12
+RMD160 (pep517-0.13.0-py3-none-any.whl) = 632caf211f4a2b8a91c1006ed0cefdb07efac315
 SHA512 (pep517-0.13.0-py3-none-any.whl) = 868f5131994044acad495a246218d3e8316ad27279f7b3e9db841ad52993e09d04301e000bfa017afa0128ad84f12a7d5ee993956589e1c2f7c1cbd003bc0f1d
 Size (pep517-0.13.0-py3-none-any.whl) = 18966 bytes

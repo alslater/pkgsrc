@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.199 2022/10/05 20:51:53 adam Exp $
 
-BLAKE2s (setuptools-65.4.1.tar.gz) = d953d047792ce6d79a5f04764ac04a4be641df61f37c7afec201025775ab050c
+SHA1 (setuptools-65.4.1.tar.gz) = 519a11f22479893dd7216c1332e4340e32c55eaa
+RMD160 (setuptools-65.4.1.tar.gz) = eb024965500a4fba32481a039b79d0f565f60f17
 SHA512 (setuptools-65.4.1.tar.gz) = d13253bb556380b1b45d4b51dc7922b0cffa390ba92d97ccbc43c314aceccdcf51ee8b5c751cf6f36c6c8955836bc248214d55fe7419ff0332719862772f0f95
 Size (setuptools-65.4.1.tar.gz) = 2615710 bytes

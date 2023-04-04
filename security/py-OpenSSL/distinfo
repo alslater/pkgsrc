@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.28 2022/09/26 17:57:07 adam Exp $
 
-BLAKE2s (pyOpenSSL-22.1.0.tar.gz) = 73add2c337997df28d6214b14ca4465c0e1326ccb42506a455e2c0a75f53258c
+SHA1 (pyOpenSSL-22.1.0.tar.gz) = 43df99192bc1a94467dc3e8b570859a5fc3f47e0
+RMD160 (pyOpenSSL-22.1.0.tar.gz) = dc4232761586b4f2d21361656589ff835a980269
 SHA512 (pyOpenSSL-22.1.0.tar.gz) = 7cccb48cbb1655414d21c5e66e7defee7ec370cb6b46294ae0307208f9a9bc13708345b2c088a43292262f5d5bb3d45241c18ae66d2ad6824046ffe30f0c707e
 Size (pyOpenSSL-22.1.0.tar.gz) = 181704 bytes
 SHA1 (patch-tests_memdbg.py) = a2d2395a0fe1dd1934a50b065fe68f47907f0b87

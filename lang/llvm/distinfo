@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.36 2022/08/14 20:22:44 tnn Exp $
 
-BLAKE2s (llvm-14.0.6.src.tar.xz) = 2d44946453add45426569fd4187654f83881341c5c0109e4ffacc60e8f73af60
+SHA1 (llvm-14.0.6.src.tar.xz) = 975020d4f7164d84a89f0f9b2153dd870d06e02d
+RMD160 (llvm-14.0.6.src.tar.xz) = 34e583d908e16f99d821a3171140db4c09e7a3d3
 SHA512 (llvm-14.0.6.src.tar.xz) = 6461bdde27aac17fa44c3e99a85ec47ffb181d0d4e5c3ef1c4286a59583e3b0c51af3c8081a300f45b99524340773a3011380059e3b3a571c3b0a8733e96fc1d
 Size (llvm-14.0.6.src.tar.xz) = 49660136 bytes
 SHA1 (patch-CMakeLists.txt) = 78e2dab2bf73f7e466ca2788fe6444e39b4ebd80

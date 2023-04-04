@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.13 2022/07/26 11:19:42 leot Exp $
 
-BLAKE2s (typing_extensions-4.3.0-py3-none-any.whl) = f94cdd0aa49ea9f98b9c76f06cb051134d306c9b70dc45599f6f1ff5a2395dc7
+SHA1 (typing_extensions-4.3.0-py3-none-any.whl) = 7bc19f8e88d7bd978aa16c91ea704e3218a2ed97
+RMD160 (typing_extensions-4.3.0-py3-none-any.whl) = ebda161c6b494699c847089ef8203fa5ac281d0a
 SHA512 (typing_extensions-4.3.0-py3-none-any.whl) = 6538edf5912e90287ea02716bad89efab407becb7c96cab8d01606e8a8f7e2418e5c7ca80943357c2b09411954e011f8505497fac5f2fc99f2ae611432d799bf
 Size (typing_extensions-4.3.0-py3-none-any.whl) = 25596 bytes
