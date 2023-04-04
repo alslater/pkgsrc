@@ -1906,6 +1906,7 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/_csv.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_ctypes.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_ctypes_test.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_functools.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_hashlib.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_heapq.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_hotshot.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_io.so
@@ -1919,10 +1920,6 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/_socket.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_ssl.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_struct.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_testcapi.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_md5.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_sha.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_sha256.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_sha512.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/array.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/audioop.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/binascii.so
