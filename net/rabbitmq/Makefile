@@ -2,7 +2,7 @@
 
 DISTNAME=	rabbitmq-server-3.10.20
 PKGNAME=	${DISTNAME:S/-server//}
-PKGREVISION=	1
+PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GITHUB:=rabbitmq/}
 EXTRACT_SUFX=	.tar.xz
@@ -71,7 +71,7 @@ SUBST_FILES.paths+=	${SCRIPTS_DIR}/rabbitmq-defaults
 SUBST_SED.paths=	-e 's|/etc/rabbitmq|${PKG_SYSCONFDIR}|g'
 SUBST_SED.paths+=	-e 's|/var/lib|${VARBASE}/db|g'
 SUBST_SED.paths+=	-e 's|/var/log|${VARBASE}/log|g'
-SUBST_SED.paths+=	-e 's|erl|${PREFIX}/bin/erl|g'
+SUBST_SED.paths+=	-e 's|exec erl|exec ${PREFIX}/bin/erl|g'
 SUBST_SED.paths+=	-e 's|@RABBITMQ_HOME@|${PREFIX}/${RABBITMQ_HOME}|g'
 
 SUBST_CLASSES+=		prefix
