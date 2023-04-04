@@ -8,6 +8,8 @@ MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://www.python.org/
 COMMENT=	Built-in sqlite support for Python 2.5 and up
 
+USE_LANGUAGES=	c99
+
 USE_GCC_RUNTIME=	yes
 
 # part of python itself; using egg.mk will install a useless egg
