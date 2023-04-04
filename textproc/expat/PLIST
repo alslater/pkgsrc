@@ -1,14 +1,15 @@
-@comment $NetBSD: PLIST,v 1.13 2019/06/29 22:36:04 wiz Exp $
+@comment $NetBSD$
 bin/xmlwf
 include/expat.h
 include/expat_config.h
 include/expat_external.h
+lib/cmake/${PKGNAME}/expat-config-version.cmake
+lib/cmake/${PKGNAME}/expat-config.cmake
+lib/cmake/${PKGNAME}/expat-noconfig.cmake
+lib/cmake/${PKGNAME}/expat.cmake
 lib/libexpat.la
 lib/pkgconfig/expat.pc
-lib/cmake/${DISTNAME}/expat-config-version.cmake
-lib/cmake/${DISTNAME}/expat-config.cmake
-lib/cmake/${DISTNAME}/expat-noconfig.cmake
-lib/cmake/${DISTNAME}/expat.cmake
+man/man1/xmlwf.1
 share/doc/expat/AUTHORS
 share/doc/expat/changelog
 share/doc/expat/reference.html
