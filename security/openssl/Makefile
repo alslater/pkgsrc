@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.268 2021/02/20 08:53:23 wiz Exp $
 
-DISTNAME=	openssl-3.1.0
+DISTNAME=	openssl-1.1.1t
 CATEGORIES=	security
 MASTER_SITES=	https://www.openssl.org/source/
 
@@ -91,6 +91,8 @@ post-install:
 		${RM} -f $${f};						\
 		${MV} `${ECHO} $${f} | ${SED} -e 's/openssl-//'` $${f};	\
 	done;								\
+	${RM} -f openssl-c_rehash.1;					\
+	${LN} -s openssl-rehash.1 c_rehash.1
 
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
