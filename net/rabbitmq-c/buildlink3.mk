@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.4 2020/01/18 21:48:20 jperkin Exp $
+# $NetBSD: buildlink3.mk,v 1.3 2016/03/05 11:27:53 jperkin Exp $
 
 BUILDLINK_TREE+=	rabbitmq-c
 
