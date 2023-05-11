@@ -1655,7 +1655,7 @@ lib/python${PY_VER_SUFFIX}/ensurepip/_uninstall.pyc
 lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/__init__.py
 lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/__init__.pyo
 lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/__init__.pyc
-lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/pip-22.3.1-py3-none-any.whl
+lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/pip-23.0.1-py3-none-any.whl
 lib/python${PY_VER_SUFFIX}/ensurepip/_bundled/setuptools-65.5.0-py3-none-any.whl
 lib/python${PY_VER_SUFFIX}/ensurepip/_uninstall.py
 lib/python${PY_VER_SUFFIX}/enum.py
