@@ -50,6 +50,7 @@ ${PLIST.sbf}include/php/ext/mbstring/libmbfl/filters/mbfilter_koi8r.h
 ${PLIST.sbf}include/php/ext/mbstring/libmbfl/filters/mbfilter_koi8u.h
 include/php/ext/mbstring/libmbfl/filters/mbfilter_qprint.h
 ${PLIST.php81}include/php/ext/mbstring/libmbfl/filters/mbfilter_singlebyte.h
+${PLIST.php81}include/php/ext/mbstring/libmbfl/filters/utf7_helper.h
 include/php/ext/mbstring/libmbfl/filters/mbfilter_sjis.h
 include/php/ext/mbstring/libmbfl/filters/mbfilter_sjis_2004.h
 include/php/ext/mbstring/libmbfl/filters/mbfilter_sjis_mac.h
