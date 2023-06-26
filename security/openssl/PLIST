@@ -803,6 +803,7 @@ man/man3/CMS_compress.3ossl
 man/man3/CMS_data_create.3ossl
 man/man3/CMS_data_create_ex.3ossl
 man/man3/CMS_decrypt.3ossl
+man/man3/CMS_decrypt_set1_password.3ossl
 man/man3/CMS_decrypt_set1_pkey.3ossl
 man/man3/CMS_decrypt_set1_pkey_and_peer.3ossl
 man/man3/CMS_digest_create.3ossl
@@ -2732,6 +2733,7 @@ man/man3/OSSL_CMP_MSG_get_bodytype.3ossl
 man/man3/OSSL_CMP_MSG_http_perform.3ossl
 man/man3/OSSL_CMP_MSG_it.3ossl
 man/man3/OSSL_CMP_MSG_read.3ossl
+man/man3/OSSL_CMP_MSG_update_recipNonce.3ossl
 man/man3/OSSL_CMP_MSG_update_transactionID.3ossl
 man/man3/OSSL_CMP_MSG_write.3ossl
 man/man3/OSSL_CMP_P10CR.3ossl
@@ -5468,6 +5470,7 @@ man/man7/EVP_CIPHER-CAST.7ossl
 man/man7/EVP_CIPHER-CHACHA.7ossl
 man/man7/EVP_CIPHER-DES.7ossl
 man/man7/EVP_CIPHER-IDEA.7ossl
+man/man7/EVP_CIPHER-NULL.7ossl
 man/man7/EVP_CIPHER-RC2.7ossl
 man/man7/EVP_CIPHER-RC4.7ossl
 man/man7/EVP_CIPHER-RC5.7ossl
@@ -5524,6 +5527,7 @@ man/man7/EVP_MD-MD4.7ossl
 man/man7/EVP_MD-MD5-SHA1.7ossl
 man/man7/EVP_MD-MD5.7ossl
 man/man7/EVP_MD-MDC2.7ossl
+man/man7/EVP_MD-NULL.7ossl
 man/man7/EVP_MD-RIPEMD160.7ossl
 man/man7/EVP_MD-SHA1.7ossl
 man/man7/EVP_MD-SHA2.7ossl
