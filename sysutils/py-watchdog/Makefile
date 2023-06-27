@@ -10,6 +10,8 @@ HOMEPAGE=   https://github.com/gorakhargosh/watchdog
 COMMENT=    Filesystem events monitoring
 LICENSE=    apache-2.0
 
+PYTHON_VERSIONS_INCOMPATIBLE=     27
+
 DEPENDS+=   ${PYPKGPREFIX}-argh>=0.24.1:../../devel/py-argh
 DEPENDS+=   ${PYPKGPREFIX}-pathtools>=0.1.1:../../sysutils/py-pathtools
 DEPENDS+=   ${PYPKGPREFIX}-yaml>=3.10:../../textproc/py-yaml
