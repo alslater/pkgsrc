@@ -4,9 +4,9 @@ Avoid returning invalid UTF-8 strings to python.
 Based on https://bugzilla.opensuse.org/attachment.cgi?id=746044&action=edit
 Fixes https://github.com/itstool/itstool/issues/22
 
---- python/libxml.c.orig	2023-04-11 12:19:21.000000000 +0000
+--- python/libxml.c.orig	2016-06-07 10:04:14.000000000 +0000
 +++ python/libxml.c
-@@ -1606,6 +1606,7 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
+@@ -1620,6 +1620,7 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
      PyObject *message;
      PyObject *result;
      char str[1000];
@@ -14,13 +14,13 @@ Fixes https://github.com/itstool/itstool/issues/22
  
  #ifdef DEBUG_ERROR
      printf("libxml_xmlErrorFuncHandler(%p, %s, ...) called\n", ctx, msg);
-@@ -1622,10 +1623,14 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
+@@ -1636,10 +1637,14 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
  	    str[999] = 0;
          va_end(ap);
  
 +        /* Ensure the error string doesn't start at UTF8 continuation. */
 +        while (*ptr && (*ptr & 0xc0) == 0x80)
-+            ptr++;
++	    ptr++;
 +
          list = PyTuple_New(2);
          PyTuple_SetItem(list, 0, libxml_xmlPythonErrorFuncCtxt);
@@ -28,5 +28,5 @@ Fixes https://github.com/itstool/itstool/issues/22
 -        message = libxml_charPtrConstWrap(str);
 +        message = libxml_charPtrConstWrap(ptr);
          PyTuple_SetItem(list, 1, message);
-         result = PyObject_CallObject(libxml_xmlPythonErrorFuncHandler, list);
+         result = PyEval_CallObject(libxml_xmlPythonErrorFuncHandler, list);
          Py_XDECREF(list);
