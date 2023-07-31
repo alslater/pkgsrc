@@ -7,7 +7,7 @@ hard-coded per OS per version.  Not yet reported upstream.
 
 3) Add support for FreeBSD 12.
 
---- makedefs.orig	2019-03-10 23:42:59.000000000 +0000
+--- makedefs.orig	2023-01-21 14:03:42.000000000 +0000
 +++ makedefs
 @@ -298,6 +298,15 @@ case "$SYSTEM.$RELEASE" in
  		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
@@ -100,7 +100,7 @@ hard-coded per OS per version.  Not yet reported upstream.
  		for name in nsl resolv $GDBM_LIBS
  		do
  		    for lib in /usr/lib64 /lib64 /usr/lib /lib
-@@ -597,24 +556,6 @@ EOF
+@@ -597,24 +556,6 @@ Linux.[3456].*)	SYSTYPE=LINUX$RELEASE_MA
  		;;
       GNU.0*|GNU/kFreeBSD.[567]*)
  		SYSTYPE=GNU0
@@ -125,7 +125,7 @@ hard-coded per OS per version.  Not yet reported upstream.
  		for name in nsl resolv
  		do
  		    for lib in /usr/lib64 /lib64 /usr/lib /lib
-@@ -645,26 +586,14 @@ EOF
+@@ -645,26 +586,14 @@ Linux.[3456].*)	SYSTYPE=LINUX$RELEASE_MA
  HP-UX.A.09.*)	SYSTYPE=HPUX9
  		SYSLIBS=-ldbm
  		CCARGS="$CCARGS -DMISSING_USLEEP -DNO_SNPRINTF"
@@ -152,17 +152,17 @@ hard-coded per OS per version.  Not yet reported upstream.
  		;;
  ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix543
  		RANLIB=echo
-@@ -706,12 +635,12 @@ ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix5
+@@ -712,12 +641,12 @@ ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix5
  		esac
  		: ${SHLIB_CFLAGS=-fPIC}
  		: ${SHLIB_SUFFIX=.dylib}
--		: ${SHLIB_LD='cc -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup -Wl,-install_name,@rpath/${LIB}'}
+-		: ${SHLIB_LD="cc -shared -Wl,-flat_namespace ${NOFIXUP}-Wl,-undefined,dynamic_lookup "'-Wl,-install_name,@rpath/${LIB}'}
 +		: ${SHLIB_LD='${CC} -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup -Wl,-install_name,@rpath/${LIB}'}
  		: ${SHLIB_RPATH='-Wl,-rpath,${SHLIB_DIR}'}
                  # In MacOS/X 10.11.x /bin/sh unsets DYLD_LIBRARY_PATH, so we
                  # have export it into postfix-install indirectly!
  		: ${SHLIB_ENV="DYLD_LIBRARY_PATH=`pwd`/lib SHLIB_ENV_VAR=DYLD_LIBRARY_PATH SHLIB_ENV_VAL=`pwd`/lib"}
--		: ${PLUGIN_LD='cc -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup'}
+-		: ${PLUGIN_LD="cc -shared -Wl,-flat_namespace ${NOFIXUP}-Wl,-undefined,dynamic_lookup"}
 +		: ${PLUGIN_LD='${CC} -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup'}
  		;;
      dcosx.1*)	SYSTYPE=DCOSX1
