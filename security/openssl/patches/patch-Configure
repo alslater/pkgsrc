@@ -10,14 +10,14 @@ Instead of failing the build on makedepend(8) malfunction, have
 make(1) ignore its return value - which used to be the default for
 previous OpenSSL versions.
 
---- Configure.orig	2020-04-21 12:22:39.000000000 +0000
+--- Configure.orig	2023-03-14 12:59:07.000000000 +0000
 +++ Configure
-@@ -1419,7 +1419,7 @@ if (!$disabled{makedepend}) {
+@@ -1574,7 +1574,7 @@ if (!$disabled{makedepend}) {
      } else {
-         # In all other cases, we look for 'makedepend', and disable the
-         # capability if not found.
--        $config{makedepprog} = which('makedepend');
-+        $config{makedepprog} = '-' . which('makedepend');
-         disable('unavailable', 'makedepend') unless $config{makedepprog};
+         # In all other cases, we look for 'makedepend', and set the
+         # makedep_scheme value if we found it.
+-        $config{makedepcmd} = which('makedepend');
++        $config{makedepcmd} = '-' . which('makedepend');
+         $config{makedep_scheme} = 'makedepend' if $config{makedepcmd};
      }
- }
+ 
