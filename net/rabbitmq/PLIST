@@ -180,7 +180,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/cuttlefish-3.1.0/ebin/cuttl
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/cuttlefish-3.1.0/ebin/cuttlefish_vmargs.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/cuttlefish-3.1.0/priv/erlang_vm.schema
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/dialyzex-1.3.0.ez
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/earmark_parser-1.4.32.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/earmark_parser-1.4.33.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/eetcd-0.3.6/ebin/auth_pb.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/eetcd-0.3.6/ebin/eetcd.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/eetcd-0.3.6/ebin/eetcd.beam
@@ -241,7 +241,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gun-1.3.3/ebin/gun_tcp.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gun-1.3.3/ebin/gun_tls.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gun-1.3.3/ebin/gun_ws.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gun-1.3.3/ebin/gun_ws_h.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jason-1.4.0.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jason-1.4.1.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jose-1.11.1/ebin/jose.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jose-1.11.1/ebin/jose.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jose-1.11.1/ebin/jose_app.beam
