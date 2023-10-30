@@ -1,7 +1,7 @@
 $NetBSD: distinfo,v 1.140 2017/11/29 13:56:27 wiz Exp $
 
-SHA1 (curl-8.2.1.tar.bz2) = 508df8d50c66ff7402d7ca8d160549d87bfe1236
-RMD160 (curl-8.2.1.tar.bz2) = dd6da5e7def8daae2eafe452e821b317e5f1288f
-SHA512 (curl-8.2.1.tar.bz2) = 4346d1741a7b2b5a6031718e4b601eca12b1aa3472826f91477bf5e7f31dd6454142f924ae8dca88048c89737ebab51f62f62e1f4c0faae5b7307371cbf88a46
-Size (curl-8.2.1.tar.bz2) = 3212355 bytes
+SHA1 (curl-8.3.0.tar.bz2) = 8fc793bd3847e5a292851e15df078e1b4bce7110
+RMD160 (curl-8.3.0.tar.bz2) = b97c21953352fc44c6c423f13ba83daba0c81733
+SHA512 (curl-8.3.0.tar.bz2) = e38ee271526c39395233958411a1e907655fde9aaafc5e9f0c85ec08b966cff65d2a9acbdc640c96536df0b72618d131e6904e67a48e99a264115e606962680d
+Size (curl-8.3.0.tar.bz2) = 3231051 bytes
 SHA1 (patch-curl-config.in) = 0c3cb512e6a77bb858870610f4b67ba9e9955209
