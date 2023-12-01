@@ -3773,6 +3773,7 @@ man/man3/SSL_COMP_get0_name.3ossl
 man/man3/SSL_COMP_get_compression_methods.3ossl
 man/man3/SSL_COMP_get_id.3ossl
 man/man3/SSL_CONF_CTX_clear_flags.3ossl
+man/man3/SSL_CONF_CTX_finish.3ossl
 man/man3/SSL_CONF_CTX_free.3ossl
 man/man3/SSL_CONF_CTX_new.3ossl
 man/man3/SSL_CONF_CTX_set1_prefix.3ossl
