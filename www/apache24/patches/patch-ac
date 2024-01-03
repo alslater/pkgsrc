@@ -1,9 +1,9 @@
 $NetBSD: patch-ac,v 1.1.1.1 2012/04/13 18:50:49 ryoon Exp $
 
---- configure.orig	2023-01-10 13:38:25.000000000 +0000
+--- configure.orig	2023-10-16 15:06:18.000000000 +0000
 +++ configure
-@@ -42087,7 +42087,6 @@ printf "%s\n" "#define SERVER_CONFIG_FIL
- printf "%s\n" "#define AP_TYPES_CONFIG_FILE \"${rel_sysconfdir}/mime.types\"" >>confdefs.h
+@@ -41305,7 +41305,6 @@ cat >>confdefs.h <<_ACEOF
+ _ACEOF
  
  
 -perlbin=`$ac_aux_dir/PrintPath perl`
