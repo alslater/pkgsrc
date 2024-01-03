@@ -9,6 +9,8 @@ CONFLICTS=	php-dom-[0-9]*
 CONFIGURE_ARGS+=	--enable-${MODNAME}
 CONFIGURE_ARGS+=	--with-libxml-dir=${BUILDLINK_PREFIX.libxml2}
 
+USE_PHP_EXT_PATCHES=	1
+
 .include "../../lang/php/ext.mk"
 #.include "../../devel/zlib/buildlink3.mk"
 .include "../../textproc/libxml2/buildlink3.mk"
