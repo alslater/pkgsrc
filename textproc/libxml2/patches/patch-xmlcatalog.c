@@ -2,9 +2,9 @@ $NetBSD: patch-xmlcatalog.c,v 1.1 2019/01/09 19:09:03 adam Exp $
 
 Parametrize SGML catalog directory.
 
---- xmlcatalog.c.orig	2023-05-18 19:35:15.000000000 +0000
+--- xmlcatalog.c.orig	2023-11-16 12:17:02.000000000 +0000
 +++ xmlcatalog.c
-@@ -40,7 +40,7 @@ static char *filename = NULL;
+@@ -39,7 +39,7 @@ static char *filename = NULL;
  
  
  #ifndef XML_SGML_DEFAULT_CATALOG

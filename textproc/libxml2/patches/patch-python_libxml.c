@@ -4,17 +4,17 @@ Avoid returning invalid UTF-8 strings to python.
 Based on https://bugzilla.opensuse.org/attachment.cgi?id=746044&action=edit
 Fixes https://github.com/itstool/itstool/issues/22
 
---- python/libxml.c.orig	2023-04-11 12:19:21.000000000 +0000
+--- python/libxml.c.orig	2023-11-23 17:09:31.000000000 +0000
 +++ python/libxml.c
-@@ -1606,6 +1606,7 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
+@@ -1505,6 +1505,7 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
      PyObject *message;
      PyObject *result;
      char str[1000];
 +    unsigned char *ptr = (unsigned char *)str;
  
- #ifdef DEBUG_ERROR
-     printf("libxml_xmlErrorFuncHandler(%p, %s, ...) called\n", ctx, msg);
-@@ -1622,10 +1623,14 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
+     if (libxml_xmlPythonErrorFuncHandler == NULL) {
+         va_start(ap, msg);
+@@ -1516,10 +1517,14 @@ libxml_xmlErrorFuncHandler(ATTRIBUTE_UNU
  	    str[999] = 0;
          va_end(ap);
  

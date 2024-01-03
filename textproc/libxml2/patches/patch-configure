@@ -7,9 +7,9 @@ Various configure fixes:
  * Fix test for SAX
    Submitted as https://bugzilla.gnome.org/show_bug.cgi?id=766859
 
---- configure.orig	2023-05-18 19:37:40.000000000 +0000
+--- configure.orig	2023-11-23 17:25:29.000000000 +0000
 +++ configure
-@@ -14256,7 +14256,7 @@ rm -f core conftest.err conftest.$ac_obj
+@@ -14240,7 +14240,7 @@ rm -f core conftest.err conftest.$ac_obj
      fi
  fi
  
@@ -18,12 +18,3 @@ Various configure fixes:
  XML_INCLUDEDIR='-I${includedir}/libxml2'
  XML_CFLAGS=""
  
-@@ -16144,7 +16144,7 @@ return iconv ();
-   return 0;
- }
- _ACEOF
--for ac_lib in '' iconv
-+for ac_lib in libiconv iconv
- do
-   if test -z "$ac_lib"; then
-     ac_res="none required"
