@@ -1,8 +1,8 @@
 # $NetBSD: Makefile,v 1.204 2019/12/06 14:00:08 nia Exp $
 
-DISTNAME=	gnutls-3.6.16
+DISTNAME=	gnutls-3.7.10
 CATEGORIES=	security devel
-MASTER_SITES=	https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/
+MASTER_SITES=	https://www.gnupg.org/ftp/gcrypt/gnutls/v3.7/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org

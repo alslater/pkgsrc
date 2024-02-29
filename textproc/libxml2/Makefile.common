@@ -3,7 +3,7 @@
 # used by textproc/libxml2/Makefile
 # used by textproc/py-libxml2/Makefile
 
-DISTNAME=	libxml2-2.12.1
+DISTNAME=	libxml2-2.12.4
 
 EXTRACT_SUFX=	.tar.xz
 

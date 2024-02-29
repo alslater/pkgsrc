@@ -96,7 +96,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/aten-0.5.8/ebin/aten_sink.b
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/aten-0.5.8/ebin/aten_sup.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/base64url-1.0.1/ebin/base64url.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/base64url-1.0.1/ebin/base64url.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/bunt-0.2.1.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/bunt-1.0.0.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/cowboy-2.8.0/ebin/cowboy.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/cowboy-2.8.0/ebin/cowboy.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/cowboy-2.8.0/ebin/cowboy_app.beam
@@ -223,7 +223,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/eetcd-0.3.6/priv/protos/rou
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/elixir-1.13.4.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/enough-0.1.0/ebin/enough.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/enough-0.1.0/ebin/enough.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/file_system-0.2.10.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/file_system-1.0.0.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gen_batch_server-0.8.8/ebin/gen_batch_server.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gen_batch_server-0.8.8/ebin/gen_batch_server.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/getopt-1.0.2/ebin/getopt.app
@@ -372,7 +372,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jsx-3.1.0/ebin/jsx_verify.b
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/logger-1.13.4.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup-1.1.1.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup_elixir-0.16.1.ez
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup_erlang-0.1.2.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup_erlang-0.1.3.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/nimble_parsec-1.4.0.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/observer_cli-1.7.3/ebin/observer_cli.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/observer_cli-1.7.3/ebin/observer_cli.beam
