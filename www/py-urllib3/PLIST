@@ -67,6 +67,9 @@ ${PYSITELIB}/urllib3/packages/backports/__init__.pyo
 ${PYSITELIB}/urllib3/packages/backports/makefile.py
 ${PYSITELIB}/urllib3/packages/backports/makefile.pyc
 ${PYSITELIB}/urllib3/packages/backports/makefile.pyo
+${PYSITELIB}/urllib3/packages/backports/weakref_finalize.py
+${PYSITELIB}/urllib3/packages/backports/weakref_finalize.pyc
+${PYSITELIB}/urllib3/packages/backports/weakref_finalize.pyo
 ${PYSITELIB}/urllib3/packages/six.py
 ${PYSITELIB}/urllib3/packages/six.pyc
 ${PYSITELIB}/urllib3/packages/six.pyo
