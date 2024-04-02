@@ -1,8 +1,8 @@
 # $NetBSD: Makefile,v 1.2 2022/09/23 14:53:35 taca Exp $
 
-DISTNAME=	squid-5.9
+DISTNAME=	squid-6.8
 CATEGORIES=	www
-MASTER_SITES=	http://www.squid-cache.org/Versions/v5/
+MASTER_SITES=	http://www.squid-cache.org/Versions/v6/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -10,7 +10,9 @@ HOMEPAGE=	http://www.squid-cache.org/
 COMMENT=	Post-Harvest_cached WWW proxy cache and accelerator
 LICENSE=	gnu-gpl-v2
 
-USE_LANGUAGES=		c c++11
+GCC_REQD+=      8
+
+USE_LANGUAGES=		c c++17
 USE_TOOLS+=		perl:run gmake
 GNU_CONFIGURE=		yes
 GNU_CONFIGURE_STRICT=	no # has sub-configure in libltdl
@@ -28,6 +30,8 @@ CONFIGURE_ARGS+=	--enable-storeio=${SQUID_BACKENDS:Q}
 CONFIGURE_ARGS+=	--with-aio
 CONFIGURE_ARGS+=	--with-default-user=${SQUID_USER}
 CONFIGURE_ARGS+=	--with-pidfile=${VARBASE}/run/squid.pid
+CONFIGURE_ARGS+=	--disable-esi
+CONFIGURE_ARGS+=	--without-xml2
 
 # Let 'purge' find correct config file by default.
 CPPFLAGS+=		-DDEFAULT_SQUID_CONF=\"${PKG_SYSCONFDIR}/squid.conf\"
