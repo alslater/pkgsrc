@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.317 2020/02/11 20:40:27 triaxx Exp $
+# $NetBSD: Makefile,v 1.337 2022/07/21 15:08:39 taca Exp $
 
 .include "../../mail/postfix/Makefile.common"
 
@@ -7,7 +7,7 @@ COMMENT=	Fast, easy to administer, and secure mail transfer agent
 CONFLICTS+=	courier-mta-[0-9]* fastforward>=0.51nb2 sendmail-[0-9]*
 CONFLICTS+=	esmtp>=1.2 nullmailer-[0-9]*
 
-USE_TOOLS+=	perl pkg-config
+USE_TOOLS+=	perl pkg-config m4
 
 SPECIAL_PERMS+=	sbin/postdrop ${POSTFIX_USER} ${MAILDROP_GROUP} 2555
 SPECIAL_PERMS+=	sbin/postqueue ${POSTFIX_USER} ${MAILDROP_GROUP} 2555
@@ -54,8 +54,8 @@ SUBST_STAGE.paths=	pre-configure
 INSTALLATION_DIRS+=	${LIBEXECDIR} ${METADIR} ${SHLIBDIR} ${EXAMPLEDIR} ${DOCDIR}
 
 post-extract:
-	cp ${FILESDIR}/mailer.conf ${WRKDIR}/mailer.conf
-	rm -f ${WRKSRC}/auxiliary/MacOSX/Postfix.StartupItem/Postfix
+	${CP} ${FILESDIR}/mailer.conf ${WRKDIR}/mailer.conf
+	${RM} -f ${WRKSRC}/auxiliary/MacOSX/Postfix.StartupItem/Postfix
 
 post-build:
 .if !empty(PKG_OPTIONS:Msasl)
@@ -63,11 +63,13 @@ post-build:
 .endif
 
 do-install:
-	rm -f ${WRKSRC}/conf/*.orig
+	${RM} -f ${WRKSRC}/conf/*.orig
 .if !empty(PKG_OPTIONS:Msasl)
 	${INSTALL_DATA} ${WRKDIR}/smtpd.conf ${DESTDIR}${EXAMPLEDIR}
 .endif
-	cd ${WRKSRC} && ${SH} ./postfix-install -non-interactive \
+	cd ${WRKSRC} && ${SETENV} LD_LIBRARY_PATH=${WRKSRC}/lib \
+		DYLD_LIBRARY_PATH=${WRKSRC}/lib \
+		${SH} ./postfix-install -non-interactive \
 		${DESTDIR_INSTALLOPTIONS} config_directory="${EXAMPLEDIR}"
 	${INSTALL_DATA} ${WRKDIR}/mailer.conf \
 		${DESTDIR}${EXAMPLEDIR}/mailer.conf
@@ -78,5 +80,19 @@ do-install:
 .for dir in ${POSTFIX_QUEUE_SUBDIR}
 	${RMDIR} ${DESTDIR}${POSTFIX_QUEUE_DIR}/${dir}
 .endfor
+.if ${OPSYS} == "Darwin"
+	for f in ${DESTDIR}${PREFIX}/lib/postfix/lib*.dylib; do \
+		install_name_tool -id `${ECHO} $$f | ${SED} -e 's,${DESTDIR},,g'` $$f; \
+	done
+	for f in ${DESTDIR}${PREFIX}/libexec/postfix/* ${DESTDIR}${PREFIX}/sbin/*; do \
+		install_name_tool \
+			-change @rpath/libpostfix-dns.dylib ${PREFIX}/lib/postfix/libpostfix-dns.dylib \
+			-change @rpath/libpostfix-global.dylib ${PREFIX}/lib/postfix/libpostfix-global.dylib \
+			-change @rpath/libpostfix-master.dylib ${PREFIX}/lib/postfix/libpostfix-master.dylib \
+			-change @rpath/libpostfix-tls.dylib ${PREFIX}/lib/postfix/libpostfix-tls.dylib \
+			-change @rpath/libpostfix-util.dylib ${PREFIX}/lib/postfix/libpostfix-util.dylib \
+			$$f; \
+	done
+.endif
 
 .include "../../mk/bsd.pkg.mk"

@@ -1,12 +1,19 @@
-# $NetBSD: options.mk,v 1.41 2019/07/16 15:18:28 triaxx Exp $
+# $NetBSD: options.mk,v 1.43 2021/12/15 20:54:00 adam Exp $
 
 # Global and legacy options
 
 PKG_OPTIONS_VAR=	PKG_OPTIONS.postfix
-PKG_SUPPORTED_OPTIONS=	sasl tls eai
-PKG_SUGGESTED_OPTIONS=	tls
+PKG_SUPPORTED_OPTIONS=	blocklist sasl tls eai
+PKG_SUGGESTED_OPTIONS=	blocklist tls
 
 .include "../../mk/bsd.options.mk"
+
+###
+### blocklist support
+###
+.if !empty(PKG_OPTIONS:Mblocklist)
+CCARGS+=	-DUSE_BLOCKLIST
+.endif
 
 ###
 ### STARTTLS support
@@ -57,6 +64,7 @@ AUXLIBS+=	-L${BUILDLINK_PREFIX.icu}/lib -licuuc			\
 CCARGS+=	-DNO_EAI
 
 post-install:
-	cd ${WRKSRC} && ${SETENV} LD_LIBRARY_PATH=${WRKSRC}/lib bin/postconf	\
+	cd ${WRKSRC} && ${SETENV} LD_LIBRARY_PATH=${WRKSRC}/lib \
+		DYLD_LIBRARY_PATH=${WRKSRC}/lib bin/postconf \
 		-c ${DESTDIR}${EXAMPLEDIR} smtputf8_enable=no
 .endif

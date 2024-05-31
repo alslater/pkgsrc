@@ -1,19 +1,21 @@
-$NetBSD: patch-ai,v 1.41 2019/07/17 13:33:00 triaxx Exp $
+$NetBSD: patch-ai,v 1.45 2022/07/21 15:08:39 taca Exp $
 
 1) Add shlib definitions for NetBSD 5; the build system must be
 hard-coded per OS per version.  Not yet reported upstream.
 
 2) Make this pkgsrc friendly.
 
-3) Add support for FreeBSD 12.
+3) Add support for FreeBSD 13.
 
---- makedefs.orig	2023-01-21 14:03:42.000000000 +0000
+4) Add blocklist(3) support.
+
+--- makedefs.orig	2022-01-23 20:53:41.000000000 +0000
 +++ makedefs
-@@ -298,6 +298,15 @@ case "$SYSTEM.$RELEASE" in
+@@ -339,6 +339,15 @@ case "$SYSTEM.$RELEASE" in
  		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
  		: ${PLUGIN_LD="${CC} -shared"}
  		;;
-+  FreeBSD.12*)	SYSTYPE=FREEBSD12
++  FreeBSD.13*)	SYSTYPE=FREEBSD13
 +		: ${CC=cc}
 +		: ${SHLIB_SUFFIX=.so}
 +		: ${SHLIB_CFLAGS=-fPIC}
@@ -25,7 +27,7 @@ hard-coded per OS per version.  Not yet reported upstream.
   DragonFly.*)	SYSTYPE=DRAGONFLY
  		;;
    OpenBSD.2*)	SYSTYPE=OPENBSD2
-@@ -326,25 +335,7 @@ case "$SYSTEM.$RELEASE" in
+@@ -376,49 +385,7 @@ case "$SYSTEM.$RELEASE" in
  		;;
    ekkoBSD.1*)	SYSTYPE=EKKOBSD1
  		;;
@@ -46,13 +48,37 @@ hard-coded per OS per version.  Not yet reported upstream.
 -		: ${SHLIB_RPATH='-Wl,-rpath,${SHLIB_DIR}'}
 -		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
 -		: ${PLUGIN_LD="${CC-gcc} -shared"}
--               ;;
--   NetBSD.7*)  SYSTYPE=NETBSD7
+-		;;
+-   NetBSD.7*)	SYSTYPE=NETBSD7
+-		: ${SHLIB_SUFFIX=.so}
+-		: ${SHLIB_CFLAGS=-fPIC}
+-		: ${SHLIB_LD="${CC-gcc} -shared"' -Wl,-soname,${LIB}'}
+-		: ${SHLIB_RPATH='-Wl,-rpath,${SHLIB_DIR}'}
+-		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
+-		: ${PLUGIN_LD="${CC-gcc} -shared"}
+-		;;
+-   NetBSD.8*)	SYSTYPE=NETBSD8
+-		: ${SHLIB_SUFFIX=.so}
+-		: ${SHLIB_CFLAGS=-fPIC}
+-		: ${SHLIB_LD="${CC-gcc} -shared"' -Wl,-soname,${LIB}'}
+-		: ${SHLIB_RPATH='-Wl,-rpath,${SHLIB_DIR}'}
+-		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
+-		: ${PLUGIN_LD="${CC-gcc} -shared"}
+-		;;
+-   NetBSD.9*)	SYSTYPE=NETBSD9
+-		: ${SHLIB_SUFFIX=.so}
+-		: ${SHLIB_CFLAGS=-fPIC}
+-		: ${SHLIB_LD="${CC-gcc} -shared"' -Wl,-soname,${LIB}'}
+-		: ${SHLIB_RPATH='-Wl,-rpath,${SHLIB_DIR}'}
+-		: ${SHLIB_ENV="LD_LIBRARY_PATH=`pwd`/lib"}
+-		: ${PLUGIN_LD="${CC-gcc} -shared"}
+-		;;
+-   NetBSD.10*)	SYSTYPE=NETBSD10
 +   NetBSD*)	SYSTYPE=NETBSD
  		: ${SHLIB_SUFFIX=.so}
  		: ${SHLIB_CFLAGS=-fPIC}
  		: ${SHLIB_LD="${CC-gcc} -shared"' -Wl,-soname,${LIB}'}
-@@ -423,13 +414,6 @@ case "$SYSTEM.$RELEASE" in
+@@ -493,13 +460,6 @@ case "$SYSTEM.$RELEASE" in
  		esac
  		;;
     ULTRIX.4*)	SYSTYPE=ULTRIX4
@@ -66,7 +92,7 @@ hard-coded per OS per version.  Not yet reported upstream.
  		for l in syslog resolv; do
  		    if [ -f /usr/local/lib/lib$l.a ]; then
  			SYSLIBS="$SYSLIBS -l$l"
-@@ -471,33 +455,8 @@ case "$SYSTEM.$RELEASE" in
+@@ -541,33 +501,8 @@ case "$SYSTEM.$RELEASE" in
  		esac;;
  		# Tested with RedHat 3.03 on 20020729.
      Linux.1*)	SYSTYPE=LINUX1
@@ -100,7 +126,7 @@ hard-coded per OS per version.  Not yet reported upstream.
  		for name in nsl resolv $GDBM_LIBS
  		do
  		    for lib in /usr/lib64 /lib64 /usr/lib /lib
-@@ -597,24 +556,6 @@ Linux.[3456].*)	SYSTYPE=LINUX$RELEASE_MA
+@@ -667,24 +602,6 @@ EOF
  		;;
       GNU.0*|GNU/kFreeBSD.[567]*)
  		SYSTYPE=GNU0
@@ -125,7 +151,7 @@ hard-coded per OS per version.  Not yet reported upstream.
  		for name in nsl resolv
  		do
  		    for lib in /usr/lib64 /lib64 /usr/lib /lib
-@@ -645,26 +586,14 @@ Linux.[3456].*)	SYSTYPE=LINUX$RELEASE_MA
+@@ -715,26 +632,14 @@ EOF
  HP-UX.A.09.*)	SYSTYPE=HPUX9
  		SYSLIBS=-ldbm
  		CCARGS="$CCARGS -DMISSING_USLEEP -DNO_SNPRINTF"
@@ -152,18 +178,40 @@ hard-coded per OS per version.  Not yet reported upstream.
  		;;
  ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix543
  		RANLIB=echo
-@@ -712,12 +641,12 @@ ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix5
+@@ -776,12 +681,12 @@ ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix5
  		esac
  		: ${SHLIB_CFLAGS=-fPIC}
  		: ${SHLIB_SUFFIX=.dylib}
--		: ${SHLIB_LD="cc -shared -Wl,-flat_namespace ${NOFIXUP}-Wl,-undefined,dynamic_lookup "'-Wl,-install_name,@rpath/${LIB}'}
+-		: ${SHLIB_LD='cc -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup -Wl,-install_name,@rpath/${LIB}'}
 +		: ${SHLIB_LD='${CC} -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup -Wl,-install_name,@rpath/${LIB}'}
  		: ${SHLIB_RPATH='-Wl,-rpath,${SHLIB_DIR}'}
                  # In MacOS/X 10.11.x /bin/sh unsets DYLD_LIBRARY_PATH, so we
                  # have export it into postfix-install indirectly!
  		: ${SHLIB_ENV="DYLD_LIBRARY_PATH=`pwd`/lib SHLIB_ENV_VAR=DYLD_LIBRARY_PATH SHLIB_ENV_VAL=`pwd`/lib"}
--		: ${PLUGIN_LD="cc -shared -Wl,-flat_namespace ${NOFIXUP}-Wl,-undefined,dynamic_lookup"}
+-		: ${PLUGIN_LD='cc -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup'}
 +		: ${PLUGIN_LD='${CC} -shared -Wl,-flat_namespace -Wl,-undefined,dynamic_lookup'}
  		;;
      dcosx.1*)	SYSTYPE=DCOSX1
  		RANLIB=echo
+@@ -805,6 +710,21 @@ ReliantUNIX-?.5.43) SYSTYPE=ReliantUnix5
+ esac
+ 
+ #
++# Support for blocklist(3) or blacklist(3).
++#
++case "$CCARGS" in
++    *-DUSE_BLOCKLIST*)
++	if test -f /usr/include/blocklist.h; then
++	    CCARGS="$CCARGS -DHAVE_BLOCKLIST"
++	    SYSLIBS="$SYSLIBS -lblocklist"
++	elif test -f /usr/include/blacklist.h; then
++	    CCARGS="$CCARGS -DHAVE_BLACKLIST"
++	    SYSLIBS="$SYSLIBS -lblacklist"
++	fi
++	;;
++esac
++
++#
+ # sigsetjmp()/siglongjmp() can be "better" than setjmp()/longjmp()
+ # if used wisely (that is: almost never, just like signals).
+ # Unfortunately some implementations have been buggy in the past.
