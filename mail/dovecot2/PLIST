@@ -447,6 +447,7 @@ include/dovecot/ostream-dot.h
 include/dovecot/ostream-encrypt.h
 include/dovecot/ostream-failure-at.h
 include/dovecot/ostream-file-private.h
+include/dovecot/ostream-final-trickle.h
 include/dovecot/ostream-hash.h
 include/dovecot/ostream-metawrap.h
 include/dovecot/ostream-multiplex.h
@@ -523,6 +524,7 @@ include/dovecot/sdbox-storage.h
 include/dovecot/sdbox-sync.h
 include/dovecot/sendfile-util.h
 include/dovecot/seq-range-array.h
+include/dovecot/seq-set-builder.h
 include/dovecot/service-settings.h
 include/dovecot/settings-parser.h
 include/dovecot/settings.h
@@ -530,7 +532,6 @@ include/dovecot/sha-common.h
 include/dovecot/sha1.h
 include/dovecot/sha2.h
 include/dovecot/sha3.h
-include/dovecot/seq-set-builder.h
 include/dovecot/shared-storage.h
 include/dovecot/sleep.h
 include/dovecot/smtp-address.h
