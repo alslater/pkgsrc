@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.191 2018/01/01 21:18:12 adam Exp $
 
-DISTNAME=	curl-8.8.0
+DISTNAME=	curl-8.9.1
 #PKGREVISION=	1
 CATEGORIES=	www
 MASTER_SITES=	https://curl.haxx.se/download/
@@ -23,6 +23,8 @@ CONFIGURE_ARGS+=	--with-ssl=${BUILDLINK_PREFIX.openssl}
 CONFIGURE_ARGS+=	--with-ca-path=${SSLCERTS}
 CONFIGURE_ARGS+=	--with-zlib=${BUILDLINK_PREFIX.zlib}
 CONFIGURE_ARGS+=	--without-libpsl
+CONFIGURE_ARGS+=	--without-brotli
+CONFIGURE_ARGS+=	--without-zstd
 PKGCONFIG_OVERRIDE=	libcurl.pc.in
 
 INSTALLATION_DIRS=	share/doc/curl
