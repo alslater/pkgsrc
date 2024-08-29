@@ -165,6 +165,7 @@ SHA1 (patch-vendor_backtrace_src_symbolize_gimli.rs) = b93148ff72a60a17c6a444f26
 SHA1 (patch-vendor_backtrace_src_symbolize_gimli_elf.rs) = 308538090d9ce11d206d6eef0e675581a1fc6e80
 SHA1 (patch-vendor_cc-1.0.69_src_lib.rs) = b5c0f795624b928b8b02fe01174e6a24e770adea
 SHA1 (patch-vendor_cc_src_lib.rs) = 8864edc8dc0ad0665a89c89016bbaee7d603cbe1
+SHA1 (patch-vendor_curl-sys_curl_lib_http.c) = 2bee2003d4e63b61a52f55cdbc166e499a0b0d33
 SHA1 (patch-vendor_libc-0.2.119_src_unix_bsd_netbsdlike_netbsd_mod.rs) = e447bd34d0dd7c6a51fbc27dfae50129d0b33462
 SHA1 (patch-vendor_libc_src_unix_bsd_netbsdlike_netbsd_mod.rs) = 31b1f5d1c9d289ecbd219b8bb2fd3839db5e7862
 SHA1 (patch-vendor_libc_src_unix_solarish_mod.rs) = 5b45640b2f0015142bd1eda5d5f02c7dbfe9210c
