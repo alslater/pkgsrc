@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.2 2022/09/23 14:53:35 taca Exp $
 
-SHA1 (squid-6.10.tar.xz) = 70e90865df0e4e9ba7765b622da40bda9bb8fc5d
-RMD160 (squid-6.10.tar.xz) = 35cbc5fd37ef6ba6f62cdf387ef0ef43b81e2591
-SHA512 (squid-6.10.tar.xz) = c0b75c3d383b1cd234b30dd02e84e1c5655fc53f63b75704bf4bac9ee0b86ba27e4656116893aff8b95dea19ff1befabcbb9dab3875da52fcb65f1d30f0fe5a9
-Size (squid-6.10.tar.xz) = 2558208 bytes
+SHA1 (squid-6.11.tar.xz) = 7bb1347154aaf013fef87075bf05805b3ef1b4d4
+RMD160 (squid-6.11.tar.xz) = 864542eeac875a6b9afc16168db9729ed53124f4
+SHA512 (squid-6.11.tar.xz) = 669f658b0a58514f98c2b33df874706d40b9ed0837e1f32e08e274c79617063e06e706932011a34b115dcc96d43125f9cea30fba459cd31a88e3afd9b6076d7a
+Size (squid-6.11.tar.xz) = 2547824 bytes
 SHA1 (patch-compat_compat.h) = 839381a5e1f46e7d9b822bbb53d82a53c996ddc0
 SHA1 (patch-configure) = 230631115b9d903f7a25b2bdb0e4b7e0bda2de02
 SHA1 (patch-errors_Makefile.in) = bc2f66eecb9b54be2260bee72f4939b8eb3181ac
