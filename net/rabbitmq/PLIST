@@ -223,7 +223,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/eetcd-0.3.6/priv/protos/rou
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/elixir-1.13.4.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/enough-0.1.0/ebin/enough.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/enough-0.1.0/ebin/enough.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/file_system-1.0.0.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/file_system-1.0.1.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gen_batch_server-0.8.8/ebin/gen_batch_server.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/gen_batch_server-0.8.8/ebin/gen_batch_server.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/getopt-1.0.2/ebin/getopt.app

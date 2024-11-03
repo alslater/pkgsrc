@@ -1,7 +1,7 @@
 $NetBSD: distinfo,v 1.141 2019/12/06 14:00:08 nia Exp $
 
-SHA1 (gnutls-3.7.10.tar.xz) = 4b34a37f3a5b4fe70dae690b4cd2eaf2fdff2f13
-RMD160 (gnutls-3.7.10.tar.xz) = e221dc4200d30b8644cfe1f2c8d5e7bccac8aca0
-SHA512 (gnutls-3.7.10.tar.xz) = 23e0890abd00c433f11c2d4ceb328fe4ac0a0b765de89dff52f16e7d20694a7c61a6acb084d9f58f15c1a9609d70efdac489ac4759963c0ff1d1b8bb7183269e
-Size (gnutls-3.7.10.tar.xz) = 6407852 bytes
+SHA1 (gnutls-3.7.11.tar.xz) = 9001ec4c4ae9decd9aeed13fc6a9ca60b4ffb3a7
+RMD160 (gnutls-3.7.11.tar.xz) = b8a3b948b2cfd504f72e04a31fce31a79b4316b1
+SHA512 (gnutls-3.7.11.tar.xz) = a663c27c276a817d0623369f041f8a7892ff898f62f689de264322aec103c8cb9307e2b43ceb5af590dfa105fd938e7509d0738ff33f0a8f71d7406fd4813964
+Size (gnutls-3.7.11.tar.xz) = 6406420 bytes
 SHA1 (patch-lib_system_certs.c) = fba74b2834a36d66bddcd7d3405d0c91c1b14efc
