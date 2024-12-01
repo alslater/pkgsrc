@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.11 2016/07/09 13:04:01 wiz Exp $
 
-DISTNAME=	omniORBpy-4.2.5
+DISTNAME=	omniORBpy-4.2.6
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 #PKGREVISION=	1
 CATEGORIES=	devel python
