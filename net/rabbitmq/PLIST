@@ -370,8 +370,8 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jsx-3.1.0/ebin/jsx_to_json.
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jsx-3.1.0/ebin/jsx_to_term.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/jsx-3.1.0/ebin/jsx_verify.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/logger-1.13.4.ez
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup-1.1.2.ez
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup_elixir-0.16.2.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup-1.2.1.ez
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup_elixir-1.0.0.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/makeup_erlang-1.0.1.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/nimble_parsec-1.4.0.ez
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/observer_cli-1.7.3/ebin/observer_cli.app
