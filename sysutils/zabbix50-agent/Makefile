@@ -19,7 +19,7 @@ CONFIGURE_ARGS+=	--with-libpcre=${BUILDLINK_PREFIX.pcre}
 CONFIGURE_ARGS+=	--with-openssl=${BUILDLINK_PREFIX.openssl}
 
 EGDIR=		share/examples/${PKGBASE}
-CONF_FILES+=	${EGDIR}/zabbix_agentd.conf ${PKG_SYSCONFDIR}/zabbix_agentd.conf
+#CONF_FILES+=	${EGDIR}/zabbix_agentd.conf ${PKG_SYSCONFDIR}/zabbix_agentd.conf
 
 RCD_SCRIPTS=	zabbix_agentd
 
@@ -39,6 +39,9 @@ SUBST_FILES.fix-pkgbase=	src/zabbix_agent/Makefile.in
 SUBST_SED.fix-pkgbase=		-e 's,%%PKGBASE%%,${PKGBASE},g'
 
 PLIST_SUBST+=			PKGBASE=${PKGBASE}
+
+post-install:
+	${MV} ${DESTDIR}${PKG_SYSCONFDIR}/zabbix_agentd.conf ${DESTDIR}${PKG_SYSCONFDIR}/zabbix_agentd.conf.sample
 
 .include "../../mk/bsd.prefs.mk"
 
