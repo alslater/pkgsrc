@@ -838,6 +838,7 @@ share/postgresql/timezone/America/Cayenne
 share/postgresql/timezone/America/Cayman
 share/postgresql/timezone/America/Chicago
 share/postgresql/timezone/America/Chihuahua
+share/postgresql/timezone/America/Ciudad_Juarez
 share/postgresql/timezone/America/Coral_Harbour
 share/postgresql/timezone/America/Cordoba
 share/postgresql/timezone/America/Costa_Rica
@@ -1191,6 +1192,7 @@ share/postgresql/timezone/Europe/Istanbul
 share/postgresql/timezone/Europe/Jersey
 share/postgresql/timezone/Europe/Kaliningrad
 share/postgresql/timezone/Europe/Kiev
+share/postgresql/timezone/Europe/Kyiv
 share/postgresql/timezone/Europe/Kirov
 share/postgresql/timezone/Europe/Lisbon
 share/postgresql/timezone/Europe/Ljubljana

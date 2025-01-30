@@ -1,8 +1,8 @@
-$NetBSD: patch-src_pl_plperl_plperl.h,v 1.1 2019/10/07 19:21:48 adam Exp $
+$NetBSD$
 
---- src/pl/plperl/plperl.h.orig	2019-09-30 20:06:55.000000000 +0000
-+++ src/pl/plperl/plperl.h
-@@ -68,6 +68,10 @@
+--- src/pl/plperl/plperl_system.h.orig	2024-11-18 20:41:03.000000000 +0000
++++ src/pl/plperl/plperl_system.h
+@@ -83,6 +83,11 @@
  #define HAS_BOOL 1
  #endif
  
@@ -10,10 +10,11 @@ $NetBSD: patch-src_pl_plperl_plperl.h,v 1.1 2019/10/07 19:21:48 adam Exp $
 +#define list_head sun_list_head
 +#define list_tail sun_list_tail
 +#endif
- 
++
  /*
   * Get the basic Perl API.  We use PERL_NO_GET_CONTEXT mode so that our code
-@@ -110,6 +114,11 @@
+  * can compile against MULTIPLICITY Perl builds without including XSUB.h.
+@@ -124,6 +129,11 @@
  #include "XSUB.h"
  #endif
  
