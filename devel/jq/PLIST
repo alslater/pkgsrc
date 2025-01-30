@@ -3,8 +3,9 @@ bin/jq
 include/jq.h
 include/jv.h
 lib/libjq.la
+lib/pkgconfig/libjq.pc
 man/man1/jq.1
 share/doc/jq/AUTHORS
 share/doc/jq/COPYING
-share/doc/jq/README
+share/doc/jq/NEWS.md
 share/doc/jq/README.md

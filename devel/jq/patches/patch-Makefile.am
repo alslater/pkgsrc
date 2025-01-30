@@ -3,9 +3,9 @@ $NetBSD: patch-Makefile.am,v 1.2 2018/11/03 12:51:54 leot Exp $
 Do dynamic linking of libtool libraries too (otherwise bin/jq can
 ends up to be statically linked).
 
---- Makefile.am.orig	2018-11-02 01:49:29.000000000 +0000
+--- Makefile.am.orig	2023-12-13 19:24:02.000000000 +0000
 +++ Makefile.am
-@@ -106,7 +106,7 @@ src/builtin.o: src/builtin.inc
+@@ -126,7 +126,7 @@ CLEANFILES = src/version.h .remake-versi
  
  bin_PROGRAMS = jq
  jq_SOURCES = src/main.c src/version.h
@@ -13,4 +13,4 @@ ends up to be statically linked).
 +jq_LDFLAGS = 
  jq_LDADD = libjq.la -lm
  
- if WIN32
+ if ENABLE_ALL_STATIC
