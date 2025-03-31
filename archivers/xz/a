@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.9 2014/12/30 06:37:35 adam Exp $
+@comment $NetBSD$
 bin/lzcat
 bin/lzcmp
 bin/lzdiff
@@ -80,9 +80,3 @@ share/doc/xz/faq.txt
 share/doc/xz/history.txt
 share/doc/xz/lzma-file-format.txt
 share/doc/xz/xz-file-format.txt
-${PLIST.nls}share/locale/cs/LC_MESSAGES/xz.mo
-${PLIST.nls}share/locale/de/LC_MESSAGES/xz.mo
-${PLIST.nls}share/locale/fr/LC_MESSAGES/xz.mo
-${PLIST.nls}share/locale/it/LC_MESSAGES/xz.mo
-${PLIST.nls}share/locale/pl/LC_MESSAGES/xz.mo
-${PLIST.nls}share/locale/vi/LC_MESSAGES/xz.mo

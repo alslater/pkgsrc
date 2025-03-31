@@ -1,7 +1,7 @@
 $NetBSD: distinfo,v 1.45 2019/04/12 13:02:44 wiz Exp $
 
-SHA1 (apr-1.7.0.tar.bz2) = 58ebc7b35efaebb211c0b9df594ab16c4d874234
-RMD160 (apr-1.7.0.tar.bz2) = 4b282845f4ba1c4949b7b386c438e5ef98deaf4b
-SHA512 (apr-1.7.0.tar.bz2) = 3dc42d5caf17aab16f5c154080f020d5aed761e22db4c5f6506917f6bfd2bf8becfb40af919042bd4ce1077d5de74aa666f5edfba7f275efba78e8893c115148
-Size (apr-1.7.0.tar.bz2) = 872238 bytes
+SHA1 (apr-1.7.5.tar.bz2) = b6acc2ea8048d582136c93512bff520fe446d095
+RMD160 (apr-1.7.5.tar.bz2) = db17ac3535cf706cc100e929e7ab81cc2a52ed38
+SHA512 (apr-1.7.5.tar.bz2) = d8a7553642da0c81261ac3992536efd9d43ecb9154934ef1a10ae808d6a3ce8198b40433091d3a6d04f61e67c59426fb5276193a37e810ae4bc74a8a10fb651b
+Size (apr-1.7.5.tar.bz2) = 898264 bytes
 SHA1 (patch-include_apr__general.h) = bff357eee11218a6c53769278fc3f9094b062fdf

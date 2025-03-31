@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.26 2016/07/09 06:37:47 wiz Exp $
 
-DISTNAME=		libzip-1.5.1
+DISTNAME=		libzip-1.11.3
 PKGREVISION=		2
 CATEGORIES=		archivers devel
 MASTER_SITES=		https://libzip.org/download/
