@@ -48,7 +48,7 @@
 # PKG_PHP_VERSION
 #	The selected PHP version.
 #
-#	Possible: 56 74 80 81
+#	Possible: 56 74 80 81 84
 #	Default: ${PHP_VERSION_DEFAULT}
 #
 # PHP_BASE_VERS
@@ -90,11 +90,13 @@ PHPVERSION_MK=	defined
 PHP74_VERSION=	7.4.33
 PHP80_VERSION=	8.0.28
 PHP81_VERSION=	8.1.31
+PHP84_VERSION=	8.4.6
 
 # Define initial release of major version.
 PHP74_RELDATE=	20191128
 PHP80_RELDATE=	20201124
 PHP81_RELDATE=	20211125
+PHP84_RELDATE=  20241121
 
 _VARGROUPS+=	php
 _USER_VARS.php=	PHP_VERSION_DEFAULT
@@ -105,7 +107,7 @@ _SYS_VARS.php=	PKG_PHP_VERSION PKG_PHP PHPPKGSRCDIR PHP_PKG_PREFIX \
 .include "../../mk/bsd.prefs.mk"
 
 PHP_VERSION_DEFAULT?=		74
-PHP_VERSIONS_ACCEPTED?=		74 81
+PHP_VERSIONS_ACCEPTED?=		74 81 84
 .for pv in ${PHP_VERSIONS_ACCEPTED}
 .  if empty(PHP_VERSIONS_INCOMPATIBLE:M${pv})
 _PHP_VERSIONS_ACCEPTED+=	${pv}
@@ -118,7 +120,10 @@ _PHP_VERSION_${pv}_OK=	yes
 .endfor
 
 # check what is installed
-.if exists(${LOCALBASE}/lib/php/${PHP81_RELDATE})
+.if exists(${LOCALBASE}/lib/php/${PHP84_RELDATE})
+_PHP_VERSION_84_INSTALLED=	yes
+_PHP_INSTALLED=			yes
+.elif exists(${LOCALBASE}/lib/php/${PHP81_RELDATE})
 _PHP_VERSION_81_INSTALLED=	yes
 _PHP_INSTALLED=			yes
 .elif exists(${LOCALBASE}/lib/php/${PHP80_RELDATE})
@@ -212,6 +217,9 @@ PHP_EXTENSION_DIR=	lib/php/${PHP80_RELDATE}
 .elif ${_PHP_VERSION} == "81"
 PHP_VERSION=		${PHP81_VERSION}
 PHP_EXTENSION_DIR=	lib/php/${PHP81_RELDATE}
+.elif ${_PHP_VERSION} == "84"
+PHP_VERSION=		${PHP84_VERSION}
+PHP_EXTENSION_DIR=	lib/php/${PHP84_RELDATE}
 .else
 # force an error
 PKG_FAIL_REASON+=	"${PKG_PHP} is not a valid package"
