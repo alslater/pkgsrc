@@ -18,6 +18,7 @@ USE_LIBTOOL=		yes
 PKGCONFIG_OVERRIDE+=	libnewt.pc.in
 
 PY_PATCHPLIST=		yes
+PYTHON_VERSIONS_ACCEPTED= 27
 
 pre-configure:
 	cd ${WRKSRC}; \
