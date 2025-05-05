@@ -27,6 +27,8 @@ USE_TOOLS+=	gmake msgfmt
 INSTALLATION_DIRS=	bin ${PKGMANDIR}/man1 ${PKGMANDIR}/man5
 INSTALLATION_DIRS+=	share/doc/mercurial
 
+PYTHON_SELF_CONFLICT=		yes
+
 .include "version.mk"
 .include "options.mk"
 
@@ -52,5 +54,5 @@ post-install:
 	${INSTALL_DATA} ${WRKSRC}/README.rst  \
 		${DESTDIR}${PREFIX}/share/doc/mercurial
 
-.include "../../lang/python/distutils.mk"
+.include "../../lang/python/egg.mk"
 .include "../../mk/bsd.pkg.mk"

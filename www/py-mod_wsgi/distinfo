@@ -1,8 +1,6 @@
 $NetBSD: distinfo,v 1.19 2021/12/19 14:12:48 wiz Exp $
 
-SHA1 (mod_wsgi-4.7.1.tar.gz) = 155b0e2931f875c6294db4a6f7a82c7f34e0b2c9
-RMD160 (mod_wsgi-4.7.1.tar.gz) = 4c920f6723f73cb09d7ea239ede5d3a0e55e656c
-SHA512 (mod_wsgi-4.7.1.tar.gz) = 2c9d83737fe0ca5c599d3915e47047db2d06880ac3721c94350cd2d9ae930c20058e350f07c918dd301e50bf3433480e1bad479f4ffd382e6b2e42675352734e
-Size (mod_wsgi-4.7.1.tar.gz) = 498301 bytes
-SHA1 (patch-configure) = 7ece56413dfcb8de755dab722ebac632f3d1166f
-SHA1 (patch-src_server_wsgi__python.h) = 70c153e55642714d7172246748b6e4038e87d831
+SHA1 (mod_wsgi-5.0.2.tar.gz) = 47747f124e3fd35a0e0254680cc3a4b58c32f516
+RMD160 (mod_wsgi-5.0.2.tar.gz) = 111e6211f3bec4b9dc7c30fd5dbc3076353423c3
+SHA512 (mod_wsgi-5.0.2.tar.gz) = cac158184c05b51448de3b1cee76226662a5a67b69e7a9fee50a13243b5484c973fa2d36dff8fbddb21998d38e773a1b508717f3a69889ad4b2397e8992b34a2
+Size (mod_wsgi-5.0.2.tar.gz) = 498627 bytes

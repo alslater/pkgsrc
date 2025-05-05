@@ -1,16 +1,16 @@
 $NetBSD: patch-aa,v 1.10 2012/08/27 08:49:09 adam Exp $
 
---- boostcpp.jam.orig	2012-07-27 18:15:55.000000000 +0000
+--- boostcpp.jam.orig	2025-03-31 15:03:06.500463312 +0000
 +++ boostcpp.jam
-@@ -249,6 +249,7 @@ rule declare_install_and_stage_proper_ta
+@@ -290,6 +290,7 @@ rule declare_install_and_stage_proper_ta
          : <location>$(stage-locate)/lib
            <install-dependencies>on <install-type>LIB
            <install-no-version-symlinks>on
-+          <dll-path>@PREFIX@/lib@LIBARCHSUFFIX@
++          <dll-path>/opt/scl64/lib
          ;
      $(p).mark-target-as-explicit stage-proper ;
  
-@@ -509,6 +510,10 @@ rule libraries-to-install ( existing-lib
+@@ -551,6 +552,10 @@ rule libraries-to-install ( existing-lib
      {
          EXIT error: both --with-<library> and --without-<library> specified ;
      }

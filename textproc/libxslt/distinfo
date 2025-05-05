@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.65 2019/11/06 13:23:45 wiz Exp $
 
-SHA1 (libxslt-1.1.42.tar.xz) = a2ee92076aa1f9d0b97218ba3a1222e23112e34a
-RMD160 (libxslt-1.1.42.tar.xz) = e1511ec57d0001aada859dcdbdc873640a47d71d
-SHA512 (libxslt-1.1.42.tar.xz) = 02a2189b6cd65fa1fb929fc0e6868bc046bdd8827849f0048cdf9267ed9450745158cef0f2713a833e28fb520b312ff86dc5754dd423ce768c457bfd8812bdc7
-Size (libxslt-1.1.42.tar.xz) = 1573668 bytes
+SHA1 (libxslt-1.1.43.tar.xz) = 9b2815f9f7126dde84b46d3f960169bf39fecfe3
+RMD160 (libxslt-1.1.43.tar.xz) = b646f6620803c608edb564b61a06c397712ad5e9
+SHA512 (libxslt-1.1.43.tar.xz) = 96110b0397a8f5791f489127574e2143845feb61bea0581d7b7e3c1101fd0718483bae81a7ce417b971bd678293bfd95daddad0dadd3e256c87d41a69faed85a
+Size (libxslt-1.1.43.tar.xz) = 1518364 bytes

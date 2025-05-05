@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.22 2022/01/05 20:47:37 wiz Exp $
 
-DISTNAME=	mod_wsgi-4.7.1
+DISTNAME=	mod_wsgi-5.0.2
 PKGNAME=	${PYPKGPREFIX}-${APACHE_PKG_PREFIX}-${DISTNAME}
 PKGREVISION=	2
 CATEGORIES=	www python
@@ -10,6 +10,8 @@ MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://modwsgi.readthedocs.io/
 COMMENT=	WSGI module for apache
 LICENSE=	apache-2.0
+
+PYTHON_VERSIONS_INCOMPATIBLE= 27
 
 APACHE_MODULE=		yes
 MESSAGE_SUBST+=		PYSITELIB=${PYSITELIB}
