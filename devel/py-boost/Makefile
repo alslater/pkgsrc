@@ -15,7 +15,7 @@ BJAM_ARGS+=		--with-python
 MAKE_ENV+=		BOOST_BUILD_PATH=${WRKSRC}
 
 .include "../../devel/boost-jam/bjam.mk"
-.include "../../lang/python/application.mk"
+.include "../../lang/python/pyversion.mk"
 
 post-configure:
 	${ECHO} 'using python : ${PYVERSSUFFIX} :' \
