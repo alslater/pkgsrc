@@ -11,6 +11,7 @@ GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--with-libxml-prefix=${BUILDLINK_PREFIX.libxml2}
 CONFIGURE_ARGS+=	--without-python
 CONFIGURE_ARGS+=	--with-html-subdir=libxslt
+CONFIGURE_ARGS+=	--with-debugger
 
 PKGCONFIG_OVERRIDE=	libxslt.pc.in
 PKGCONFIG_OVERRIDE+=	libexslt.pc.in
