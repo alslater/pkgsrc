@@ -1,4 +1,5 @@
-@comment $NetBSD: PLIST.pdo,v 1.4 2015/12/06 13:51:30 taca Exp $
+@comment $NetBSD: PLIST.pdo,v 1.7 2025/02/22 15:12:10 taca Exp $
 include/php/ext/pdo/php_pdo.h
 include/php/ext/pdo/php_pdo_driver.h
-${PLIST.pdo_error}include/php/ext/pdo/php_pdo_error.h
+include/php/ext/pdo/php_pdo_error.h
+${PLIST.pdo_sql_parser}include/php/ext/pdo/pdo_sql_parser.h

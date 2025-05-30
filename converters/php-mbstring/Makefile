@@ -11,8 +11,7 @@ INSTALLATION_DIRS+=	${PREFIX}/include/php/ext/mbstring/libmbfl/filters
 INSTALLATION_DIRS+=	${PREFIX}/include/php/ext/mbstring/libmbfl/mbfl
 INSTALLATION_DIRS+=	${PREFIX}/include/php/ext/mbstring/libmbfl/nls
 
-PLIST_SRC+=		${.CURDIR}/PLIST
-PLIST_VARS+=		php7 php81 sbf
+PLIST_SRC+=		${.CURDIR}/PLIST.php${PHP_VER}
 
 CONFIGURE_ARGS+=	--enable-${MODNAME}=shared,${BUILDLINK_DIR}
 
@@ -23,13 +22,4 @@ post-install:
 
 .include "../../lang/php/ext.mk"
 .include "../../textproc/oniguruma/buildlink3.mk"
-
-.if ${PKG_PHP_VERSION} <=80
-PLIST.sbf=	yes
-.else
-PLIST.php81=	yes
-.endif
-.if ${PKG_PHP_MAJOR_VERS} < 8
-PLIST.php7=	yes
-.endif
 .include "../../mk/bsd.pkg.mk"

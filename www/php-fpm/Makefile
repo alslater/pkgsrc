@@ -9,7 +9,7 @@ MAINTAINER=	filip@joyent.com
 COMMENT=	FPM interface for ${PKG_PHP}
 LICENSE=	2-clause-bsd
 
-USE_TOOLS+=	pkg-config
+USE_TOOLS+=	autoconf pkg-config
 
 USE_PHP_EXT_PATCHES=	yes
 LIBTOOL_OVERRIDE=	# empty
@@ -52,6 +52,9 @@ SMF_NAME=		php-fpm
 RCD_SCRIPTS=		php_fpm
 MESSAGE_SUBST+=		CGIDIR=${CGIDIR}
 MESSAGE_SUBST+=		VARBASE=${VARBASE}
+
+pre-configure:
+	cd ${WRKSRC} && ${PKGSRC_SETENV} ${CONFIGURE_ENV} autoconf -f
 
 do-install:
 	${INSTALL_PROGRAM} ${WRKSRC}/sapi/fpm/php-fpm ${DESTDIR}${PREFIX}/sbin/php-fpm

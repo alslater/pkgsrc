@@ -28,6 +28,8 @@ CONFIGURE_ARGS+=	--system-libs
 # jsoncpp requires cmake to build, so use the one provided with cmake
 CONFIGURE_ARGS+=	--no-system-jsoncpp
 
+CFLAGS+=	-fpermissive
+
 LDFLAGS.Darwin+=	-framework CoreServices # for LSOpenCFURLRef()
 LDFLAGS.SunOS+=		-lsocket -lnsl
 

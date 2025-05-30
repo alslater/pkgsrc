@@ -182,6 +182,15 @@ PKG_PHP:=		PHP${_PHP_VERSION:C/([0-9])([0-9])/\1.\2/}
 # Major version
 PKG_PHP_MAJOR_VERS:=	${_PHP_VERSION:C/^([0-9]).*/\1/}
 
+# PHP major version
+PHP_MAJOR_VERS=		${PHP_VERSION:C/([0-9]+)\.([0-9]+)\.([0-9]+)/\1/}
+
+# PHP minor version
+PHP_MINOR_VERS=		${PHP_VERSION:C/([0-9]+)\.([0-9]+)\.([0-9]+)/\2/}
+
+# export some of the internal variables
+PHP_VER:=		${PHP_MAJOR_VERS}${PHP_MINOR_VERS}
+
 PHP_CHECK_INSTALLED?=	Yes
 
 # if installed PHP isn't compatible with required PHP, bail out

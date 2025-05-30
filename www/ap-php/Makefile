@@ -11,12 +11,18 @@ USE_TOOLS+=		lex pkg-config
 APACHE_MODULE=		YES
 
 .include "../../lang/php/phpversion.mk"
+
+USE_TOOLS+=		autoconf
+
 .include "${PHPPKGSRCDIR}/Makefile.php"
 
 # Ensure we export symbols in the linked shared object.
 CONFIGURE_ENV+=		EXTRA_LDFLAGS=${EXPORT_SYMBOLS_LDFLAGS:M*:Q}
 
 INSTALLATION_DIRS=	lib/httpd
+
+pre-configure:
+	cd ${WRKSRC} && ${PKGSRC_SETENV} ${CONFIGURE_ENV} autoconf -f
 
 do-install:
 	if [ -f ${WRKSRC}/.libs/libphp${PKG_PHP_MAJOR_VERS}.so ]; then	\

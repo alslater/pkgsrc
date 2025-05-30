@@ -14,13 +14,12 @@ CONFIGURE_ARGS+=	--with-${MODNAME}
 
 INSTALLATION_DIRS+=	include/php/ext/pdo
 
-PDO_INCLUDES=		php_pdo_driver.h php_pdo.h
-PLIST_VARS+=		pdo_error
+PDO_INCLUDES=		php_pdo_driver.h php_pdo.h php_pdo_error.h
+PLIST_VARS+=		pdo_error pdo_sql_parser
 PLIST_SRC+=		${.CURDIR}/../../databases/php-pdo/PLIST.pdo
-
-.if ${PKG_PHP_VERSION} != "55"
-PDO_INCLUDES+=		php_pdo_error.h
-PLIST.pdo_error=	yes
+.if ${PHP_VER} >= 84
+PDO_INCLUDES+=		pdo_sql_parser.h
+PLIST.pdo_sql_parser=	yes
 .endif
 
 post-install:

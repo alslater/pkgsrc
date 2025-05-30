@@ -14,6 +14,8 @@ PKG_OPTIONS_VAR=	PKG_OPTIONS.php-pdo_mysql
 PKG_SUPPORTED_OPTIONS=	mysqlnd
 PKG_SUGGESTED_OPTIONS=	# empty
 
+MAKE_ENV+=      RE2C=re2c
+
 .include "../../mk/bsd.options.mk"
 
 .if !empty(PKG_OPTIONS:Mmysqlnd)
