@@ -14,3 +14,4 @@ ${PYSITELIB}/certifi/cacert.pem
 ${PYSITELIB}/certifi/core.py
 ${PYSITELIB}/certifi/core.pyc
 ${PYSITELIB}/certifi/core.pyo
+${PYSITELIB}/certifi/py.typed

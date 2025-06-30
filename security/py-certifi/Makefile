@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.27 2022/01/04 20:54:39 wiz Exp $
 
-DISTNAME=	certifi-2021.10.8
+DISTNAME=	certifi-2025.4.26
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 PKGREVISION=	1
 CATEGORIES=	security python
