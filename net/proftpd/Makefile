@@ -40,6 +40,9 @@ MODULES+=	\
 
 CONFIGURE_ARGS+=	--with-shared=${MODULES:ts:}
 
+# needed for memset_s
+CFLAGS.SunOS+=		-D__STDC_WANT_LIB_EXT1__=1
+
 RCD_SCRIPTS=		proftpd
 REPLACE_PERL+=		contrib/ftpasswd
 REPLACE_PERL+=		contrib/ftpmail
@@ -56,9 +59,6 @@ INSTALLATION_DIRS+=	share/examples/proftpd
 post-install:
 .for i in NEWS README.md README.LDAP README.modules
 	${INSTALL_DATA} ${WRKSRC}/${i} ${DESTDIR}${PREFIX}/share/doc/proftpd
-.endfor
-.for i in Configuration.html faq.html license.txt
-	${INSTALL_DATA} ${WRKSRC}/doc/${i} ${DESTDIR}${PREFIX}/share/doc/proftpd
 .endfor
 	${INSTALL_DATA} ${WRKSRC}/sample-configurations/*.conf \
 		${DESTDIR}${PREFIX}/share/examples/proftpd
