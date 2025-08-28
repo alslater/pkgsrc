@@ -1,8 +1,7 @@
-# $NetBSD: Makefile,v 1.68 2022/06/30 11:18:43 nia Exp $
+# $NetBSD: Makefile,v 1.95 2024/05/06 16:10:04 adam Exp $
 
-DISTNAME=	rabbitmq-server-3.10.23
+DISTNAME=	rabbitmq-server-3.13.2
 PKGNAME=	${DISTNAME:S/-server//}
-#PKGREVISION=	2
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GITHUB:=rabbitmq/}
 EXTRACT_SUFX=	.tar.xz
@@ -16,11 +15,10 @@ LICENSE=	mpl-1.1
 
 USE_TOOLS+=		bash:run gmake unzip zip
 
-BUILD_DEPENDS+=		elixir-[0-9]*:../../lang/elixir
-BUILD_DEPENDS+=		libxslt-[0-9]*:../../textproc/libxslt
-BUILD_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
-BUILD_DEPENDS+=		rsync-[0-9]*:../../net/rsync
-BUILD_DEPENDS+=		xmlto-[0-9]*:../../textproc/xmlto
+TOOL_DEPENDS+=		elixir-[0-9]*:../../lang/elixir
+TOOL_DEPENDS+=		libxslt-[0-9]*:../../textproc/libxslt
+TOOL_DEPENDS+=		rsync-[0-9]*:../../net/rsync
+TOOL_DEPENDS+=		xmlto-[0-9]*:../../textproc/xmlto
 DEPENDS+=		${PYPKGPREFIX}-simplejson>=2:../../converters/py-simplejson
 
 BUILD_DEFS+=		VARBASE
@@ -119,5 +117,6 @@ post-install:
 		${DESTDIR}${PREFIX}/share/examples/rabbitmq
 
 .include "../../lang/erlang/buildlink3.mk"
+.include "../../lang/python/batteries-included.mk"
 .include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"
