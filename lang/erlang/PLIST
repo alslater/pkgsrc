@@ -1,4 +1,4 @@
-@comment $NetBSD$
+@comment $NetBSD: PLIST,v 1.56 2023/12/20 18:46:53 wiz Exp $
 bin/ct_run
 bin/dialyzer
 bin/epmd
@@ -47,6 +47,7 @@ lib/erlang/erts-${VERSION.erts}/bin/start_erl.src
 lib/erlang/erts-${VERSION.erts}/bin/to_erl
 lib/erlang/erts-${VERSION.erts}/bin/typer
 lib/erlang/erts-${VERSION.erts}/bin/yielding_c_fun
+@pkgdir lib/erlang/erts-${VERSION.erts}/doc
 lib/erlang/erts-${VERSION.erts}/include/driver_int.h
 lib/erlang/erts-${VERSION.erts}/include/erl_driver.h
 lib/erlang/erts-${VERSION.erts}/include/erl_drv_nif.h
@@ -106,6 +107,7 @@ lib/erlang/erts-${VERSION.erts}/lib/internal/README
 lib/erlang/erts-${VERSION.erts}/lib/internal/liberts_internal.a
 lib/erlang/erts-${VERSION.erts}/lib/internal/liberts_internal_r.a
 lib/erlang/erts-${VERSION.erts}/lib/internal/libethread.a
+@pkgdir lib/erlang/erts-${VERSION.erts}/man
 lib/erlang/erts-${VERSION.erts}/src/setuid_socket_wrap.c
 lib/erlang/lib/asn1-${VERSION.asn1}/c_src/asn1_erl_nif.c
 lib/erlang/lib/asn1-${VERSION.asn1}/ebin/asn1.app
@@ -211,7 +213,6 @@ lib/erlang/lib/common_test-${VERSION.common_test}/priv/ct_default.css
 lib/erlang/lib/common_test-${VERSION.common_test}/priv/jquery-latest.js
 lib/erlang/lib/common_test-${VERSION.common_test}/priv/jquery.tablesorter.min.js
 lib/erlang/lib/common_test-${VERSION.common_test}/priv/tile1.jpg
-lib/erlang/lib/common_test-${VERSION.common_test}/priv/vts.tool
 lib/erlang/lib/common_test-${VERSION.common_test}/src/ct.erl
 lib/erlang/lib/common_test-${VERSION.common_test}/src/ct_config.erl
 lib/erlang/lib/common_test-${VERSION.common_test}/src/ct_config_plain.erl
@@ -274,15 +275,18 @@ lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_kernel_to_ssa.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_listing.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_opcodes.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa.beam
+lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_alias.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_bc_size.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_bool.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_bsm.beam
+lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_check.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_codegen.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_dead.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_lint.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_opt.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_pp.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_pre_codegen.beam
+lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_private_append.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_recv.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_share.beam
 lib/erlang/lib/compiler-${VERSION.compiler}/ebin/beam_ssa_throw.beam
@@ -336,9 +340,11 @@ lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_opcodes.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_opcodes.hrl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa.hrl
+lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_alias.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_bc_size.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_bool.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_bsm.erl
+lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_check.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_codegen.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_dead.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_lint.erl
@@ -346,6 +352,7 @@ lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_opt.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_opt.hrl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_pp.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_pre_codegen.erl
+lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_private_append.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_recv.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_share.erl
 lib/erlang/lib/compiler-${VERSION.compiler}/src/beam_ssa_throw.erl
@@ -459,11 +466,14 @@ lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_clean_core.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_codeserver.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_contracts.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_coordinator.beam
+lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_cplt.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_dataflow.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_dep.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_dot.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_explanation.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_gui_wx.beam
+lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_incremental.beam
+lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_iplt.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_options.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_plt.beam
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/ebin/dialyzer_succ_typings.beam
@@ -488,12 +498,15 @@ lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_clean_core.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_codeserver.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_contracts.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_coordinator.erl
+lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_cplt.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_dataflow.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_dep.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_dot.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_explanation.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_gui_wx.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_gui_wx.hrl
+lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_incremental.erl
+lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_iplt.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_options.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_plt.erl
 lib/erlang/lib/dialyzer-${VERSION.dialyzer}/src/dialyzer_succ_typings.erl
@@ -756,6 +769,7 @@ lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/Makefile
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/Makefile.in
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/README
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/README.internal
+@pkgdir lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/auxdir
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/connect/ei_connect.c
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/connect/ei_connect_int.h
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/connect/ei_resolve.c
@@ -843,8 +857,6 @@ lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/ei_x_encode.c
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/ei_x_encode.h
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/eidef.h
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/eiext.h
-lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/eimd5.c
-lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/eimd5.h
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/get_type.c
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/putget.h
 lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/misc/show_msg.c
@@ -950,11 +962,13 @@ lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp.app
 lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp.appup
 lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp.beam
 lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp_app.beam
+lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp_internal.beam
 lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp_progress.beam
 lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp_response.beam
 lib/erlang/lib/ftp-${VERSION.ftp}/ebin/ftp_sup.beam
 lib/erlang/lib/ftp-${VERSION.ftp}/src/ftp.erl
 lib/erlang/lib/ftp-${VERSION.ftp}/src/ftp_app.erl
+lib/erlang/lib/ftp-${VERSION.ftp}/src/ftp_internal.erl
 lib/erlang/lib/ftp-${VERSION.ftp}/src/ftp_progress.erl
 lib/erlang/lib/ftp-${VERSION.ftp}/src/ftp_response.erl
 lib/erlang/lib/ftp-${VERSION.ftp}/src/ftp_sup.erl
@@ -1045,7 +1059,6 @@ lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/auth/group
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/auth/passwd
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/cgi-bin/printenv.sh
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/conf/8080.conf
-lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/conf/8888.conf
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/conf/httpd.conf
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/conf/mime.types
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/conf/ssl.conf
@@ -1060,8 +1073,10 @@ lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/misc/friedrich
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/misc/oech.html
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/mnesia_open/dummy.html
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/mnesia_secret/dummy.html
+@pkgdir lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/mnesia_secret/top_secret
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/open/dummy.html
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/secret/dummy.html
+@pkgdir lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/secret/top_secret
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/README
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/a.gif
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/alert.black.gif
@@ -1154,6 +1169,7 @@ lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/uu.gif
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/uuencoded.gif
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/world1.gif
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/icons/world2.gif
+@pkgdir lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/logs
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/ssl/ssl_client.pem
 lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/ssl/ssl_server.pem
 lib/erlang/lib/inets-${VERSION.inets}/include/httpd.hrl
@@ -1276,6 +1292,8 @@ lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet6_udp.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_config.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_db.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_dns.beam
+lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_epmd_dist.beam
+lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_epmd_socket.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_gethost_native.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_hosts.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/inet_parse.beam
@@ -1311,6 +1329,7 @@ lib/erlang/lib/kernel-${VERSION.kernel}/ebin/net_kernel.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/os.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/pg.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/pg2.beam
+lib/erlang/lib/kernel-${VERSION.kernel}/ebin/prim_tty.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/ram_file.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/raw_file_io.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/raw_file_io_compressed.beam
@@ -1322,16 +1341,19 @@ lib/erlang/lib/kernel-${VERSION.kernel}/ebin/rpc.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/seq_trace.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/socket.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/standard_error.beam
-lib/erlang/lib/kernel-${VERSION.kernel}/ebin/user.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/user_drv.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/user_sup.beam
 lib/erlang/lib/kernel-${VERSION.kernel}/ebin/wrap_log_reader.beam
+@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/erl_uds_dist/ebin
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/erl_uds_dist/src/Makefile
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/erl_uds_dist/src/erl_uds_dist.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/gen_tcp_dist/Makefile
+@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/gen_tcp_dist/ebin
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/gen_tcp_dist/src/gen_tcp_dist.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/c_src/Makefile
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/c_src/uds_drv.c
+@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/ebin
+@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/priv
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/src/Makefile
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/src/uds.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/src/uds_dist.app
@@ -1401,6 +1423,8 @@ lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_db.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_dns.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_dns.hrl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_dns_record_adts.hrl
+lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_epmd_dist.erl
+lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_epmd_socket.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_gethost_native.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_hosts.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/inet_int.hrl
@@ -1439,6 +1463,7 @@ lib/erlang/lib/kernel-${VERSION.kernel}/src/net_kernel.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/os.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/pg.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/pg2.erl
+lib/erlang/lib/kernel-${VERSION.kernel}/src/prim_tty.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/ram_file.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/raw_file_io.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/raw_file_io_compressed.erl
@@ -1450,7 +1475,6 @@ lib/erlang/lib/kernel-${VERSION.kernel}/src/rpc.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/seq_trace.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/socket.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/standard_error.erl
-lib/erlang/lib/kernel-${VERSION.kernel}/src/user.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/user_drv.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/user_sup.erl
 lib/erlang/lib/kernel-${VERSION.kernel}/src/wrap_log_reader.erl
@@ -1696,6 +1720,7 @@ lib/erlang/lib/mnesia-${VERSION.mnesia}/examples/company_o.erl
 lib/erlang/lib/mnesia-${VERSION.mnesia}/examples/company_o.hrl
 lib/erlang/lib/mnesia-${VERSION.mnesia}/examples/mnesia_meter.erl
 lib/erlang/lib/mnesia-${VERSION.mnesia}/examples/mnesia_tpcb.erl
+@pkgdir lib/erlang/lib/mnesia-${VERSION.mnesia}/include
 lib/erlang/lib/mnesia-${VERSION.mnesia}/src/mnesia.erl
 lib/erlang/lib/mnesia-${VERSION.mnesia}/src/mnesia.hrl
 lib/erlang/lib/mnesia-${VERSION.mnesia}/src/mnesia_app.erl
@@ -1851,17 +1876,13 @@ lib/erlang/lib/os_mon-${VERSION.os_mon}/ebin/os_mon_mib.beam
 lib/erlang/lib/os_mon-${VERSION.os_mon}/ebin/os_mon_sysinfo.beam
 lib/erlang/lib/os_mon-${VERSION.os_mon}/ebin/os_sup.beam
 lib/erlang/lib/os_mon-${VERSION.os_mon}/priv/bin/cpu_sup
-lib/erlang/lib/os_mon-${VERSION.os_mon}/priv/bin/ferrule
 lib/erlang/lib/os_mon-${VERSION.os_mon}/priv/bin/memsup
-lib/erlang/lib/os_mon-${VERSION.os_mon}/priv/bin/mod_syslog
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/cpu_sup.c
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/cpu_sup.erl
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/disksup.erl
-lib/erlang/lib/os_mon-${VERSION.os_mon}/src/ferrule.c
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/memsup.c
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/memsup.erl
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/memsup.hrl
-lib/erlang/lib/os_mon-${VERSION.os_mon}/src/mod_syslog.c
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/nteventlog.erl
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/os_mon.erl
 lib/erlang/lib/os_mon-${VERSION.os_mon}/src/os_mon_mib.erl
@@ -1903,6 +1924,7 @@ lib/erlang/lib/public_key-${VERSION.public_key}/ebin/pubkey_ocsp.beam
 lib/erlang/lib/public_key-${VERSION.public_key}/ebin/pubkey_os_cacerts.beam
 lib/erlang/lib/public_key-${VERSION.public_key}/ebin/pubkey_pbe.beam
 lib/erlang/lib/public_key-${VERSION.public_key}/ebin/pubkey_pem.beam
+lib/erlang/lib/public_key-${VERSION.public_key}/ebin/pubkey_policy_tree.beam
 lib/erlang/lib/public_key-${VERSION.public_key}/ebin/pubkey_ssh.beam
 lib/erlang/lib/public_key-${VERSION.public_key}/ebin/public_key.app
 lib/erlang/lib/public_key-${VERSION.public_key}/ebin/public_key.appup
@@ -1920,6 +1942,7 @@ lib/erlang/lib/public_key-${VERSION.public_key}/src/pubkey_ocsp.erl
 lib/erlang/lib/public_key-${VERSION.public_key}/src/pubkey_os_cacerts.erl
 lib/erlang/lib/public_key-${VERSION.public_key}/src/pubkey_pbe.erl
 lib/erlang/lib/public_key-${VERSION.public_key}/src/pubkey_pem.erl
+lib/erlang/lib/public_key-${VERSION.public_key}/src/pubkey_policy_tree.erl
 lib/erlang/lib/public_key-${VERSION.public_key}/src/pubkey_ssh.erl
 lib/erlang/lib/public_key-${VERSION.public_key}/src/public_key.erl
 lib/erlang/lib/reltool-${VERSION.reltool}/ebin/reltool.app
@@ -1950,6 +1973,7 @@ lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/appmon_info.beam
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/dbg.beam
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/dyntrace.beam
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/erts_alloc_config.beam
+lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/instrument.beam
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/msacc.beam
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/observer_backend.beam
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/ebin/runtime_tools.app
@@ -1989,6 +2013,7 @@ lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/appmon_info.erl
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/dbg.erl
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/dyntrace.erl
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/erts_alloc_config.erl
+lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/instrument.erl
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/msacc.erl
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/observer_backend.erl
 lib/erlang/lib/runtime_tools-${VERSION.runtime_tools}/src/runtime_tools.erl
@@ -2364,6 +2389,7 @@ lib/erlang/lib/ssh-${VERSION.ssh}/ebin/ssh_tcpip_forward_client.beam
 lib/erlang/lib/ssh-${VERSION.ssh}/ebin/ssh_tcpip_forward_srv.beam
 lib/erlang/lib/ssh-${VERSION.ssh}/ebin/ssh_transport.beam
 lib/erlang/lib/ssh-${VERSION.ssh}/ebin/ssh_xfer.beam
+@pkgdir lib/erlang/lib/ssh-${VERSION.ssh}/include
 lib/erlang/lib/ssh-${VERSION.ssh}/src/ssh.erl
 lib/erlang/lib/ssh-${VERSION.ssh}/src/ssh.hrl
 lib/erlang/lib/ssh-${VERSION.ssh}/src/ssh_acceptor.erl
@@ -2461,22 +2487,25 @@ lib/erlang/lib/ssl-${VERSION.ssl}/ebin/ssl_session.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/ssl_session_cache_api.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/ssl_srp_primes.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/ssl_sup.beam
+lib/erlang/lib/ssl-${VERSION.ssl}/ebin/ssl_trace.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/ssl_upgrade_server_session_cache_sup.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_bloom_filter.beam
+lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_client_connection_1_3.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_client_ticket_store.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_connection.beam
-lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_connection_1_3.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_connection_sup.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_dist_server_sup.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_dist_sup.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_dtls_connection.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_dyn_connection_sup.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_gen_connection.beam
+lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_gen_connection_1_3.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_handshake.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_handshake_1_3.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_record.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_record_1_3.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_sender.beam
+lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_server_connection_1_3.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_server_session_ticket.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_server_session_ticket_sup.beam
 lib/erlang/lib/ssl-${VERSION.ssl}/ebin/tls_server_sup.beam
@@ -2552,18 +2581,20 @@ lib/erlang/lib/ssl-${VERSION.ssl}/src/ssl_session_cache_api.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/ssl_srp.hrl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/ssl_srp_primes.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/ssl_sup.erl
+lib/erlang/lib/ssl-${VERSION.ssl}/src/ssl_trace.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/ssl_upgrade_server_session_cache_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_bloom_filter.erl
+lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_client_connection_1_3.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_client_ticket_store.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_connection.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_connection.hrl
-lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_connection_1_3.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_connection_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_dist_server_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_dist_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_dtls_connection.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_dyn_connection_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_gen_connection.erl
+lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_gen_connection_1_3.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_handshake.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_handshake.hrl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_handshake_1_3.erl
@@ -2573,12 +2604,14 @@ lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_record.hrl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_record_1_3.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_record_1_3.hrl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_sender.erl
+lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_server_connection_1_3.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_server_session_ticket.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_server_session_ticket_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_server_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_socket.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_sup.erl
 lib/erlang/lib/ssl-${VERSION.ssl}/src/tls_v1.erl
+lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/argparse.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/array.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/base64.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/beam_lib.beam
@@ -2594,7 +2627,10 @@ lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/dict.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/digraph.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/digraph_utils.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/edlin.beam
+lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/edlin_context.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/edlin_expand.beam
+lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/edlin_key.beam
+lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/edlin_type_suggestion.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/epp.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/erl_abstract_code.beam
 lib/erlang/lib/stdlib-${VERSION.stdlib}/ebin/erl_anno.beam
@@ -2675,6 +2711,7 @@ lib/erlang/lib/stdlib-${VERSION.stdlib}/include/erl_compile.hrl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/include/ms_transform.hrl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/include/qlc.hrl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/include/zip.hrl
+lib/erlang/lib/stdlib-${VERSION.stdlib}/src/argparse.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/array.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/base64.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/beam_lib.erl
@@ -2691,7 +2728,10 @@ lib/erlang/lib/stdlib-${VERSION.stdlib}/src/dict.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/digraph.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/digraph_utils.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/edlin.erl
+lib/erlang/lib/stdlib-${VERSION.stdlib}/src/edlin_context.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/edlin_expand.erl
+lib/erlang/lib/stdlib-${VERSION.stdlib}/src/edlin_key.erl
+lib/erlang/lib/stdlib-${VERSION.stdlib}/src/edlin_type_suggestion.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/epp.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/erl_abstract_code.erl
 lib/erlang/lib/stdlib-${VERSION.stdlib}/src/erl_anno.erl
@@ -2811,7 +2851,6 @@ lib/erlang/lib/tools-${VERSION.tools}/ebin/cover.beam
 lib/erlang/lib/tools-${VERSION.tools}/ebin/cprof.beam
 lib/erlang/lib/tools-${VERSION.tools}/ebin/eprof.beam
 lib/erlang/lib/tools-${VERSION.tools}/ebin/fprof.beam
-lib/erlang/lib/tools-${VERSION.tools}/ebin/instrument.beam
 lib/erlang/lib/tools-${VERSION.tools}/ebin/lcnt.beam
 lib/erlang/lib/tools-${VERSION.tools}/ebin/make.beam
 lib/erlang/lib/tools-${VERSION.tools}/ebin/tags.beam
@@ -2841,7 +2880,6 @@ lib/erlang/lib/tools-${VERSION.tools}/src/cover.erl
 lib/erlang/lib/tools-${VERSION.tools}/src/cprof.erl
 lib/erlang/lib/tools-${VERSION.tools}/src/eprof.erl
 lib/erlang/lib/tools-${VERSION.tools}/src/fprof.erl
-lib/erlang/lib/tools-${VERSION.tools}/src/instrument.erl
 lib/erlang/lib/tools-${VERSION.tools}/src/lcnt.erl
 lib/erlang/lib/tools-${VERSION.tools}/src/make.erl
 lib/erlang/lib/tools-${VERSION.tools}/src/tags.erl
@@ -3496,7 +3534,6 @@ lib/erlang/lib/xmerl-${VERSION.xmerl}/src/xmerl_xs.erl
 lib/erlang/lib/xmerl-${VERSION.xmerl}/src/xmerl_xsd.erl
 lib/erlang/lib/xmerl-${VERSION.xmerl}/src/xmerl_xsd_type.erl
 lib/erlang/misc/format_man_pages
-lib/erlang/misc/makewhatis
 lib/erlang/releases/${VERSION}/OTP_VERSION
 lib/erlang/releases/${VERSION}/installed_application_versions
 lib/erlang/releases/${VERSION}/no_dot_erlang.boot
@@ -3526,16 +3563,3 @@ lib/erlang/usr/include/erl_nif.h
 lib/erlang/usr/include/erl_nif_api_funcs.h
 lib/erlang/usr/lib/libei.a
 lib/erlang/usr/lib/libei_st.a
-@pkgdir lib/erlang/lib/ssh-${VERSION.ssh}/include
-${PLIST.odbc}@pkgdir lib/erlang/lib/odbc-${VERSION.odbc}/priv/obj
-@pkgdir lib/erlang/lib/mnesia-${VERSION.mnesia}/include
-@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/priv
-@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/uds_dist/ebin
-@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/gen_tcp_dist/ebin
-@pkgdir lib/erlang/lib/kernel-${VERSION.kernel}/examples/erl_uds_dist/ebin
-@pkgdir lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/logs
-@pkgdir lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/secret/top_secret
-@pkgdir lib/erlang/lib/inets-${VERSION.inets}/examples/server_root/htdocs/mnesia_secret/top_secret
-@pkgdir lib/erlang/lib/erl_interface-${VERSION.erl_interface}/src/auxdir
-@pkgdir lib/erlang/erts-${VERSION.erts}/man
-@pkgdir lib/erlang/erts-${VERSION.erts}/doc

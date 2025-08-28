@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.109 2022/06/28 11:34:10 wiz Exp $
+# $NetBSD: Makefile,v 1.123 2024/05/27 19:07:50 riastradh Exp $
 
 DISTNAME=	erlang-${DIST_VERSION_MAJOR}.${DIST_VERSION_MINOR}${!empty(DIST_VERSION_PATCH):?.:}${DIST_VERSION_PATCH}
 PKGNAME=	${DISTNAME:S/OTP-/erlang-/}
-PKGREVISION=	3
+PKGREVISION=	2
 CATEGORIES=	lang
 MASTER_SITES=	${MASTER_SITE_GITHUB:=erlang/}
 GITHUB_PROJECT=	otp
@@ -17,19 +17,42 @@ EXTRACT_USING=	bsdtar
 
 WRKSRC=		${WRKDIR}/otp-${GITHUB_TAG}
 GNU_CONFIGURE=	yes
-USE_TOOLS+=	autoconf awk gmake perl:run flex
+USE_TOOLS+=	awk gmake perl flex
+USE_LANGUAGES+=	c c++
 
 # "This run-time was supposed be compiled with all code below 2Gb,
 # but the instruction 'allocate_tt' is located at 00000001c586f34c."
-#MKPIE_SUPPORTED=	no
+MKPIE_SUPPORTED=	no
 
 .include "../../mk/bsd.prefs.mk"
 
-.if !empty(MACHINE_ARCH:M*armv6*) || !empty(MACHINE_ARCH:M*armv7*)
+.if ${MACHINE_ARCH:M*armv6*} || ${MACHINE_ARCH:M*armv7*}
 MAKE_FLAGS+=	ARCH=arm
 .endif
 
-USE_GNU_CONFIGURE_HOST=	${USE_CROSS_COMPILE}
+.if ${USE_CROSS_COMPILE:U:tl} == yes
+
+# Cross-build requires running erlc.
+TOOL_DEPENDS+=		${PKGNAME}:../../${PKGPATH}
+
+# The Erlang cross-build -- particularly the openssl part -- is unhappy
+# if erl_xcomp_sysroot is undefined.  However, the pkgsrc wrappers
+# already handle sysroot -- and passing CROSS_DESTDIR through to
+# erl_xcomp_sysroot causes configure to break in mysterious ways (fails
+# to detect suffix of executables for some reason, can't find
+# conftest.c just for that one test).  So for now we'll pass / through
+# as the sysroot and hope Erlang doesn't try any funny business with
+# files in /usr/include or /usr/lib or anything.
+CONFIGURE_ARGS+=	erl_xcomp_sysroot=/	# handled by pkgsrc
+
+USE_GNU_CONFIGURE_HOST=	yes
+
+.else
+
+USE_GNU_CONFIGURE_HOST=	no
+
+.endif
+
 OVERRIDE_DIRDEPTH=	4
 
 CONFIGURE_ARGS+=	--with-ssl=${BUILDLINK_PREFIX.openssl}
@@ -43,10 +66,9 @@ REPLACE_INTERPRETER+=	escript
 REPLACE.escript.old=	.*escript
 REPLACE.escript.new=	${PREFIX}/bin/escript
 REPLACE_FILES.escript+=	lib/diameter/bin/diameterc
+REPLACE_FILES.escript+=	lib/edoc/bin/edoc
 REPLACE_FILES.escript+=	lib/erl_docgen/priv/bin/codeline_preprocessing.escript
 REPLACE_FILES.escript+=	lib/erl_docgen/priv/bin/xml_from_edoc.escript
-REPLACE_FILES.escript+=	lib/reltool/examples/display_args
-REPLACE_FILES.escript+=	lib/reltool/examples/mnesia_core_dump_viewer
 REPLACE_FILES.escript+=	lib/snmp/src/compile/snmpc.src
 
 SUBST_CLASSES+=		target
@@ -62,14 +84,12 @@ SMF_NAME=		epmd
 
 CONFIGURE_ARGS.DragonFly+=	--disable-sctp
 
-CFLAGS+=-Wno-deprecated-declarations 
+.if defined(OPSYS_HAS_KQUEUE) && ${OPSYS} != "Darwin"
+CONFIGURE_ARGS+=	--enable-kernel-poll
+.endif
 
-CHECK_INTERPRETER_SKIP+= lib/erlang/lib/edoc-1.2/bin/edoc
-
-###
-### XXX There may be others here.
-###
-.if ${OPSYS} == "NetBSD" || ${OPSYS} == "OpenBSD" || ${OPSYS} == "Darwin"
+# Erlang rejects kqueue implementations before Sierra.
+.if ${OPSYS} == "Darwin" && ${OPSYS_VERSION} > 101200
 CONFIGURE_ARGS+=	--enable-kernel-poll
 .endif
 
@@ -77,9 +97,6 @@ CHECK_RELRO_SKIP+=	lib/erlang/lib/megaco-${VERSION.megaco}/priv/lib/megaco_flex_
 CHECK_RELRO_SKIP+=	lib/erlang/lib/megaco-${VERSION.megaco}/priv/lib/megaco_flex_scanner_drv_mt.so
 
 .include "options.mk"
-
-pre-configure:
-	cd ${WRKSRC} && ./otp_build autoconf
 
 ###
 ### Ensure this gets rebuilt.

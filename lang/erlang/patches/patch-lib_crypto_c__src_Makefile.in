@@ -1,9 +1,18 @@
-$NetBSD: patch-lib_crypto_c__src_Makefile.in,v 1.1 2017/10/04 16:20:51 jperkin Exp $
+$NetBSD: patch-lib_crypto_c__src_Makefile.in,v 1.4 2023/11/02 19:20:46 adam Exp $
 
-Compile via CC wrapper to ensure correct flags.
+Properly install shared objects.
 
---- lib/crypto/c_src/Makefile.in.orig	2023-03-06 13:35:28.000000000 +0000
+--- lib/crypto/c_src/Makefile.in.orig	2023-10-11 15:12:39.000000000 +0000
 +++ lib/crypto/c_src/Makefile.in
+@@ -147,7 +147,7 @@ endif
+ endif
+ 
+ ifeq ($(DYNAMIC_OR_WIN_CRYPTO_LIB),yes)
+-SSL_DED_LD_RUNTIME_LIBRARY_PATH = @SSL_DED_LD_RUNTIME_LIBRARY_PATH@
++SSL_DED_LD_RUNTIME_LIBRARY_PATH =
+ CRYPTO_LINK_LIB=$(SSL_DED_LD_RUNTIME_LIBRARY_PATH) -L$(SSL_LIBDIR) -l$(SSL_CRYPTO_LIBNAME)
+ EXTRA_FLAGS = -DHAVE_DYNAMIC_CRYPTO_LIB
+ else
 @@ -232,7 +232,7 @@ $(LIBDIR)/crypto$(TYPEMARKER).dll: $(CRY
  ifeq ($(DYNAMIC_OR_WIN_CRYPTO_LIB),yes)
  $(LIBDIR)/crypto_callback$(TYPEMARKER).so: $(CALLBACK_OBJS)
@@ -13,3 +22,20 @@ Compile via CC wrapper to ensure correct flags.
  
  $(LIBDIR)/crypto_callback$(TYPEMARKER).dll: $(CALLBACK_OBJS)
  	$(INSTALL_DIR) $(LIBDIR)
+@@ -266,13 +266,13 @@ include $(ERL_TOP)/make/otp_release_targ
+ 
+ release_spec: opt
+ 	$(INSTALL_DIR) "$(RELSYSDIR)/priv/lib"
+-	$(INSTALL_PROGRAM) $(NIF_LIB) "$(RELSYSDIR)/priv/lib"
++	${BSD_INSTALL_LIB} $(NIF_LIB) "$(RELSYSDIR)/priv/lib"
+ ifeq ($(DYNAMIC_OR_WIN_CRYPTO_LIB),yes)
+-	$(INSTALL_PROGRAM) $(CALLBACK_LIB) "$(RELSYSDIR)/priv/lib"
++	${BSD_INSTALL_LIB} $(CALLBACK_LIB) "$(RELSYSDIR)/priv/lib"
+ endif
+ ifeq ($(DISABLE_OTP_TEST_ENGINE),yes)
+ else
+-	$(INSTALL_PROGRAM) $(TEST_ENGINE_LIB) "$(RELSYSDIR)/priv/lib"
++	${BSD_INSTALL_LIB} $(TEST_ENGINE_LIB) "$(RELSYSDIR)/priv/lib"
+ endif
+ 
+ release_docs_spec:
