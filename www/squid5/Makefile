@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.2 2022/09/23 14:53:35 taca Exp $
 
-DISTNAME=	squid-6.13
+DISTNAME=	squid-6.14
 CATEGORIES=	www
 #MASTER_SITES=	http://www.squid-cache.org/Versions/v6/
 MASTER_SITES=	${MASTER_SITE_GITHUB:=squid-cache/}

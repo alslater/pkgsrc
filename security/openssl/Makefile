@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.268 2021/02/20 08:53:23 wiz Exp $
 
-DISTNAME=	openssl-3.0.16
+DISTNAME=	openssl-3.0.17
 CATEGORIES=	security
 MASTER_SITES=	https://www.openssl.org/source/
 

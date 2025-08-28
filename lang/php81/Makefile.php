@@ -34,6 +34,7 @@ CONFIGURE_ARGS+=	--without-iconv
 CONFIGURE_ARGS+=	--without-pear
 CONFIGURE_ARGS+=	--without-sqlite3
 CONFIGURE_ARGS+=	--with-external-pcre
+CONFIGURE_ARGS+=	--without-pdo-sqlite
 
 CONFIGURE_ARGS+=	--disable-intl
 CONFIGURE_ARGS+=	--disable-posix

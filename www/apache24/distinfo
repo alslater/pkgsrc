@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.34 2017/10/23 21:12:44 adam Exp $
 
-SHA1 (httpd-2.4.63.tar.bz2) = 5f26584d27100cf33f278288b8e7efffdd58c397
-RMD160 (httpd-2.4.63.tar.bz2) = 851f634398dbaa98e975db51269d008cc7a635f8
-SHA512 (httpd-2.4.63.tar.bz2) = a804ca564dfee5907fe4ce4f36884815bace0621bc7b8c9aa7c99472a954aa19cb13733f90678ff3d58ab3c76cc0e33a27e1035dc1d8cb597a9622154c59ef48
-Size (httpd-2.4.63.tar.bz2) = 7517972 bytes
+SHA1 (httpd-2.4.65.tar.bz2) = 442471fd305fa863db70c1486cf532a516024f81
+RMD160 (httpd-2.4.65.tar.bz2) = 61d3463a59eb19ce71db061459a68a17ef70fe96
+SHA512 (httpd-2.4.65.tar.bz2) = 202f8bfe2aafcfbcd7315191d466e9c10b9a8c0abafb7864510b6e1abe4cb660aaacc2456aa77d43e48ef7a49e591d0b54170d3daf67abc3e06c3da1c63fdffc
+Size (httpd-2.4.65.tar.bz2) = 7506711 bytes
 SHA1 (patch-aa) = 9a66685f1d2e4710ab464beda98cbaad632aebf9
 SHA1 (patch-ab) = a3edcc20b7654e0446c7d442cda1510b23e5d324
 SHA1 (patch-ac) = d529df410f564571a8cc7c2a31c3b446479a71df
