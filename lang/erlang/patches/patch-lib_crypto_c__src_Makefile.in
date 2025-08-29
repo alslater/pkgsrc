@@ -1,9 +1,22 @@
-$NetBSD: patch-lib_crypto_c__src_Makefile.in,v 1.4 2023/11/02 19:20:46 adam Exp $
+$NetBSD: patch-lib_crypto_c__src_Makefile.in,v 1.1 2017/10/04 16:20:51 jperkin Exp $
 
-Properly install shared objects.
+Compile via CC wrapper to ensure correct flags.
 
---- lib/crypto/c_src/Makefile.in.orig	2023-10-11 15:12:39.000000000 +0000
+--- lib/crypto/c_src/Makefile.in.orig	2025-07-16 15:33:26.000000000 +0000
 +++ lib/crypto/c_src/Makefile.in
+@@ -31,10 +31,10 @@ VSN=$(CRYPTO_VSN)
+ # Set by configure.
+ # ----------------------------------------------------
+ CC = @DED_CC@
+-LD = @DED_LD@
++LD = @DED_CC@ 
+ SHELL = /bin/sh
+ LIBS = @DED_LIBS@
+-LDFLAGS += @DED_LDFLAGS@
++LDFLAGS += -shared
+ CFLAGS = @DED_CFLAGS@ @SSL_FLAGS@
+ 
+ # From configure
 @@ -147,7 +147,7 @@ endif
  endif
  
@@ -13,7 +26,7 @@ Properly install shared objects.
  CRYPTO_LINK_LIB=$(SSL_DED_LD_RUNTIME_LIBRARY_PATH) -L$(SSL_LIBDIR) -l$(SSL_CRYPTO_LIBNAME)
  EXTRA_FLAGS = -DHAVE_DYNAMIC_CRYPTO_LIB
  else
-@@ -232,7 +232,7 @@ $(LIBDIR)/crypto$(TYPEMARKER).dll: $(CRY
+@@ -243,7 +243,7 @@ $(LIBDIR)/crypto$(TYPEMARKER).dll: $(CRY
  ifeq ($(DYNAMIC_OR_WIN_CRYPTO_LIB),yes)
  $(LIBDIR)/crypto_callback$(TYPEMARKER).so: $(CALLBACK_OBJS)
  	$(INSTALL_DIR) $(LIBDIR)
@@ -22,7 +35,7 @@ Properly install shared objects.
  
  $(LIBDIR)/crypto_callback$(TYPEMARKER).dll: $(CALLBACK_OBJS)
  	$(INSTALL_DIR) $(LIBDIR)
-@@ -266,13 +266,13 @@ include $(ERL_TOP)/make/otp_release_targ
+@@ -277,13 +277,13 @@ include $(ERL_TOP)/make/otp_release_targ
  
  release_spec: opt
  	$(INSTALL_DIR) "$(RELSYSDIR)/priv/lib"

@@ -22,7 +22,7 @@ USE_LANGUAGES+=	c c++
 
 # "This run-time was supposed be compiled with all code below 2Gb,
 # but the instruction 'allocate_tt' is located at 00000001c586f34c."
-MKPIE_SUPPORTED=	no
+#MKPIE_SUPPORTED=	no
 
 .include "../../mk/bsd.prefs.mk"
 

@@ -1,12 +1,12 @@
 $NetBSD: distinfo,v 1.114 2024/05/27 19:07:50 riastradh Exp $
 
-BLAKE2s (erlang-26.2.5.tar.gz) = f846568c846c62db184fc50e30b16e22716a869ea0632f934294dd8f7bb2b821
-SHA512 (erlang-26.2.5.tar.gz) = f06d34290c0d93609aa3efbdc97206e8d3ce17aa2c3f62b6c566c7631ee3a3d45a89b61ce0ace81604b5a94610d03ad98558f27ee888ca90ecdeeeb2759c0184
-Size (erlang-26.2.5.tar.gz) = 62479032 bytes
+SHA1 (erlang-26.2.5.14.tar.gz) = 59e229c59292eb3530d849c279340b0933331ae5
+RMD160 (erlang-26.2.5.14.tar.gz) = 6a1a6b299d620eaef59e9959a75fc8b56eeca3e8
+SHA512 (erlang-26.2.5.14.tar.gz) = 49ab187d657efd45304685b2117aa8f9adc07a41864e13c1bb5c3b3893fcda4b5d3895bfe91a3dbcd5c3372f49b3aad9f4dafa6511755e6cab595ddd87c748cb
+Size (erlang-26.2.5.14.tar.gz) = 62564783 bytes
 SHA1 (patch-erts_emulator_Makefile.in) = b99ccd2669652b1542b2ee99e09f886d864fd8be
 SHA1 (patch-erts_emulator_beam_erl__init.c) = ccbf4330a0774b97a3aca611fc57ba60062e1390
 SHA1 (patch-erts_emulator_beam_packet__parser.c) = 13cb7fb1d65ddac93221d85df1a44d76332b1cec
-SHA1 (patch-erts_emulator_drivers_common_inet__drv.c) = 937280446342ceb00e3d193fe0e2ee47765a9957
 SHA1 (patch-erts_emulator_drivers_common_ram__file__drv.c) = 5c3c05c27b2eec0f5be1e31f2e8fbdee0d9b8885
 SHA1 (patch-erts_emulator_drivers_win32_registry__drv.c) = 5d66b9be1c09f7c471d9675f376df3c8ec3d39be
 SHA1 (patch-erts_emulator_nifs_common_prim__tty__nif.c) = 10843ede3abd4a6c68fa60cbc3e5b434cfc19e31
@@ -22,7 +22,7 @@ SHA1 (patch-erts_lib__src_common_erl__printf.c) = e156722b0617a4a9eb1eb7ea63365c
 SHA1 (patch-erts_lib__src_common_erl__printf__format.c) = 2d5b98a5450c36b0eda4e2161ac3aefa6c08f6bc
 SHA1 (patch-erts_lib__src_pthread_ethread.c) = d4c6e55818061ac465cc022e748cd072abbc2825
 SHA1 (patch-lib_asn1_c__src_Makefile) = d47870e58de5e10a94dfa9f4a274c88261633e5b
-SHA1 (patch-lib_crypto_c__src_Makefile.in) = 025efecaa05f8a190a9024c475cbe5e9ab9286d9
+SHA1 (patch-lib_crypto_c__src_Makefile.in) = c40ed7ae4f125c1fa5b01484432525467a614945
 SHA1 (patch-lib_erl__interface_src_misc_ei__format.c) = 255ad04bd60e1aefe6668f1c6fcefc790d0564df
 SHA1 (patch-lib_erl__interface_src_misc_ei__printterm.c) = 587f17c256c62aa29fda7d36d8056875b4b4193f
 SHA1 (patch-lib_erl__interface_src_prog_erl__call.c) = 3d585d4dbb2a45e1d177b9417fba0c261e5de3fd
