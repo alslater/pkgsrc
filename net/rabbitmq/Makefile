@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.95 2024/05/06 16:10:04 adam Exp $
 
-DISTNAME=	rabbitmq-server-3.13.2
+DISTNAME=	rabbitmq-server-3.13.7
 PKGNAME=	${DISTNAME:S/-server//}
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GITHUB:=rabbitmq/}
@@ -20,6 +20,7 @@ TOOL_DEPENDS+=		libxslt-[0-9]*:../../textproc/libxslt
 TOOL_DEPENDS+=		rsync-[0-9]*:../../net/rsync
 TOOL_DEPENDS+=		xmlto-[0-9]*:../../textproc/xmlto
 DEPENDS+=		${PYPKGPREFIX}-simplejson>=2:../../converters/py-simplejson
+DEPENDS+=		${PYPKGPREFIX}-expat>=2:../../textproc/py-expat
 
 BUILD_DEFS+=		VARBASE
 
@@ -100,6 +101,7 @@ CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmqctl
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/vmware-rabbitmq
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/sbin/cuttlefish
 
+ALL_ENV+=       ELIXIR_ERL_OPTIONS="+fnu"
 MAKE_ENV+=		MANDIR="${PREFIX}/${PKGMANDIR}"
 MAKE_ENV+=		RMQ_BINDIR="${PREFIX}/sbin"
 MAKE_ENV+=		RMQ_LIBDIR="${PREFIX}/lib/erlang/lib"
@@ -117,6 +119,5 @@ post-install:
 		${DESTDIR}${PREFIX}/share/examples/rabbitmq
 
 .include "../../lang/erlang/buildlink3.mk"
-.include "../../lang/python/batteries-included.mk"
 .include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"
