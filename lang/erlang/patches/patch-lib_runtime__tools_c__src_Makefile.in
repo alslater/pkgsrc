@@ -2,8 +2,21 @@ $NetBSD: patch-lib_runtime__tools_c__src_Makefile.in,v 1.3 2023/11/02 19:20:46 a
 
 Properly install shared objects.
 
---- lib/runtime_tools/c_src/Makefile.in.orig	2023-11-02 14:43:42.856434868 +0000
+--- lib/runtime_tools/c_src/Makefile.in.orig	2025-07-16 15:33:26.000000000 +0000
 +++ lib/runtime_tools/c_src/Makefile.in
+@@ -34,10 +34,10 @@ VSN=$(RUNTIME_TOOLS_VSN)
+ # ----------------------------------------------------
+ CC = $(DED_CC)
+ CFLAGS = $(DED_CFLAGS) -I./
+-LD = $(DED_LD)
++LD = $(DED_CC)
+ SHELL = /bin/sh
+ LIBS = $(DED_LIBS) @LIBS@
+-LDFLAGS += $(DED_LDFLAGS)
++LDFLAGS += -shared
+ 
+ TRACE_LIBNAME = dyntrace trace_file_drv trace_ip_drv
+ 
 @@ -110,7 +110,7 @@ include $(ERL_TOP)/make/otp_release_targ
  
  release_spec: opt

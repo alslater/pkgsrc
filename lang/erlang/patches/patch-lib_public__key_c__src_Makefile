@@ -1,0 +1,18 @@
+$NetBSD$
+
+--- lib/public_key/c_src/Makefile.orig	2025-07-16 15:33:26.000000000 +0000
++++ lib/public_key/c_src/Makefile
+@@ -35,11 +35,11 @@ VSN=$(PUBLIC_KEY_VSN)
+ # ----------------------------------------------------
+ CC = $(DED_CC)
+ CFLAGS = $(DED_CFLAGS) -I./
+-LD = $(DED_LD)
++LD = $(DED_CC)
+ SHELL = /bin/sh
+ #LIBS = $(DED_LIBS) @LIBS@
+ LIBS = $(DED_LIBS)
+-LDFLAGS += $(DED_LDFLAGS)
++LDFLAGS += -shared
+ 
+ PUBKEY_LIBNAME = public_key
+ 
