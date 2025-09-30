@@ -12,11 +12,12 @@ TEST_TARGET=		test
 
 USE_TOOLS+=		autoconf gmake lex
 LIBTOOL_OVERRIDE=	# empty
+PHP_CHECK_INSTALLED=	No
 
 PHP_VERSIONS_ACCEPTED=	83
 
-CONFLICTS+=		php-[0-9]*
-SUPERSEDES+=		php>=8.3<8.4
+#CONFLICTS+=		php-[0-9]*
+#SUPERSEDES+=		php>=8.3<8.4
 
 .include "Makefile.php"
 

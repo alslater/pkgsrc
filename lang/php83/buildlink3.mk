@@ -2,16 +2,16 @@
 
 BUILDLINK_TREE+=	php
 
-.if !defined(PHP83_BUILDLINK3_MK)
-PHP83_BUILDLINK3_MK:=
+.if !defined(PHP_BUILDLINK3_MK)
+PHP_BUILDLINK3_MK:=
 
-BUILDLINK_API_DEPENDS.php83+=	php${PHP_VER}>=8.3.0<8.4
-BUILDLINK_ABI_DEPENDS.php83+=	php83>=8.3.20nb1
+BUILDLINK_API_DEPENDS.php83+=	php>=8.3.0<8.4.0
+BUILDLINK_ABI_DEPENDS.php83+=	php>=8.3.0
 BUILDLINK_PKGSRCDIR.php83?=	../../lang/php83
 
-pkgbase := php83
+pkgbase := php
 .include "../../mk/pkg-build-options.mk"
 .include "../../textproc/libxml2/buildlink3.mk"
-.endif # PHP83_BUILDLINK3_MK
+.endif # PHP_BUILDLINK3_MK
 
 BUILDLINK_TREE+=	-php
