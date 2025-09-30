@@ -1,20 +1,22 @@
-# $NetBSD: Makefile,v 1.7 2022/06/09 15:10:50 taca Exp $
+# $NetBSD: Makefile,v 1.17 2025/07/04 01:25:48 taca Exp $
 
 #
 # We can't omit PKGNAME here to handle PKG_OPTIONS.
 #
 PKGNAME=		php-${PHP_VERSION:S/RC/rc/}
 
-COMMENT=		PHP Hypertext Preprocessor version 8.4
+COMMENT=		PHP Hypertext Preprocessor version 8.3
 LICENSE=		php
 
 TEST_TARGET=		test
 
 USE_TOOLS+=		autoconf gmake lex
 LIBTOOL_OVERRIDE=	# empty
-PHP_CHECK_INSTALLED=	No
 
-PHP_VERSIONS_ACCEPTED=		84
+PHP_VERSIONS_ACCEPTED=	83
+
+CONFLICTS+=		php-[0-9]*
+SUPERSEDES+=		php>=8.3<8.4
 
 .include "Makefile.php"
 
