@@ -1,6 +1,7 @@
 # $NetBSD: Makefile.common,v 1.1 2023/11/30 16:14:50 taca Exp $
 # used by lang/php83/Makefile.php
 # used by lang/php/ext.mk
+# used by meta-pkgs/php83-extensions/Makefile
 
 PHP_VERSION_REQD=	83
 

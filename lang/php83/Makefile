@@ -16,9 +16,6 @@ PHP_CHECK_INSTALLED=	No
 
 PHP_VERSIONS_ACCEPTED=	83
 
-#CONFLICTS+=		php-[0-9]*
-#SUPERSEDES+=		php>=8.3<8.4
-
 .include "Makefile.php"
 
 CGIDIR=			${PREFIX}/libexec/cgi-bin

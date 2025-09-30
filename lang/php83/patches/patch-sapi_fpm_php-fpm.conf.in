@@ -9,7 +9,7 @@ Set proper default configuration values.
  ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
  ; Default Value: none
 -;pid = run/php-fpm.pid
-+pid = run/php-fpm@PHP_VER@.pid
++pid = run/php-fpm.pid
  
  ; Error log file
  ; If it's set to "syslog", log is sent to syslogd instead of being written
@@ -17,7 +17,7 @@ Set proper default configuration values.
  ; Note: the default prefix is @EXPANDED_LOCALSTATEDIR@
  ; Default Value: log/php-fpm.log
 -;error_log = log/php-fpm.log
-+;error_log = log/php-fpm@PHP_VER@.log
++;error_log = log/php-fpm.log
  
  ; syslog_facility is used to specify what type of program is logging the
  ; message. This lets syslogd specify that messages from different facilities
