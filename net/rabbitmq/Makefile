@@ -1,6 +1,7 @@
 # $NetBSD: Makefile,v 1.95 2024/05/06 16:10:04 adam Exp $
 
-DISTNAME=	rabbitmq-server-3.13.7
+DISTNAME=	rabbitmq-server-4.1.3
+PKGREVISION=	1
 PKGNAME=	${DISTNAME:S/-server//}
 CATEGORIES=	net
 MASTER_SITES=	${MASTER_SITE_GITHUB:=rabbitmq/}
@@ -101,12 +102,13 @@ CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/rabbitmqctl
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/escript/vmware-rabbitmq
 CHECK_INTERPRETER_SKIP+=	${RABBITMQ_HOME}/sbin/cuttlefish
 
-ALL_ENV+=       ELIXIR_ERL_OPTIONS="+fnu"
+MAKE_ENV+=       	ELIXIR_ERL_OPTIONS="+fnu"
 MAKE_ENV+=		MANDIR="${PREFIX}/${PKGMANDIR}"
 MAKE_ENV+=		RMQ_BINDIR="${PREFIX}/sbin"
 MAKE_ENV+=		RMQ_LIBDIR="${PREFIX}/lib/erlang/lib"
 MAKE_ENV+=		RSYNC="${PREFIX}/bin/rsync"
 MAKE_ENV+=		VERSION="${PKGVERSION_NOREV}"
+MAKE_ENV+=		PROJECT_VERSION="${PKGVERSION_NOREV}"
 
 INSTALL_TARGET=		install-erlapp install-scripts install-bin install-man
 # XXX this test target doesn't work correctly at present, needs investigation.
