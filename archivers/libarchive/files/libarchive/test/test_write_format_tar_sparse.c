@@ -24,7 +24,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include "test.h"
-__FBSDID("$FreeBSD$");
 
 static char buff[1000000];
 
@@ -39,7 +38,7 @@ test_1(void)
 	char *buff2;
 	size_t buff2_size = 0x13000;
 	char buff3[1024];
-	long i;
+	unsigned long i;
 
 	assert((buff2 = malloc(buff2_size)) != NULL);
 	/* Repeat the following for a variety of odd blocksizes. */
@@ -94,7 +93,7 @@ test_1(void)
 
 		/* This calculation gives "the smallest multiple of
 		 * the block size that is at least 11264 bytes". */
-		failure("blocksize=%d", blocksize);
+		failure("blocksize=%zu", blocksize);
 		assertEqualInt(((11264 - 1)/blocksize+1)*blocksize, used);
 
 		/*
@@ -182,7 +181,7 @@ test_2(void)
 	char *buff2;
 	size_t buff2_size = 0x11000;
 	char buff3[1024];
-	long i;
+	unsigned long i;
 
 	assert((buff2 = malloc(buff2_size)) != NULL);
 	/* Create a new archive in memory. */
@@ -229,7 +228,7 @@ test_2(void)
 
 	/* This calculation gives "the smallest multiple of
 	 * the block size that is at least 11264 bytes". */
-	failure("blocksize=%d", blocksize);
+	failure("blocksize=%zu", blocksize);
 	assertEqualInt(((11264 - 1)/blocksize+1)*blocksize, used);
 
 	/*

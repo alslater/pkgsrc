@@ -27,10 +27,7 @@
 **  This code is in the public domain and has no copyright.
 */
 
-#ifdef __FreeBSD__
-#include <sys/cdefs.h>
-__FBSDID("$FreeBSD$");
-#endif
+#include "archive_platform.h"
 
 #include <ctype.h>
 #include <stdio.h>
@@ -38,8 +35,7 @@ __FBSDID("$FreeBSD$");
 #include <string.h>
 #include <time.h>
 
-#define __LIBARCHIVE_BUILD 1
-#include "archive_getdate.h"
+#include "archive.h"
 
 /* Basic time units. */
 #define	EPOCH		1970
@@ -694,8 +690,12 @@ Convert(time_t Month, time_t Day, time_t Year,
 	signed char DaysInMonth[12] = {
 		31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
 	};
-	time_t	Julian;
-	int	i;
+	time_t		Julian;
+	int		i;
+	struct tm	*ltime;
+#if defined(HAVE_LOCALTIME_R) || defined(HAVE_LOCALTIME_S)
+	struct tm	tmbuf;
+#endif
 
 	if (Year < 69)
 		Year += 2000;
@@ -705,7 +705,7 @@ Convert(time_t Month, time_t Day, time_t Year,
 	    ? 29 : 28;
 	/* Checking for 2038 bogusly assumes that time_t is 32 bits.  But
 	   I'm too lazy to try to check for time_t overflow in another way.  */
-	if (Year < EPOCH || Year > 2038
+	if (Year < EPOCH || Year >= 2038
 	    || Month < 1 || Month > 12
 	    /* Lint fluff:  "conversion from long may lose accuracy" */
 	    || Day < 1 || Day > DaysInMonth[(int)--Month]
@@ -722,21 +722,44 @@ Convert(time_t Month, time_t Day, time_t Year,
 	Julian *= DAY;
 	Julian += Timezone;
 	Julian += Hours * HOUR + Minutes * MINUTE + Seconds;
+#if defined(HAVE_LOCALTIME_S)
+	ltime = localtime_s(&tmbuf, &Julian) ? NULL : &tmbuf;
+#elif defined(HAVE_LOCALTIME_R)
+	ltime = localtime_r(&Julian, &tmbuf);
+#else
+	ltime = localtime(&Julian);
+#endif
 	if (DSTmode == DSTon
-	    || (DSTmode == DSTmaybe && localtime(&Julian)->tm_isdst))
+	    || (DSTmode == DSTmaybe && ltime->tm_isdst))
 		Julian -= HOUR;
 	return Julian;
 }
 
-
 static time_t
 DSTcorrect(time_t Start, time_t Future)
 {
-	time_t	StartDay;
-	time_t	FutureDay;
-
-	StartDay = (localtime(&Start)->tm_hour + 1) % 24;
-	FutureDay = (localtime(&Future)->tm_hour + 1) % 24;
+	time_t		StartDay;
+	time_t		FutureDay;
+	struct tm	*ltime;
+#if defined(HAVE_LOCALTIME_R) || defined(HAVE_LOCALTIME_S)
+	struct tm	tmbuf;
+#endif
+#if defined(HAVE_LOCALTIME_S)
+	ltime = localtime_s(&tmbuf, &Start) ? NULL : &tmbuf;
+#elif defined(HAVE_LOCALTIME_R)
+	ltime = localtime_r(&Start, &tmbuf);
+#else
+	ltime = localtime(&Start);
+#endif
+	StartDay = (ltime->tm_hour + 1) % 24;
+#if defined(HAVE_LOCALTIME_S)
+	ltime = localtime_s(&tmbuf, &Future) ? NULL : &tmbuf;
+#elif defined(HAVE_LOCALTIME_R)
+	ltime = localtime_r(&Future, &tmbuf);
+#else
+	ltime = localtime(&Future);
+#endif
+	FutureDay = (ltime->tm_hour + 1) % 24;
 	return (Future - Start) + (StartDay - FutureDay) * HOUR;
 }
 
@@ -747,9 +770,18 @@ RelativeDate(time_t Start, time_t zone, int dstmode,
 {
 	struct tm	*tm;
 	time_t	t, now;
+#if defined(HAVE_GMTIME_R) || defined(HAVE_GMTIME_S)
+	struct tm	tmbuf;
+#endif
 
 	t = Start - zone;
+#if defined(HAVE_GMTIME_S)
+	tm = gmtime_s(&tmbuf, &t) ? NULL : &tmbuf;
+#elif defined(HAVE_GMTIME_R)
+	tm = gmtime_r(&t, &tmbuf);
+#else
 	tm = gmtime(&t);
+#endif
 	now = Start;
 	now += DAY * ((DayNumber - tm->tm_wday + 7) % 7);
 	now += 7 * DAY * (DayOrdinal <= 0 ? DayOrdinal : DayOrdinal - 1);
@@ -765,10 +797,19 @@ RelativeMonth(time_t Start, time_t Timezone, time_t RelMonth)
 	struct tm	*tm;
 	time_t	Month;
 	time_t	Year;
+#if defined(HAVE_LOCALTIME_R) || defined(HAVE_LOCALTIME_S)
+	struct tm	tmbuf;
+#endif
 
 	if (RelMonth == 0)
 		return 0;
+#if defined(HAVE_LOCALTIME_S)
+	tm = localtime_s(&tmbuf, &Start) ? NULL : &tmbuf;
+#elif defined(HAVE_LOCALTIME_R)
+	tm = localtime_r(&Start, &tmbuf);
+#else
 	tm = localtime(&Start);
+#endif
 	Month = 12 * (tm->tm_year + 1900) + tm->tm_mon + RelMonth;
 	Year = Month / 12;
 	Month = Month % 12 + 1;
@@ -776,6 +817,23 @@ RelativeMonth(time_t Start, time_t Timezone, time_t RelMonth)
 	    Convert(Month, (time_t)tm->tm_mday, Year,
 		(time_t)tm->tm_hour, (time_t)tm->tm_min, (time_t)tm->tm_sec,
 		Timezone, DSTmaybe));
+}
+
+/*
+ * Parses and consumes an unsigned number.
+ * Returns 1 if any number is parsed. Otherwise, *value is unchanged.
+ */
+static char
+consume_unsigned_number(const char **in, time_t *value)
+{
+	char c;
+	if (isdigit((unsigned char)(c = **in))) {
+		for (*value = 0; isdigit((unsigned char)(c = *(*in)++)); )
+			*value = 10 * *value + c - '0';
+		(*in)--;
+		return 1;
+	}
+	return 0;
 }
 
 /*
@@ -819,7 +877,8 @@ nexttoken(const char **in, time_t *value)
 			    && i < sizeof(buff)-1) {
 				if (*src != '.') {
 					if (isupper((unsigned char)*src))
-						buff[i++] = tolower((unsigned char)*src);
+						buff[i++] = (char)tolower(
+						    (unsigned char)*src);
 					else
 						buff[i++] = *src;
 				}
@@ -853,10 +912,7 @@ nexttoken(const char **in, time_t *value)
 		 * Because '-' and '+' have other special meanings, I
 		 * don't deal with signed numbers here.
 		 */
-		if (isdigit((unsigned char)(c = **in))) {
-			for (*value = 0; isdigit((unsigned char)(c = *(*in)++)); )
-				*value = 10 * *value + c - '0';
-			(*in)--;
+		if (consume_unsigned_number(in, value)) {
 			return (tUNUMBER);
 		}
 
@@ -872,7 +928,7 @@ difftm (struct tm *a, struct tm *b)
 {
 	int ay = a->tm_year + (TM_YEAR_ORIGIN - 1);
 	int by = b->tm_year + (TM_YEAR_ORIGIN - 1);
-	int days = (
+	long days = (
 		/* difference in day of year */
 		a->tm_yday - b->tm_yday
 		/* + intervening leap days */
@@ -888,13 +944,39 @@ difftm (struct tm *a, struct tm *b)
 }
 
 /*
+ * Parses a Unix epoch timestamp (seconds).
+ * This supports a subset of what GNU tar accepts from black box testing,
+ * but covers common use cases.
+ */
+static time_t
+parse_unix_epoch(const char *p)
+{
+	time_t epoch;
+
+	/* may begin with + */
+	if (*p == '+') {
+		p++;
+	}
+
+	/* followed by some number */
+	if (!consume_unsigned_number(&p, &epoch))
+		return (time_t)-1;
+
+	/* ...and nothing else */
+	if (*p != '\0')
+		return (time_t)-1;
+
+	return epoch;
+}
+
+/*
  *
  * The public function.
  *
  * TODO: tokens[] array should be dynamically sized.
  */
 time_t
-__archive_get_date(time_t now, const char *p)
+archive_parse_date(time_t now, const char *p)
 {
 	struct token	tokens[256];
 	struct gdstate	_gds;
@@ -906,6 +988,13 @@ __archive_get_date(time_t now, const char *p)
 	time_t		tod;
 	long		tzone;
 
+	/*
+	 * @-prefixed Unix epoch timestamps (seconds)
+	 * Skip the complex tokenizer - We do not want to accept strings like "@tenth"
+	 */
+	if (*p == '@')
+		return parse_unix_epoch(p + 1);
+
 	/* Clear out the parsed token array. */
 	memset(tokens, 0, sizeof(tokens));
 	/* Initialize the parser state. */
@@ -913,20 +1002,34 @@ __archive_get_date(time_t now, const char *p)
 	gds = &_gds;
 
 	/* Look up the current time. */
+#if defined(HAVE_LOCALTIME_S)
+	tm = localtime_s(&local, &now) ? NULL : &local;
+#elif defined(HAVE_LOCALTIME_R)
+	tm = localtime_r(&now, &local);
+#else
 	memset(&local, 0, sizeof(local));
-	tm = localtime (&now);
+	tm = localtime(&now);
+#endif
 	if (tm == NULL)
 		return -1;
+#if !defined(HAVE_LOCALTIME_R) && !defined(HAVE_LOCALTIME_S)
 	local = *tm;
+#endif
 
 	/* Look up UTC if we can and use that to determine the current
 	 * timezone offset. */
+#if defined(HAVE_GMTIME_S)
+	gmt_ptr = gmtime_s(&gmt, &now) ? NULL : &gmt;
+#elif defined(HAVE_GMTIME_R)
+	gmt_ptr = gmtime_r(&now, &gmt);
+#else
 	memset(&gmt, 0, sizeof(gmt));
-	gmt_ptr = gmtime (&now);
+	gmt_ptr = gmtime(&now);
 	if (gmt_ptr != NULL) {
 		/* Copy, in case localtime and gmtime use the same buffer. */
 		gmt = *gmt_ptr;
 	}
+#endif
 	if (gmt_ptr != NULL)
 		tzone = difftm (&gmt, &local);
 	else
@@ -960,7 +1063,13 @@ __archive_get_date(time_t now, const char *p)
 	 * time components instead of the local timezone. */
 	if (gds->HaveZone && gmt_ptr != NULL) {
 		now -= gds->Timezone;
-		gmt_ptr = gmtime (&now);
+#if defined(HAVE_GMTIME_S)
+		gmt_ptr = gmtime_s(&gmt, &now) ? NULL : &gmt;
+#elif defined(HAVE_GMTIME_R)
+		gmt_ptr = gmtime_r(&now, &gmt);
+#else
+		gmt_ptr = gmtime(&now);
+#endif
 		if (gmt_ptr != NULL)
 			local = *gmt_ptr;
 		now += gds->Timezone;

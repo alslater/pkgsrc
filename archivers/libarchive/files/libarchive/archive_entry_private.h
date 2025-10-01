@@ -21,16 +21,14 @@
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $FreeBSD: head/lib/libarchive/archive_entry_private.h 201096 2009-12-28 02:41:27Z kientzle $
  */
+
+#ifndef ARCHIVE_ENTRY_PRIVATE_H_INCLUDED
+#define ARCHIVE_ENTRY_PRIVATE_H_INCLUDED
 
 #ifndef __LIBARCHIVE_BUILD
 #error This header is only to be used internally to libarchive.
 #endif
-
-#ifndef ARCHIVE_ENTRY_PRIVATE_H_INCLUDED
-#define	ARCHIVE_ENTRY_PRIVATE_H_INCLUDED
 
 #include "archive_acl_private.h"
 #include "archive_string.h"
@@ -48,6 +46,15 @@ struct ae_sparse {
 
 	int64_t	 offset;
 	int64_t	 length;
+};
+
+struct ae_digest {
+	unsigned char md5[16];
+	unsigned char rmd160[20];
+	unsigned char sha1[20];
+	unsigned char sha256[32];
+	unsigned char sha384[48];
+	unsigned char sha512[64];
 };
 
 /*
@@ -138,6 +145,11 @@ struct archive_entry {
 #define	AE_SET_SIZE	64
 #define	AE_SET_INO	128
 #define	AE_SET_DEV	256
+#define	AE_SET_PERM	512
+#define	AE_SET_FILETYPE	1024
+#define	AE_SET_UID	2048
+#define	AE_SET_GID	4096
+#define	AE_SET_RDEV	8192
 
 	/*
 	 * Use aes here so that we get transparent mbs<->wcs conversions.
@@ -146,9 +158,8 @@ struct archive_entry {
 	unsigned long ae_fflags_set;		/* Bitmap fflags */
 	unsigned long ae_fflags_clear;
 	struct archive_mstring ae_gname;		/* Name of owning group */
-	struct archive_mstring ae_hardlink;	/* Name of target for hardlink */
+	struct archive_mstring ae_linkname;	/* Name of target for hardlink or symlink */
 	struct archive_mstring ae_pathname;	/* Name of entry */
-	struct archive_mstring ae_symlink;		/* symlink contents */
 	struct archive_mstring ae_uname;		/* Name of owner */
 
 	/* Not used within libarchive; useful for some clients. */
@@ -161,6 +172,16 @@ struct archive_entry {
 	
 	void *mac_metadata;
 	size_t mac_metadata_size;
+
+	/* Digest support. */
+#define AE_MSET_DIGEST_MD5	 1
+#define AE_MSET_DIGEST_RMD160	 2
+#define AE_MSET_DIGEST_SHA1	 4
+#define AE_MSET_DIGEST_SHA256	 8
+#define AE_MSET_DIGEST_SHA384	16
+#define AE_MSET_DIGEST_SHA512	32
+	uint_least32_t mset_digest;
+	struct ae_digest digest;
 
 	/* ACL support. */
 	struct archive_acl    acl;
@@ -181,4 +202,4 @@ struct archive_entry {
 	int ae_symlink_type;
 };
 
-#endif /* ARCHIVE_ENTRY_PRIVATE_H_INCLUDED */
+#endif /* !ARCHIVE_ENTRY_PRIVATE_H_INCLUDED */

@@ -1,7 +1,5 @@
 /*-
- * Copyright (c) 2016 IBM Corporation
- * Copyright (c) 2003-2007 Tim Kientzle
- *
+ * Copyright (c) 2003-2023 Tim Kientzle
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -23,48 +21,45 @@
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * This test case's code has been derived from test_entry.c
  */
 #include "test.h"
 
-DEFINE_TEST(test_schily_xattr_pax)
+/*
+ * Read a pax formatted tar archive that has an extremely large
+ * (8,000,000 bytes) attribute of unknown type.  The pax reader should simply
+ * skip the attribute.
+ */
+DEFINE_TEST(test_read_format_tar_pax_large_attr)
 {
-	struct archive *a;
+	char name[] = "test_read_format_tar_pax_large_attr.tar.Z";
 	struct archive_entry *ae;
-	const char *refname = "test_read_pax_schily_xattr.tar";
-	const char *xname; /* For xattr tests. */
-	const void *xval; /* For xattr tests. */
-	size_t xsize; /* For xattr tests. */
-	const char *string, *array;
+	struct archive *a;
 
 	assert((a = archive_read_new()) != NULL);
 	assertEqualIntA(a, ARCHIVE_OK, archive_read_support_filter_all(a));
 	assertEqualIntA(a, ARCHIVE_OK, archive_read_support_format_all(a));
+	extract_reference_file(name);
+	assertEqualIntA(a, ARCHIVE_OK, archive_read_open_filename(a, name, 10240));
 
-	extract_reference_file(refname);
-	assertEqualIntA(a, ARCHIVE_OK,
-	    archive_read_open_filename(a, refname, 10240));
+	/* Read first entry. */
+	assertEqualIntA(a, ARCHIVE_OK, archive_read_next_header(a, &ae));
+	assertEqualString("foo", archive_entry_pathname(ae));
+	assertEqualInt(1, archive_entry_mtime(ae));
+	assertEqualInt(1000, archive_entry_uid(ae));
+	assertEqualString("tim", archive_entry_uname(ae));
+	assertEqualInt(0, archive_entry_gid(ae));
+	assertEqualString("wheel", archive_entry_gname(ae));
+	assertEqualInt(0100644, archive_entry_mode(ae));
+	assertEqualInt(archive_entry_is_encrypted(ae), 0);
+	assertEqualIntA(a, archive_read_has_encrypted_entries(a), ARCHIVE_READ_FORMAT_ENCRYPTION_UNSUPPORTED);
 
-	assertEqualInt(ARCHIVE_OK, archive_read_next_header(a, &ae));
-	assertEqualInt(2, archive_entry_xattr_count(ae));
-	assertEqualInt(2, archive_entry_xattr_reset(ae));
+	/* Verify the end-of-archive. */
+	assertEqualIntA(a, ARCHIVE_EOF, archive_read_next_header(a, &ae));
 
-	assertEqualInt(0, archive_entry_xattr_next(ae, &xname, &xval, &xsize));
-	assertEqualString(xname, "security.selinux");
-	string = "system_u:object_r:unlabeled_t:s0";
-	assertEqualString(xval, string);
-	/* the xattr's value also contains the terminating \0 */
-	assertEqualInt((int)xsize, strlen(string) + 1);
+	/* Verify that the format detection worked. */
+	assertEqualInt(archive_filter_code(a, 0), ARCHIVE_FILTER_COMPRESS);
+	assertEqualInt(archive_format(a), ARCHIVE_FORMAT_TAR_PAX_INTERCHANGE);
 
-	assertEqualInt(0, archive_entry_xattr_next(ae, &xname, &xval, &xsize));
-	assertEqualString(xname, "security.ima");
-	assertEqualInt((int)xsize, 265);
-	/* we only compare the first 12 bytes */
-	array = "\x03\x02\x04\xb0\xe9\xd6\x79\x01\x00\x2b\xad\x1e";
-	assertEqualMem(xval, array, 12);
-
-	/* Close the archive. */
 	assertEqualInt(ARCHIVE_OK, archive_read_close(a));
 	assertEqualInt(ARCHIVE_OK, archive_read_free(a));
 }

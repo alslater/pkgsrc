@@ -1,5 +1,5 @@
 Name:           {{{ git_name }}}
-Version:        {{{ git_version lead=3 follow=4 }}}
+Version:        {{{ git_version lead=3 follow=5 }}}
 Release:        1%{?dist}
 Summary:        A library for handling streaming archive formats
 
@@ -22,7 +22,6 @@ BuildRequires:  libzstd-devel
 BuildRequires:  lz4-devel
 BuildRequires:  lzo-devel
 BuildRequires:  openssl-devel
-BuildRequires:  sharutils
 BuildRequires:  xz-devel
 BuildRequires:  zlib-devel
 
@@ -99,7 +98,7 @@ replace ()
             print \".Dt ${binary^^} 1\";
             next;
         }
-        # replace the first occurence of \"$pattern\" by \"$binary\"
+        # replace the first occurrence of \"$pattern\" by \"$binary\"
         !stop && /^.Nm $pattern/ {
             print \".Nm $binary\" ;
             stop = 1 ;

@@ -21,8 +21,6 @@
  * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * $FreeBSD$
  */
 
 #ifndef	TEST_COMMON_H
@@ -38,6 +36,9 @@
 #elif defined(__FreeBSD__)
 /* Building as part of FreeBSD system requires a pre-built config.h. */
 #include "config_freebsd.h"
+#elif defined(__NetBSD__)
+/* Building as part of NetBSD system requires a pre-built config.h. */
+#include "config_netbsd.h"
 #elif defined(_WIN32) && !defined(__CYGWIN__)
 /* Win32 can't run the 'configure' script. */
 #include "config_windows.h"
@@ -47,6 +48,9 @@
 #endif
 
 #include <sys/types.h>  /* Windows requires this before sys/stat.h */
+#if !HAVE_SUSECONDS_T
+#define suseconds_t long
+#endif
 #include <sys/stat.h>
 
 #if HAVE_DIRENT_H
@@ -112,24 +116,31 @@
 #pragma warn -8068	/* Constant out of range in comparison. */
 #endif
 
+
+#if defined(__GNUC__) && (__GNUC__ > 2 || \
+			  (__GNUC__ == 2 && __GNUC_MINOR__ >= 7))
+# ifdef __MINGW_PRINTF_FORMAT
+#  define __LA_PRINTF_FORMAT __MINGW_PRINTF_FORMAT
+# else
+#  define __LA_PRINTF_FORMAT __printf__
+# endif
+# define __LA_PRINTFLIKE(f,a)	__attribute__((__format__(__LA_PRINTF_FORMAT, f, a)))
+#else
+# define __LA_PRINTFLIKE(f,a)
+#endif
+
 /* Haiku OS and QNX */
 #if defined(__HAIKU__) || defined(__QNXNTO__)
 /* Haiku and QNX have typedefs in stdint.h (needed for int64_t) */
 #include <stdint.h>
 #endif
 
-/* Get a real definition for __FBSDID if we can */
-#if HAVE_SYS_CDEFS_H
-#include <sys/cdefs.h>
-#endif
-
-/* If not, define it so as to avoid dangling semicolons. */
-#ifndef __FBSDID
-#define	__FBSDID(a)     struct _undefined_hack
-#endif
-
 #ifndef O_BINARY
 #define	O_BINARY 0
+#endif
+
+#ifndef __LIBARCHIVE_TEST_COMMON
+#define __LIBARCHIVE_TEST_COMMON
 #endif
 
 #include "archive_platform_acl.h"
@@ -149,12 +160,17 @@
 /* chdir() and error if it fails */
 #define assertChdir(path)  \
   assertion_chdir(__FILE__, __LINE__, path)
+/* change file/directory permissions and errors if it fails */
+#define assertChmod(pathname, mode)				\
+  assertion_chmod(__FILE__, __LINE__, pathname, mode)
 /* Assert two files have the same file flags */
 #define assertEqualFflags(patha, pathb)	\
   assertion_compare_fflags(__FILE__, __LINE__, patha, pathb, 0)
 /* Assert two integers are the same.  Reports value of each one if not. */
 #define assertEqualInt(v1,v2) \
   assertion_equal_int(__FILE__, __LINE__, (v1), #v1, (v2), #v2, NULL)
+#define assertEqualAddress(v1,v2) \
+  assertion_equal_address(__FILE__, __LINE__, (v1), #v1, (v2), #v2, NULL)
 /* Assert two strings are the same.  Reports value of each one if not. */
 #define assertEqualString(v1,v2)   \
   assertion_equal_string(__FILE__, __LINE__, (v1), #v1, (v2), #v2, NULL, 0)
@@ -259,14 +275,16 @@
   skipping_setup(__FILE__, __LINE__);test_skipping
 
 /* Function declarations.  These are defined in test_utility.c. */
-void failure(const char *fmt, ...);
+void failure(const char *fmt, ...) __LA_PRINTFLIKE(1, 2);
 int assertion_assert(const char *, int, int, const char *, void *);
 int assertion_chdir(const char *, int, const char *);
+int assertion_chmod(const char *, int, const char *, int);
 int assertion_compare_fflags(const char *, int, const char *, const char *,
     int);
 int assertion_empty_file(const char *, int, const char *);
 int assertion_equal_file(const char *, int, const char *, const char *);
 int assertion_equal_int(const char *, int, long long, const char *, long long, const char *, void *);
+int assertion_equal_address(const char *, int, const void *, const char *, const void *, const char *, void *);
 int assertion_equal_mem(const char *, int, const void *, const char *, const void *, const char *, size_t, const char *, void *);
 int assertion_memory_filled_with(const char *, int, const void *, const char *, size_t, const char *, char, const char *, void *);
 int assertion_equal_string(const char *, int, const char *v1, const char *, const char *v2, const char *, void *, int);
@@ -298,14 +316,14 @@ int assertion_non_empty_file(const char *, int, const char *);
 int assertion_set_nodump(const char *, int, const char *);
 int assertion_text_file_contents(const char *, int, const char *buff, const char *f);
 int assertion_umask(const char *, int, int);
-int assertion_utimes(const char *, int, const char *, long, long, long, long );
+int assertion_utimes(const char *, int, const char *, time_t, suseconds_t, time_t, suseconds_t);
 int assertion_version(const char*, int, const char *, const char *);
 
 void skipping_setup(const char *, int);
-void test_skipping(const char *fmt, ...);
+void test_skipping(const char *fmt, ...) __LA_PRINTFLIKE(1, 2);
 
 /* Like sprintf, then system() */
-int systemf(const char * fmt, ...);
+int systemf(const char *fmt, ...) __LA_PRINTFLIKE(1, 2);
 
 /* Delay until time() returns a value after this. */
 void sleepUntilAfter(time_t);
@@ -368,7 +386,7 @@ void *sunacl_get(int cmd, int *aclcnt, int fd, const char *path);
 
 /* Suck file into string allocated via malloc(). Call free() when done. */
 /* Supports printf-style args: slurpfile(NULL, "%s/myfile", refdir); */
-char *slurpfile(size_t *, const char *fmt, ...);
+char *slurpfile(size_t *, const char *fmt, ...) __LA_PRINTFLIKE(2, 3);
 
 /* Dump block of bytes to a file. */
 void dumpfile(const char *filename, void *, size_t);
@@ -447,4 +465,6 @@ void assertVersion(const char *prog, const char *base);
 #include <dmalloc.h>
 #endif
 
-#endif	/* TEST_COMMON_H */
+#include "test_utils.h"
+
+#endif	/* !TEST_COMMON_H */

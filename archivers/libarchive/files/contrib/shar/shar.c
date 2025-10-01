@@ -24,11 +24,6 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <sys/cdefs.h>
-#ifdef __FBSDID
-__FBSDID("$FreeBSD$");
-#endif
-
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -170,7 +165,7 @@ out:
 }
 
 /*
- * Write singe path to the archive. The path can be a regular file, directory
+ * Write single path to the archive. The path can be a regular file, directory
  * or device. Symbolic links are followed.
  */
 static int

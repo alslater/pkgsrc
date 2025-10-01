@@ -127,14 +127,26 @@ rm -fr %buildroot
 All persons listed below can be reached at <cvs_login>@pld-linux.org
 
 $Log: libarchive.1aix53.spec,v $
-Revision 1.11  2019/09/22 09:55:06  joerg
-Update for libarchive-3.4.0:
-- improvements for Android APK and JAR archives
-- better support for non-recursive list and extract
-- tar --exclude-vcs support
-- fixes for file attributes and flags handling
-- zipx support
-- rar 5.0 reader
+Revision 1.14  2024/04/30 06:05:17  adam
+libarchive: updated to 3.7.4
+
+Libarchive 3.7.4 is a bugfix and security release
+
+Security fixes:
+
+rar: Fix OOB in rar e8 filter (CVE-2024-26256)
+zip: Fix out of boundary access
+
+Important bugfixes:
+
+7zip: Limit amount of properties
+bsdtar: Fix error handling around strtol() usages
+passphrase: Improve newline handling on Windows
+passphrase: Never allow empty passwords
+rar: Fix "File CRC Error" when extracting specific rar4 archives
+xar: Avoid infinite link loop
+zip: Update AppleDouble support for directories
+zstd: Implement core detection
 
 Release 1aix53  2006/12/12 rm1023@dcx.com
 - tweak for aix-5.3
