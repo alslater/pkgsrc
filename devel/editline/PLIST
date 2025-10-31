@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.2 2013/07/15 15:14:29 ryoon Exp $
+@comment $NetBSD: PLIST,v 1.7 2025/04/28 20:14:59 tnn Exp $
 include/editline/history.h
 include/editline/readline.h
 include/histedit.h
@@ -13,7 +13,11 @@ man/man3/el_gets.3
 man/man3/el_history.3
 man/man3/el_history_end.3
 man/man3/el_history_init.3
+man/man3/el_history_w.3
+man/man3/el_history_wend.3
+man/man3/el_history_winit.3
 man/man3/el_init.3
+man/man3/el_init_fd.3
 man/man3/el_insertstr.3
 man/man3/el_line.3
 man/man3/el_parse.3
@@ -27,4 +31,19 @@ man/man3/el_tok_init.3
 man/man3/el_tok_line.3
 man/man3/el_tok_reset.3
 man/man3/el_tok_str.3
+man/man3/el_tok_wend.3
+man/man3/el_tok_winit.3
+man/man3/el_tok_wline.3
+man/man3/el_tok_wreset.3
+man/man3/el_tok_wstr.3
+man/man3/el_wdeletestr.3
+man/man3/el_wget.3
+man/man3/el_wgetc.3
+man/man3/el_wgets.3
+man/man3/el_winsertstr.3
+man/man3/el_wline.3
+man/man3/el_wparse.3
+man/man3/el_wpush.3
+man/man3/el_wset.3
 man/man5/editrc.5
+man/man7/editline.7

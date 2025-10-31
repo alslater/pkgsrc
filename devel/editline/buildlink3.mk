@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.3 2013/08/11 07:42:51 obache Exp $
+# $NetBSD: buildlink3.mk,v 1.6 2023/06/26 11:37:07 wiz Exp $
 
 BUILDLINK_TREE+=	editline
 
@@ -6,7 +6,8 @@ BUILDLINK_TREE+=	editline
 EDITLINE_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.editline+=	editline>=3.0.20130712nb1
-BUILDLINK_PKGSRCDIR.editline?=	../../devel/editline
+BUILDLINK_PKGSRCDIR.editline?=		../../devel/editline
+BUILDLINK_INCDIRS.editline?=		include/readline
 
 BUILDLINK_FILES.editline+=	include/history.h
 BUILDLINK_FILES.editline+=	include/readline.h
@@ -19,7 +20,7 @@ CHECK_BUILTIN.editline:=	yes
 CHECK_BUILTIN.editline:=	no
 
 # A built-in editline is always going to use a built-in termcap.
-.if !empty(USE_BUILTIN.editline:M[yY][eE][sS])
+.if ${USE_BUILTIN.editline:U:tl} == yes
 USE_BUILTIN.termcap=	yes
 .endif
 
