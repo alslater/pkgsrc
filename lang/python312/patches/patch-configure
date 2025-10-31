@@ -1,0 +1,68 @@
+$NetBSD: patch-configure,v 1.4 2024/12/24 10:13:40 wiz Exp $
+
+Chunks 1, 4, 5: Changes for consistency across pkgsrc platforms.
+Chunk 1: Simplify _sysconfigdata to include only platform name.
+Chunk 2: Disable barrier to cross-compilation.
+Chunk 3: should be handled in the Makefile?
+Chunk 6: ?
+
+--- configure.orig	2024-12-03 18:42:41.000000000 +0000
++++ configure
+@@ -3689,7 +3689,7 @@ fi
+     fi
+         ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
+     PYTHON_FOR_FREEZE="$with_build_python"
+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) '$with_build_python
++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`:)$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(MACHDEP) '$with_build_python
+     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_build_python" >&5
+ printf "%s\n" "$with_build_python" >&6; }
+ 
+@@ -4321,7 +4321,7 @@ fi
+ printf "%s\n" "\"$MACHDEP\"" >&6; }
+ 
+ 
+-if test "$cross_compiling" = yes; then
++if false && test "$cross_compiling" = yes; then
+ 	case "$host" in
+ 	*-*-linux*)
+ 		case "$host_cpu" in
+@@ -9500,7 +9500,7 @@ fi
+ 
+ case $GCC in
+ yes)
+-    CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"
++    CFLAGS_NODIST="$CFLAGS_NODIST -std=gnu11"
+ 
+ 
+ 
+@@ -24399,7 +24399,7 @@ printf "%s\n" "#define ALT_SOABI \"${ALT
+ fi
+ 
+ 
+-EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX}
++EXT_SUFFIX=${SHLIB_SUFFIX}
+ 
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking LDVERSION" >&5
+ printf %s "checking LDVERSION... " >&6; }
+@@ -24453,11 +24453,7 @@ fi
+ 
+ 
+ 
+-if test x$PLATFORM_TRIPLET = x; then
+-  LIBPL='$(prefix)'"/${PLATLIBDIR}/python${VERSION}/config-${LDVERSION}"
+-else
+-  LIBPL='$(prefix)'"/${PLATLIBDIR}/python${VERSION}/config-${LDVERSION}-${PLATFORM_TRIPLET}"
+-fi
++LIBPL='$(prefix)'"/${PLATLIBDIR}/python${VERSION}/config-${LDVERSION}"
+ 
+ 
+ # Check for --with-wheel-pkg-dir=PATH
+@@ -26112,7 +26108,7 @@ fi
+ fi
+ CURSES_CFLAGS=$(echo $CURSES_CFLAGS | sed 's/-D_XOPEN_SOURCE=600//g')
+ 
+-if test "$have_curses" != no -a "$ac_sys_system" = "Darwin"; then
++if test "$have_curses" = no -a "$ac_sys_system" = "Darwin"; then
+ 
+   as_fn_append CURSES_CFLAGS " -D_XOPEN_SOURCE_EXTENDED=1"
+   printf "%s\n" "#define HAVE_NCURSESW 1" >>confdefs.h
