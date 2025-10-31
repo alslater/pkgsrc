@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.202 2022/07/21 15:08:39 taca Exp $
 
-SHA1 (postfix-3.7.12.tar.gz) = 22fa0708073ab97e11ce7feaf20b1a53ac4c76de
-RMD160 (postfix-3.7.12.tar.gz) = 8bf273fb7eb3354d96a1777132a8e27907712e16
-SHA512 (postfix-3.7.12.tar.gz) = 1e4cc29dd681d56fc529719dbf71dec8d73038abb2f70ce2e46aac21ee721abdf5521cb15afcf117fa729fc9a547c027b9381f1cd885d368eb31494090102eee
-Size (postfix-3.7.12.tar.gz) = 4846055 bytes
+SHA1 (postfix-3.7.16.tar.gz) = 15c95fca6fa1de650f4fa8a9ede7a1031586bb37
+RMD160 (postfix-3.7.16.tar.gz) = cd8738f35052fd1f1c39fae9ef66367c26ce56c1
+SHA512 (postfix-3.7.16.tar.gz) = 0a8994ad251e4b48da07a3ad5ae4f57ad9ebf8e927b8cc7896787f3f8998e42f4eb903c34b0a32932a879a09f9df667540d4b61986490c69db15b5a12cb93f54
+Size (postfix-3.7.16.tar.gz) = 4851324 bytes
 SHA1 (patch-aa) = c8216f133e202a7bb37682b0dbc1448f021e7c1c
 SHA1 (patch-ag) = 8ab3cfafa63056f9a7f096da7e55bcccab965180
 SHA1 (patch-ai) = 57b9814dc8aa7cdc6c5254a85210ec4f9bc36a27
@@ -11,3 +11,4 @@ SHA1 (patch-src_smtpd_Makefile.in) = 8133f9cceb0c1c0250d6543cb060c66288571722
 SHA1 (patch-src_smtpd_pfilter.c) = c747d2f3584f694eb7b73b19118b4d8b450cfe7f
 SHA1 (patch-src_smtpd_pfilter.h) = 153b516da89d709d293c6086c2f126791bd945d6
 SHA1 (patch-src_smtpd_smtpd.c) = 5f290ec55305702986beefdbbc194f5ce7987643
+SHA1 (patch-src_util_dict__dbm.c) = 0d6bd888b008bedd030f10e2297cf555f4b6b61d

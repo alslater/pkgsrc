@@ -6,6 +6,7 @@ SHA512 (php-8.4.13.tar.xz) = 1801d4b55969dcfaea77671c91c3e99f1237dad1135123da335
 Size (php-8.4.13.tar.xz) = 13646008 bytes
 SHA1 (patch-build_php.m4) = bb72e38ab391ad587962940ba85e8d4de8633dca
 SHA1 (patch-configure.ac) = 2bdd1d2b1def552032dba5fbeb6140922b72c880
+SHA1 (patch-ext_dom_lexbor_lexbor_selectors-adapted_selectors.c) = e0b80a537b9c92ae9674103e4793006b19dbc96b
 SHA1 (patch-ext_phar_Makefile.frag) = 53ea5c58b0bc27d236118d5750a74b1cba43e5dd
 SHA1 (patch-ext_standard_php__fopen__wrapper.c) = 0a2c19c18f089448a8d842e99738b292ab9e5640
 SHA1 (patch-main_streams_streams.c) = d699ce7d3a300ffb39494b3f1fa5e0958f714483
