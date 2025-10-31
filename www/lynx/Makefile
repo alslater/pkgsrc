@@ -1,40 +1,40 @@
-# $NetBSD: Makefile,v 1.124 2016/12/22 17:30:51 sevan Exp $
+# $NetBSD: Makefile,v 1.156 2025/04/17 21:52:50 wiz Exp $
 
-DISTNAME=	lynx2.8.9rel.1
+DISTNAME=	lynx2.9.2
 PKGNAME=	${DISTNAME:S/lynx/lynx-/:S/rel//}
-PKGREVISION=	1
-#PKGREVISION=	0
+PKGREVISION=	5
 CATEGORIES=	www
-MASTER_SITES=   https://invisible-mirror.net/archives/lynx/tarballs/
-MASTER_SITES+=  ftp://ftp.cyf-kr.edu.pl/pub/unix/lynx/${SUBDIR:Q}/
+MASTER_SITES=	https://invisible-mirror.net/archives/lynx/tarballs/
 EXTRACT_SUFX=	.tar.bz2
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://lynx.invisible-island.net/
+HOMEPAGE=	https://lynx.invisible-island.net/
 COMMENT=	Alphanumeric display oriented World-Wide Web Client
-LICENSE=	gnu-gpl-v2
+LICENSE=	gnu-gpl-v2 # OpenSSL exception
 
 # problem with WWW/Library/Implementation
 MAKE_JOBS_SAFE=		no
 
-SUBDIR=			current
-WRKSRC=			${WRKDIR}/lynx2.8.9rel.1
-USE_PKGLOCALEDIR=	yes
-GNU_CONFIGURE=		yes
-BROKEN_GETTEXT_DETECTION= yes
-INSTALL_TARGET=		install-full
-MAKE_FILE=		makefile
+SUBDIR=				current
+USE_PKGLOCALEDIR=		yes
+GNU_CONFIGURE=			yes
+BROKEN_GETTEXT_DETECTION=	yes
+INSTALL_TARGET=			install-full
+MAKE_FILE=			makefile
 
 CONFIGURE_ENV+=		GZIP=${TOOLS_GZIP_CMD:Q}
 CONFIGURE_ENV+=		UNZIP=${TOOLS_PATH.unzip:Q}
-USE_TOOLS+=		gzip msgfmt msginit unzip:run
+USE_TOOLS+=		gzip msgfmt unzip:run
 
 CONF_FILES+=		share/examples/lynx/lynx.cfg ${PKG_SYSCONFDIR}/lynx.cfg
 CONF_FILES+=		share/examples/lynx/lynx.lss ${PKG_SYSCONFDIR}/lynx.lss
 
 # But no dependency on Perl.
 REPLACE_PERL+=			samples/mailto-form.pl
+REPLACE_PERL+=			samples/mhtml-tool
 CHECK_INTERPRETER_SKIP+=	share/lynx/lynx_doc/samples/mailto-form.pl
+CHECK_INTERPRETER_SKIP+=	share/lynx/lynx_doc/samples/mhtml-tool
+CHECK_WRKREF_SKIP+=		bin/lynx
 
 .include "options.mk"
 
@@ -42,10 +42,6 @@ CHECK_INTERPRETER_SKIP+=	share/lynx/lynx_doc/samples/mailto-form.pl
 CONFIGURE_ARGS+=	--enable-nls
 CONFIGURE_ARGS+=	--with-nls-datadir=${PREFIX}/${PKGLOCALEDIR}
 CONFIGURE_ARGS+=	--without-included-gettext
-
-# With SSL, lynx can get https:// and snews:// URL's.
-CONFIGURE_ARGS+=	--with-ssl
-CPPFLAGS+=		-I${BUILDLINK_PREFIX.openssl}/include/openssl
 
 # Note: --enable-{default-colors,scrollbar} are simply ignored
 # for certain settings of --with-screen.
@@ -74,8 +70,9 @@ CONFIGURE_ARGS+=	--enable-read-eta
 CONFIGURE_ENV+=		BUILD_CC=${NATIVE_CC:Q}
 .endif
 
+CONFIGURE_ENV.SunOS+=	cf_cv_xopen_source=no
+
 .include "../../devel/gettext-tools/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
-.include "../../security/openssl/buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"
