@@ -1,7 +1,7 @@
 $NetBSD: distinfo,v 1.12 2018/11/03 12:51:54 leot Exp $
 
-SHA1 (jq-1.7.1.tar.gz) = 7420c31e4b22d9eeda6b7d9d949af7489fe97c4f
-RMD160 (jq-1.7.1.tar.gz) = 847594ee8355e6ddd047e31e72b0e6ac6397494f
-SHA512 (jq-1.7.1.tar.gz) = 464861fb2e0d6934b616f1dc7f8002d7dae727c8c0c07b385b813e7522ba1ada8ead4165e1d99c892e3ea76e238c55a15b718c738805419721920f88f8d8478c
-Size (jq-1.7.1.tar.gz) = 1950645 bytes
+SHA1 (jq-1.8.1.tar.gz) = ac8ee9d92fd58805a90e1853df7c35887236d8a8
+RMD160 (jq-1.8.1.tar.gz) = e179864f37a296896e63fbed40373f28a48f9e2f
+SHA512 (jq-1.8.1.tar.gz) = b09d48dbeaac7b552397b75692ed7833afa72186de80d977fb1b887a14ac66c02f677acdd79f9a2736db1fd738b7ce57a39725e34846bfa21ed3728cd7adc187
+Size (jq-1.8.1.tar.gz) = 2026798 bytes
 SHA1 (patch-Makefile.am) = d2acba3dc8d4efe2432b0febe50075ef2dc1f950

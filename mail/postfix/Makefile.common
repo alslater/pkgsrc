@@ -2,7 +2,7 @@
 # used by mail/postfix/Makefile
 # used by mail/postfix/Makefile.module
 
-DISTNAME=	postfix-3.7.12
+DISTNAME=	postfix-3.7.16
 CATEGORIES=	mail
 MASTER_SITES=	ftp://ftp.porcupine.org/mirrors/postfix-release/official/
 MASTER_SITES+=  https://ghostarchive.org/postfix/postfix-release/official/

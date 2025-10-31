@@ -44,7 +44,7 @@ DEPENDS+=	${PHP_PKG_PREFIX}-pdo_pgsql{13,12,11,10}>=${PHP_VERSION}<${NEXT_VERS}:
 DEPENDS+=	${PHP_PKG_PREFIX}-pdo_sqlite>=${PHP_VERSION}<${NEXT_VERS}:../../databases/php-pdo_sqlite
 DEPENDS+=	${PHP_PKG_PREFIX}-pgsql{13,12,11,10}>=${PHP_VERSION}<${NEXT_VERS}:../../databases/php-pgsql
 DEPENDS+=	${PHP_PKG_PREFIX}-posix>=${PHP_VERSION}<${NEXT_VERS}:../../devel/php-posix
-DEPENDS+=	${PHP_PKG_PREFIX}-pspell>=${PHP_VERSION}<${NEXT_VERS}:../../textproc/php-pspell
+#DEPENDS+=	${PHP_PKG_PREFIX}-pspell>=${PHP_VERSION}<${NEXT_VERS}:../../textproc/php-pspell
 DEPENDS+=	${PHP_PKG_PREFIX}-shmop>=${PHP_VERSION}<${NEXT_VERS}:../../devel/php-shmop
 DEPENDS+=	${PHP_PKG_PREFIX}-snmp>=${PHP_VERSION}<${NEXT_VERS}:../../net/php-snmp
 DEPENDS+=	${PHP_PKG_PREFIX}-soap>=${PHP_VERSION}<${NEXT_VERS}:../../net/php-soap
