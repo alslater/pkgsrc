@@ -1,14 +1,17 @@
-# $NetBSD: egg.mk,v 1.39 2022/09/06 09:05:59 nia Exp $
+# $NetBSD: egg.mk,v 1.46 2025/02/02 10:38:01 he Exp $
+#
+# The method used in this Makefile fragment is obsolete.
+# Please use wheel.mk instead.
+
 #
 # Common logic to handle Python Eggs
 #
 .include "../../mk/bsd.fast.prefs.mk"
 .include "../../lang/python/pyversion.mk"
 
-# This file should be included to package python "distributions" which
-# use setuptools to create an egg.
-#
-# For wheel (*.whl) support, look at wheel.mk.
+.if ${PKG_DEVELOPER:Uno} != "no"
+WARNINGS+=	"lang/python/egg.mk is deprecated; use lang/python/wheel.mk instead."
+.endif
 
 EGG_NAME?=	${DISTNAME:C/-([^0-9])/_\1/g}
 EGG_INFODIR?=	${EGG_NAME}-py${PYVERSSUFFIX}.egg-info
@@ -37,16 +40,20 @@ PRINT_PLIST_AWK+=	{ gsub(/${PYVERSSUFFIX:S,.,\.,g}/, \
 
 USE_PKG_RESOURCES?=	no
 
+.if ${PYTHON_VERSION} >= 313
+.include "../../mk/atomic64.mk"
+.endif
+
 # py-setuptools needs to be bootstrapped from python itself, without using
 # py-setuptools.
 BOOTSTRAP_SETUPTOOLS?=	no
 .if ${BOOTSTRAP_SETUPTOOLS} == "yes"
-TOOL_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 do-build: ensurepip
 .PHONY: ensurepip
+.include "../../lang/python/batteries-included.mk"
 
 ensurepip:
-	${SETENV} ${MAKE_ENV} ${PYTHONBIN} -m ensurepip --user
+	${SETENV} ${MAKE_ENV} ${TOOL_PYTHONBIN} -m ensurepip --user
 .else
 .  if "${PYVERSSUFFIX}" == "2.7"
 SETUPTOOLS_PATH=../../devel/py-setuptools44
@@ -62,6 +69,19 @@ DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:${SETUPTOOLS_PATH}
 TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools-[0-9]*:${SETUPTOOLS_PATH}
 .endif
 
+.if ${USE_CROSS_COMPILE:tl} == "yes"
+.if ${PYTHON_FOR_BUILD_ONLY:Uno:tl} == "no" || \
+    ${PYTHON_FOR_BUILD_ONLY:Uno:tl} == "build"
+_COOKIE.pysetupcross=	${WRKDIR}/.pysetupcross_done
+pre-configure: ${_COOKIE.pysetupcross}
+${_COOKIE.pysetupcross}:
+	@${STEP_MSG} "Adjusting Python setup.cfg for cross-compiling"
+	${RUN} ${PRINTF} "\\n[build]\\nexecutable = '%s'\\n" ${PYTHONBIN:Q} \
+		>>${WRKSRC}/setup.cfg
+	${RUN} touch $@
+.endif
+.endif
+
 INSTALLATION_DIRS+=	${PYSITELIB}
 
 privileged-install-hook:	fixup-egg-info
@@ -69,7 +89,7 @@ privileged-install-hook:	fixup-egg-info
 fixup-egg-info:	# ensure egg-info directory contents are always 644
 	if ${TEST} -d "${DESTDIR}${PREFIX}/${PYSITELIB}/${EGG_INFODIR}"; then \
 	    ${FIND} ${DESTDIR}${PREFIX}/${PYSITELIB}/${EGG_INFODIR} -type f \
-		-exec ${CHMOD} ${SHAREMODE} '{}' +; \
+		-exec ${CHMOD} ${SHAREMODE} '{}' ';' ; \
 	fi
 
 .include "../../lang/python/extension.mk"

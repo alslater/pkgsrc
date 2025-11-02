@@ -1,4 +1,4 @@
-# $NetBSD: srcdist.mk,v 1.42 2022/09/06 09:05:59 nia Exp $
+# $NetBSD: srcdist.mk,v 1.45 2025/01/16 23:30:07 gutteridge Exp $
 
 .include "../../lang/python/pyversion.mk"
 
@@ -8,12 +8,21 @@ PYSUBDIR=	${DISTNAME}
 WRKSRC=		${WRKDIR}/${PYSUBDIR}
 
 .if !empty(PYDISTUTILSPKG:M[yY][eE][sS])
-# This is used for standard modules shipped with Python but build as
+# This is used for standard modules shipped with Python but built as
 # separate packages.
 
 # Standard modules depend on their own version
 BUILDLINK_API_DEPENDS.${PYPACKAGE}+=	${PYPACKAGE}>=${PY_DISTVERSION}
 BUILDLINK_ABI_DEPENDS.${PYPACKAGE}+=	${PYPACKAGE}>=${PY_DISTVERSION}
+
+.include "../../mk/bsd.prefs.mk"
+
+.if ${USE_CROSS_COMPILE:tl} == "yes"
+TOOL_DEPENDS+=	${PYDEPENDENCY}
+DEPENDS+=	${PYDEPENDENCY}
+ALL_ENV+=	_PYTHON_PROJECT_BASE=${WRKSRC:Q}
+CPPFLAGS+=	-I${LOCALBASE:Q}/${PYINC:Q}
+.endif
 
 python-std-patchsetup:
 	${SED} ${PY_SETUP_SUBST:S/=/@!/:S/$/!g/:S/^/ -e s!@/} \

@@ -1,80 +1,91 @@
-# $NetBSD: wheel.mk,v 1.7 2022/05/22 19:32:41 kleink Exp $
+# $NetBSD: wheel.mk,v 1.22 2025/05/11 19:34:25 gdt Exp $
 #
-# Initial mk for building and installing python wheels
+# Build and install Python wheels
 #
+# PEP-518 defines how packages specify their build system
+# requirements, via the build section in pyproject.toml.  The default
+# in the PEP (used when the build section is not present) is
+# setuptools and wheel, but setuptools as of 70.1 has enough wheel
+# functionality that wheel is not required.  Some packages use
+# different build systems, e.g., flit.
+#
+# wheel.mk does not look for and parse pyproject.toml, and does not
+# support variables to declare the needed tools.  Therefore, packages
+# including wheel.mk must TOOL_DEPENDS on the needed build tools.
+# A typical package will need one of the following, perhaps with the
+# minimum version adjusted:
+#   TOOL_DEPENDS+=  ${PYPKGPREFIX}-setuptools>=70.1:../../devel/py-setuptools
+#   TOOL_DEPENDS+=  ${PYPKGPREFIX}-poetry-core>=2:../../devel/py-poetry-core
+#   TOOL_DEPENDS+=  ${PYPKGPREFIX}-poetry>=0.12:../../devel/py-poetry
+#
+# wheel.mk does not implement USE_PKG_RESOURCES (which is deprecated);
+# packages that need that should DEPENDS (not just BUILD_DEPENDS) on
+# setuptools.
+
 # Variables:
-# 
-# WHEELFILE:		path to the wheelfile to be installed
-#			only needs to be set if do-build is redefined
 #
-# MASTER_SITE_WHEEL:	master site to grab wheels directly 
-#			use like ${MASTER_SITE_WHEEL:=project/}
-#			uses debian pypi redirector so that there
-#			is no need for hashes in urls.
+# WHEELFILE:		Path to the wheelfile to be installed.
+#			Only needs to be set if do-build is redefined.
 #
-# TODO: 		fix BUILDDIR support
-#			
-# Feel free to contribute to this file
-#			
+# USE_PYTEST:		If set to yes, depend on py-test and use it for testing.
+#			(This is strongly the standard approach; often upstreams
+#			will not even document it.)
+#			Default: yes
+#
+# WHEEL_ARGS:		Additional arguments to pass during build of the wheel.
+#
+# WHEEL_NAME:		Name that appears in paths to installed package metadata.
+#			Can be set if DISTNAME is not the same as the project
+#			name defined in pyproject.toml.
 
-.include "../../lang/python/pyversion.mk"
+PY_PATCHPLIST?=	yes
+PYSETUPSUBDIR?=	# empty
 
-TOOL_DEPENDS+= ${PYPKGPREFIX}-pip>=0:../../devel/py-pip
-
-WHEELFILE?= ${WRKSRC}/dist/*.whl
-
-.if defined(NO_BUILD)
-
-MASTER_SITE_WHEEL= https://pypi.debian.net/
-
-WHEELFILE= ${DISTFILES}
-
-.for i in 2 3
-.if !empty(_PYTHON_VERSIONS_ACCEPTED:M${i}*)
-PYMAJORVERSIONS+= py${i}
-.endif
-.endfor
-
-EXTRACT_SUFX= -${PYMAJORVERSIONS:ts.}-none-any.whl
-
-.else
-#we need to build a wheel
-
-TOOL_DEPENDS+= ${PYPKGPREFIX}-build>=0:../../devel/py-build
-
-.if !target(do-build)
-do-build:
-	${RUN} cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ${PYTHONBIN} -m build --wheel --skip-dependency-check --no-isolation
-.endif
-
-.endif
-
+WHEELFILE?=	${WRKSRC}/${PYSETUPSUBDIR}/dist/*.whl
 WHEEL_NAME?=	${DISTNAME:C/-([^0-9])/_\1/g}
 _WHEEL_INFODIR=	${WHEEL_NAME}.dist-info
-PLIST_SUBST+=	PYSITELIB=${PYSITELIB}
-PLIST_SUBST+=	PYVERSSUFFIX=${PYVERSSUFFIX}
 PLIST_SUBST+=	WHEEL_INFODIR=${_WHEEL_INFODIR}
-
-# mostly for ALTERNATIVES files
-FILES_SUBST+=	PYVERSSUFFIX=${PYVERSSUFFIX}
-
-# from extension.mk
-
-# Python>=3.2 bytecode file location change
-# http://www.python.org/dev/peps/pep-3147/
-.if empty(_PYTHON_VERSION:M2?)
-PLIST_AWK+=		-f ${PKGSRCDIR}/lang/python/plist-python.awk
-PLIST_AWK_ENV+=		PYVERS="${PYVERSSUFFIX:S/.//}"
-EARLY_PRINT_PLIST_AWK+=	/^[^@]/ && /[^\/]+\.pyc$$/ {
-EARLY_PRINT_PLIST_AWK+=	gsub(/__pycache__\//, "")
-EARLY_PRINT_PLIST_AWK+=	gsub(/\.cpython-${_PYTHON_VERSION}/, "")}
-.endif
+WHEEL_ARGS?=	# empty
 
 PRINT_PLIST_AWK+=	{ gsub(/${_WHEEL_INFODIR:S,.,\.,g}/, "$${WHEEL_INFODIR}") }
 
-INSTALL_ENV+= PIP_NO_CACHEDIR=1
+.include "../../mk/bsd.fast.prefs.mk"
 
+.if !target(do-build)
+TOOL_DEPENDS+= ${PYPKGPREFIX}-build>=0:../../devel/py-build
+do-build:
+	${RUN} cd ${WRKSRC}/${PYSETUPSUBDIR} && \
+	${SETENV} ${MAKE_ENV} ${TOOL_PYTHONBIN} \
+		-m build --wheel --skip-dependency-check --no-isolation ${WHEEL_ARGS}
+.endif
+
+.if !target(do-install)
+.  if ${USE_CROSS_COMPILE:tl} == "yes"
+TOOL_DEPENDS+=	${PYPKGPREFIX}-installer>=0.7.0nb2:../../misc/py-installer
+PYINSTALL_EXEC=	--executable ${PYTHONBIN:Q}
+.  else
+TOOL_DEPENDS+=	${PYPKGPREFIX}-installer>=0.7.0nb1:../../misc/py-installer
+PYINSTALL_EXEC=	# empty
+.  endif
 do-install:
-	${RUN} cd ${WRKDIR} && \
-	${SETENV} ${INSTALL_ENV} \
-	${PYTHONBIN} -m pip install --no-cache-dir --no-deps --root ${DESTDIR:Q} --prefix ${PREFIX:Q} --compile --force-reinstall -I ${WHEELFILE}
+	${RUN} cd ${WRKSRC}/${PYSETUPSUBDIR} && \
+	${SETENV} ${INSTALL_ENV} ${TOOL_PYTHONBIN} \
+		-m installer \
+		--destdir ${DESTDIR:Q} \
+		--prefix ${PREFIX:Q} \
+		${PYINSTALL_EXEC} \
+		${WHEELFILE}
+.endif
+
+USE_PYTEST?=	yes
+.if !target(do-test) && ${USE_PYTEST:Myes}
+TEST_DEPENDS+= ${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
+do-test:
+	${RUN} cd ${WRKSRC}/${PYSETUPSUBDIR} && \
+	${SETENV} ${TEST_ENV} pytest-${PYVERSSUFFIX}
+.endif
+
+.include "../../lang/python/extension.mk"
+.if ${PYTHON_VERSION} >= 313
+.include "../../mk/atomic64.mk"
+.endif

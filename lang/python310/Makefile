@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.16 2022/09/06 19:13:24 adam Exp $
+# $NetBSD: Makefile,v 1.42 2025/06/04 14:13:37 adam Exp $
 
 .include "dist.mk"
 
@@ -11,6 +11,18 @@ COMMENT=	Interpreted, interactive, object-oriented programming language
 LICENSE=	python-software-foundation
 
 CONFLICTS+=	python-[0-9]*
+CONFLICTS+=	py310-cElementTree-[0-9]*
+CONFLICTS+=	py310-curses-[0-9]*
+CONFLICTS+=	py310-cursespanel-[0-9]*
+CONFLICTS+=	py310-expat-[0-9]*
+CONFLICTS+=	py310-readline-[0-9]*
+CONFLICTS+=	py310-sqlite3-[0-9]*
+SUPERSEDES+=	py310-cElementTree-[0-9]*
+SUPERSEDES+=	py310-curses-[0-9]*
+SUPERSEDES+=	py310-cursespanel-[0-9]*
+SUPERSEDES+=	py310-expat-[0-9]*
+SUPERSEDES+=	py310-readline-[0-9]*
+SUPERSEDES+=	py310-sqlite3-[0-9]*
 
 PLIST_AWK=		-f ${PKGSRCDIR}/lang/python/plist-python.awk
 PLIST_AWK_ENV+=		PYVERS=310
@@ -25,25 +37,29 @@ USE_TOOLS+=		pkg-config
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-shared
 CONFIGURE_ARGS+=	--with-openssl=${BUILDLINK_PREFIX.openssl}
+CONFIGURE_ARGS+=	--with-readline=readline # XXX editline?
+CONFIGURE_ARGS+=	--with-system-expat
 CONFIGURE_ARGS+=	--with-system-ffi
 CONFIGURE_ARGS+=	--without-ensurepip
 CONFIGURE_ENV+=		OPT=${CFLAGS:M*:Q}
 CONFIGURE_ENV+=		ac_cv_path_mkdir=${TOOLS_PATH.mkdir}
 PKGCONFIG_OVERRIDE+=	Misc/python.pc.in Misc/python-embed.pc.in
 
+# NetBSD-8 curses has enough support for py-curses
+USE_CURSES=		getsyx wide
+# But we build as ncurses still to get the full feature set easily
+FAKE_NCURSES=		yes
+
 PTHREAD_OPTS+=	require
 .include "../../mk/pthread.buildlink3.mk"
 
 .include "../../mk/bsd.prefs.mk"
 
-.if !empty(USE_CROSS_COMPILE:M[yY][eE][sS])
+.if ${USE_CROSS_COMPILE:tl} == "yes"
 TOOL_DEPENDS+=		${PKGNAME}:../../${PKGPATH}
-# XXX copied from ../../lang/python/pyversion.mk to avoid including it
-# XXX should use NATIVE_PREFIX but we don't have that
-CONFIGURE_ARGS+=	PYTHON_FOR_BUILD=${PREFIX}/bin/python3.10
-CONFIGURE_ARGS+=	MACHDEP=${PY_PLATNAME}
 CONFIGURE_ARGS+=	\
-	_PYTHON_HOST_PLATFORM=${LOWER_OPSYS}-${MACHINE_GNU_ARCH}
+	PYTHON_FOR_BUILD=${TOOLBASE:Q}/bin/python${PY_VER_SUFFIX}
+CONFIGURE_ARGS+=	MACHDEP=${PY_PLATNAME}
 CONFIGURE_ARGS+=	ac_sys_system=${OPSYS}
 .  if ${OPSYS} == "OSF1"
 CONFIGURE_ARGS+=	ac_cv_buggy_getaddrinfo=true
@@ -52,13 +68,16 @@ CONFIGURE_ARGS+=	ac_cv_buggy_getaddrinfo=false
 .  endif
 CONFIGURE_ARGS.NetBSD+=	ac_cv_file__dev_ptmx=yes
 CONFIGURE_ARGS.NetBSD+=	ac_cv_file__dev_ptc=no
-MAKE_ENV+=		\
+ALL_ENV+=		\
 	_PYTHON_HOST_PLATFORM=${LOWER_OPSYS}-${MACHINE_GNU_ARCH}
-MAKE_ENV+=		_PYTHON_PROJECT_BASE=${WRKSRC}
+ALL_ENV+=		\
+	_PYTHON_PROJECT_BASE=${WRKSRC}
+ALL_ENV+=		\
+	_PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_${PY_PLATNAME:Q}
 .endif
 
 # http://bugs.python.org/issue13241
-.if !empty(MACHINE_PLATFORM:MDarwin-1[12].*)
+.if ${MACHINE_PLATFORM:MDarwin-1[12].*}
 PKGSRC_COMPILER=	clang
 PKG_CC=			clang
 PKG_CXX=		clang++
@@ -67,7 +86,6 @@ PKG_CXX=		clang++
 # Used in socketmodule.c to determine if a sethostname declaration is required
 CFLAGS.SunOS+=		-DPKGSRC_OPSYS_VERSION=${OPSYS_VERSION}
 LIBS.SunOS+=		-lrt	# fdatasync()
-LIBS.SunOS+=		-luuid
 .if ${OPSYS} == "SunOS" && ${OPSYS_VERSION} < 051100
 SUBST_CLASSES+=		setup
 SUBST_MESSAGE.setup=	Replacing crypt with crypt_i
@@ -79,19 +97,10 @@ SUBST_SED.setup=	-e "s,'crypt','crypt_i',"
 PY_VER_SUFFIX=		3.10
 
 .if ${OPSYS} == "Darwin"
-PY_PLATNAME=	${LOWER_OPSYS}
 USE_TOOLS+=	gmake
-.elif ${OPSYS} == "IRIX"
-PY_PLATNAME=	${LOWER_OPSYS:C/\..*//}
-.elif ${OPSYS} == "SunOS"
-PY_PLATNAME=	sunos${OS_VERSION:C/\..*//}
-.elif ${OPSYS} == "HPUX"
-PY_PLATNAME=	hp-ux11
-.elif ${OPSYS} == "Linux"
-PY_PLATNAME=	linux
-.else
-PY_PLATNAME=	${LOWER_OPSYS}${OS_VERSION:C/\..*//}
 .endif
+
+.include "platname.mk"
 PLIST_SUBST+=	PY_PLATNAME=${PY_PLATNAME:Q}
 
 # For Xcode 5 and up, we need to search the SDK path for headers, otherwise
@@ -219,18 +228,21 @@ setuptools-preinstall:
 	${INSTALL_DATA} ${.CURDIR}/../../devel/py-setuptools/files/_distutils_system_mod \
 		${DESTDIR}${PREFIX}/lib/python${PY_VER_SUFFIX}/site-packages/_distutils_system_mod.py
 
-# needed to make devel/py-readline pick up the correct readline implementation
-BUILDLINK_DEPMETHOD.readline=		build
-
 .include "../../archivers/bzip2/buildlink3.mk"
 .include "../../archivers/xz/buildlink3.mk"
+.include "../../databases/sqlite3/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
+.if ${USE_BUILTIN.gettext:U:tl} == no
+CONFIGURE_ENV+=		ac_cv_lib_intl_textdomain=yes
+.endif
 .include "../../devel/libffi/buildlink3.mk"
 .include "../../devel/libuuid/buildlink3.mk"
 .include "../../devel/readline/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../security/openssl/buildlink3.mk"
+.include "../../textproc/expat/buildlink3.mk"
 .include "../../mk/bdb.buildlink3.mk"
+.include "../../mk/curses.buildlink3.mk"
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/oss.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

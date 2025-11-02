@@ -1,8 +1,9 @@
-# $NetBSD: Makefile,v 1.80 2019/04/25 15:59:54 roy Exp $
+# $NetBSD: Makefile,v 1.122 2025/04/29 09:35:13 tnn Exp $
 
 .include "dist.mk"
 
 PKGNAME=	python27-${PY_DISTVERSION}
+PKGREVISION=	21
 CATEGORIES=	lang python
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -13,13 +14,27 @@ LICENSE=	python-software-foundation
 DEPENDS=	mozilla-rootcerts>=1.0.20150804nb1:../../security/mozilla-rootcerts
 
 CONFLICTS+=	python-[0-9]*
+CONFLICTS+=	py27-cElementTree-[0-9]*
+CONFLICTS+=	py27-curses-[0-9]*
+CONFLICTS+=	py27-cursespanel-[0-9]*
+CONFLICTS+=	py27-expat-[0-9]*
+CONFLICTS+=	py27-readline-[0-9]*
+CONFLICTS+=	py27-sqlite3-[0-9]*
+SUPERSEDES+=	py27-cElementTree-[0-9]*
+SUPERSEDES+=	py27-curses-[0-9]*
+SUPERSEDES+=	py27-cursespanel-[0-9]*
+SUPERSEDES+=	py27-expat-[0-9]*
+SUPERSEDES+=	py27-readline-[0-9]*
+SUPERSEDES+=	py27-sqlite3-[0-9]*
 
 USE_LANGUAGES=		c c++
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-shared
 CONFIGURE_ARGS+=	--with-dbmliborder=ndbm:bdb
+CONFIGURE_ARGS+=	--with-system-expat
 CONFIGURE_ARGS+=	--with-system-ffi
 CONFIGURE_ARGS+=	--with-threads
+CONFIGURE_ARGS+=	PKG_CONFIG=${PREFIX}/bin/pkg-config
 CONFIGURE_ENV+=		MKDIR_P=${MKDIR:Q}
 CONFIGURE_ENV+=		OPT=${CFLAGS:M*:Q}
 PKGCONFIG_OVERRIDE+=	Misc/python.pc.in
@@ -29,9 +44,10 @@ LDFLAGS+=		-L${WRKSRC}
 # $RANDOM usage there is fine
 CHECK_PORTABILITY_SKIP=	Tools/faqwiz/move-faqwiz.sh
 
-# Harmless PKG_CONFIG_LIBDIR references to BUILDLINK_DIR
-CHECK_WRKREF_SKIP+=	lib/python2.7/_sysconfigdata.py
-CHECK_WRKREF_SKIP+=	lib/python2.7/config/Makefile
+# NetBSD-8 curses has enough support for py-curses
+USE_CURSES=		getsyx wide
+# But we build as ncurses still to get the full feature set easily
+FAKE_NCURSES=		yes
 
 PTHREAD_OPTS+=		require
 PTHREAD_AUTO_VARS=	yes
@@ -51,6 +67,13 @@ CFLAGS+=	-fwrapv
 
 # fdatasync()
 LIBS.SunOS+=		-lrt
+.if ${OPSYS} == "SunOS" && ${OPSYS_VERSION} < 051100
+SUBST_CLASSES+=		setup
+SUBST_MESSAGE.setup=	Replacing crypt with crypt_i
+SUBST_STAGE.setup=	pre-configure
+SUBST_FILES.setup=	setup.py
+SUBST_SED.setup=	-e "s,\([ \[]\)'crypt',\\1'crypt_i',"
+.endif
 
 PY_VER_SUFFIX=		2.7
 
@@ -59,22 +82,11 @@ PY_VER_SUFFIX=		2.7
 CONFIGURE_ENV+=		ac_cv_func_bind_textdomain_codeset=yes
 .endif
 
-.if ${OPSYS} == "Cygwin" || ${OPSYS} == "Darwin" || ${OPSYS} == "Interix"
-PY_PLATNAME=	${LOWER_OPSYS}
+.if ${OPSYS} == "Cygwin" || ${OPSYS} == "Darwin"
 USE_TOOLS+=	gmake
-.elif ${OPSYS} == "IRIX"
-PY_PLATNAME=	${LOWER_OPSYS:C/\..*//}
-.elif ${OPSYS} == "SunOS"
-PY_PLATNAME=	sunos${OS_VERSION:C/\..*//}
-.elif ${OPSYS} == "HPUX"
-PY_PLATNAME=	hp-ux11
-.elif ${OPSYS} == "Linux"
-PY_PLATNAME=	linux2
-.elif ${OS_VARIANT} == "SCOOSR5"
-PY_PLATNAME=	sco_sv3
-.else
-PY_PLATNAME=	${LOWER_OPSYS}${OS_VERSION:C/\..*//}
 .endif
+
+.include "platname.mk"
 PLIST_SUBST+=	PY_PLATNAME=${PY_PLATNAME:Q}
 
 .if !empty(LP64PLATFORMS:@.PLAT.@${MACHINE_PLATFORM:M${.PLAT.}}@) || \
@@ -100,10 +112,14 @@ PLIST.extra-so=	yes
 # modules will not be built.
 .if ${OPSYS} == "Darwin"
 .  if exists(${OSX_SDK_PATH}/usr/include)
-CFLAGS+=	-I${OSX_SDK_PATH:Q}/usr/include
+CFLAGS+=		-I${OSX_SDK_PATH:Q}/usr/include
+SUBST_CLASSES+=		sdkpath
+SUBST_STAGE.sdkpath=	pre-configure
+SUBST_FILES.sdkpath=	Lib/distutils/unixccompiler.py
+SUBST_VARS.sdkpath=	OSX_SDK_PATH
 .  endif
 .  if exists(${OSX_SDK_PATH}/System/Library/Frameworks/QuickTime.framework)
-PLIST.qt=	yes
+PLIST.qt=		yes
 .  endif
 .endif
 
@@ -183,6 +199,19 @@ SUBST_FILES.findlib+=	Lib/ctypes/util.py
 SUBST_FILES.findlib+=	Lib/distutils/unixccompiler.py
 SUBST_SED.findlib=	-e 's,/usr/local,${PREFIX},'
 SUBST_SED.findlib+=	-e 's!\(-Wl,-t -o\)!${COMPILER_RPATH_FLAG}${PREFIX}/lib -L${PREFIX}/lib \1!'
+SUBST_NOOP_OK.findlib=	yes
+
+SUBST_CLASSES+=			pkgversion
+SUBST_STAGE.pkgversion=		pre-configure
+SUBST_FILES.pkgversion=		Lib/lib2to3/pgen2/driver.py
+SUBST_FILES.pkgversion+=	Lib/distutils/command/install_egg_info.py
+SUBST_VARS.pkgversion=		PKGVERSION_NOREV
+
+SUBST_CLASSES+=		urllib
+SUBST_MESSAGE.urllib=	Fixing path to urllib.cfg.
+SUBST_STAGE.urllib=	pre-configure
+SUBST_FILES.urllib=	Lib/urlparse.py
+SUBST_VARS.urllib=	PKG_SYSCONFDIR
 
 .include "options.mk"
 
@@ -215,14 +244,15 @@ post-install:
 CONFIGURE_ENV+=		ac_cv_type_socklen_t=yes
 .endif
 
-BUILDLINK_DEPMETHOD.readline=		build
-
 .include "../../archivers/bzip2/buildlink3.mk"
+.include "../../databases/sqlite3/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
 .include "../../devel/libffi/buildlink3.mk"
 .include "../../devel/readline/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../security/openssl/buildlink3.mk"
+.include "../../textproc/expat/buildlink3.mk"
 .include "../../mk/bdb.buildlink3.mk"
+.include "../../mk/curses.buildlink3.mk"
 .include "../../mk/dlopen.buildlink3.mk"
 .include "../../mk/bsd.pkg.mk"

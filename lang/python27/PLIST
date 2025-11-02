@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.4 2019/10/21 09:40:35 adam Exp $
+@comment $NetBSD: PLIST,v 1.6 2023/10/23 06:35:59 wiz Exp $
 bin/2to3-${PY_VER_SUFFIX}
 bin/pydoc${PY_VER_SUFFIX}
 bin/python${PY_VER_SUFFIX}
@@ -1905,7 +1905,11 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/_collections.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_csv.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_ctypes.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_ctypes_test.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_curses.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_curses_panel.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_elementtree.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_functools.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_hashlib.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_heapq.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_hotshot.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_io.so
@@ -1916,13 +1920,10 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/_multibytecodec.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_multiprocessing.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_random.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_socket.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/_sqlite3.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_ssl.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_struct.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/_testcapi.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_md5.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_sha.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_sha256.so
-lib/python${PY_VER_SUFFIX}/lib-dynload/_sha512.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/array.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/audioop.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/binascii.so
@@ -1944,6 +1945,8 @@ lib/python${PY_VER_SUFFIX}/lib-dynload/mmap.so
 ${PLIST.nis}lib/python${PY_VER_SUFFIX}/lib-dynload/nis.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/operator.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/parser.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/pyexpat.so
+lib/python${PY_VER_SUFFIX}/lib-dynload/readline.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/resource.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/select.so
 lib/python${PY_VER_SUFFIX}/lib-dynload/strop.so
@@ -2966,6 +2969,7 @@ lib/python${PY_VER_SUFFIX}/test/list_tests.pyo
 lib/python${PY_VER_SUFFIX}/test/lock_tests.py
 lib/python${PY_VER_SUFFIX}/test/lock_tests.pyc
 lib/python${PY_VER_SUFFIX}/test/lock_tests.pyo
+lib/python${PY_VER_SUFFIX}/test/mailcap.txt
 lib/python${PY_VER_SUFFIX}/test/make_ssl_certs.py
 lib/python${PY_VER_SUFFIX}/test/make_ssl_certs.pyc
 lib/python${PY_VER_SUFFIX}/test/make_ssl_certs.pyo
@@ -3703,6 +3707,9 @@ lib/python${PY_VER_SUFFIX}/test/test_macurl2path.pyo
 lib/python${PY_VER_SUFFIX}/test/test_mailbox.py
 lib/python${PY_VER_SUFFIX}/test/test_mailbox.pyc
 lib/python${PY_VER_SUFFIX}/test/test_mailbox.pyo
+lib/python${PY_VER_SUFFIX}/test/test_mailcap.py
+lib/python${PY_VER_SUFFIX}/test/test_mailcap.pyc
+lib/python${PY_VER_SUFFIX}/test/test_mailcap.pyo
 lib/python${PY_VER_SUFFIX}/test/test_marshal.py
 lib/python${PY_VER_SUFFIX}/test/test_marshal.pyc
 lib/python${PY_VER_SUFFIX}/test/test_marshal.pyo
