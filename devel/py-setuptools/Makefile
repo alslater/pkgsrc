@@ -1,33 +1,38 @@
-# $NetBSD: Makefile,v 1.222 2022/10/05 20:51:53 adam Exp $
+# $NetBSD: Makefile,v 1.271 2025/05/27 07:28:15 adam Exp $
 
-DISTNAME=	setuptools-65.4.1
+DISTNAME=	setuptools-80.9.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=s/setuptools/}
 
-MAINTAINER=	joerg@NetBSD.org
+MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://github.com/pypa/setuptools
 COMMENT=	New Python packaging system
 LICENSE=	python-software-foundation OR zpl-2.0
 
-DEPENDS+=	${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
-TEST_DEPENDS+=	${PYPKGPREFIX}-ini2toml>=0.9:../../textproc/py-ini2toml
+TEST_DEPENDS+=	${PYPKGPREFIX}-build>=1.0.3:../../devel/py-build
+TEST_DEPENDS+=	${PYPKGPREFIX}-filelock>=3.4.0:../../devel/py-filelock
+TEST_DEPENDS+=	${PYPKGPREFIX}-ini2toml>=0.14:../../textproc/py-ini2toml
+TEST_DEPENDS+=	${PYPKGPREFIX}-jaraco.develop>=7.21:../../devel/py-jaraco.develop
 TEST_DEPENDS+=	${PYPKGPREFIX}-jaraco.envs>=2.2:../../devel/py-jaraco.envs
-TEST_DEPENDS+=	${PYPKGPREFIX}-jaraco.path>=3.2.0:../../devel/py-jaraco.path
-TEST_DEPENDS+=	${PYPKGPREFIX}-mock-[0-9]*:../../devel/py-mock
-TEST_DEPENDS+=	${PYPKGPREFIX}-pip-run>=8.8:../../devel/py-pip-run
-TEST_DEPENDS+=	${PYPKGPREFIX}-sphinx>=4.3.2:../../textproc/py-sphinx
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-fixture-config-[0-9]*:../../devel/py-test-fixture-config
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-virtualenv-[0-9]*:../../devel/py-test-virtualenv
+TEST_DEPENDS+=	${PYPKGPREFIX}-jaraco.path>=3.7.2:../../devel/py-jaraco.path
+TEST_DEPENDS+=	${PYPKGPREFIX}-jaraco.test>=5.5:../../devel/py-jaraco.test
+TEST_DEPENDS+=	${PYPKGPREFIX}-packaging>=24.2:../../devel/py-packaging
+TEST_DEPENDS+=	${PYPKGPREFIX}-pip>=19.1:../../devel/py-pip
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-home>=0.5:../../devel/py-test-home
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-subprocess-[0-9]*:../../devel/py-test-subprocess
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-timeout-[0-9]*:../../devel/py-test-timeout
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-xdist>=3:../../devel/py-test-xdist
 TEST_DEPENDS+=	${PYPKGPREFIX}-tomli_w>=1.0.0:../../textproc/py-tomli_w
-TEST_DEPENDS+=	${PYPKGPREFIX}-wheel-[0-9]*:../../devel/py-wheel
+TEST_DEPENDS+=	${PYPKGPREFIX}-virtualenv>=13.0.0:../../devel/py-virtualenv
+TEST_DEPENDS+=	${PYPKGPREFIX}-wheel>=0.44.0:../../devel/py-wheel
 
-PYTHON_VERSIONS_INCOMPATIBLE=	27
+# Pick setuptools.tests which are not built nor installed.
+TEST_ENV+=	PYTHONPATH=${WRKSRC}
 
-PYSETUPTESTTARGET=	pytest
+# as of 75.8.2
+# 25 failed, 1176 passed, 42 skipped, 10 xfailed, 2 xpassed, 18 errors
 
-BOOTSTRAP_SETUPTOOLS=	yes
-
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/batteries-included.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"

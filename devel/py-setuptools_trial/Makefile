@@ -1,28 +1,28 @@
-# $NetBSD: Makefile,v 1.15 2018/04/03 20:19:47 adam Exp $
+# $NetBSD: Makefile,v 1.23 2025/04/12 20:54:47 adam Exp $
 
 DISTNAME=	setuptools_trial-0.6.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-PKGREVISION=	1
+PKGREVISION=	4
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=s/setuptools_trial/}
 
-MAINTAINER=	gdt@ir.bbn.com
+MAINTAINER=	gdt@NetBSD.org
 HOMEPAGE=	https://github.com/rutsky/setuptools-trial
 COMMENT=	Setuptools plugin for Twisted-based unit tests
 LICENSE=	modified-bsd
 
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
 DEPENDS+=	${PYPKGPREFIX}-twisted>=2.4.0:../../net/py-twisted
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
 TEST_DEPENDS+=	${PYPKGPREFIX}-test-virtualenv-[0-9]*:../../devel/py-test-virtualenv
 TEST_DEPENDS+=	${PYPKGPREFIX}-virtualenv-[0-9]*:../../devel/py-virtualenv
 
+# test status as of 0.6.0
+# with Python 3.11:
+# 2 failed
+# with Python 3.12:
+# uses deprecated 'imp' module which was removed in Python 3.12
+
 USE_LANGUAGES=	# none
 
-.include "../../lang/python/pyversion.mk"
-.if "${PYPKGPREFIX}" == "py27"
-DEPENDS+=	${PYPKGPREFIX}-pathlib2-[0-9]*:../../devel/py-pathlib2
-.endif
-
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
