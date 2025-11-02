@@ -3,7 +3,7 @@
 VERSION=		4.2.6
 DISTNAME=		omniORB-${VERSION}
 PKGNAME=		omniORB42-${VERSION}
-PKGREVISION=		1
+PKGREVISION=		2
 CATEGORIES=		devel
 MASTER_SITES=		${MASTER_SITE_SOURCEFORGE:=omniorb/}
 EXTRACT_SUFX=		.tar.bz2
@@ -51,7 +51,7 @@ CONFIGURE_ARGS+=--disable-ipv6
 PY_PATCHPLIST=		yes
 REPLACE_PYTHON+=	src/tool/omniidl/python/scripts/omniidlrun.py
 REPLACE_PYTHON+=	src/tool/omniidl/python3/scripts/omniidlrun.py
-PYTHON_VERSIONS_ACCEPTED= 39
+PYTHON_VERSIONS_ACCEPTED= 310
 
 post-install:
 	${INSTALL_DATA_DIR} ${DESTDIR}${PREFIX}/share/examples/omniORB/

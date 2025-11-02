@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.43 2024/06/08 20:31:23 nikita Exp $
 
-BLAKE2s (lynx2.9.2.tar.bz2) = 1365a0fdc942144abd262abeceffb0907930550b3f002ea72f7f82d5cc77c39f
+SHA1 (lynx2.9.2.tar.bz2) = d38c77e87704e71e11e2a9c8ef72e0a37b89303a
+RMD160 (lynx2.9.2.tar.bz2) = c0ec2ad38f7dbdc24f66495b689c92fa545cfe40
 SHA512 (lynx2.9.2.tar.bz2) = bb9ed23a5f8664ca8bccd95cc55683849aa707f601e209d84e0acaed151b78cd772316f527881022ff120049c4fc586c05d579f9d616a2b108d9ddfaa5b2159d
 Size (lynx2.9.2.tar.bz2) = 2783769 bytes
 SHA1 (patch-aa) = 85e76c4b2708e01dd1abdc1af764a067bd83bcb9

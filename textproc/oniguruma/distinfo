@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.19 2020/11/05 07:08:27 kim Exp $
 
-SHA1 (onig-6.9.9.tar.gz) = cb35868f9cdd205770b99610682f254cb553cb02
-RMD160 (onig-6.9.9.tar.gz) = 5e0927a53265b178ff1fe9fd833678d2aa8063db
-SHA512 (onig-6.9.9.tar.gz) = 14d2afd0d2cf86012c9959f221e9a77e7787e709c9dd7295d159e0a9ba89df52fa3edc59f95a6d859c34181e2e2e53e21b932b3eceb4d6ddeb2a3445ef951e95
-Size (onig-6.9.9.tar.gz) = 957444 bytes
+SHA1 (onig-6.9.10.tar.gz) = bcada943679fa8cecfe359e57d785da9430dcdbc
+RMD160 (onig-6.9.10.tar.gz) = b905b7e4fed06c429b2915e8cf23a1e4e05d1e39
+SHA512 (onig-6.9.10.tar.gz) = f7cf33008ca0181322fb8efc8e6bb67a1f81677095a33d88134781b804e6a9fbf675f05789d762fdd3d9f0171f8dc4c2e960c2b6a09ddd03bfd35a5ab0920317
+Size (onig-6.9.10.tar.gz) = 979159 bytes

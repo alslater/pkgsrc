@@ -743,11 +743,6 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/r
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_health_check.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_khepri.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_limiter.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_log_channel.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_log_connection.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_log_mirroring.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_log_prelaunch.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_log_queue.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_log_tail.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_logger_exchange_h.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbit-${PKGVERSION}/ebin/rabbit_maintenance.beam
@@ -936,7 +931,6 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_inter
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/ebin/rabbit_auth_backend_ldap.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/ebin/rabbit_auth_backend_ldap_app.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/ebin/rabbit_auth_backend_ldap_util.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/ebin/rabbit_log_ldap.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/ebin/rabbitmq_auth_backend_ldap.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/include/logging.hrl
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_auth_backend_ldap-${PKGVERSION}/priv/schema/rabbitmq_auth_backend_ldap.schema
@@ -1002,7 +996,6 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVE
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/ebin/rabbit_federation_upstream.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/ebin/rabbit_federation_upstream_exchange.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/ebin/rabbit_federation_util.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/ebin/rabbit_log_federation.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/ebin/rabbitmq_federation.app
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/include/logging.hrl
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_federation-${PKGVERSION}/include/rabbit_federation.hrl
@@ -1358,7 +1351,6 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSIO
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/Elixir.RabbitMQ.CLI.Ctl.Commands.ShovelStatusCommand.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/rabbit_amqp091_shovel.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/rabbit_amqp10_shovel.beam
-lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/rabbit_log_shovel.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/rabbit_shovel.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/rabbit_shovel_behaviour.beam
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_shovel-${PKGVERSION}/ebin/rabbit_shovel_config.beam

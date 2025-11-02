@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.5 2020/12/08 14:30:40 adam Exp $
 
-SHA1 (Python-3.9.23.tar.xz) = 73d07237b70b19e4cd530bbc204cccd668ec05d4
-RMD160 (Python-3.9.23.tar.xz) = 2d0e831335f28b838eca5622d44984639ff9e705
-SHA512 (Python-3.9.23.tar.xz) = ad2eb2eebff286a16ad631339bc0890b0686cf5e669d28905a98f96e9b1af6673d255f36bf19e146aa4de8d012587dc6b3193e903718f9cdba4b97041318f418
-Size (Python-3.9.23.tar.xz) = 19659284 bytes
+SHA1 (Python-3.9.24.tar.xz) = 32438f848084bf03a25d8514c9a396582f66e7be
+RMD160 (Python-3.9.24.tar.xz) = 4a189dfb93e8eada7d07ac557bd6a638fbf2235c
+SHA512 (Python-3.9.24.tar.xz) = 54be1c0805e66aa68b4c71e07a4234176203868ecdb6dfdc1859b04b95858bde26990dd1c5ac1001ce4b55513c05cd63310155c6c6666707e27fb79c159870bb
+Size (Python-3.9.24.tar.xz) = 20176216 bytes
 SHA1 (patch-Lib_ctypes_util.py) = 032cc99ebad93ddddfd89073c60424a952e3faa3
 SHA1 (patch-Lib_distutils_sysconfig.py) = 6822eafb4dfded86d7f7353831816aeb8119e6cf
 SHA1 (patch-Lib_distutils_unixccompiler.py) = 2e65a8dd5dd3fe25957206c062106fa7a6fc4e69

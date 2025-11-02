@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.22 2025/06/01 14:14:35 vins Exp $
 
-BLAKE2s (libedit-20250104-3.1.tar.gz) = 459c6801dc8baa7498865b932a39da055de7c21286da78ccd6b019c1d4339f8f
+SHA1 (libedit-20250104-3.1.tar.gz) = b3f3b31baa7018fe177516d0afd0d4fed90bfb32
+RMD160 (libedit-20250104-3.1.tar.gz) = 3621772ba45561a919b908acc2414f2a719ad469
 SHA512 (libedit-20250104-3.1.tar.gz) = 4b4a8b4b1f2cb952bbb3d128605eba9bc7cd0ad35c44b2c099f067c8bea69455bd11faae4ff20384bbe0ea901b25a1249d8323dea4ccd6141a17393f62bb8df2
 Size (libedit-20250104-3.1.tar.gz) = 546745 bytes
 SHA1 (patch-libedit.pc.in) = c2c810ab2c9c7b9d1862abc7bdca53fda5732119

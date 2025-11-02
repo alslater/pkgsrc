@@ -1,9 +1,10 @@
-# $NetBSD: Makefile,v 1.2 2022/09/23 14:53:35 taca Exp $
+# $NetBSD: Makefile,v 1.1 2025/07/16 10:58:02 sborrill Exp $
 
-DISTNAME=	squid-6.14
+VERSION=	7.3
+DISTNAME=	squid-${VERSION}
+
 CATEGORIES=	www
-#MASTER_SITES=	http://www.squid-cache.org/Versions/v6/
-MASTER_SITES=	${MASTER_SITE_GITHUB:=squid-cache/}
+MASTER_SITES=	${MASTER_SITE_GITHUB:=squid-cache/}squid/releases/download/SQUID_${VERSION:S/./_/g}/
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -11,9 +12,13 @@ HOMEPAGE=	http://www.squid-cache.org/
 COMMENT=	Post-Harvest_cached WWW proxy cache and accelerator
 LICENSE=	gnu-gpl-v2
 
-GCC_REQD+=      8
+# GCC 7 fails even with c++17
+# src/ipc/TypedMsgHdr.h fails with
+# static_assert(std::is_trivially_copyable<Pod>::value, "getPod() used for a POD")
+USE_CXX_FEATURES+=	c++17
+USE_LANGUAGES+=		c c++
+GCC_REQD+=		8
 
-USE_LANGUAGES=		c c++17
 USE_TOOLS+=		perl:run gmake
 GNU_CONFIGURE=		yes
 GNU_CONFIGURE_STRICT=	no # has sub-configure in libltdl
@@ -28,11 +33,15 @@ CONFIGURE_ARGS+=	--enable-icmp
 CONFIGURE_ARGS+=	--enable-poll
 CONFIGURE_ARGS+=	--enable-removal-policies=lru,heap
 CONFIGURE_ARGS+=	--enable-storeio=${SQUID_BACKENDS:Q}
+CONFIGURE_ARGS+=	--enable-translation
 CONFIGURE_ARGS+=	--with-aio
 CONFIGURE_ARGS+=	--with-default-user=${SQUID_USER}
 CONFIGURE_ARGS+=	--with-pidfile=${VARBASE}/run/squid.pid
-CONFIGURE_ARGS+=	--disable-esi
-CONFIGURE_ARGS+=	--without-xml2
+
+BUILD_DEFS=		VARBASE
+
+LIBS.SunOS+= -lsocket
+LDFLAGS.SunOS+=      -lsocket -lnsl -lresolv
 
 # Let 'purge' find correct config file by default.
 CPPFLAGS+=		-DDEFAULT_SQUID_CONF=\"${PKG_SYSCONFDIR}/squid.conf\"
@@ -52,9 +61,9 @@ REPLACE_PERL+=		contrib/url-normalizer.pl contrib/user-agents.pl \
 			scripts/udp-banger.pl scripts/upgrade-1.0-store.pl \
 			tools/helper-ok-dying.pl tools/helper-ok.pl
 EGFILES=		src/mime.conf.default src/squid.conf.default \
-			errors/errorpage.css tools/cachemgr.conf
+			errors/errorpage.css
 EGDIR=			share/examples/squid
-.for f in cachemgr.conf errorpage.css mime.conf squid.conf
+.for f in errorpage.css mime.conf squid.conf
 CONF_FILES+=		${PREFIX}/${EGDIR}/${f} ${PKG_SYSCONFDIR}/${f}
 .endfor
 OWN_DIRS=		${SQUID_DATADIR}

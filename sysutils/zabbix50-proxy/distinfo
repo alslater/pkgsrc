@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.6 2021/11/13 20:41:09 otis Exp $
 
-SHA1 (zabbix-7.0.19.tar.gz) = 3136760eefd359669ab09dc73ec99a5c6cf3a6bb
-RMD160 (zabbix-7.0.19.tar.gz) = 5dd211ef93fd3c1d1add0e3aee8a62ccae57bad4
-SHA512 (zabbix-7.0.19.tar.gz) = 44541f13ddc816f67e8e601255e7c21faa18b395eb5a77daf09bb9d59fc252d41ebf77c0e264749570f0edb697590832e618b007887e740f320b3a848aff6df1
-Size (zabbix-7.0.19.tar.gz) = 46506321 bytes
+SHA1 (zabbix-7.0.20.tar.gz) = aff86d46adde2897bd10ed9c23a712a334d3303a
+RMD160 (zabbix-7.0.20.tar.gz) = 1db744c89cc129e292db67ae45085fd24cbdc18b
+SHA512 (zabbix-7.0.20.tar.gz) = ef83bfc80f33b3cae73de4c8076f2d41e09915b8e6fd29b945586cd6ec1b097007e14a26ff154c0435c299200b347ad938b75466bd824a9f9e83f8798fd871eb
+Size (zabbix-7.0.20.tar.gz) = 46596572 bytes
 SHA1 (patch-m4_ax__lib__mysql.m4) = 9786c6bff3d22334263921c201bf241a207a46bc
 SHA1 (patch-m4_libssh.m4) = 8b4ac3964caf94bb0e4939d265dcefc08a07a0df
 SHA1 (patch-src_libs_zbxsysinfo_netbsd_net.c) = 468f2112a3d65b0a73f371194ae15ce0df0ad71c

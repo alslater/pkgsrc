@@ -215,18 +215,6 @@ squid-enable-helper-negotiate_auth:
 .  endfor
 .endif
 
-.if empty(SQUID_NTLM_AUTH_HELPERS)
-CONFIGURE_ARGS+=	--disable-auth-ntlm
-.else
-CONFIGURE_ARGS+=	--enable-auth-ntlm=${SQUID_NTLM_AUTH_HELPERS:Q}
-.PHONY: squid-enable-helper-ntlm_auth
-pre-configure: squid-enable-helper-ntlm_auth
-squid-enable-helper-ntlm_auth:
-.  for i in ${SQUID_NTLM_AUTH_HELPERS}
-#	${ECHO} "exit 0" > ${WRKSRC}/src/auth/ntlm/${i}/config.test
-.  endfor
-.endif
-
 .if empty(SQUID_EXTERNAL_ACL_HELPERS)
 CONFIGURE_ARGS+=	--disable-external-acl-helpers
 .else

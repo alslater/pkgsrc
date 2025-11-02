@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.95 2024/05/06 16:10:04 adam Exp $
 
-DISTNAME=	rabbitmq-server-4.1.4
+DISTNAME=	rabbitmq-server-4.1.5
 PKGREVISION=	1
 PKGNAME=	${DISTNAME:S/-server//}
 CATEGORIES=	net
@@ -24,6 +24,8 @@ DEPENDS+=		${PYPKGPREFIX}-simplejson>=2:../../converters/py-simplejson
 DEPENDS+=		${PYPKGPREFIX}-expat>=2:../../textproc/py-expat
 
 BUILD_DEFS+=		VARBASE
+
+MAKE_JOBS_SAFE=		no
 
 # Create a mix tool to avoid nested interpreter issues.
 TOOLS_CREATE+=		mix

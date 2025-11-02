@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.11 2022/08/04 15:22:08 taca Exp $
 
-SHA1 (php-8.4.13.tar.xz) = 2208dbd45637cee1e453d7fce2459a625f7f507d
-RMD160 (php-8.4.13.tar.xz) = e59fc21aed5e31914e25fb449dd7cd8ecb4fce7f
-SHA512 (php-8.4.13.tar.xz) = 1801d4b55969dcfaea77671c91c3e99f1237dad1135123da335d585a43bb5afb8c0148381d89e399399c0887a0c17b1ae028c69c1ab999dfec117d7a197c1ea1
-Size (php-8.4.13.tar.xz) = 13646008 bytes
+SHA1 (php-8.4.14.tar.xz) = 878059b22880c835ce68aed1e9fd6c0b7fd1c5fd
+RMD160 (php-8.4.14.tar.xz) = b0cdcd4290d990389088e114a2e5e843d7a38e15
+SHA512 (php-8.4.14.tar.xz) = a7626f8dc1b951bf845e72884a4dcc622a06159de623772a97ef5ccb20930a85273db81e98e933c26982ba3a539847b61bbe86bba4792f5fee49a9c91814a63b
+Size (php-8.4.14.tar.xz) = 13643936 bytes
 SHA1 (patch-build_php.m4) = bb72e38ab391ad587962940ba85e8d4de8633dca
 SHA1 (patch-configure.ac) = 2bdd1d2b1def552032dba5fbeb6140922b72c880
 SHA1 (patch-ext_dom_lexbor_lexbor_selectors-adapted_selectors.c) = e0b80a537b9c92ae9674103e4793006b19dbc96b
