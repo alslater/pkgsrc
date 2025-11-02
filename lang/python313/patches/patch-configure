@@ -1,0 +1,57 @@
+$NetBSD: patch-configure,v 1.3 2024/12/24 10:47:51 wiz Exp $
+
+Chunks 1, 4, 5: Changes for consistency across pkgsrc platforms.
+Chunk 1: Simplify _sysconfigdata to include only platform name.
+Chunk 2: Disable barrier to cross-compilation.
+Chunk 3: should probably be handled in the Makefile instead
+
+--- configure.orig	2024-12-03 17:59:52.000000000 +0000
++++ configure
+@@ -3708,7 +3708,7 @@ fi
+     fi
+         ac_cv_prog_PYTHON_FOR_REGEN=$with_build_python
+     PYTHON_FOR_FREEZE="$with_build_python"
+-    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
++    PYTHON_FOR_BUILD='_PYTHON_PROJECT_BASE=$(abs_builddir) _PYTHON_HOST_PLATFORM=$(_PYTHON_HOST_PLATFORM) PYTHONPATH=$(srcdir)/Lib _PYTHON_SYSCONFIGDATA_NAME=_sysconfigdata_$(MACHDEP) _PYTHON_SYSCONFIGDATA_PATH=$(shell test -f pybuilddir.txt && echo $(abs_builddir)/`cat pybuilddir.txt`) '$with_build_python
+     { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $with_build_python" >&5
+ printf "%s\n" "$with_build_python" >&6; }
+ 
+@@ -4485,7 +4485,7 @@ fi
+ 
+ 
+ 
+-if test "$cross_compiling" = yes; then
++if false && test "$cross_compiling" = yes; then
+ 	case "$host" in
+ 	*-*-linux*)
+ 		case "$host_cpu" in
+@@ -9670,7 +9670,7 @@ fi
+ 
+ case $GCC in
+ yes)
+-    CFLAGS_NODIST="$CFLAGS_NODIST -std=c11"
++    CFLAGS_NODIST="$CFLAGS_NODIST -std=gnu11"
+ 
+ 
+ 
+@@ -24579,7 +24579,7 @@ printf "%s\n" "#define ALT_SOABI \"${ALT
+ fi
+ 
+ 
+-EXT_SUFFIX=.${SOABI}${SHLIB_SUFFIX}
++EXT_SUFFIX=${SHLIB_SUFFIX}
+ 
+ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking LDVERSION" >&5
+ printf %s "checking LDVERSION... " >&6; }
+@@ -24645,11 +24645,7 @@ fi
+ 
+ 
+ 
+-if test x$PLATFORM_TRIPLET = x; then
+   LIBPL='$(prefix)'"/${PLATLIBDIR}/python${VERSION}${ABI_THREAD}/config-${LDVERSION}"
+-else
+-  LIBPL='$(prefix)'"/${PLATLIBDIR}/python${VERSION}${ABI_THREAD}/config-${LDVERSION}-${PLATFORM_TRIPLET}"
+-fi
+ 
+ 
+ # Check for --with-wheel-pkg-dir=PATH
