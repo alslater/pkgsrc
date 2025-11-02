@@ -1,9 +1,8 @@
-@comment $NetBSD: PLIST,v 1.7 2022/05/18 08:50:41 wiz Exp $
-${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
-${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
-${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
-${PYSITELIB}/${EGG_INFODIR}/requires.txt
-${PYSITELIB}/${EGG_INFODIR}/top_level.txt
+@comment $NetBSD: PLIST,v 1.10 2025/04/12 11:44:18 adam Exp $
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
 ${PYSITELIB}/pyparsing/__init__.py
 ${PYSITELIB}/pyparsing/__init__.pyc
 ${PYSITELIB}/pyparsing/__init__.pyo
@@ -32,6 +31,12 @@ ${PYSITELIB}/pyparsing/results.pyo
 ${PYSITELIB}/pyparsing/testing.py
 ${PYSITELIB}/pyparsing/testing.pyc
 ${PYSITELIB}/pyparsing/testing.pyo
+${PYSITELIB}/pyparsing/tools/__init__.py
+${PYSITELIB}/pyparsing/tools/__init__.pyc
+${PYSITELIB}/pyparsing/tools/__init__.pyo
+${PYSITELIB}/pyparsing/tools/cvt_pyparsing_pep8_names.py
+${PYSITELIB}/pyparsing/tools/cvt_pyparsing_pep8_names.pyc
+${PYSITELIB}/pyparsing/tools/cvt_pyparsing_pep8_names.pyo
 ${PYSITELIB}/pyparsing/unicode.py
 ${PYSITELIB}/pyparsing/unicode.pyc
 ${PYSITELIB}/pyparsing/unicode.pyo
