@@ -29,6 +29,5 @@ post-install:
 	cd ${DESTDIR}${PREFIX}/bin && \
 	${MV} watchmedo watchmedo-${PYVERSSUFFIX} || ${TRUE}
 
-.include "../../lang/python/versioned_dependencies.mk"
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
