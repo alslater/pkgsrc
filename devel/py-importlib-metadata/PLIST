@@ -1,9 +1,9 @@
-@comment $NetBSD: PLIST,v 1.5 2022/05/12 19:37:39 adam Exp $
-${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
-${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
-${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
-${PYSITELIB}/${EGG_INFODIR}/requires.txt
-${PYSITELIB}/${EGG_INFODIR}/top_level.txt
+@comment $NetBSD: PLIST,v 1.12 2025/04/28 19:46:54 adam Exp $
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
+${PYSITELIB}/${WHEEL_INFODIR}/top_level.txt
 ${PYSITELIB}/importlib_metadata/__init__.py
 ${PYSITELIB}/importlib_metadata/__init__.pyc
 ${PYSITELIB}/importlib_metadata/__init__.pyo
@@ -28,4 +28,19 @@ ${PYSITELIB}/importlib_metadata/_meta.pyo
 ${PYSITELIB}/importlib_metadata/_text.py
 ${PYSITELIB}/importlib_metadata/_text.pyc
 ${PYSITELIB}/importlib_metadata/_text.pyo
+${PYSITELIB}/importlib_metadata/_typing.py
+${PYSITELIB}/importlib_metadata/_typing.pyc
+${PYSITELIB}/importlib_metadata/_typing.pyo
+${PYSITELIB}/importlib_metadata/compat/__init__.py
+${PYSITELIB}/importlib_metadata/compat/__init__.pyc
+${PYSITELIB}/importlib_metadata/compat/__init__.pyo
+${PYSITELIB}/importlib_metadata/compat/py311.py
+${PYSITELIB}/importlib_metadata/compat/py311.pyc
+${PYSITELIB}/importlib_metadata/compat/py311.pyo
+${PYSITELIB}/importlib_metadata/compat/py39.py
+${PYSITELIB}/importlib_metadata/compat/py39.pyc
+${PYSITELIB}/importlib_metadata/compat/py39.pyo
+${PYSITELIB}/importlib_metadata/diagnose.py
+${PYSITELIB}/importlib_metadata/diagnose.pyc
+${PYSITELIB}/importlib_metadata/diagnose.pyo
 ${PYSITELIB}/importlib_metadata/py.typed
