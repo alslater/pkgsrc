@@ -1,0 +1,27 @@
+@comment $NetBSD: PLIST,v 1.3 2025/04/14 05:08:07 adam Exp $
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
+${PYSITELIB}/${WHEEL_INFODIR}/top_level.txt
+${PYSITELIB}/OpenSSL/SSL.py
+${PYSITELIB}/OpenSSL/SSL.pyc
+${PYSITELIB}/OpenSSL/SSL.pyo
+${PYSITELIB}/OpenSSL/__init__.py
+${PYSITELIB}/OpenSSL/__init__.pyc
+${PYSITELIB}/OpenSSL/__init__.pyo
+${PYSITELIB}/OpenSSL/_util.py
+${PYSITELIB}/OpenSSL/_util.pyc
+${PYSITELIB}/OpenSSL/_util.pyo
+${PYSITELIB}/OpenSSL/crypto.py
+${PYSITELIB}/OpenSSL/crypto.pyc
+${PYSITELIB}/OpenSSL/crypto.pyo
+${PYSITELIB}/OpenSSL/debug.py
+${PYSITELIB}/OpenSSL/debug.pyc
+${PYSITELIB}/OpenSSL/debug.pyo
+${PYSITELIB}/OpenSSL/rand.py
+${PYSITELIB}/OpenSSL/rand.pyc
+${PYSITELIB}/OpenSSL/rand.pyo
+${PYSITELIB}/OpenSSL/version.py
+${PYSITELIB}/OpenSSL/version.pyc
+${PYSITELIB}/OpenSSL/version.pyo
