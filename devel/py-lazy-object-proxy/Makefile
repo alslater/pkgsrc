@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.8 2020/12/07 08:59:40 adam Exp $
+# $NetBSD: Makefile,v 1.19 2025/04/21 07:47:25 adam Exp $
 
-DISTNAME=	lazy-object-proxy-1.5.2
-PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+DISTNAME=	lazy_object_proxy-1.11.0
+PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/_/-/g}
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=l/lazy-object-proxy/}
 
@@ -10,11 +10,9 @@ HOMEPAGE=	https://github.com/ionelmc/python-lazy-object-proxy
 COMMENT=	Fast and thorough lazy object proxy
 LICENSE=	modified-bsd
 
-BUILD_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm>=3.3.1:../../devel/py-setuptools_scm
-BUILD_DEPENDS+=	${PYPKGPREFIX}-wheel-[0-9]*:../../devel/py-wheel
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm>=8:../../devel/py-setuptools_scm
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-benchmark-[0-9]*:../../devel/py-test-benchmark
 
-PYTHON_VERSIONED_DEPENDENCIES+=	setuptools:build
-
-.include "../../lang/python/egg.mk"
-.include "../../lang/python/versioned_dependencies.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"

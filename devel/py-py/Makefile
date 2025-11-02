@@ -1,7 +1,8 @@
-# $NetBSD: Makefile,v 1.24 2022/02/23 11:45:52 adam Exp $
+# $NetBSD: Makefile,v 1.27 2025/04/12 20:03:45 adam Exp $
 
 DISTNAME=	py-1.11.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+PKGREVISION=	2
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=p/py/}
 
@@ -10,10 +11,10 @@ HOMEPAGE=	https://py.readthedocs.io/
 COMMENT=	Library with cross-python path, ini-parsing, io, code, log facilities
 LICENSE=	mit
 
-PYTHON_VERSIONED_DEPENDENCIES=	setuptools_scm:build
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm-[0-9]*:../../devel/py-setuptools_scm
 
 USE_LANGUAGES=	# none
 
-.include "../../lang/python/egg.mk"
-.include "../../lang/python/versioned_dependencies.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"

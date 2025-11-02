@@ -1,11 +1,10 @@
-@comment $NetBSD: PLIST,v 1.8 2019/02/16 23:37:23 adam Exp $
-${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
-${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
-${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
-${PYSITELIB}/${EGG_INFODIR}/entry_points.txt
-${PYSITELIB}/${EGG_INFODIR}/not-zip-safe
-${PYSITELIB}/${EGG_INFODIR}/requires.txt
-${PYSITELIB}/${EGG_INFODIR}/top_level.txt
+@comment $NetBSD: PLIST,v 1.12 2025/04/12 09:50:45 adam Exp $
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/entry_points.txt
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
+${PYSITELIB}/${WHEEL_INFODIR}/top_level.txt
 ${PYSITELIB}/_cffi_backend.so
 ${PYSITELIB}/cffi/__init__.py
 ${PYSITELIB}/cffi/__init__.pyc
@@ -13,6 +12,12 @@ ${PYSITELIB}/cffi/__init__.pyo
 ${PYSITELIB}/cffi/_cffi_errors.h
 ${PYSITELIB}/cffi/_cffi_include.h
 ${PYSITELIB}/cffi/_embedding.h
+${PYSITELIB}/cffi/_imp_emulation.py
+${PYSITELIB}/cffi/_imp_emulation.pyc
+${PYSITELIB}/cffi/_imp_emulation.pyo
+${PYSITELIB}/cffi/_shimmed_dist_utils.py
+${PYSITELIB}/cffi/_shimmed_dist_utils.pyc
+${PYSITELIB}/cffi/_shimmed_dist_utils.pyo
 ${PYSITELIB}/cffi/api.py
 ${PYSITELIB}/cffi/api.pyc
 ${PYSITELIB}/cffi/api.pyo

@@ -1,20 +1,19 @@
-# $NetBSD: Makefile,v 1.4 2022/01/13 19:31:23 wiz Exp $
+# $NetBSD: Makefile,v 1.7 2025/04/21 07:02:42 adam Exp $
 
-DISTNAME=	iniconfig-1.1.1
+DISTNAME=	iniconfig-2.1.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-PKGREVISION=	1
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=i/iniconfig/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	https://github.com/RonnyPfannschmidt/iniconfig
+HOMEPAGE=	https://github.com/pytest-dev/iniconfig
 COMMENT=	Brain-dead simple config-ini parsing
 LICENSE=	mit
 
-PYTHON_VERSIONED_DEPENDENCIES=	setuptools_scm:build
+TOOL_DEPENDS+=	${PYPKGPREFIX}-hatch-vcs-[0-9]*:../../devel/py-hatch-vcs
+TOOL_DEPENDS+=	${PYPKGPREFIX}-hatchling>=1.26:../../devel/py-hatchling
 
 USE_LANGUAGES=	# none
 
-.include "../../lang/python/egg.mk"
-.include "../../lang/python/versioned_dependencies.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"

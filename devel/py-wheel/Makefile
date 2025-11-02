@@ -1,30 +1,24 @@
-# $NetBSD: Makefile,v 1.28 2022/08/24 08:41:08 wiz Exp $
+# $NetBSD: Makefile,v 1.43 2025/02/23 19:38:37 wiz Exp $
 
-DISTNAME=	wheel-0.37.1
+DISTNAME=	wheel-0.45.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
-PKGREVISION=	2
+PKGREVISION=	1
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=w/wheel/}
 
-MAINTAINER=	pkgsrc-users@netbsd.org
+MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://github.com/pypa/wheel
-COMMENT=	Built-package format for Python
+COMMENT=	Tool for manipulating Python wheel files
 LICENSE=	mit
 
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
+TOOL_DEPENDS+=	${PYPKGPREFIX}-flit_core>=3.11:../../devel/py-flit_core
+TEST_DEPENDS+=	${PYPKGPREFIX}-setuptools>=65:../../devel/py-setuptools
 
-USE_LANGUAGES=	# none
-
-PYTHON_VERSIONED_DEPENDENCIES+=	test-cov:test
-
-PYSETUPTESTTARGET=	pytest
-
-USE_PKG_RESOURCES=	yes
+USE_LANGUAGES=	c # for tests only
 
 post-install:
 	cd ${DESTDIR}${PREFIX}/bin && \
 	${MV} wheel wheel-${PYVERSSUFFIX} || ${TRUE}
 
-.include "../../lang/python/versioned_dependencies.mk"
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
