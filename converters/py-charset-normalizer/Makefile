@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.12 2022/09/14 11:10:00 adam Exp $
+# $NetBSD: Makefile,v 1.23 2025/05/04 13:21:07 adam Exp $
 
-DISTNAME=	charset-normalizer-2.1.1
-PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+DISTNAME=	charset_normalizer-3.4.2
+PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/_/-/}
 CATEGORIES=	converters python
 MASTER_SITES=	${MASTER_SITE_PYPI:=c/charset-normalizer/}
 
@@ -10,15 +10,15 @@ HOMEPAGE=	https://github.com/ousret/charset_normalizer
 COMMENT=	Universal Charset Detector
 LICENSE=	mit
 
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm-[0-9]*:../../devel/py-setuptools_scm
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-cov>=4.1.0:../../devel/py-test-cov
+
 USE_LANGUAGES=	# none
-
-PYTHON_VERSIONS_INCOMPATIBLE=	27
-
-USE_PKG_RESOURCES=	yes
 
 post-install:
 	cd ${DESTDIR}${PREFIX}/bin && \
 	${MV} normalizer normalizer-${PYVERSSUFFIX} || ${TRUE}
 
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
