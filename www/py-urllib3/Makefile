@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.40 2022/09/11 17:14:22 wiz Exp $
+# $NetBSD: Makefile,v 1.67 2025/06/22 17:41:13 wiz Exp $
 
-DISTNAME=	urllib3-1.26.20
+DISTNAME=	urllib3-2.5.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	www python
 MASTER_SITES=	${MASTER_SITE_PYPI:=u/urllib3/}
@@ -10,21 +10,36 @@ HOMEPAGE=	https://urllib3.readthedocs.io/
 COMMENT=	HTTP library with thread-safe connection pooling
 LICENSE=	mit
 
-DEPENDS+=	${PYPKGPREFIX}-OpenSSL>=0.14:../../security/py-OpenSSL
-DEPENDS+=	${PYPKGPREFIX}-Socks>=1.6.0:../../net/py-Socks
-DEPENDS+=	${PYPKGPREFIX}-certifi-[0-9]*:../../security/py-certifi
-DEPENDS+=	${PYPKGPREFIX}-cryptography>=0:../../security/py-cryptography
-DEPENDS+=	${PYPKGPREFIX}-idna>=2.0.0:../../www/py-idna
-TEST_DEPENDS+=	${PYPKGPREFIX}-mock-[0-9]*:../../devel/py-mock
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
-TEST_DEPENDS+=	${PYPKGPREFIX}-tornado-[0-9]*:../../www/py-tornado
-TEST_DEPENDS+=	${PYPKGPREFIX}-trustme-[0-9]*:../../security/py-trustme
+TOOL_DEPENDS+=	${PYPKGPREFIX}-hatch-vcs>=0.4.0:../../devel/py-hatch-vcs
+TOOL_DEPENDS+=	${PYPKGPREFIX}-hatchling>=1.6.0:../../devel/py-hatchling
+# optional dependencies:
+# "socks"; higher requirement from dev_requirements.txt
+DEPENDS+=	${PYPKGPREFIX}-Socks>=1.7.1:../../net/py-Socks
+# "secure"
+#PYTHON_VERSIONED_DEPENDENCIES+=	OpenSSL cryptography
+#DEPENDS+=	${PYPKGPREFIX}-idna>=2.0.0:../../www/py-idna
+#DEPENDS+=	${PYPKGPREFIX}-certifi>=0:../../www/py-certify
+# but also needs unpackaged urlib3-secure-extra
 
-PYTHON_VERSIONS_INCOMPATIBLE=	27
+# brotli, zstd
+.include "options.mk"
 
-PYSETUPTESTTARGET=	pytest
+# needs py-cryptography>=39.0.1
+PYTHON_VERSIONED_DEPENDENCIES+=	cryptography:test
+
+TEST_DEPENDS+=	${PYPKGPREFIX}-coverage>=7.0.4:../../devel/py-coverage
+TEST_DEPENDS+=	${PYPKGPREFIX}-freezegun>=1.2.2:../../devel/py-freezegun
+#TEST_DEPENDS+=	${PYPKGPREFIX}-towncrier>=21.9.0:../../wip/py-towncrier
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-timeout>=2.1.0:../../devel/py-test-timeout
+TEST_DEPENDS+=	${PYPKGPREFIX}-tornado>=6.2:../../www/py-tornado
+TEST_DEPENDS+=	${PYPKGPREFIX}-trio>=0.26.2:../../devel/py-trio
+TEST_DEPENDS+=	${PYPKGPREFIX}-trustme>=0.9.0:../../security/py-trustme
+# quart
+#hypercorn @ git+https://github.com/urllib3/hypercorn@urllib3-changes
+#pytest-memray 1.5.0; sys_platform!="win32" and implementation_name=="cpython"
 
 USE_LANGUAGES=	# none
 
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/versioned_dependencies.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
