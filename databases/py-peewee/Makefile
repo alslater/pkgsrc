@@ -1,19 +1,20 @@
-# $NetBSD: Makefile,v 1.88 2022/09/26 13:24:14 adam Exp $
+# $NetBSD: Makefile,v 1.122 2025/07/09 05:56:08 adam Exp $
 
-DISTNAME=	peewee-3.15.3
+DISTNAME=	peewee-3.18.2
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	databases python
 MASTER_SITES=	${MASTER_SITE_PYPI:=p/peewee/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	http://docs.peewee-orm.com/
+HOMEPAGE=	https://docs.peewee-orm.com/
 COMMENT=	Small, expressive ORM for PostgreSQL, MySQL and SQLite
 LICENSE=	mit
 
-DEPENDS+=	${PYPKGPREFIX}-sqlite3-[0-9]*:../../databases/py-sqlite3
-BUILD_DEPENDS+=	${PYPKGPREFIX}-sphinx-[0-9]*:../../textproc/py-sphinx
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+TOOL_DEPENDS+=	${PYPKGPREFIX}-sphinx-[0-9]*:../../textproc/py-sphinx
+TOOL_DEPENDS+=	${PYPKGPREFIX}-sphinx-rtd-theme-[0-9]*:../../textproc/py-sphinx-rtd-theme
 
-PYTHON_VERSIONS_INCOMPATIBLE=	27 # needs features from newer sphinx than python 2.7 supports
+PYTHON_VERSIONS_INCOMPATIBLE=	39 310 # py-sphinx
 
 MAKE_FLAGS+=	SPHINXBUILD=sphinx-build-${PYVERSSUFFIX}
 
@@ -44,5 +45,6 @@ post-install:
 .include "../../databases/sqlite3/buildlink3.mk"
 .include "../../devel/py-cython/buildlink3.mk"
 .include "../../lang/python/application.mk"
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/batteries-included.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"

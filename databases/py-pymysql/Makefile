@@ -1,8 +1,8 @@
-# $NetBSD: Makefile,v 1.15 2022/04/21 11:00:00 wiz Exp $
+# $NetBSD: Makefile,v 1.20 2025/04/14 11:31:12 adam Exp $
 
-DISTNAME=	PyMySQL-0.10.1
-PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
-PKGREVISION=	1
+DISTNAME=	pymysql-1.1.1
+PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
+PKGREVISION=	2
 CATEGORIES=	databases python
 MASTER_SITES=	${MASTER_SITE_PYPI:=P/PyMySQL/}
 
@@ -11,10 +11,12 @@ HOMEPAGE=	https://github.com/PyMySQL/PyMySQL
 COMMENT=	Pure-Python MySQL driver
 LICENSE=	mit
 
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+# rsa
 PYTHON_VERSIONED_DEPENDENCIES+=	cryptography
 
 USE_LANGUAGES=	# none
 
 .include "../../lang/python/versioned_dependencies.mk"
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
