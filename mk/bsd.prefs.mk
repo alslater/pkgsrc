@@ -546,6 +546,7 @@ IPV6_READY=		NO
 .endif
 
 LOCALBASE?=		/usr/pkg
+TOOLBASE:=		${LOCALBASE}
 X11_TYPE?=		modular
 .if !empty(X11_TYPE:Mnative)
 .  if ${OPSYS} == "SunOS"
