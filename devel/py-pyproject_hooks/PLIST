@@ -1,0 +1,18 @@
+@comment $NetBSD: PLIST,v 1.6 2025/02/23 18:08:21 wiz Exp $
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
+${PYSITELIB}/pyproject_hooks/__init__.py
+${PYSITELIB}/pyproject_hooks/__init__.pyc
+${PYSITELIB}/pyproject_hooks/__init__.pyo
+${PYSITELIB}/pyproject_hooks/_impl.py
+${PYSITELIB}/pyproject_hooks/_impl.pyc
+${PYSITELIB}/pyproject_hooks/_impl.pyo
+${PYSITELIB}/pyproject_hooks/_in_process/__init__.py
+${PYSITELIB}/pyproject_hooks/_in_process/__init__.pyc
+${PYSITELIB}/pyproject_hooks/_in_process/__init__.pyo
+${PYSITELIB}/pyproject_hooks/_in_process/_in_process.py
+${PYSITELIB}/pyproject_hooks/_in_process/_in_process.pyc
+${PYSITELIB}/pyproject_hooks/_in_process/_in_process.pyo
+${PYSITELIB}/pyproject_hooks/py.typed

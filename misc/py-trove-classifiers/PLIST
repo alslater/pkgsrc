@@ -1,0 +1,15 @@
+@comment $NetBSD: PLIST,v 1.5 2025/06/03 11:50:42 markd Exp $
+bin/trove-classifiers-${PYVERSSUFFIX}
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/entry_points.txt
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
+${PYSITELIB}/${WHEEL_INFODIR}/top_level.txt
+${PYSITELIB}/trove_classifiers/__init__.py
+${PYSITELIB}/trove_classifiers/__init__.pyc
+${PYSITELIB}/trove_classifiers/__init__.pyo
+${PYSITELIB}/trove_classifiers/__main__.py
+${PYSITELIB}/trove_classifiers/__main__.pyc
+${PYSITELIB}/trove_classifiers/__main__.pyo
+${PYSITELIB}/trove_classifiers/py.typed

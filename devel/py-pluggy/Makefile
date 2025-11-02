@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.14 2019/11/22 09:18:48 adam Exp $
+# $NetBSD: Makefile,v 1.31 2025/05/18 10:13:43 wiz Exp $
 
-DISTNAME=	pluggy-0.13.1
+DISTNAME=	pluggy-1.6.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=p/pluggy/}
@@ -10,14 +10,14 @@ HOMEPAGE=	https://github.com/pytest-dev/pluggy
 COMMENT=	Plugin and hook calling mechanisms for python
 LICENSE=	mit
 
-BUILD_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm-[0-9]*:../../devel/py-setuptools_scm
-DEPENDS+=	${PYPKGPREFIX}-importlib-metadata>=0.12:../../devel/py-importlib-metadata
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools_scm>=6.2.3:../../devel/py-setuptools_scm
+TEST_DEPENDS+=	${PYPKGPREFIX}-test-benchmark-[0-9]*:../../devel/py-test-benchmark
 
 USE_LANGUAGES=	# none
 
-do-test:
-	cd ${WRKSRC} && pytest-${PYVERSSUFFIX} testing
+# as of 1.6.0
+# 3 failed, 121 passed
 
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
