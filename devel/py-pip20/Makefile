@@ -22,7 +22,7 @@ PYTHON_VERSIONS_ACCEPTED=	27
 USE_PKG_RESOURCES=	yes
 
 .include "../../lang/python/pyversion.mk"
-FILES_SUBST+=  PYMAJORVERSION=${_PYTHON_VERSION:C/^([0-9]).*/\1/}
+FILES_SUBST+=  PYMAJORVERSION=${PYTHON_VERSION:C/^([0-9]).*/\1/}
 
 post-install:
 	cd ${DESTDIR}${PREFIX}/bin && ${RM} -f pip pip[2-3]
