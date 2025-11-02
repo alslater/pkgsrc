@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.40 2021/03/31 06:36:50 adam Exp $
+# $NetBSD: Makefile,v 1.103 2025/07/14 05:20:34 adam Exp $
 
-DISTNAME=	astroid-2.5.2
+DISTNAME=	astroid-3.3.11
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=a/astroid/}
@@ -8,21 +8,16 @@ MASTER_SITES=	${MASTER_SITE_PYPI:=a/astroid/}
 MAINTAINER=	kamel.derouiche@gmail.com
 HOMEPAGE=	https://github.com/pycqa/astroid
 COMMENT=	Rebuild a new abstract syntax tree from Python's ast
-LICENSE=	gnu-lgpl-v3
+LICENSE=	gnu-lgpl-v2.1
 
-DEPENDS+=	${PYPKGPREFIX}-lazy-object-proxy>=1.4.0:../../devel/py-lazy-object-proxy
-DEPENDS+=	${PYPKGPREFIX}-wrapt>=1.11:../../devel/py-wrapt
-BUILD_DEPENDS+=	${PYPKGPREFIX}-test-runner-[0-9]*:../../devel/py-test-runner
-TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
-
-PYTHON_VERSIONS_INCOMPATIBLE=	27
-
-.include "../../lang/python/pyversion.mk"
-.if ${_PYTHON_VERSION} < 38
-DEPENDS+=	${PYPKGPREFIX}-typed-ast>=1.4.0:../../devel/py-typed-ast
-.endif
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
 
 USE_LANGUAGES=	# none
 
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/pyversion.mk"
+.if ${PYTHON_VERSION} < 311
+DEPENDS+=	${PYPKGPREFIX}-typing-extensions>=4.0.0:../../devel/py-typing-extensions
+.endif
+
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
