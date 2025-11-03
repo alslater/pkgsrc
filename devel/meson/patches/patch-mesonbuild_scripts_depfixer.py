@@ -1,14 +1,14 @@
-$NetBSD: patch-mesonbuild_scripts_depfixer.py,v 1.1 2019/10/04 14:06:19 prlw1 Exp $
+$NetBSD: patch-mesonbuild_scripts_depfixer.py,v 1.4 2022/07/13 03:57:22 triaxx Exp $
 
 Do not touch rpath for ELF.
 
---- mesonbuild/scripts/depfixer.py.orig	2019-06-06 05:17:20.000000000 +0000
+--- mesonbuild/scripts/depfixer.py.orig	2020-09-17 22:00:44.000000000 +0000
 +++ mesonbuild/scripts/depfixer.py
-@@ -439,8 +439,6 @@ def fix_rpath(fname, new_rpath, final_pa
-         if fname.endswith('.jar'):
-             fix_jar(fname)
+@@ -482,8 +482,6 @@ def fix_rpath(fname: str, rpath_dirs_to_
              return
--        fix_elf(fname, new_rpath, verbose)
+         if isinstance(new_rpath, str):
+             new_rpath = new_rpath.encode('utf8')
+-        fix_elf(fname, rpath_dirs_to_remove, new_rpath, verbose)
 -        return
      except SystemExit as e:
          if isinstance(e.code, int) and e.code == 0:

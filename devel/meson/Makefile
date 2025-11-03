@@ -1,22 +1,24 @@
-# $NetBSD: Makefile,v 1.5 2019/12/11 12:48:07 adam Exp $
+# $NetBSD: Makefile,v 1.80 2025/06/10 09:05:32 adam Exp $
 
-DISTNAME=	meson-0.52.1
+DISTNAME=	meson-1.8.2
 CATEGORIES=	devel python
-MASTER_SITES=	${MASTER_SITE_PYPI:=m/meson/}
+#MASTER_SITES=	${MASTER_SITE_PYPI:=m/meson/}
+MASTER_SITES=	${MASTER_SITE_GITHUB:=mesonbuild/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://mesonbuild.com/
 COMMENT=	Open source build system meant to be fast and user friendly
 LICENSE=	apache-2.0
 
-CONFLICTS=	${PYPKGPREFIX}-meson-[0-9]*
-SUPERSEDES=	${PYPKGPREFIX}-meson-[0-9]*
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+DEPENDS+=	ninja-build>=1.7:../../devel/ninja-build
 
-DEPENDS+=	ninja-build-[0-9]*:../../devel/ninja-build
-
-PYTHON_VERSIONS_INCOMPATIBLE=	27
+CONFLICTS+=	py[0-9]*-meson-[0-9]*
+SUPERSEDES+=	py[0-9]*-meson-[0-9]*
 
 USE_LANGUAGES=	c c++ # c++ for tests
+# XXX only needed for tests, but itstool:test didn't work
+USE_TOOLS+=	itstool
 
 SUBST_CLASSES+=		man
 SUBST_SED.man+=		-e "s,share/man,${PKGMANDIR},"
@@ -24,23 +26,27 @@ SUBST_FILES.man+=	setup.py
 SUBST_STAGE.man=	pre-configure
 SUBST_MESSAGE.man=	Fixing man page installation path.
 
-REPLACE_PYTHON+=	ghwt.py
 REPLACE_PYTHON+=	meson.py
 REPLACE_PYTHON+=	mesonbuild/rewriter.py
-REPLACE_PYTHON+=	mesonbuild/cmake/data/run_ctgt.py
 REPLACE_PYTHON+=	run_*.py
 REPLACE_PYTHON+=	test\ cases/*/*/*.py
 REPLACE_PYTHON+=	test\ cases/*/*/*/*.py
 REPLACE_PYTHON+=	test\ cases/*/*/*/*/*.py
 REPLACE_PYTHON+=	test\ cases/common/14\ configure\ file/test.py.in
-REPLACE_PYTHON+=	test\ cases/common/188\ find\ override/subdir/gencodegen.py.in
-REPLACE_PYTHON+=	test\ cases/common/55\ run\ target/configure.in
 REPLACE_PYTHON+=	test\ cases/windows/8\ find\ program/test-script
 REPLACE_PYTHON+=	tools/*.py
 
+# as of 1.8.0
+# Total passed tests:  479
+# Total failed tests:  38
+# Total skipped tests: 106
+
 do-test:
-	cd ${WRKSRC} && ${PYTHONBIN} run_tests.py
+	cd ${WRKSRC} && ${SETENV} ${TEST_ENV} ${PYTHONBIN} run_tests.py
 
 .include "../../lang/python/application.mk"
-.include "../../lang/python/egg.mk"
+.include "../../lang/python/wheel.mk"
+# the following are only for tests
+.include "../../devel/gettext-tools/msgfmt-desktop.mk"
+.include "../../lang/python/tool.mk"
 .include "../../mk/bsd.pkg.mk"
