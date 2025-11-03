@@ -1,26 +1,27 @@
-# $NetBSD: Makefile,v 1.80 2022/08/01 07:58:05 adam Exp $
+# $NetBSD: Makefile,v 1.105 2025/07/03 19:18:03 wiz Exp $
 
-DISTNAME=	Cython-0.29.32
-PKGNAME=	${PYPKGPREFIX}-${DISTNAME:tl}
+DISTNAME=	cython-3.1.2
+PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 CATEGORIES=	devel python
 MASTER_SITES=	${MASTER_SITE_PYPI:=C/Cython/}
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://cython.org/
 COMMENT=	C-Extensions for Python
-LICENSE=	apache-1.1
+LICENSE=	apache-2.0
 
-REPLACE_PYTHON+=	Cython/Build/Cythonize.py
+TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+TEST_DEPENDS+=	${PYPKGPREFIX}-numpy-[0-9]*:../../math/py-numpy
+
 REPLACE_PYTHON+=	Cython/Debugger/Cygdb.py
 REPLACE_PYTHON+=	Cython/Debugger/libpython.py
 REPLACE_PYTHON+=	cython.py
 
-USE_PKG_RESOURCES=	yes
+PYTHON_VERSIONS_INCOMPATIBLE=	39 310
 
-# for test only
-#USE_LANGUAGES=	c c++
-do-test:
-	cd ${WRKSRC} && ${PYTHONBIN} runtests.py
+USE_CC_FEATURES=	c99
+# error: 'for' loop initial declarations are only allowed in C99 mode
+FORCE_C_STD+=		c99
 
 post-install:
 	cd ${DESTDIR}${PREFIX}/bin && \
@@ -28,8 +29,13 @@ post-install:
 	${MV} cythonize cythonize-${PYVERSSUFFIX} && \
 	${MV} cygdb cygdb-${PYVERSSUFFIX} || ${TRUE}
 
+# remove tests that are so broken they break collecting the other tests
+pre-test:
+	${RM} -f ${WRKSRC}/Cython/Debugger/Tests/test_libcython_in_gdb.py
+	${RM} -f ${WRKSRC}/Cython/Debugger/Tests/test_libpython_in_gdb.py
+	${RM} -f ${WRKSRC}/docs/examples/tutorial/clibraries/test_queue.py
+	${RM} -f ${WRKSRC}/pyximport/test/test_reload.py
+
 .include "../../lang/python/application.mk"
-.include "../../lang/python/egg.mk"
-# for test only
-#.include "../../math/py-numpy/buildlink3.mk"
+.include "../../lang/python/wheel.mk"
 .include "../../mk/bsd.pkg.mk"
