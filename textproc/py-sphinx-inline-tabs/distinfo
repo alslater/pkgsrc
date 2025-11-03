@@ -1,0 +1,5 @@
+$NetBSD: distinfo,v 1.2 2024/01/13 06:29:07 adam Exp $
+
+BLAKE2s (sphinx_inline_tabs-2023.4.21.tar.gz) = 4cfeaac396aacbe4548ef8bb3813cf14d860de28d205007ad5cf078867625cb4
+SHA512 (sphinx_inline_tabs-2023.4.21.tar.gz) = d5c856821ca3d2b251733fe200465679dc875d66719851f89b6e38fd1898e40a2bbc97975b6bbdb7bf769fb67038bbb8dd94282504adb0977c57e8d1cf3fde5c
+Size (sphinx_inline_tabs-2023.4.21.tar.gz) = 42664 bytes

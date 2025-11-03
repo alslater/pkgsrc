@@ -1,6 +1,5 @@
-$NetBSD: distinfo,v 1.5 2021/10/29 16:15:08 adam Exp $
+$NetBSD: distinfo,v 1.10 2024/08/06 13:06:28 wiz Exp $
 
-SHA1 (sphinxcontrib-htmlhelp-2.0.0.tar.gz) = fcd0a815cd0e7941669aff2d652679f72caadb1b
-RMD160 (sphinxcontrib-htmlhelp-2.0.0.tar.gz) = 8aafaebaac69398a3c3ba0a60ac0ad7b0548f4bb
-SHA512 (sphinxcontrib-htmlhelp-2.0.0.tar.gz) = 6ed673966615f3e818e00de4b7e59c27f0a0d7b494294f804540777c580480870c36002c08d8ad626b7b41a676fe40edc0b0b5ffc6ad8080f38f59c24e157636
-Size (sphinxcontrib-htmlhelp-2.0.0.tar.gz) = 28144 bytes
+BLAKE2s (sphinxcontrib_htmlhelp-2.1.0.tar.gz) = 206cf692bb8446ecd9086791f4cfade936fc820fbb286cb9a108166346e1c35a
+SHA512 (sphinxcontrib_htmlhelp-2.1.0.tar.gz) = 9aa2650ed27712a94de6ea16954db952db9c4a0c5f509aba42e33c69ba46f7069e9ee01c09a31e531fd096882c0248cf72334404d717a9f35aafc22e3976530e
+Size (sphinxcontrib_htmlhelp-2.1.0.tar.gz) = 22617 bytes

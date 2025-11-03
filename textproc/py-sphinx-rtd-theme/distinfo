@@ -1,6 +1,5 @@
-$NetBSD: distinfo,v 1.9 2019/02/13 12:50:40 adam Exp $
+$NetBSD: distinfo,v 1.16 2024/11/13 17:36:51 adam Exp $
 
-SHA1 (sphinx_rtd_theme-0.4.3.tar.gz) = 866ef81d5015bd0fc902fa4d8e5abae0a1e15645
-RMD160 (sphinx_rtd_theme-0.4.3.tar.gz) = 4445532bc9604877e8a28c819a403bc47f49895d
-SHA512 (sphinx_rtd_theme-0.4.3.tar.gz) = 44b9309ddd041181542747c70b6e180c07aaf8cd7ee9e4c7eb9e3948685b8bd578e815c022bd991cc7f4bc7d02bb3c7a6d213e5d0c2e8214aa85d50b73e53853
-Size (sphinx_rtd_theme-0.4.3.tar.gz) = 5391190 bytes
+BLAKE2s (sphinx_rtd_theme-3.0.2.tar.gz) = a14145174dba2b2b32fa23050862895724670339072dc7660fac42718f4d8257
+SHA512 (sphinx_rtd_theme-3.0.2.tar.gz) = 280a2d80ce00df84cf2484e07da95040b62bd2d6dfc8d90222af1f86842a7a3921fb8f7e0677d03677a1376e879ef6ae43daef4c90076b266001a0f4c25b4848
+Size (sphinx_rtd_theme-3.0.2.tar.gz) = 7620463 bytes

@@ -1,12 +1,4 @@
-@comment $NetBSD: PLIST,v 1.2 2021/08/05 18:39:39 adam Exp $
-${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
-${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
-${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
-${PYSITELIB}/${EGG_INFODIR}/namespace_packages.txt
-${PYSITELIB}/${EGG_INFODIR}/not-zip-safe
-${PYSITELIB}/${EGG_INFODIR}/requires.txt
-${PYSITELIB}/${EGG_INFODIR}/top_level.txt
-${PYSITELIB}/${EGG_NAME}-nspkg.pth
+@comment $NetBSD: PLIST,v 1.5 2025/02/23 19:32:47 wiz Exp $
 ${PYSITELIB}/sphinxcontrib/serializinghtml/__init__.py
 ${PYSITELIB}/sphinxcontrib/serializinghtml/__init__.pyc
 ${PYSITELIB}/sphinxcontrib/serializinghtml/__init__.pyo
@@ -123,6 +115,8 @@ ${PYSITELIB}/sphinxcontrib/serializinghtml/locales/zh_CN/LC_MESSAGES/sphinxcontr
 ${PYSITELIB}/sphinxcontrib/serializinghtml/locales/zh_CN/LC_MESSAGES/sphinxcontrib.serializinghtml.po
 ${PYSITELIB}/sphinxcontrib/serializinghtml/locales/zh_TW/LC_MESSAGES/sphinxcontrib.serializinghtml.mo
 ${PYSITELIB}/sphinxcontrib/serializinghtml/locales/zh_TW/LC_MESSAGES/sphinxcontrib.serializinghtml.po
-${PYSITELIB}/sphinxcontrib/serializinghtml/version.py
-${PYSITELIB}/sphinxcontrib/serializinghtml/version.pyc
-${PYSITELIB}/sphinxcontrib/serializinghtml/version.pyo
+${PYSITELIB}/sphinxcontrib/serializinghtml/py.typed
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENCE.rst

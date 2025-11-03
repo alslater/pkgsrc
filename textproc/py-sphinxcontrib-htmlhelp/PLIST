@@ -1,12 +1,4 @@
-@comment $NetBSD: PLIST,v 1.2 2021/10/29 16:15:08 adam Exp $
-${PYSITELIB}/${EGG_INFODIR}/PKG-INFO
-${PYSITELIB}/${EGG_INFODIR}/SOURCES.txt
-${PYSITELIB}/${EGG_INFODIR}/dependency_links.txt
-${PYSITELIB}/${EGG_INFODIR}/namespace_packages.txt
-${PYSITELIB}/${EGG_INFODIR}/not-zip-safe
-${PYSITELIB}/${EGG_INFODIR}/requires.txt
-${PYSITELIB}/${EGG_INFODIR}/top_level.txt
-${PYSITELIB}/${EGG_NAME}-nspkg.pth
+@comment $NetBSD: PLIST,v 1.7 2025/02/23 19:31:04 wiz Exp $
 ${PYSITELIB}/sphinxcontrib/htmlhelp/__init__.py
 ${PYSITELIB}/sphinxcontrib/htmlhelp/__init__.pyc
 ${PYSITELIB}/sphinxcontrib/htmlhelp/__init__.pyo
@@ -120,9 +112,11 @@ ${PYSITELIB}/sphinxcontrib/htmlhelp/locales/zh_CN/LC_MESSAGES/sphinxcontrib.html
 ${PYSITELIB}/sphinxcontrib/htmlhelp/locales/zh_CN/LC_MESSAGES/sphinxcontrib.htmlhelp.po
 ${PYSITELIB}/sphinxcontrib/htmlhelp/locales/zh_TW/LC_MESSAGES/sphinxcontrib.htmlhelp.mo
 ${PYSITELIB}/sphinxcontrib/htmlhelp/locales/zh_TW/LC_MESSAGES/sphinxcontrib.htmlhelp.po
+${PYSITELIB}/sphinxcontrib/htmlhelp/py.typed
 ${PYSITELIB}/sphinxcontrib/htmlhelp/templates/project.hhc
 ${PYSITELIB}/sphinxcontrib/htmlhelp/templates/project.hhp
 ${PYSITELIB}/sphinxcontrib/htmlhelp/templates/project.stp
-${PYSITELIB}/sphinxcontrib/htmlhelp/version.py
-${PYSITELIB}/sphinxcontrib/htmlhelp/version.pyc
-${PYSITELIB}/sphinxcontrib/htmlhelp/version.pyo
+${PYSITELIB}/${WHEEL_INFODIR}/METADATA
+${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
+${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENCE.rst

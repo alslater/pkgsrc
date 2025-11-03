@@ -1,6 +1,5 @@
-$NetBSD: distinfo,v 1.4 2021/10/26 11:23:14 nia Exp $
+$NetBSD: distinfo,v 1.8 2024/08/06 13:07:18 wiz Exp $
 
-SHA1 (sphinxcontrib-qthelp-1.0.3.tar.gz) = 3f0d3b111e2a57ae24afc51c518ebc2e9e377cd5
-RMD160 (sphinxcontrib-qthelp-1.0.3.tar.gz) = b41a6b415c5653b0828009bcd73b18823d3cc1b8
-SHA512 (sphinxcontrib-qthelp-1.0.3.tar.gz) = 29f77e4b3f1a4868c2a34dbd853415e5d813f482cd23b982aeed42d53acba09b896d77ba930c34cce8af043bb7d64a19acff610430e942038d95a410b6e0b5fa
-Size (sphinxcontrib-qthelp-1.0.3.tar.gz) = 21658 bytes
+BLAKE2s (sphinxcontrib_qthelp-2.0.0.tar.gz) = eb140b7a2767668584d92c5f877976b337a9e14de0ed8024eb160f865d80de42
+SHA512 (sphinxcontrib_qthelp-2.0.0.tar.gz) = d551559a6f0fddf61ea24ce067e28a6bb8a61dda1f62e3a2531e43c8ec8059eb819b6a37f912425832c1b0f8dc4b830614240c38abca8a04b31ebb0ded59ec4d
+Size (sphinxcontrib_qthelp-2.0.0.tar.gz) = 17165 bytes
