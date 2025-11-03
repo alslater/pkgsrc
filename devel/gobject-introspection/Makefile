@@ -1,51 +1,56 @@
-# $NetBSD: Makefile,v 1.66 2019/10/14 03:28:01 gutteridge Exp $
+# $NetBSD: Makefile,v 1.97 2025/07/18 08:37:35 adam Exp $
 
-DISTNAME=	gobject-introspection-1.62.0
-PKG_REVISION=	1
+DISTNAME=	gobject-introspection-1.84.0
 CATEGORIES=	devel gnome
 MASTER_SITES=	${MASTER_SITE_GNOME:=sources/gobject-introspection/${PKGVERSION_NOREV:R}/}
 EXTRACT_SUFX=	.tar.xz
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
-HOMEPAGE=	https://wiki.gnome.org/Projects/GObjectIntrospection
+HOMEPAGE=	https://gi.readthedocs.io/en/latest/
 COMMENT=	GObject Introspection
 LICENSE=	gnu-gpl-v2 AND gnu-lgpl-v2
 
-DEPENDS+=	${PYPKGPREFIX}-cElementTree-[0-9]*:../../textproc/py-cElementTree
-DEPENDS+=	${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
+.include "../../lang/python/pyversion.mk"
 
-PYTHON_VERSIONS_INCOMPATIBLE=	27
+.if ${PYTHON_VERSION} > 311
+# https://gitlab.gnome.org/GNOME/gobject-introspection/-/issues/395
+DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
+.endif
 
 USE_TOOLS+=	pkg-config flex bison
 
 MESON_ARGS+=	-Dpython=${PYTHONBIN}
+MESON_ARGS+=	-Ddoctool=disabled
 
-PKGCONFIG_OVERRIDE+=	gobject-introspection-1.0.pc.in
-PKGCONFIG_OVERRIDE+=	gobject-introspection-no-export-1.0.pc.in
+PKGCONFIG_OVERRIDE+=	output/meson-private/gobject-introspection-1.0.pc
+PKGCONFIG_OVERRIDE+=	output/meson-private/gobject-introspection-no-export-1.0.pc
 
-SUBST_CLASSES+=		timet
-SUBST_STAGE.timet=	pre-configure
-SUBST_FILES.timet=	giscanner/ast.py
-SUBST_FILES.timet+=	tests/scanner/Regress-1.0-expected.gir
-.include "../../mk/bsd.prefs.mk"
-.if !empty(MACHINE_PLATFORM:MNetBSD-5.99.*) || !empty(MACHINE_PLATFORM:MNetBSD-[6-9].*) || !empty(MACHINE_PLATFORM:MMirBSD-*)
-SUBST_SED.timet=	-e 's,@TIMET_TYPENAME@,TYPE_INT64,g'
-SUBST_SED.timet+=	-e 's,@TIMET_CTYPE@,gint64,g'
-.else
-SUBST_SED.timet=	-e 's,@TIMET_TYPENAME@,TYPE_LONG,g'
-SUBST_SED.timet+=	-e 's,@TIMET_CTYPE@,glong,g'
-.endif
+PKGCONFIG_OVERRIDE_STAGE=	post-build
+
+SUBST_CLASSES+=		libdirs
+SUBST_STAGE.libdirs=	pre-configure
+SUBST_FILES.libdirs=	giscanner/ccompiler.py
+SUBST_FILES.libdirs+=	girepository/gitypelib.c
+SUBST_VARS.libdirs=	_OPSYS_LIB_DIRS
+SUBST_VARS.libdirs+=	PREFIX
 
 MAKE_ENV+=	LD_LIBRARY_PATH=${WRKSRC}/output/girepository
+# For Darwin
+MAKE_ENV+=	DYLD_LIBRARY_PATH=${WRKSRC}/output/girepository
 
-do-test:
-	cd ${WRKSRC} && ${SETENV} ${MAKE_ENV} ninja -C output test
+# Disable cache to keep fake homedir clean
+MAKE_ENV+=	GI_SCANNER_DISABLE_CACHE=yes
 
-BUILDLINK_API_DEPENDS.glib2+= glib2>=2.58.0
+post-install:
+	${INSTALL_DATA} ${WRKSRC}/output/gir/*.typelib ${DESTDIR}${PREFIX}/lib/girepository-1.0
+	${INSTALL_DATA} ${WRKSRC}/output/gir/*.gir ${DESTDIR}${PREFIX}/share/gir-1.0
+
+BUILDLINK_API_DEPENDS.glib2+= glib2>=2.82
 .include "../../devel/glib2/buildlink3.mk"
 BUILDLINK_API_DEPENDS.libffi+= libffi>=3.0.0
 .include "../../devel/libffi/buildlink3.mk"
 .include "../../devel/meson/build.mk"
+.include "../../lang/python/batteries-included.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/extension.mk"
 .include "../../mk/bsd.pkg.mk"

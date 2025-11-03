@@ -1,20 +1,35 @@
-$NetBSD: patch-giscanner_ccompiler.py,v 1.2 2019/06/03 10:47:20 prlw1 Exp $
+$NetBSD: patch-giscanner_ccompiler.py,v 1.10 2025/01/27 17:27:40 jperkin Exp $
 
-Do not set LD_LIBRARY_PATH when calling the compiler.
+Exclude system paths from LD_LIBRARY_PATH.
+Do not use -Wl,--no-as-needed on SunOS.
 
---- giscanner/ccompiler.py.orig	2019-03-02 17:10:05.000000000 +0000
+--- giscanner/ccompiler.py.orig	2024-09-13 13:08:54.000000000 +0000
 +++ giscanner/ccompiler.py
-@@ -227,13 +227,6 @@ class CCompiler(object):
-                 else:
-                     args.append('-l' + library)
+@@ -242,7 +242,7 @@ class CCompiler(object):
  
--        for envvar in runtime_path_envvar:
--            if envvar in os.environ:
--                os.environ[envvar] = \
--                    os.pathsep.join(runtime_paths + [os.environ[envvar]])
--            else:
--                os.environ[envvar] = os.pathsep.join(runtime_paths)
--
-     def get_external_link_flags(self, args, libraries):
-         # An "external" link is where the library to be introspected
-         # is installed on the system; this case is used for the scanning
+             # Ensure libraries are always linked as we are going to use ldd to work
+             # out their names later
+-            if sys.platform != 'darwin':
++            if sys.platform != 'darwin' and sys.platform != 'sunos5':
+                 args.append('-Wl,--no-as-needed')
+ 
+         for library_path in libpaths:
+@@ -260,7 +260,8 @@ class CCompiler(object):
+                     else:
+                         args.append('-Wl,-rpath,' + library_path)
+ 
+-            runtime_paths.append(library_path)
++            if library_path not in '@_OPSYS_LIB_DIRS@'.split(' '):
++                runtime_paths.append(library_path)
+ 
+         for library in libraries + extra_libraries:
+             if os.path.isfile(library):
+@@ -291,7 +292,7 @@ class CCompiler(object):
+ 
+         # Ensure libraries are always linked as we are going to use ldd to work
+         # out their names later
+-        if os.name != 'nt' and sys.platform != 'darwin':
++        if os.name != 'nt' and sys.platform != 'darwin' and sys.platform != 'sunos5':
+             args.append('-Wl,--no-as-needed')
+ 
+         for library in libraries:

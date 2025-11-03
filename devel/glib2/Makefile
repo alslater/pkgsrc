@@ -1,44 +1,77 @@
-# $NetBSD: Makefile,v 1.265 2019/11/28 09:23:32 bsiegert Exp $
+# $NetBSD: Makefile,v 1.309 2025/05/27 19:07:42 adam Exp $
 
 .include "Makefile.common"
 
 CATEGORIES=	devel gnome
 COMMENT=	Some useful routines for C programming (glib2)
 
+TOOL_DEPENDS+=	${PYPKGPREFIX}-packaging-[0-9]*:../../devel/py-packaging
+
 .include "options.mk"
 
+# failed: No probe sites found for declared provider
+MESON_ARGS+=	-Ddtrace=disabled
+MESON_ARGS+=	-Dglib_debug=disabled
+MESON_ARGS+=	-Dintrospection=disabled
 MESON_ARGS+=	-Dinstalled_tests=false
 # Avoid linux dependency on libmount-dev
-MESON_ARGS+=	-Dlibmount=false
+MESON_ARGS+=	-Dlibmount=disabled
+MESON_ARGS+=	-Dlocalstatedir=${VARBASE}
+MESON_ARGS+=	-Druntime_dir=${VARBASE}/run
+.if ${OPSYS} == "FreeBSD"
+MESON_ARGS+=	-Db_lundef=false
+.endif
 
 MAKE_ENV+=	LD_LIBRARY_PATH=${WRKSRC}/output/gio:${WRKSRC}/output/glib:${WRKSRC}/output/gobject:${WRKSRC}/output/gmodule
+# For Darwin
+MAKE_ENV+=	DYLD_LIBRARY_PATH=${WRKSRC}/output/gio:${WRKSRC}/output/glib:${WRKSRC}/output/gobject:${WRKSRC}/output/gmodule
 
-CPPFLAGS.SunOS+=	-D_XOPEN_SOURCE=600 -D__EXTENSIONS__
-LDFLAGS.SunOS+=		-liconv -lintl -lnsl -lsocket
+CPPFLAGS.SunOS+=	-D_XOPEN_SOURCE=600 -D__EXTENSIONS__ -D__stub_epoll_create
+LDFLAGS.SunOS+=		-lnsl -lsocket
+LDFLAGS.FreeBSD+=	-liconv
 
-REPLACE_PYTHON+=	gio/gio-querymodules-wrapper.py
+.include "../../mk/bsd.prefs.mk"
+.if ${USE_CROSS_COMPILE:U:tl} == yes
+MESON_CROSS_ARCH_VARS+=			growing_stack
+MESON_CROSS_OPSYS_VARS+=		have_c99_snprintf
+MESON_CROSS_OPSYS_VARS+=		have_c99_vsnprintf
+MESON_CROSS_OPSYS_VARS+=		have_strlcpy
+MESON_CROSS_OPSYS_VARS+=		have_unix98_printf
+MESON_CROSS.NetBSD.have_c99_snprintf=	true
+MESON_CROSS.NetBSD.have_c99_vsnprintf=	true
+MESON_CROSS.NetBSD.have_strlcpy=	true
+MESON_CROSS.NetBSD.have_unix98_printf=	true
+MESON_CROSS.hppa.growing_stack=		true
+.endif
+
 REPLACE_PYTHON+=	gio/tests/gengiotypefuncs.py
+REPLACE_PYTHON+=	gio/tests/memory-monitor-dbus.py.in
+REPLACE_PYTHON+=	gio/tests/memory-monitor-portal.py.in
 REPLACE_PYTHON+=	gio/tests/static-link.py
 REPLACE_PYTHON+=	glib/update-gtranslit.py
 REPLACE_PYTHON+=	gobject/tests/mkenums.py
-REPLACE_PYTHON+=	tests/gen-casefold-txt.py
-REPLACE_PYTHON+=	tests/gen-casemap-txt.py
 
-FILES_SUBST+=		GIO_MODULES_DIR=${PREFIX}/lib/gio/modules
+SUBST_CLASSES+=		meson
+SUBST_STAGE.meson=	pre-configure
+SUBST_FILES.meson+=	meson.build
+SUBST_MESSAGE.meson=	Forcing meson to find proper Python.
+SUBST_VARS.meson+=	PYTHONBIN
+
+GIO_MODULES_DIR=	${PREFIX}/lib/gio/modules
+OWN_DIRS=		${GIO_MODULES_DIR}
+
+FILES_SUBST+=		GIO_MODULES_DIR=${GIO_MODULES_DIR}
 FILES_SUBST+=		GIO_QUERYMODULES=${PREFIX}/bin/gio-querymodules
 FILES_SUBST+=		GLIB_COMPILE_SCHEMAS=${PREFIX}/bin/glib-compile-schemas
 FILES_SUBST+=		GLIB_SCHEMAS_DIR=${PREFIX}/share/glib-2.0/schemas
 
-OWN_DIRS=		${GIO_MODULES_DIR}
-
 BUILD_DEFS+=		VARBASE
-SUBST_CLASSES+=		dbusdb
-SUBST_MESSAGE.dbusdb=	Adjust dbus machine uuid path to dbus package
-SUBST_STAGE.dbusdb=	pre-configure
-SUBST_FILES.dbusdb=	gio/gdbusconnection.c
-SUBST_FILES.dbusdb+=	gio/gdbusprivate.c
-SUBST_FILES.dbusdb+=	po/*.po
-SUBST_SED.dbusdb=	-e 's,/var/lib/dbus,${VARBASE}/db/dbus,g'
+
+SUBST_CLASSES+=		python
+SUBST_MESSAGE.python=	Replace PYTHON.
+SUBST_STAGE.python=	pre-configure
+SUBST_FILES.python=	glib/gtester-report.in
+SUBST_SED.python=	-e 's,@PYTHON@,${PYTHONBIN},'
 
 SUBST_CLASSES+=		xdg
 SUBST_MESSAGE.xdg=	Adjust XDG_DATA_DIRS so schemas and pixbuf loaders are found
@@ -60,17 +93,26 @@ PKGCONFIG_OVERRIDE+=	output/meson-private/gthread-2.0.pc
 PKGCONFIG_OVERRIDE_STAGE=	post-configure
 
 # to run gdbus-codegen to generate gdbus-daemon-generated.{h,c}
-TOOL_DEPENDS+=		${PYPKGPREFIX}-expat-[0-9]*:../../textproc/py-expat
 PYTHON_FOR_BUILD_ONLY=	yes
+
+.include "../../mk/compiler.mk"
+
+# Work around GCC 4.x bug https://gcc.gnu.org/bugzilla/show_bug.cgi?id=54113
+# preventing a successful CentOS 7 build
+.if ${CC_VERSION:Mgcc-4.*}
+BUILDLINK_TRANSFORM+=	rm:-Werror=missing-prototypes
+.endif
 
 post-extract:
 	${CHMOD} +x ${WRKSRC}/gio/tests/gengiotypefuncs.py
 
 .include "../../converters/libiconv/buildlink3.mk"
 .include "../../devel/gettext-lib/buildlink3.mk"
-.include "../../devel/pcre/buildlink3.mk"
-.include "../../devel/meson/build.mk"
 .include "../../devel/libffi/buildlink3.mk"
+.include "../../devel/meson/build.mk"
+.include "../../devel/pcre2/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/application.mk"
+.include "../../lang/python/batteries-included.mk"
+.include "../../lang/python/tool.mk"
 .include "../../mk/bsd.pkg.mk"

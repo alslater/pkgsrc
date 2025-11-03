@@ -1,11 +1,11 @@
-$NetBSD: patch-glib_tests_hash.c,v 1.1 2019/06/21 20:21:00 prlw1 Exp $
+$NetBSD: patch-glib_tests_hash.c,v 1.3 2020/03/04 15:11:48 wiz Exp $
 
 Revert GHashTable improvements
 https://gitlab.gnome.org/GNOME/glib/merge_requests/208
 
 to fix PR pkg/54310
 
---- glib/tests/hash.c.orig	2019-06-10 17:47:20.000000000 +0000
+--- glib/tests/hash.c.orig	2020-02-27 16:12:52.000000000 +0000
 +++ glib/tests/hash.c
 @@ -1353,9 +1353,6 @@ struct _GHashTable
    gint             nnodes;
