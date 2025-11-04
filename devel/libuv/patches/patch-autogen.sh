@@ -1,17 +1,16 @@
-$NetBSD: patch-autogen.sh,v 1.1 2015/06/11 13:32:35 fhajny Exp $
+$NetBSD: patch-autogen.sh,v 1.3 2023/05/19 20:35:47 adam Exp $
 
-Use libtoolize on Darwin instead of glibtoolize
+On Darwin, use libtoolize instead of glibtoolize
 
---- autogen.sh.orig	2015-06-05 17:45:58.000000000 +0000
+--- autogen.sh.orig	2023-05-19 11:21:01.000000000 +0000
 +++ autogen.sh
-@@ -16,10 +16,6 @@
+@@ -23,9 +23,6 @@ else
+     export LIBUV_RELEASE=false
+ fi
  
- cd `dirname "$0"`
- 
--if [ "$LIBTOOLIZE" = "" ] && [ "`uname`" = "Darwin" ]; then
+-if [ "${LIBTOOLIZE:-}" = "" ] && [ "`uname`" = "Darwin" ]; then
 -  LIBTOOLIZE=glibtoolize
 -fi
--
+ 
  ACLOCAL=${ACLOCAL:-aclocal}
  AUTOCONF=${AUTOCONF:-autoconf}
- AUTOMAKE=${AUTOMAKE:-automake}
