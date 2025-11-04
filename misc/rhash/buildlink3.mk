@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.1 2014/04/18 21:21:30 wiz Exp $
+# $NetBSD: buildlink3.mk,v 1.6 2023/10/24 22:10:04 wiz Exp $
 
 BUILDLINK_TREE+=	rhash
 
@@ -6,10 +6,8 @@ BUILDLINK_TREE+=	rhash
 RHASH_BUILDLINK3_MK:=
 
 BUILDLINK_API_DEPENDS.rhash+=	rhash>=1.3.1
-BUILDLINK_ABI_DEPENDS.rhash?=	rhash>=1.3.8nb1
+BUILDLINK_ABI_DEPENDS.rhash+=	rhash>=1.4.4nb1
 BUILDLINK_PKGSRCDIR.rhash?=	../../misc/rhash
-
-BUILDLINK_DEPMETHOD.rhash?=	build
 
 .include "../../security/openssl/buildlink3.mk"
 .endif	# RHASH_BUILDLINK3_MK
