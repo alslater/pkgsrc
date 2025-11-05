@@ -1,11 +1,11 @@
-# $NetBSD: buildlink3.mk,v 1.24 2023/10/06 19:15:20 adam Exp $
+# $NetBSD: buildlink3.mk,v 1.20 2022/11/14 18:44:05 adam Exp $
 
 BUILDLINK_TREE+=	llvm
 
 .if !defined(LLVM_BUILDLINK3_MK)
 LLVM_BUILDLINK3_MK:=
 
-BUILDLINK_API_DEPENDS.llvm+=	llvm>=16.0.0<17
+BUILDLINK_API_DEPENDS.llvm+=	llvm>=15
 BUILDLINK_PKGSRCDIR.llvm?=	../../lang/llvm
 
 LLVM_CONFIG_PATH?=		${BUILDLINK_PREFIX.llvm}/bin/llvm-config
@@ -33,7 +33,6 @@ BUILDLINK_FILES.llvm+=		bin/llvm-cvtres
 BUILDLINK_FILES.llvm+=		bin/llvm-cxxdump
 BUILDLINK_FILES.llvm+=		bin/llvm-cxxfilt
 BUILDLINK_FILES.llvm+=		bin/llvm-cxxmap
-BUILDLINK_FILES.llvm+=		bin/llvm-debuginfo-analyzer
 BUILDLINK_FILES.llvm+=		bin/llvm-debuginfod
 BUILDLINK_FILES.llvm+=		bin/llvm-debuginfod-find
 BUILDLINK_FILES.llvm+=		bin/llvm-diff
@@ -53,7 +52,6 @@ BUILDLINK_FILES.llvm+=		bin/llvm-lib
 BUILDLINK_FILES.llvm+=		bin/llvm-libtool-darwin
 BUILDLINK_FILES.llvm+=		bin/llvm-link
 BUILDLINK_FILES.llvm+=		bin/llvm-lipo
-BUILDLINK_FILES.llvm+=		bin/llvm-lit
 BUILDLINK_FILES.llvm+=		bin/llvm-lto
 BUILDLINK_FILES.llvm+=		bin/llvm-lto2
 BUILDLINK_FILES.llvm+=		bin/llvm-mc
@@ -75,7 +73,6 @@ BUILDLINK_FILES.llvm+=		bin/llvm-readelf
 BUILDLINK_FILES.llvm+=		bin/llvm-readobj
 BUILDLINK_FILES.llvm+=		bin/llvm-reduce
 BUILDLINK_FILES.llvm+=		bin/llvm-remark-size-diff
-BUILDLINK_FILES.llvm+=		bin/llvm-remarkutil
 BUILDLINK_FILES.llvm+=		bin/llvm-rtdyld
 BUILDLINK_FILES.llvm+=		bin/llvm-sim
 BUILDLINK_FILES.llvm+=		bin/llvm-size
