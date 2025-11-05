@@ -1,6 +1,6 @@
-# $NetBSD: Makefile,v 1.267 2022/10/10 20:34:15 he Exp $
+# $NetBSD: Makefile,v 1.299 2024/01/06 19:00:19 he Exp $
 
-DISTNAME=	rustc-1.63.0-src
+DISTNAME=	rustc-1.74.1-src
 PKGNAME=	${DISTNAME:S/rustc/rust/:S/-src//}
 CATEGORIES=	lang
 MASTER_SITES=	https://static.rust-lang.org/dist/
@@ -12,11 +12,11 @@ LICENSE=	mit OR apache-2.0
 
 CONFLICTS+=	rust-bin-[0-9]*
 
-# LLVM uses gcc7, follow suit.  Also, uses -std=c++14
-GCC_REQD+=	8
-
+# LLVM uses -std=c++17
+USE_CXX_FEATURES+=      c++17
+GCC_REQD=               8
 USE_GCC_RUNTIME=	yes
-USE_LANGUAGES=		c c++11
+USE_LANGUAGES=		c c++17
 USE_LIBTOOL=		yes
 USE_TOOLS+=		bash grep gmake perl:build pkg-config
 
@@ -27,6 +27,8 @@ BROKEN_ON_PLATFORM+=	NetBSD-[1-7].*-*
 BROKEN_ON_PLATFORM+=	NetBSD-8.*-*arm*
 BROKEN_ON_PLATFORM+=	NetBSD-8.*-aarch64
 BROKEN_ON_PLATFORM+=	NetBSD-8.*-sparc64
+BROKEN_ON_PLATFORM+=	NetBSD-8.*-powerpc
+BROKEN_ON_PLATFORM+=	NetBSD-8.*-i386
 
 HAS_CONFIGURE=		yes
 PYTHON_FOR_BUILD_ONLY=	yes
@@ -64,12 +66,22 @@ CONFIGURE_ARGS+=	--enable-vendor
 # cargo defaults to using the number of available CPUs
 MAKE_ENV+=		CARGO_BUILD_JOBS=${_MAKE_JOBS_N}
 
+# Rust builds some bundled components with strict version requirements, ensure
+# that any conflicting packages pulled in via dependencies are not buildlinked.
+BUILDLINK_FILES_CMD.libssh2=	${TRUE}
+BUILDLINK_FILES_CMD.xz=		${TRUE}
+MAKE_ENV+=			LZMA_API_STATIC=1
+
 # MacOS X 10.7 is the oldest supported version. See
 # ${WRKSRC}/src/bootstrap/lib.rs
 MAKE_ENV.Darwin+=	MACOSX_DEPLOYMENT_TARGET="10.7"
 
 CFLAGS.SunOS+=		-D_POSIX_PTHREAD_SEMANTICS
 MAKE_ENV.SunOS+=	AR=gar
+
+# Debugging of crate resolution
+# Annoyingly, this makes the powerpc build succeed...
+#MAKE_ENV+=		RUSTC_LOG=rustc_metadata
 
 UNLIMIT_RESOURCES+=	cputime stacksize datasize virtualsize
 
@@ -101,12 +113,14 @@ BUILD_TARGET?=		dist
 BUILD_TARGET?=		build
 .endif
 
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-powerpc) || \
-    !empty(MACHINE_PLATFORM:MNetBSD-*-earmv7hf) || \
-    !empty(TARGET:Marmv7-unknown-netbsd-eabihf)
+.if ${MACHINE_PLATFORM:MNetBSD-*-powerpc} || \
+    ${MACHINE_PLATFORM:MNetBSD-*-earmv[67]hf} || \
+    ${MACHINE_PLATFORM:MNetBSD-*-mipsel} || \
+    !empty(TARGET:Marmv[67]-unknown-netbsd-eabihf) || \
+    !empty(TARGET:Mmipsel-unknown-netbsd)
 # Bootstrapping on NetBSD/powerpc requires no debug-info from rustc
 # (both for amd64->powerpc built and powerpc->powerpc built bootstrap bits)
-# Also try to downsize the armv7 build.
+# Also try to downsize the armv[67] build.
 CONFIGURE_ARGS+=	--disable-debug
 CONFIGURE_ARGS+=	--disable-debug-assertions
 CONFIGURE_ARGS+=	--disable-llvm-release-debuginfo
@@ -118,14 +132,32 @@ CONFIGURE_ARGS+=	--debuginfo-level-tests=0
 .endif
 
 # Only build the ARM target on/for this host, due to resource constraints
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-earmv7hf)
+.if ${MACHINE_PLATFORM:MNetBSD-*-earmv[67]hf}
 CONFIGURE_ARGS+=	--set llvm.targets="ARM"
 .endif
 # When cross-building for ARM on X86, X86 needs to go along due
 # to 2-stage build process
-.if !empty(TARGET:Marmv7-unknown-netbsd-eabihf)
+.if !empty(TARGET:Marmv[67]-unknown-netbsd-eabihf)
 CONFIGURE_ARGS+=	--set llvm.targets="ARM;X86"
 .endif
+# Same for mips:
+.if ${MACHINE_PLATFORM:MNetBSD-*-mipsel}
+CONFIGURE_ARGS+=	--set llvm.targets="Mips"
+.endif
+.if !empty(TARGET:Mmipsel-unknown-netbsd)
+CONFIGURE_ARGS+=	--set llvm.targets="Mips;X86"
+.endif
+
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/backtrace/ci/android-sdk.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/backtrace/ci/debuglink.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/backtrace/ci/run.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/backtrace/ci/run-docker.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/core/src/unicode/printable.py
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/stdarch/ci/build-std-detect.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/stdarch/ci/dox.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/stdarch/ci/run-docker.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/stdarch/ci/run.sh
+CHECK_INTERPRETER_SKIP+=	lib/rustlib/src/rust/library/stdarch/ci/style.sh
 
 .if ${OPSYS} == "NetBSD"
 # This block contains information about known trouble on NetBSD and workarounds.
@@ -150,8 +182,8 @@ CONFIGURE_ARGS+=	--set llvm.targets="ARM;X86"
 # PR is open for this.)  \todo Understand and fix.
 #
 # If we aren't on 9-current, and are on 8.x or 9.x, avoid parallel.
-# \todo Consider avoiding setting this on netbsd-9 past the fix.
-.  if ${OPSYS} == "NetBSD" && ${OPSYS_VERSION} < 099957
+# Release 9.x and 9.1 or later is OK.
+.  if ${OPSYS} == "NetBSD" && 090999 < ${OPSYS_VERSION} && ${OPSYS_VERSION} < 090900
 MAKE_JOBS_SAFE?=	no
 .  endif
 
@@ -173,7 +205,7 @@ BUILDLINK_TRANSFORM.NetBSD+=	rm:-Wl,--enable-new-dtags
 # breaks linking, see https://github.com/rust-lang/rust/issues/81790.  Until
 # this can be located (proving difficult!) we just force it.
 #
-.if !empty(MACHINE_PLATFORM:MDarwin-*-aarch64)
+.if ${MACHINE_PLATFORM:MDarwin-*-aarch64}
 BUILDLINK_TRANSFORM+=	opt:x86_64:arm64
 .endif
 
@@ -185,50 +217,50 @@ BUILDLINK_TRANSFORM+=	opt:x86_64:arm64
 #
 DISTFILES:=		${DEFAULT_DISTFILES}
 
-.if !empty(MACHINE_PLATFORM:MDarwin-*-aarch64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MDarwin-*-aarch64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		aarch64-apple-darwin
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MDarwin-*-x86_64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MDarwin-*-x86_64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		x86_64-apple-darwin
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MLinux-*-aarch64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MLinux-*-aarch64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		aarch64-unknown-linux-gnu
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MLinux-*-earmv6hf) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MLinux-*-earmv6hf} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		arm-unknown-linux-gnueabihf
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MLinux-*-earmv7hf) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MLinux-*-earmv7hf} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		armv7-unknown-linux-gnueabihf
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MLinux-*-i386) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MLinux-*-i386} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		i686-unknown-linux-gnu
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MLinux-*-x86_64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MLinux-*-x86_64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		x86_64-unknown-linux-gnu
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
@@ -239,8 +271,8 @@ DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 # are built on.  If you wish to target Oracle Solaris you'll need to create an
 # x86_64-sun-solaris bootstrap and comment out the overrides.
 #
-.if !empty(MACHINE_PLATFORM:MSunOS-*-x86_64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.0
+.if ${MACHINE_PLATFORM:MSunOS-*-x86_64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		x86_64-unknown-illumos
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 SITES.${RUST_STAGE0}=	https://us-central.manta.mnx.io/pkgsrc/public/pkg-bootstraps/
@@ -252,15 +284,15 @@ CONFIGURE_ARGS+=	--build=${RUST_ARCH}
 CONFIGURE_ARGS+=	--host=${RUST_ARCH}
 CONFIGURE_ARGS+=	--target=${RUST_ARCH}
 .endif
-.if !empty(MACHINE_PLATFORM:MFreeBSD-*-x86_64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MFreeBSD-*-x86_64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH:=		x86_64-unknown-freebsd
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.gz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-i386) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MNetBSD-*-i386} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH=		i586-unknown-netbsd
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
@@ -279,38 +311,27 @@ pre-build-fix-paxctl:
 	${TOOLS_PLATFORM.paxctl} +am ${WRKDIR}/rust-bootstrap/bin/cargo
 	${TOOLS_PLATFORM.paxctl} +am ${WRKDIR}/rust-bootstrap/bin/rustc
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-x86_64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
+.if ${MACHINE_PLATFORM:MNetBSD-*-x86_64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
 RUST_ARCH=		x86_64-unknown-netbsd
 RUST_STAGE0:=		rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=	rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 DISTFILES:=		${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-powerpc) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=	1.62.1
-RUST_ARCH=		powerpc-unknown-netbsd
+.if ${MACHINE_PLATFORM:MNetBSD-*-powerpc} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=	1.73.0
+RUST_ARCH=		powerpc-unknown-netbsd-nb1
 
 # Cross-built against NetBSD 9.0
-.  if empty(OS_VERSION:M8.*) || make(distinfo) || make(makesum) || make(mdi)
-RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}90.tar.xz
-RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}90.tar.xz
-DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
-SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
-SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
-.  endif
-
-# Cross-built against NetBSD 8.0
-.  if !empty(OS_VERSION:M8.*) || make(distinfo) || make(makesum) || make(mdi)
 RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
 SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
-.  endif
 
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-aarch64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=		1.62.1
+.if ${MACHINE_PLATFORM:MNetBSD-*-aarch64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=		1.73.0
 RUST_ARCH=			aarch64-unknown-netbsd
 RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
@@ -318,8 +339,8 @@ DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
 SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-aarch64eb) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=		1.62.1
+.if ${MACHINE_PLATFORM:MNetBSD-*-aarch64eb} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=		1.73.0
 RUST_ARCH=			aarch64_be-unknown-netbsd
 RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
@@ -327,8 +348,8 @@ DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
 SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-sparc64) || make(distinfo) || make (makesum) || make(mdi)
-RUST_STAGE0_VER=		1.62.1
+.if ${MACHINE_PLATFORM:MNetBSD-*-sparc64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_STAGE0_VER=		1.73.0
 RUST_ARCH=			sparc64-unknown-netbsd
 RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
@@ -336,9 +357,36 @@ DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
 SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
 SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
 .endif
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-earmv7hf) || make(distinfo) || make (makesum) || make(mdi)
+.if ${MACHINE_PLATFORM:MNetBSD-*-earmv7hf} || make(distinfo) || make (makesum) || make(mdi)
 RUST_ARCH=			armv7-unknown-netbsd-eabihf
-RUST_STAGE0_VER=		1.62.1
+RUST_STAGE0_VER=		1.73.0
+RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
+RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
+DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
+SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
+SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
+.endif
+.if ${MACHINE_PLATFORM:MNetBSD-*-earmv6hf} || make(distinfo) || make (makesum) || make(mdi)
+RUST_ARCH=			armv6-unknown-netbsd-eabihf
+RUST_STAGE0_VER=		1.73.0
+RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
+RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
+DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
+SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
+SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
+.endif
+.if ${MACHINE_PLATFORM:MNetBSD-*-mipsel} || make(distinfo) || make (makesum) || make(mdi)
+RUST_ARCH=			mipsel-unknown-netbsd
+RUST_STAGE0_VER=		1.73.0
+RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
+RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
+DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
+SITES.${RUST_STAGE0}=		${MASTER_SITE_LOCAL:=rust/}
+SITES.${RUST_STD_STAGE0}=	${MASTER_SITE_LOCAL:=rust/}
+.endif
+.if ${MACHINE_PLATFORM:MNetBSD-*-riscv64} || make(distinfo) || make (makesum) || make(mdi)
+RUST_ARCH=			riscv64gc-unknown-netbsd
+RUST_STAGE0_VER=		1.73.0
 RUST_STAGE0:=			rust-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 RUST_STD_STAGE0:=		rust-std-${RUST_STAGE0_VER}-${RUST_ARCH}.tar.xz
 DISTFILES:=			${DISTFILES} ${RUST_STAGE0} ${RUST_STD_STAGE0}
@@ -355,8 +403,8 @@ RUST_BOOTSTRAP_PATH?=	${WRKDIR}/rust-bootstrap
 .endif
 
 .if ${OPSYS} == "SunOS"
-BUILD_DEPENDS+=		coreutils>=0:../../sysutils/coreutils
-BUILD_DEPENDS+=		gzip>=0:../../archivers/gzip
+TOOL_DEPENDS+=		coreutils>=0:../../sysutils/coreutils
+TOOL_DEPENDS+=		gzip>=0:../../archivers/gzip
 TOOLS_CREATE+=		md5sum
 TOOLS_PATH.md5sum=	${PREFIX}/bin/gmd5sum
 TOOLS_PLATFORM.gzcat=	${PREFIX}/bin/gzip -cd
@@ -377,33 +425,73 @@ SUBST_VARS.rpath=	PREFIX
 # updating and verification.
 #
 
-CKSUM_CRATES+=	vendor/cc-1.0.69
-CKSUMS+=	6dde684bdcc1bb03a808784ce8ccc0721f53bfdf87b84c607045aada916730ba
-CKSUMS+=	dd09a6ad92c998b3cc15d81b3b56a70544886fe0c22d659406aa25d734fe2fd1
+CKSUM_CRATES+=	vendor/cc-1.0.73
+CKSUMS+=	38970d678de0efb4b5e2978265daa8a613a1db35fc42e669621b03fc56d5b138
+CKSUMS+=	65de0d6593a4256e5fcaf898f9468d71bab672c70a2dfab3dcb8514e9b72819c
+
+CKSUM_CRATES+=	vendor/cc
+CKSUMS+=	17a4659710aa290c4ed9c23063c7b202c5bcf2a84de33aa1f01fc6fded69a1f8
+CKSUMS+=	a19bcb1a561d4ba5846f8f89fcfe6f05a3cb2e79baf8f21f53f0fba012db1b7f
 
 CKSUM_CRATES+=	vendor/libc
-CKSUMS+=	8826303cad14a575fa8189f67c7df52a7e11f8eea0381d7d389ff8206757de9e
-CKSUMS+=	f79ec5ad2156182d51cf70d80401293da6f8277983dbdedfd2e6927133440e42
-CKSUMS+=	976b07a13e195840b67c166a62318abfa9ffc8d5ebbb0358f199dd213ec98d1b
-CKSUMS+=	ee760c856bb491d885e9458fb723c53db7988ba775e59ab5b9ee8be438e69cf4
-CKSUMS+=	cb1560bf8ffcc7b2726a27b433efac90e726292960626f3064bd2c6b7f861a55
-CKSUMS+=	683f56837b31b9f0f5bace3080c5242b86f57f71d1126e352be24af9874ab531
+CKSUMS+=	55ce4624745e31ad226b47fde177a46176a89da3fa5030663673a115102471f9
+CKSUMS+=	09ab15cd50245f4ced230b7919657ab170e06443bb0ed4baf4449d3472f5f656
+CKSUMS+=	90dd33ef20dc3be8aef5bd152a6a06e7ab34f9527b3978487b593aaa16a907bd
+CKSUMS+=	ec1cb2b8522ce7d35c9fce2f5b17a1a7e28cae9836f1cf11e267f222b72dff60
+CKSUMS+=	b1660c631a599a3355116e7485b88ab2f8f2929c2e37851a763431387b902f14
+CKSUMS+=	990d1c6c01db31b9e5541128e4987b114f39c6808d94a5f8f048f492cfb96d78
+
+CKSUM_CRATES+=	vendor/libc-0.2.138
+CKSUMS+=	107a4aa396b8383c66e0ace2f941450b4b69146558cdc4d9fbe33eeab51760f1
+CKSUMS+=	4be83bef456569d59405edf134e7fe8eff78f3fe35f1efd60e15405d5c822725
+
+CKSUM_CRATES+=	vendor/libc-0.2.140
+CKSUMS+=	4493317993af390d8aafc2cb7ace4c349dfc9d2451fd666844f04a4fa1f47442
+CKSUMS+=	537a01c3cd5507f493616193991e1135c7896aae3fc92d98ec9facbfe243d980
+CKSUMS+=	6442ed05eb390d44a03daa9800af1030f2ee3e61db98675262c227b28de51937
+CKSUMS+=	ec554c837999c718786debfcfe2241984193751fcd52156323b418d96319aa95
+
+CKSUM_CRATES+=	vendor/libc-0.2.146
+#CKSUMS+=	6442ed05eb390d44a03daa9800af1030f2ee3e61db98675262c227b28de51937
+#CKSUMS+=	ec554c837999c718786debfcfe2241984193751fcd52156323b418d96319aa95
+#CKSUMS+=	6a60a542639528a0a34b9c9a7298973ec2cf1449c59546b7b30dcef6c51874dd
+#CKSUMS+=	ec1cb2b8522ce7d35c9fce2f5b17a1a7e28cae9836f1cf11e267f222b72dff60
 
 CKSUM_CRATES+=	vendor/lzma-sys
 CKSUMS+=	6fd5e9245db34c6f557b8bfcaf03db82fc88c3b06dbfbb5f03b2bcd138983ef9
 CKSUMS+=	5e252578b5d266f6a4c8dc9f71ca7a91536ccb8c5c7d7753b82f12ec886459ef
 
 CKSUM_CRATES+=	vendor/stacker
-CKSUMS+=	cee329550bad2ed1182abb71db9c24558a91b12e1eab8d9a48e23b997bb8f04e
-CKSUMS+=	79915b243d02df1dc698f5c2de3a9356c6c296d2dedb06d9035dbcc2f8972cf4
+CKSUMS+=	59ca847887cf19387119d18c57f08d5a8520d714876ca0142b8f1c001ecde06b
+CKSUMS+=	03be8ae293b713fe6e9703e4809dd68caaec992bae6777914ffddae8da2a9bc7
+
+CKSUM_CRATES+=	vendor/crossbeam-utils
+CKSUMS+=	5f75132808d9e8d6e266fe77f9e20bbc35855a1c37a5dbc0940b3e989bca1a94
+CKSUMS+=	3d7c747108434546837b1c5664111c9146fcbfb2e084c95f8ce0be970d652421
+
+CKSUM_CRATES+=	vendor/crossbeam-utils-0.8.14
+CKSUMS+=	3314524d2afa0360c947455a6e6566fb54ebf909c99479ca3b7435741fd3293e
+CKSUMS+=	eaef167dea04efa811cf0d53de98feac6063ec2196eccd315d345ef86c551aaa
+
+CKSUM_CRATES+=	vendor/crossbeam-epoch
+CKSUMS+=	5f75132808d9e8d6e266fe77f9e20bbc35855a1c37a5dbc0940b3e989bca1a94
+CKSUMS+=	3d7c747108434546837b1c5664111c9146fcbfb2e084c95f8ce0be970d652421
+
+CKSUM_CRATES+=	vendor/openssl-sys
+CKSUMS+=	b2cbaa5bfac5e7d5550aa0eb8e5c65a9f7e86a3692b759fb13330ef6e3b26b30
+CKSUMS+=	b303bf9ceae9fcffa4a0420ea858675d827fc2d75c358f8236e44274d58be1a0
+CKSUMS+=	33f814dba4ac9942266157cbe3dc8eadf5e477090370a92c36c53f916fa45d48
+CKSUMS+=	4f14cac64c027b3bea07908bae58184b31f6da6326f8ba5a6935d726ab2e1d20
 
 CKSUM_CRATES+=	vendor/openssl-src
-CKSUMS+=	65a4daf6f0d6ad80a83d63614288c3a9df9adcebe5f3d7ff2ad34dd3d2c75196
-CKSUMS+=	7ff3cb1d807d93defda37c2ec01e01223295bcc3d20d218436c07e89cae80fe2
+CKSUMS+=	683c9ed1a7953f7f9da43412010de95ba733860a18bc28a4fc3cbcc6ac93c4d7
+CKSUMS+=	d83220880699d6a4d9a4e265d19b7896ca4dc7235e3e2f546c5fa06222bdc258
+CKSUMS+=	090744f85cf99a9b8412c23fca1eabb61eb45d830f0f9f0e7309be2572c1e827
+CKSUMS+=	ead7bdeee121f1357b99741b175a564c8b7026f694cbc388aae2a86b3bae913f
 
-CKSUM_CRATES+=  vendor/curl-sys
-CKSUMS+=	a86f39245a91aad4813ef5cea17ce9e47a4b6c2f3a652d4d118d6b66824da7be
-CKSUMS+=	66f899628ffa3544e63ee5ca515aa9c007386f117c862e53a9102780765e90e1
+CKSUM_CRATES+=	vendor/nix
+CKSUMS+=	c3e13a2edea54d190a4b051f62efc97953c00b5051a9fda0e39e3bc732a31939
+CKSUMS+=	263bd7ace66a4cfee3de18532f61c187327fcbd564666b4f97c4b01ae6885d98
 
 SUBST_CLASSES+=		cksum
 SUBST_STAGE.cksum=	pre-configure
@@ -549,13 +637,13 @@ stage0-bootstrap: install
 		${CP} `${PKG_CC} -print-file-name=$${lib}` \
 		    ${BOOTSTRAP_TMPDIR}/lib/pkgsrc/; \
 	done; \
-	for lib in libLLVM-14.so libcrypto.so.1.1 libcurl.so.4 \
-		   libssl.so.1.1 libz.so.1; do \
+	for lib in libLLVM-15.so libcrypto.so.1.1 libcurl.so.4 \
+		   libssl.so.1.1 libz.so.1 libzstd.so.1; do \
 		${CP} ${PREFIX}/lib/$${lib} ${BOOTSTRAP_TMPDIR}/lib/pkgsrc/; \
 	done; \
 	for lib in libiconv.so.2 libidn2.so.0 libintl.so.8 liblber.so.2 \
 		   libldap.so.2 libnghttp2.so.14 libsasl2.so.3 \
-		   libssh2.so.1 libunistring.so.2; do \
+		   libssh2.so.1 libunistring.so.5; do \
 		${CP} ${PREFIX}/lib/$${lib} ${BOOTSTRAP_TMPDIR}/lib/pkgsrc/; \
 	done; \
 	for f in ${BOOTSTRAP_TMPDIR}/bin/*; do \
@@ -596,21 +684,26 @@ stage0-bootstrap: install
 
 ## Issues specific to: bootstrap AND NetBSD follow
 
-# rust i386 bootstraps are built for 8.0 and still depend on libstdc++.so.8.
+# rust i386 and sparc64 bootstraps are built for 8.0
+# and still depend on libstdc++.so.8.
 # Pull in compat80 on 9.x and newer.
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-i386) && empty(OS_VERSION:M8.*)
-BUILD_DEPENDS+=	compat80>=0:../../emulators/compat80
+.if (${MACHINE_PLATFORM:MNetBSD-*-i386} || \
+     ${MACHINE_PLATFORM:MNetBSD-*-sparc64}) \
+    && empty(OS_VERSION:M8.*)
+TOOL_DEPENDS+=	compat80>=0:../../emulators/compat80
 .endif
 
 .include "../../mk/atomic64.mk"
 # This is for when we build natively:
-.if !empty(MACHINE_PLATFORM:MNetBSD-*-powerpc) || \
-    !empty(MACHINE_PLATFORM:MNetBSD-*-i386)
+.if ${MACHINE_PLATFORM:MNetBSD-*-powerpc} || \
+    ${MACHINE_PLATFORM:MNetBSD-*-i386} || \
+    ${MACHINE_PLATFORM:MNetBSD-*-mipsel} || \
+    ${MACHINE_PLATFORM:MNetBSD-*-riscv64}
 # Make libatomic library available via a unique directory:
 DEPENDS+=	libatomic-links>=0:../../devel/libatomic-links
 .endif
 
-BUILD_DEPENDS+= cmake-[0-9]*:../../devel/cmake
+TOOL_DEPENDS+= cmake-[0-9]*:../../devel/cmake
 .include "../../devel/cmake/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/tool.mk"

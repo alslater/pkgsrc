@@ -1,51 +1,37 @@
-$NetBSD: patch-src_bootstrap_bootstrap.py,v 1.13 2022/10/10 20:34:15 he Exp $
+$NetBSD: patch-src_bootstrap_bootstrap.py,v 1.21 2024/01/06 19:00:19 he Exp $
 
 Use `uname -p` on NetBSD, as that is reliable and sensible there.
-Handle earmv7hf for NetBSD.
-Default to non-verbose compilation.
+Handle earmv[67]hf for NetBSD.
 
---- src/bootstrap/bootstrap.py.orig	2021-02-10 17:36:44.000000000 +0000
+--- src/bootstrap/bootstrap.py.orig	2023-07-12 03:32:40.000000000 +0000
 +++ src/bootstrap/bootstrap.py
-@@ -278,6 +278,11 @@ def default_build_triple(verbose):
-         'OpenBSD': 'unknown-openbsd'
+@@ -271,6 +271,11 @@ def default_build_triple(verbose):
+         'GNU': 'unknown-hurd',
      }
  
 +    # For NetBSD, use `uname -p`, as there it is reliable & sensible
-+    if ostype == 'NetBSD':
++    if kernel == 'NetBSD':
 +        cputype = subprocess.check_output(
 +            ['uname', '-p']).strip().decode(default_encoding)
 +
      # Consider the direct transformation first and then the special cases
-     if ostype in ostype_mapper:
-         ostype = ostype_mapper[ostype]
-@@ -331,6 +336,7 @@ def default_build_triple(verbose):
-     cputype_mapper = {
-         'BePC': 'i686',
-         'aarch64': 'aarch64',
-+        'aarch64eb': 'aarch64',
-         'amd64': 'x86_64',
-         'arm64': 'aarch64',
-         'i386': 'i686',
-@@ -369,10 +375,12 @@ def default_build_triple(verbose):
-             ostype = 'linux-androideabi'
+     if kernel in kerneltype_mapper:
+         kernel = kerneltype_mapper[kernel]
+@@ -374,10 +379,16 @@ def default_build_triple(verbose):
+             kernel = 'linux-androideabi'
          else:
-             ostype += 'eabihf'
+             kernel += 'eabihf'
 -    elif cputype in {'armv7l', 'armv8l'}:
-+    elif cputype in {'armv7l', 'armv8l', 'earmv7hf'}:
++    elif cputype in {'armv6hf', 'earmv6hf'}:
++        cputype = 'armv6'
++        if kernel == 'unknown-netbsd':
++            kernel += '-eabihf'
++    elif cputype in {'armv7l', 'earmv7hf', 'armv8l'}:
          cputype = 'armv7'
-         if ostype == 'linux-android':
-             ostype = 'linux-androideabi'
-+        elif ostype == 'unknown-netbsd':
-+            ostype += '-eabihf'
+         if kernel == 'linux-android':
+             kernel = 'linux-androideabi'
++        elif kernel == 'unknown-netbsd':
++            kernel += '-eabihf'
          else:
-             ostype += 'eabihf'
+             kernel += 'eabihf'
      elif cputype == 'mips':
-@@ -791,7 +799,7 @@ class RustBuild(object):
-                 self.cargo()))
-         args = [self.cargo(), "build", "--manifest-path",
-                 os.path.join(self.rust_root, "src/bootstrap/Cargo.toml")]
--        for _ in range(0, self.verbose):
-+        for _ in range(1, self.verbose):
-             args.append("--verbose")
-         if self.use_locked_deps:
-             args.append("--locked")

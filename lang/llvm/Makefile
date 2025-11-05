@@ -1,4 +1,4 @@
-# $NetBSD: Makefile,v 1.82 2022/09/12 08:59:15 he Exp $
+# $NetBSD: Makefile,v 1.94 2023/11/23 11:01:46 jperkin Exp $
 #
 # When updating this, please also update:
 # devel/include-what-you-use
@@ -23,11 +23,11 @@
 # Always update all */buildlink3.mk to require the latest stable release
 # version in BUILDLINK_API_DEPENDS, as there is no backwards compatibility.
 
+PKGREVISION= 1
 .include "version.mk"
 
 DISTNAME=	llvm-${LLVM_VERSION}.src
 PKGNAME=	${DISTNAME:S/.src//}
-PKGREVISION=	1
 CATEGORIES=	lang devel
 
 MAINTAINER=	pkgsrc-users@NetBSD.org
@@ -36,19 +36,14 @@ COMMENT=	Low Level Virtual Machine compiler infrastructure
 LICENSE=	apache-2.0
 
 USE_LANGUAGES=		c c++14
-USE_CMAKE=		yes
-GCC_REQD+=		7
-PYTHON_FOR_BUILD_ONLY=	yes
+GCC_REQD+=		8
+PYTHON_FOR_BUILD_ONLY=	tool
 
 PYTHON_VERSIONS_INCOMPATIBLE=	27
 
 NOT_FOR_PLATFORM+=	*-*-alpha
 NOT_FOR_PLATFORM+=	*-*-vax
 
-CONFIGURE_DIRS=		build
-CMAKE_ARG_PATH=		${WRKSRC}
-
-CMAKE_ARGS+=	-DCMAKE_BUILD_TYPE=Release
 CMAKE_ARGS+=	-DCMAKE_C_COMPILER=${CC:Q}
 CMAKE_ARGS+=	-DCMAKE_CXX_COMPILER=${CXX:Q}
 CMAKE_ARGS+=	-DCMAKE_CXX_LINK_FLAGS=${LDFLAGS:Q}
@@ -85,7 +80,6 @@ TEST_ENV+=		LD_LIBRARY_PATH=${WRKDIR}/build/lib
 # all platforms.  Change this to a patch if verified.
 SUBST_CLASSES.SunOS+=	linkmap
 SUBST_STAGE.linkmap=	pre-configure
-SUBST_FILES.linkmap=	tools/lto/lto.exports
 SUBST_FILES.linkmap+=	tools/remarks-shlib/Remarks.exports
 SUBST_SED.linkmap=	-e '/^LLVM/d'
 
@@ -103,7 +97,7 @@ PLIST.notdylib=	yes
 PLIST_SUBST+=	SOEXT=${SOEXT}
 PLIST_SUBST+=	LLVM_MAJOR_VERSION=${LLVM_MAJOR_VERSION}
 
-NOTDYLIBS=	LTO Remarks
+NOTDYLIBS=		LTO Remarks
 .for libname in ${NOTDYLIBS}
 PRINT_PLIST_AWK+=	/lib${libname}.${SOEXT}.${LLVM_MAJOR_VERSION}/ { gsub(/\.${SOEXT}\.${LLVM_MAJOR_VERSION}/, ".$${SOEXT}.$${LLVM_MAJOR_VERSION}"); print "$${PLIST.notdylib}" $$0; next }
 .endfor
@@ -132,8 +126,15 @@ CXXFLAGS+=	-mno-pltseq
 .  endif
 .endif
 
+PLIST_SUBST+=	RELEASE_TYPE=${RELEASE_TYPE}
+
 .if ${OPSYS} == "NetBSD"
 CMAKE_ARGS+=	-DPKGSRC_LLVM_PTHREADLIB=-lpthread
+.endif
+
+.if ${USE_CROSS_COMPILE:U:tl} == "yes"
+TOOL_DEPENDS+=	${PKGNAME}:../../${PKGPATH}
+CMAKE_ARGS+=	-DLLVM_TABLEGEN:STRING=${TOOLBASE:Q}/bin/llvm-tblgen
 .endif
 
 .include "options.mk"
@@ -141,11 +142,12 @@ CMAKE_ARGS+=	-DPKGSRC_LLVM_PTHREADLIB=-lpthread
 # replacing config.guess is required even for cmake.
 # It is used to detect correct LLVM_HOST_TRIPLE, e.g. for NetBSD/evbarm.
 post-extract:
-	${MKDIR} ${WRKSRC}/build
 .for f in config.guess config.sub
-	cp ../../mk/gnu-config/${f} ${WRKSRC}/cmake/${f}
+	${CP} ../../mk/gnu-config/${f} ${WRKSRC}/cmake/${f}
 .endfor
 
+.include "../../devel/cmake/build.mk"
+.include "../../archivers/zstd/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../lang/python/application.mk"
 .include "../../lang/python/tool.mk"
