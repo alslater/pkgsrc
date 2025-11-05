@@ -1,6 +1,4 @@
-$NetBSD: patch-vendor_valuable_no__atomic.rs,v 1.4 2023/10/25 05:50:43 pin Exp $
-
-Add mipsel-unknown-netbsd.
+$NetBSD: patch-vendor_valuable_no__atomic.rs,v 1.1 2022/11/15 23:11:14 he Exp $
 
 --- vendor/valuable/no_atomic.rs.orig	2022-09-19 15:35:03.000000000 +0000
 +++ vendor/valuable/no_atomic.rs

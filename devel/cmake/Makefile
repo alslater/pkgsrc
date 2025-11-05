@@ -1,10 +1,11 @@
-# $NetBSD: Makefile,v 1.215 2023/11/19 17:16:27 adam Exp $
+# $NetBSD: Makefile,v 1.201 2022/11/04 19:46:48 adam Exp $
 
 .include "Makefile.common"
 
 COMMENT=	Cross platform make
 
 USE_TOOLS+=		gmake
+GCC_REQD+=		4.8
 HAS_CONFIGURE=		yes
 CONFIGURE_SCRIPT=	bootstrap
 
@@ -18,10 +19,7 @@ CONFIGURE_ARGS+=	--docdir=/share/doc/cmake-${CMAKE_API}
 CONFIGURE_ARGS+=	--parallel=${MAKE_JOBS:U1}
 CONFIGURE_ARGS+=	--prefix=${PREFIX}
 CONFIGURE_ARGS+=	--system-libs
-# Debugger is not available for all platforms
-CONFIGURE_ARGS+=	--no-debugger
-# cppdap and jsoncpp require cmake to build, so use the one provided with cmake
-CONFIGURE_ARGS+=	--no-system-cppdap
+# jsoncpp requires cmake to build, so use the one provided with cmake
 CONFIGURE_ARGS+=	--no-system-jsoncpp
 
 LDFLAGS.Darwin+=	-framework CoreServices # for LSOpenCFURLRef()
@@ -34,7 +32,7 @@ INSTALL_TARGET=		install/strip
 .endif
 
 # Enforce arm64 to support building inside x86_64 chroots.
-.if ${MACHINE_PLATFORM:MDarwin-*-aarch64}
+.if !empty(MACHINE_PLATFORM:MDarwin-*-aarch64)
 CONFIGURE_ENV+=		CMAKE_OSX_ARCHITECTURES=arm64
 .endif
 
@@ -55,21 +53,11 @@ SUBST_FILES.cmake+=	Modules/FindX11.cmake
 SUBST_FILES.cmake+=	Modules/Platform/UnixPaths.cmake
 SUBST_VARS.cmake=	LOCALBASE X11BASE
 
-# Use custom shell for Makefiles. For most platforms this is a no-op.
-# On Darwin, system /bin/sh is restricted, so DYLD_LIBRARY_PATH can't be used.
-# This is needed for packages that execute binaries linked with not-yet
-# installed shared libraries, like qt6-qtbase.
-SUBST_CLASSES+=		shell
-SUBST_STAGE.shell=	pre-configure
-SUBST_MESSAGE.shell=	Set custom SHELL in generated Makefiles.
-SUBST_FILES.shell+=	Source/cmLocalUnixMakefileGenerator3.cxx
-SUBST_SED.shell=	-e 's,/bin/sh,${SH},g'
-
 pre-configure:
 	${CP} ${FILESDIR}/Source_Checks_cm_cxx_cbegin.cxx ${WRKSRC}/Source/Checks/cm_cxx_cbegin.cxx
 	${CP} ${FILESDIR}/Source_Checks_cm_cxx_cend.cxx ${WRKSRC}/Source/Checks/cm_cxx_cend.cxx
 	${CP} ${FILESDIR}/Source_Checks_cm_cxx_size_t.cxx ${WRKSRC}/Source/Checks/cm_cxx_size_t.cxx
-	${FIND} ${WRKSRC}/Modules -type f -a -name "*.orig" -print | ${XARGS} ${RM}
+	${RM} -f ${WRKSRC}/Modules/*.orig ${WRKSRC}/Modules/Compiler/*.orig ${WRKSRC}/Modules/Platform/*.orig ${WRKSRC}/Modules/FindPython/*.orig
 	${LN} -f ${WRKSRC}/Modules/Platform/OpenBSD.cmake ${WRKSRC}/Modules/Platform/MirBSD.cmake
 .for lang in C CXX Fortran
 	${LN} -f ${WRKSRC}/Modules/Platform/SunOS-GNU-${lang}.cmake \
@@ -81,7 +69,6 @@ USE_CURSES=		wsyncup
 BUILDLINK_API_DEPENDS.libarchive+=	libarchive>=3.3.3
 BUILDLINK_API_DEPENDS.rhash+=	rhash>=1.4.2nb1
 .include "../../archivers/libarchive/buildlink3.mk"
-.include "../../archivers/zstd/buildlink3.mk"
 .include "../../devel/libexecinfo/buildlink3.mk"
 .include "../../devel/libuv/buildlink3.mk"
 .include "../../misc/rhash/buildlink3.mk"

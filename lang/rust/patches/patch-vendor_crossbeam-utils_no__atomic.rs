@@ -1,19 +1,15 @@
-$NetBSD: patch-vendor_crossbeam-utils_no__atomic.rs,v 1.5 2023/10/25 05:50:43 pin Exp $
+$NetBSD: patch-vendor_crossbeam-utils_no__atomic.rs,v 1.1 2022/11/15 23:11:14 he Exp $
 
-Add mipsel-unknown-netbsd target as not having 64-bit atomics.
-Unify with crossbeam-utils-0.8.12 by removing mipsel-sony-psx.
+Add "mipsel-unknown-netbsd" to the list who don't have 
+native 64-bit atomic ops.
 
---- vendor/crossbeam-utils/no_atomic.rs.orig	2023-07-12 05:06:31.000000000 +0000
+--- vendor/crossbeam-utils/no_atomic.rs.orig	2022-09-19 15:35:01.000000000 +0000
 +++ vendor/crossbeam-utils/no_atomic.rs
-@@ -38,10 +38,10 @@ const NO_ATOMIC_64: &[&str] = &[
-     "mips-unknown-linux-musl",
-     "mips-unknown-linux-uclibc",
-     "mipsel-sony-psp",
--    "mipsel-sony-psx",
-     "mipsel-unknown-linux-gnu",
+@@ -36,6 +36,7 @@ const NO_ATOMIC_64: &[&str] = &[
      "mipsel-unknown-linux-musl",
      "mipsel-unknown-linux-uclibc",
-+    "mipsel-unknown-netbsd",
      "mipsel-unknown-none",
++    "mipsel-unknown-netbsd",
      "mipsisa32r6-unknown-linux-gnu",
      "mipsisa32r6el-unknown-linux-gnu",
+     "msp430-none-elf",

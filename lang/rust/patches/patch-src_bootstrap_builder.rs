@@ -1,15 +1,15 @@
-$NetBSD: patch-src_bootstrap_builder.rs,v 1.29 2024/01/06 19:00:19 he Exp $
+$NetBSD: patch-src_bootstrap_builder.rs,v 1.24 2022/11/15 23:11:14 he Exp $
 
 Use @PREFIX@, not $ORIGIN in rpath.
 
---- src/bootstrap/builder.rs.orig	2023-10-03 02:52:17.000000000 +0000
+--- src/bootstrap/builder.rs.orig	2022-06-27 13:37:07.000000000 +0000
 +++ src/bootstrap/builder.rs
-@@ -1645,7 +1645,7 @@ impl<'a> Builder<'a> {
-                 && !target.contains("xous")
-             {
+@@ -1702,7 +1701,7 @@ impl<'a> Builder<'a> {
+                 Some("-Wl,-rpath,@loader_path/../lib")
+             } else if !target.contains("windows") {
                  rustflags.arg("-Clink-args=-Wl,-z,origin");
--                Some(format!("-Wl,-rpath,$ORIGIN/../{libdir}"))
-+                Some(format!("-Wl,-rpath,@PREFIX@/{libdir}"))
+-                Some("-Wl,-rpath,$ORIGIN/../lib")
++                Some("-Wl,-rpath,@PREFIX@/lib")
              } else {
                  None
              };

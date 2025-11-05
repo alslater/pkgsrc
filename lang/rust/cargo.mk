@@ -1,4 +1,4 @@
-# $NetBSD: cargo.mk,v 1.36 2023/12/13 17:39:06 schmonz Exp $
+# $NetBSD: cargo.mk,v 1.30 2022/05/24 09:51:51 nia Exp $
 #
 # Common logic that can be used by packages that depend on cargo crates
 # from crates.io. This lets existing pkgsrc infrastructure fetch and verify
@@ -29,7 +29,6 @@ USE_TOOLS+=		bsdtar
 CARGO_VENDOR_DIR=	${WRKDIR}/vendor
 CARGO_WRKSRC?=		${WRKSRC}
 
-# TODO: some Cargo.lock files include git+https sources which need to be fetched from the URL (not necessarily resolving to a crate.io url)
 DISTFILES?=			${DEFAULT_DISTFILES}
 .for crate in ${CARGO_CRATE_DEPENDS}
 DISTFILES+=			${crate}.crate
@@ -70,12 +69,11 @@ print-cargo-depends:
 			print "CARGO_CRATE_DEPENDS+=\t" name "-" vers;	\
 			}' ${CARGO_WRKSRC}/Cargo.lock
 
-DEFAULT_CARGO_ARGS=	--offline -j${_MAKE_JOBS_N}	\
+DEFAULT_CARGO_ARGS=	build --offline --release -j${_MAKE_JOBS_N}	\
 			  ${CARGO_NO_DEFAULT_FEATURES:M[yY][eE][sS]:C/[yY][eE][sS]/--no-default-features/}	\
 			  ${CARGO_FEATURES:C/.*/--features/W}	\
 			  ${CARGO_FEATURES:S/ /,/Wg}
-CARGO_ARGS?=		build --release ${DEFAULT_CARGO_ARGS}
-CARGO_INSTALL_ARGS?=	install --path . --root ${DESTDIR}${PREFIX} ${DEFAULT_CARGO_ARGS}
+CARGO_ARGS?=		${DEFAULT_CARGO_ARGS}
 
 MAKE_ENV+=		RUSTFLAGS=${RUSTFLAGS:Q}
 
@@ -86,24 +84,3 @@ do-build: do-cargo-build
 .PHONY: do-cargo-build
 do-cargo-build:
 	${RUN} cd ${CARGO_WRKSRC} && ${SETENV} ${MAKE_ENV} ${PREFIX}/bin/cargo ${CARGO_ARGS}
-
-.if !target(do-install) && ${GNU_CONFIGURE:Uno:tl} == no
-do-install: do-cargo-install
-.endif
-
-.PHONY: do-cargo-install
-do-cargo-install:
-	${RUN} cd ${CARGO_WRKSRC} && ${SETENV} ${MAKE_ENV} ${PREFIX}/bin/cargo ${CARGO_INSTALL_ARGS}
-	# remove files cargo uses for tracking installations
-	${RM} -f ${DESTDIR}${PREFIX}/.crates.toml
-	${RM} -f ${DESTDIR}${PREFIX}/.crates2.json
-
-.if ${OPSYS} == "Darwin"
-.PHONY: do-cargo-post-install-darwin-fix-rpath
-post-install: do-cargo-post-install-darwin-fix-rpath
-do-cargo-post-install-darwin-fix-rpath:
-	${RUN} cd ${DESTDIR};								\
-	for i in $$(${FIND} .${PREFIX}/lib -name '*.so' | ${SED} -e 's|^\./||'); do	\
-	  install_name_tool -id /$$i $$i;						\
-	done
-.endif
