@@ -1,26 +1,16 @@
-# $NetBSD: buildlink3.mk,v 1.31 2025/06/29 21:10:47 bsiegert Exp $
+# $NetBSD: buildlink3.mk,v 1.19 2022/08/12 08:37:58 pin Exp $
 
 BUILDLINK_TREE+=	llvm
 
 .if !defined(LLVM_BUILDLINK3_MK)
 LLVM_BUILDLINK3_MK:=
 
-.include "../../mk/bsd.prefs.mk"
-.if ${OPSYS} == "NetBSD" && ${OS_VERSION:M9.*}
-# Gcc 8 (induced elsewhere) blows up on per-process VM space.
-# Ref. https://mail-index.netbsd.org/pkgsrc-users/2025/06/21/msg041678.html
-# Also, the llvm produced by gcc 8 or 10 crashes when building wasi-libc.
-GCC_REQD+=		14
-.endif
-
-BUILDLINK_API_DEPENDS.llvm+=	llvm>=19.1.0
-BUILDLINK_ABI_DEPENDS.llvm?=	llvm>=19.1.7
+BUILDLINK_API_DEPENDS.llvm+=	llvm>=14
 BUILDLINK_PKGSRCDIR.llvm?=	../../lang/llvm
 
 LLVM_CONFIG_PATH?=		${BUILDLINK_PREFIX.llvm}/bin/llvm-config
 
 BUILDLINK_FILES.llvm+=		bin/FileCheck
-BUILDLINK_FILES.llvm+=		bin/UnicodeNameMappingGenerator
 BUILDLINK_FILES.llvm+=		bin/bugpoint
 BUILDLINK_FILES.llvm+=		bin/count
 BUILDLINK_FILES.llvm+=		bin/dsymutil
@@ -42,14 +32,11 @@ BUILDLINK_FILES.llvm+=		bin/llvm-cvtres
 BUILDLINK_FILES.llvm+=		bin/llvm-cxxdump
 BUILDLINK_FILES.llvm+=		bin/llvm-cxxfilt
 BUILDLINK_FILES.llvm+=		bin/llvm-cxxmap
-BUILDLINK_FILES.llvm+=		bin/llvm-debuginfo-analyzer
-BUILDLINK_FILES.llvm+=		bin/llvm-debuginfod
 BUILDLINK_FILES.llvm+=		bin/llvm-debuginfod-find
 BUILDLINK_FILES.llvm+=		bin/llvm-diff
 BUILDLINK_FILES.llvm+=		bin/llvm-dis
 BUILDLINK_FILES.llvm+=		bin/llvm-dlltool
 BUILDLINK_FILES.llvm+=		bin/llvm-dwarfdump
-BUILDLINK_FILES.llvm+=		bin/llvm-dwarfutil
 BUILDLINK_FILES.llvm+=		bin/llvm-dwp
 BUILDLINK_FILES.llvm+=		bin/llvm-exegesis
 BUILDLINK_FILES.llvm+=		bin/llvm-extract
@@ -62,7 +49,6 @@ BUILDLINK_FILES.llvm+=		bin/llvm-lib
 BUILDLINK_FILES.llvm+=		bin/llvm-libtool-darwin
 BUILDLINK_FILES.llvm+=		bin/llvm-link
 BUILDLINK_FILES.llvm+=		bin/llvm-lipo
-BUILDLINK_FILES.llvm+=		bin/llvm-lit
 BUILDLINK_FILES.llvm+=		bin/llvm-lto
 BUILDLINK_FILES.llvm+=		bin/llvm-lto2
 BUILDLINK_FILES.llvm+=		bin/llvm-mc
@@ -82,9 +68,7 @@ BUILDLINK_FILES.llvm+=		bin/llvm-ranlib
 BUILDLINK_FILES.llvm+=		bin/llvm-rc
 BUILDLINK_FILES.llvm+=		bin/llvm-readelf
 BUILDLINK_FILES.llvm+=		bin/llvm-readobj
-BUILDLINK_FILES.llvm+=		bin/llvm-readtapi
 BUILDLINK_FILES.llvm+=		bin/llvm-reduce
-BUILDLINK_FILES.llvm+=		bin/llvm-remarkutil
 BUILDLINK_FILES.llvm+=		bin/llvm-rtdyld
 BUILDLINK_FILES.llvm+=		bin/llvm-sim
 BUILDLINK_FILES.llvm+=		bin/llvm-size
@@ -93,6 +77,7 @@ BUILDLINK_FILES.llvm+=		bin/llvm-stress
 BUILDLINK_FILES.llvm+=		bin/llvm-strings
 BUILDLINK_FILES.llvm+=		bin/llvm-strip
 BUILDLINK_FILES.llvm+=		bin/llvm-symbolizer
+BUILDLINK_FILES.llvm+=		bin/llvm-tapi-diff
 BUILDLINK_FILES.llvm+=		bin/llvm-tblgen
 BUILDLINK_FILES.llvm+=		bin/llvm-tli-checker
 BUILDLINK_FILES.llvm+=		bin/llvm-undname
@@ -101,7 +86,6 @@ BUILDLINK_FILES.llvm+=		bin/llvm-xray
 BUILDLINK_FILES.llvm+=		bin/not
 BUILDLINK_FILES.llvm+=		bin/obj2yaml
 BUILDLINK_FILES.llvm+=		bin/opt
-BUILDLINK_FILES.llvm+=		bin/reduce-chunk-list
 BUILDLINK_FILES.llvm+=		bin/sancov
 BUILDLINK_FILES.llvm+=		bin/sanstats
 BUILDLINK_FILES.llvm+=		bin/split-file
@@ -119,7 +103,6 @@ pkgbase := llvm
 .include "../../math/z3/buildlink3.mk"
 .endif
 
-.include "../../archivers/zstd/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .endif	# LLVM_BUILDLINK3_MK
 
