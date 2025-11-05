@@ -1,4 +1,4 @@
-# $NetBSD: cargo.mk,v 1.43 2025/06/16 21:10:43 he Exp $
+# $NetBSD: cargo.mk,v 1.30 2022/05/24 09:51:51 nia Exp $
 #
 # Common logic that can be used by packages that depend on cargo crates
 # from crates.io. This lets existing pkgsrc infrastructure fetch and verify
@@ -25,21 +25,14 @@ CHECK_SSP_SUPPORTED=	no
 
 .include "../../lang/rust/rust.mk"
 
-USE_TOOLS+=		bsdtar digest
+USE_TOOLS+=		bsdtar
 CARGO_VENDOR_DIR=	${WRKDIR}/vendor
 CARGO_WRKSRC?=		${WRKSRC}
 
-# TODO: some Cargo.lock files include git+https sources which need to be fetched from the URL (not necessarily resolving to a crate.io url)
 DISTFILES?=			${DEFAULT_DISTFILES}
 .for crate in ${CARGO_CRATE_DEPENDS}
 DISTFILES+=			${crate}.crate
-.  if ${crate:M*+*}
-# E.g., for `curl-sys-0.4.75+curl-8.10.0', we use the URL:
-# https://crates.io/api/v1/crates/curl-sys/0.4.77+curl-8.10.1/download
-SITES.${crate}.crate+=		-${MASTER_SITE_CRATESIO}${crate:C/-[0-9]+\.[0-9.]+.*$//}/${crate:C/^.*-([0-9]+\.[0-9.]+.*\+.*)$/\1/}/download
-.  else
 SITES.${crate}.crate+=		-${MASTER_SITE_CRATESIO}${crate:C/-[0-9]+\.[0-9.]+.*$//}/${crate:C/^.*-([0-9]+\.[0-9.]+.*)$/\1/}/download
-.  endif
 EXTRACT_DIR.${crate}.crate?=	${CARGO_VENDOR_DIR}
 .endfor
 
@@ -54,8 +47,8 @@ post-extract: cargo-vendor-crates
 .PHONY: cargo-vendor-crates
 cargo-vendor-crates:
 	@${STEP_MSG} "Extracting local cargo crates"
-	${RUN}${MKDIR} ${WRKDIR}/.cargo
-	${RUN}${PRINTF} "[source.crates-io]\nreplace-with = \"vendored-sources\"\n[source.vendored-sources]\ndirectory = \"${CARGO_VENDOR_DIR}\"\n" > ${WRKDIR}/.cargo/config.toml
+	${RUN}${MKDIR} ${CARGO_WRKSRC}/.cargo
+	${RUN}${PRINTF} "[source.crates-io]\nreplace-with = \"vendored-sources\"\n[source.vendored-sources]\ndirectory = \"${CARGO_VENDOR_DIR}\"\n" > ${CARGO_WRKSRC}/.cargo/config
 	${RUN}${MKDIR} ${CARGO_VENDOR_DIR}
 .for crate in ${CARGO_CRATE_DEPENDS}
 	${RUN}${PRINTF} '{"package":"%s","files":{}}'	\
@@ -76,20 +69,13 @@ print-cargo-depends:
 			print "CARGO_CRATE_DEPENDS+=\t" name "-" vers;	\
 			}' ${CARGO_WRKSRC}/Cargo.lock
 
-.if ${RUST_TYPE} == "native"
-CARGO=			cargo
-.else
-CARGO=			${PREFIX}/bin/cargo
-.endif
-DEFAULT_CARGO_ARGS=	--offline -j${_MAKE_JOBS_N}	\
+DEFAULT_CARGO_ARGS=	build --offline --release -j${_MAKE_JOBS_N}	\
 			  ${CARGO_NO_DEFAULT_FEATURES:M[yY][eE][sS]:C/[yY][eE][sS]/--no-default-features/}	\
 			  ${CARGO_FEATURES:C/.*/--features/W}	\
 			  ${CARGO_FEATURES:S/ /,/Wg}
-CARGO_ARGS?=		build --release ${DEFAULT_CARGO_ARGS}
-CARGO_INSTALL_ARGS?=	install --path . --root ${DESTDIR}${PREFIX} ${DEFAULT_CARGO_ARGS}
+CARGO_ARGS?=		${DEFAULT_CARGO_ARGS}
 
 MAKE_ENV+=		RUSTFLAGS=${RUSTFLAGS:Q}
-ALL_ENV+=		CARGO_HOME=${WRKDIR}
 
 .if !target(do-build)
 do-build: do-cargo-build
@@ -97,25 +83,4 @@ do-build: do-cargo-build
 
 .PHONY: do-cargo-build
 do-cargo-build:
-	${RUN} cd ${CARGO_WRKSRC} && ${SETENV} ${MAKE_ENV} ${CARGO} ${CARGO_ARGS}
-
-.if !target(do-install) && ${GNU_CONFIGURE:Uno:tl} == no
-do-install: do-cargo-install
-.endif
-
-.PHONY: do-cargo-install
-do-cargo-install:
-	${RUN} cd ${CARGO_WRKSRC} && ${SETENV} ${MAKE_ENV} ${CARGO} ${CARGO_INSTALL_ARGS}
-	# remove files cargo uses for tracking installations
-	${RM} -f ${DESTDIR}${PREFIX}/.crates.toml
-	${RM} -f ${DESTDIR}${PREFIX}/.crates2.json
-
-.if ${OPSYS} == "Darwin"
-.PHONY: do-cargo-post-install-darwin-fix-rpath
-post-install: do-cargo-post-install-darwin-fix-rpath
-do-cargo-post-install-darwin-fix-rpath:
-	${RUN} cd ${DESTDIR};								\
-	for i in $$(${FIND} .${PREFIX}/lib -name '*.so' | ${SED} -e 's|^\./||'); do	\
-	  install_name_tool -id /$$i $$i;						\
-	done
-.endif
+	${RUN} cd ${CARGO_WRKSRC} && ${SETENV} ${MAKE_ENV} ${PREFIX}/bin/cargo ${CARGO_ARGS}

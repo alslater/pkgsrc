@@ -1,4 +1,4 @@
-# $NetBSD: buildlink3.mk,v 1.17 2025/03/31 16:38:43 jakllsch Exp $
+# $NetBSD: buildlink3.mk,v 1.10 2022/06/28 11:34:15 wiz Exp $
 
 BUILDLINK_TREE+=	rust
 
@@ -9,16 +9,10 @@ BUILDLINK_TREE+=	rust
 .if !defined(RUST_BUILDLINK3_MK)
 RUST_BUILDLINK3_MK:=
 
-BUILDLINK_API_DEPENDS.rust+=	rust>=1.56.1
+BUILDLINK_API_DEPENDS.rust+=	rust>=1.20.0
+BUILDLINK_ABI_DEPENDS.rust?=	rust>=1.60.0nb1
 BUILDLINK_PKGSRCDIR.rust?=	../../lang/rust
 BUILDLINK_PASSTHRU_DIRS+=	${PREFIX}/lib/rustlib
-
-pkgbase:= rust
-.include "../../mk/pkg-build-options.mk"
-.if empty(PKG_BUILD_OPTIONS.rust:Mrust-internal-llvm)
-.  include "../../lang/libunwind/buildlink3.mk"
-.endif
-
 .endif
 
 BUILDLINK_TREE+=	-rust

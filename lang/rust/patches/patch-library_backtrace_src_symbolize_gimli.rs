@@ -1,14 +1,14 @@
-$NetBSD: patch-library_backtrace_src_symbolize_gimli.rs,v 1.8 2025/04/08 09:31:06 wiz Exp $
+$NetBSD: patch-library_backtrace_src_symbolize_gimli.rs,v 1.2 2022/08/30 19:22:17 he Exp $
 
-Add NetBSD to the family who is in the unix class.
+Add NetBSD to the family who uses dl_iterate_phdr().
 
---- library/backtrace/src/symbolize/gimli.rs.orig	2006-07-24 01:21:28.000000000 +0000
+--- library/backtrace/src/symbolize/gimli.rs.orig	2022-04-04 09:41:26.000000000 +0000
 +++ library/backtrace/src/symbolize/gimli.rs
-@@ -40,6 +40,7 @@ cfg_if::cfg_if! {
-         target_os = "haiku",
-         target_os = "hurd",
-         target_os = "linux",
-+        target_os = "netbsd",
-         target_os = "openbsd",
-         target_os = "solaris",
-         target_os = "illumos",
+@@ -177,6 +177,7 @@ cfg_if::cfg_if! {
+             target_os = "linux",
+             target_os = "fuchsia",
+             target_os = "freebsd",
++            target_os = "netbsd",
+             target_os = "openbsd",
+             all(target_os = "android", feature = "dl_iterate_phdr"),
+         ),
