@@ -1,27 +1,11 @@
-@comment $NetBSD: PLIST,v 1.10 2025/07/01 20:24:44 wiz Exp $
+@comment $NetBSD: PLIST,v 1.2 2022/07/29 09:02:47 adam Exp $
+${PYSITELIB}/${WHEEL_INFODIR}/INSTALLER
+${PYSITELIB}/${WHEEL_INFODIR}/LICENSE
 ${PYSITELIB}/${WHEEL_INFODIR}/METADATA
 ${PYSITELIB}/${WHEEL_INFODIR}/RECORD
+${PYSITELIB}/${WHEEL_INFODIR}/REQUESTED
 ${PYSITELIB}/${WHEEL_INFODIR}/WHEEL
-${PYSITELIB}/${WHEEL_INFODIR}/licenses/LICENSE
+${PYSITELIB}/${WHEEL_INFODIR}/direct_url.json
 ${PYSITELIB}/${WHEEL_INFODIR}/top_level.txt
-${PYSITELIB}/zipp/__init__.py
-${PYSITELIB}/zipp/__init__.pyc
-${PYSITELIB}/zipp/__init__.pyo
-${PYSITELIB}/zipp/_functools.py
-${PYSITELIB}/zipp/_functools.pyc
-${PYSITELIB}/zipp/_functools.pyo
-${PYSITELIB}/zipp/compat/__init__.py
-${PYSITELIB}/zipp/compat/__init__.pyc
-${PYSITELIB}/zipp/compat/__init__.pyo
-${PYSITELIB}/zipp/compat/overlay.py
-${PYSITELIB}/zipp/compat/overlay.pyc
-${PYSITELIB}/zipp/compat/overlay.pyo
-${PYSITELIB}/zipp/compat/py310.py
-${PYSITELIB}/zipp/compat/py310.pyc
-${PYSITELIB}/zipp/compat/py310.pyo
-${PYSITELIB}/zipp/compat/py313.py
-${PYSITELIB}/zipp/compat/py313.pyc
-${PYSITELIB}/zipp/compat/py313.pyo
-${PYSITELIB}/zipp/glob.py
-${PYSITELIB}/zipp/glob.pyc
-${PYSITELIB}/zipp/glob.pyo
+${PYSITELIB}/zipp.py
+${PYSITELIB}/zipp.pyc
