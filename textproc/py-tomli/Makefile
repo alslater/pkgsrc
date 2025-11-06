@@ -11,6 +11,8 @@ HOMEPAGE=	https://github.com/hukkin/tomli
 COMMENT=	Lil' TOML parser
 LICENSE=	mit
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 USE_LANGUAGES=	# none
 
 .include "../../lang/python/bootstrap.mk"

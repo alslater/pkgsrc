@@ -11,6 +11,8 @@ HOMEPAGE=	https://passlib.readthedocs.io/
 COMMENT=	Comprehensive password hashing framework supporting over 30 schemes
 LICENSE=	modified-bsd
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 USE_LANGUAGES=	# none
 
 .include "../../lang/python/egg.mk"

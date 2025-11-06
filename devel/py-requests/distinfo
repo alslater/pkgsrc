@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.52 2025/06/10 19:12:23 wiz Exp $
 
-BLAKE2s (requests-2.32.4.tar.gz) = 56d4e34e82f8b97c1de999a3f7eee590ddfa53bf5b4274c165fe30ef993b5324
+SHA1 (requests-2.32.4.tar.gz) = 2b5ccb0dee4b8b85ae69fa4fcebe2644ced06343
+RMD160 (requests-2.32.4.tar.gz) = 7f3b5357880a78eb1468a2403e7c7e5c12100434
 SHA512 (requests-2.32.4.tar.gz) = 8308da5ec2b1bd4442497dc8ecb21d4c1d3aba82987a264bc0f55b75d2522b303e5779f704d1b557a0f7d8a8f0a3533925cc34a58d98a95ce463a0dd59c5ac2d
 Size (requests-2.32.4.tar.gz) = 135258 bytes

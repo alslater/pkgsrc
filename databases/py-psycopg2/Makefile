@@ -11,6 +11,8 @@ HOMEPAGE=	https://www.psycopg.org/
 COMMENT=	PostgreSQL database adapter for Python
 LICENSE=	gnu-lgpl-v3
 
+PYTHON_VERSIONS_INCOMPATIBLE=   27
+
 TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
 
 .include "../../lang/python/wheel.mk"

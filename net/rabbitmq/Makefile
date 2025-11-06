@@ -21,7 +21,6 @@ TOOL_DEPENDS+=		libxslt-[0-9]*:../../textproc/libxslt
 TOOL_DEPENDS+=		rsync-[0-9]*:../../net/rsync
 TOOL_DEPENDS+=		xmlto-[0-9]*:../../textproc/xmlto
 DEPENDS+=		${PYPKGPREFIX}-simplejson>=2:../../converters/py-simplejson
-DEPENDS+=		${PYPKGPREFIX}-expat>=2:../../textproc/py-expat
 
 BUILD_DEFS+=		VARBASE
 
@@ -123,5 +122,6 @@ post-install:
 		${DESTDIR}${PREFIX}/share/examples/rabbitmq
 
 .include "../../lang/erlang/buildlink3.mk"
+.include "../../lang/python/batteries-included.mk"
 .include "../../lang/python/application.mk"
 .include "../../mk/bsd.pkg.mk"

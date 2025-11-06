@@ -1,0 +1,24 @@
+$NetBSD$
+
+--- gettext-runtime/libasprintf/config.h.in.orig	2024-02-21 16:35:57.000000000 +0000
++++ gettext-runtime/libasprintf/config.h.in
+@@ -1268,19 +1268,3 @@
+ /* Define as a signed type of the same size as size_t. */
+ #undef ssize_t
+ 
+-#if (!defined HAVE_C_STATIC_ASSERT && !defined assert \
+-     && (!defined __cplusplus \
+-         || (__cpp_static_assert < 201411 \
+-             && __GNUG__ < 6 && __clang_major__ < 6)))
+- #include <assert.h>
+- #undef/**/assert
+- #ifdef __sgi
+-  #undef/**/__ASSERT_H__
+- #endif
+- /* Solaris 11.4 <assert.h> defines static_assert as a macro with 2 arguments.
+-    We need it also to be invocable with a single argument.  */
+- #if defined __sun && (__STDC_VERSION__ - 0 >= 201112L) && !defined __cplusplus
+-  #undef/**/static_assert
+-  #define static_assert _Static_assert
+- #endif
+-#endif

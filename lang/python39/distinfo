@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.44 2025/06/04 14:12:53 adam Exp $
 
-BLAKE2s (Python-3.9.23.tar.xz) = 2fdde6b9f0e84a867fbd47275f8f3e1798b36ccaa4ea41d71c197c640d80994c
+SHA1 (Python-3.9.23.tar.xz) = 73d07237b70b19e4cd530bbc204cccd668ec05d4
+RMD160 (Python-3.9.23.tar.xz) = 2d0e831335f28b838eca5622d44984639ff9e705
 SHA512 (Python-3.9.23.tar.xz) = ad2eb2eebff286a16ad631339bc0890b0686cf5e669d28905a98f96e9b1af6673d255f36bf19e146aa4de8d012587dc6b3193e903718f9cdba4b97041318f418
 Size (Python-3.9.23.tar.xz) = 19659284 bytes
 SHA1 (patch-Lib_ctypes_util.py) = 032cc99ebad93ddddfd89073c60424a952e3faa3

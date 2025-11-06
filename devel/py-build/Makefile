@@ -23,6 +23,8 @@ TEST_DEPENDS+=	${PYPKGPREFIX}-test-xdist>=1.34:../../devel/py-test-xdist
 
 USE_LANGUAGES=	# none
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 .include "../../lang/python/pyversion.mk"
 .if ${PYTHON_VERSION} < 311
 DEPENDS+=	${PYPKGPREFIX}-tomli>=1.1.0:../../textproc/py-tomli

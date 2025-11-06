@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.60 2025/07/18 08:37:35 adam Exp $
 
-BLAKE2s (gobject-introspection-1.84.0.tar.xz) = 59fbad674cbb8b76ee42e5241afa557e651926417b217e53644f888c22cc9d63
+SHA1 (gobject-introspection-1.84.0.tar.xz) = ce0591f0249835db8e728a863e655564b2591be8
+RMD160 (gobject-introspection-1.84.0.tar.xz) = 9d92b5a868f9d3df218ef8fa7a38d61ad198e5a4
 SHA512 (gobject-introspection-1.84.0.tar.xz) = 764b5071472f93ed62bd64983c16fc4f73d4e20575d31eb475b40f4c6643080249aec4c5e9536d0ade719a99844cefa5a6e902b4d58e5644d0c0793212da3e5b
 Size (gobject-introspection-1.84.0.tar.xz) = 1080316 bytes
 SHA1 (patch-girepository_gitypelib.c) = b5fa0fe0fc22a5dfb2b2916dfbb87e16fc732640

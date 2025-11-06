@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.53 2025/06/22 17:41:13 wiz Exp $
 
-BLAKE2s (urllib3-2.5.0.tar.gz) = 03454a77e9cad4ae1bddf6f65d1dc5d4dd795025c2154e73cec563346dba6c81
+SHA1 (urllib3-2.5.0.tar.gz) = 474a5c400b60278e757636dc67a521b26dfcd5c2
+RMD160 (urllib3-2.5.0.tar.gz) = 4f2a5c31861f2d1daf015e9d2cfd3fd7fe6fec8f
 SHA512 (urllib3-2.5.0.tar.gz) = f417a2745bc9750da23916690937e5c0dfe0534354f2c1c9f056baf16554a831a28937acca2b1f23941d5b6e87a372f2e074508eaf2c3304fd1014b8afc3295e
 Size (urllib3-2.5.0.tar.gz) = 393185 bytes

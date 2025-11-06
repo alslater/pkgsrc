@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.9 2025/06/12 11:06:14 adam Exp $
 
-BLAKE2s (Python-3.13.5.tar.xz) = 0f66095eab8776aab95ee9bb137f56151e9105cbb990056ae295bf1a98cc3d83
+SHA1 (Python-3.13.5.tar.xz) = dbf3aed444cbb2221eabfb52688aa371423aa0ba
+RMD160 (Python-3.13.5.tar.xz) = f28fd984a09c4948413d4a92eedbf11314fc3adb
 SHA512 (Python-3.13.5.tar.xz) = 2a058072e87b614b204bd1321b2bfa9c4b6614dbd5ded98dc0ee51c0d6b81504f902b7c003ad14295b371a37918f6975dc37d5a9c836dd9c30f8b086e4759193
 Size (Python-3.13.5.tar.xz) = 22856016 bytes
 SHA1 (patch-Include_pymacro.h) = 7611315fefc305a48b4965f2f2b9bee53ae3d987

@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.18 2025/05/07 07:30:43 adam Exp $
 
-BLAKE2s (poetry-2.1.3.tar.gz) = ab6dc52e17fb89adcd785efb15f2cf6dedfbf0abc740b6a8fa17a4cb1e3b78ed
+SHA1 (poetry-2.1.3.tar.gz) = f5e40cf34a55aad2de897e8109744e7bb0b84927
+RMD160 (poetry-2.1.3.tar.gz) = 70500abd52ef76e43434069bc8471f148c66950e
 SHA512 (poetry-2.1.3.tar.gz) = 15c0bec8bf7922f277ec3e6f5f4aeca50488af6eb632d292a6140b351a28dad522d218f9abc70b3da80bf6db42f63947c9967edfb4dd29f0cf85d005171e6ee3
 Size (poetry-2.1.3.tar.gz) = 3435640 bytes

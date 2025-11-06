@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.8 2024/11/28 07:15:10 adam Exp $
 
-BLAKE2s (tomli-2.2.1.tar.gz) = f56bda748948a5e3498ddaee85743abe5611aced011c53d818a6756a603fbbc2
+SHA1 (tomli-2.2.1.tar.gz) = 045ab36842a601db2f3cbe57d4a9ca5dffa0f98c
+RMD160 (tomli-2.2.1.tar.gz) = 0e95af5eeaec429d6302116c90c759261c487ddf
 SHA512 (tomli-2.2.1.tar.gz) = 7c10fc955944f5e1ca752ca60247623e3694cca0f504647a9cd78869bafc46a6902a764ca359403167957043e97c58520916f2cbc6aae39b7181b0d8d24cae96
 Size (tomli-2.2.1.tar.gz) = 17175 bytes

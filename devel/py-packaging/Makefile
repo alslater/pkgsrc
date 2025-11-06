@@ -14,6 +14,8 @@ DEPENDS+=	${PYPKGPREFIX}-pyparsing>=2.0.2:../../devel/py-pyparsing
 TEST_DEPENDS+=	${PYPKGPREFIX}-pretend-[0-9]*:../../devel/py-pretend
 TEST_DEPENDS+=	${PYPKGPREFIX}-test-[0-9]*:../../devel/py-test
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 USE_LANGUAGES=	# none
 
 # as of 25.0

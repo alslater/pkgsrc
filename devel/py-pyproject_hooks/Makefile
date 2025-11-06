@@ -15,6 +15,8 @@ USE_LANGUAGES=	# none
 
 .include "../../lang/python/pyversion.mk"
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 .if ${PYTHON_VERSION} < 311
 DEPENDS+=	${PYPKGPREFIX}-tomli>=1.1.0:../../textproc/py-tomli
 .endif

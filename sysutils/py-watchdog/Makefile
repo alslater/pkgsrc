@@ -21,7 +21,7 @@ TEST_DEPENDS+=	${PYPKGPREFIX}-test-timeout>=0.3:../../devel/py-test-timeout
 # as of 6.0.0
 # 3 failed, 146 passed, 13 skipped, 21 warnings
 
-PYTHON_VERSIONS_INCOMPATIBLE=	39 310
+PYTHON_VERSIONS_INCOMPATIBLE=	27 39 310
 
 post-install:
 	cd ${DESTDIR}${PREFIX}/bin && \

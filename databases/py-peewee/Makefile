@@ -14,7 +14,7 @@ TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
 TOOL_DEPENDS+=	${PYPKGPREFIX}-sphinx-[0-9]*:../../textproc/py-sphinx
 TOOL_DEPENDS+=	${PYPKGPREFIX}-sphinx-rtd-theme-[0-9]*:../../textproc/py-sphinx-rtd-theme
 
-PYTHON_VERSIONS_INCOMPATIBLE=	39 310 # py-sphinx
+PYTHON_VERSIONS_INCOMPATIBLE=	27 39 310 # py-sphinx
 
 MAKE_FLAGS+=	SPHINXBUILD=sphinx-build-${PYVERSSUFFIX}
 
@@ -27,6 +27,8 @@ SUBST_CLASSES+=		lpath
 SUBST_STAGE.lpath=	pre-configure
 SUBST_FILES.lpath=	setup.py
 SUBST_VARS.lpath=	BUILDLINK_PREFIX.sqlite3
+
+MAKE_ENV+=	NO_SQLITE=1
 
 INSTALLATION_DIRS+=	${PKGMANDIR}/man1
 

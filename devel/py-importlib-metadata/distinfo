@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.35 2025/04/28 19:46:54 adam Exp $
 
-BLAKE2s (importlib_metadata-8.7.0.tar.gz) = 60a8f9d84869ddd344bf075511b49c8a64c5920b927a194ba3317bb78d560800
+SHA1 (importlib_metadata-8.7.0.tar.gz) = 6be7b3d3f4605d38ca75eedaa97e295a0136e2a5
+RMD160 (importlib_metadata-8.7.0.tar.gz) = f99eb9e43f7461cb0d2239bbb33eff084f5030e5
 SHA512 (importlib_metadata-8.7.0.tar.gz) = f23579486a4529135b063605728e232ba798cdda0886562e14c20ca1d4cbff65ae464543c2a2adc37bd41b9e5c5519b1700b936c6fdcaab96b317c80c484c611
 Size (importlib_metadata-8.7.0.tar.gz) = 56641 bytes

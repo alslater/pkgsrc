@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.70 2025/05/04 12:57:37 adam Exp $
 
-BLAKE2s (pip-25.1.1.tar.gz) = f18c4104f1318450180c33b48ee06a015ed42bee31f23ea6904479f2fcf4ce3e
+SHA1 (pip-25.1.1.tar.gz) = e0cfeb25b9fc9f597e1b06be9cb4529321c13053
+RMD160 (pip-25.1.1.tar.gz) = 4aaf65f5e362f4372646b3a8c9dc70386192ee57
 SHA512 (pip-25.1.1.tar.gz) = aa607dc778188700c30086ac03970f991ebcf00308003555552d57ee9edfad25caf78d2ae94260ed3df39c7338eb51d3101950bfe79c800f882031cb31eebe72
 Size (pip-25.1.1.tar.gz) = 1940155 bytes
 SHA1 (patch-src_pip___internal_build__env.py) = 19c6feb4b56cbdb70f9150c452dac73ca3949911

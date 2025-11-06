@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.27 2025/07/06 08:58:43 wiz Exp $
 
-BLAKE2s (typing_extensions-4.14.1.tar.gz) = 0ac5ca9dec13ddad30fe020cba77df038a7ad0e6fda408b589b722d3f0a6b946
+SHA1 (typing_extensions-4.14.1.tar.gz) = 01d880d64c9875a3b96a69018ceaef160afa098c
+RMD160 (typing_extensions-4.14.1.tar.gz) = bec3c7ba9f1fc3dd3fff130133a4847825e9cdbf
 SHA512 (typing_extensions-4.14.1.tar.gz) = 9db9e56d321e707562b07d633c1c4bcfe2505947d9d40a3540273e1337619e8573ee014708686fba45d14fac7841ed2cddbe53288d8283a8fcede62a5afe5eee
 Size (typing_extensions-4.14.1.tar.gz) = 107673 bytes

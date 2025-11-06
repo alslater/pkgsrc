@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.18 2025/01/14 11:32:05 adam Exp $
 
-BLAKE2s (wrapt-1.17.2.tar.gz) = 5008c7f4e5d73d39e919f8c649b5108ad821d703eddbd59b13e18b37b2a78ec7
+SHA1 (wrapt-1.17.2.tar.gz) = c83dbd8634a88b17cd799c305e8fb25d2fd828fc
+RMD160 (wrapt-1.17.2.tar.gz) = 797adffe3ac1e557d5173f0f70f0c3f2533de1b5
 SHA512 (wrapt-1.17.2.tar.gz) = 004e060b37775f422dc08baccee148ca3d27c5281398aa4196bf279f561c65d5e5b7a4743fe22001b9107b18cf30a2296ca1ae4c30de79644769e2a619869e0d
 Size (wrapt-1.17.2.tar.gz) = 55531 bytes

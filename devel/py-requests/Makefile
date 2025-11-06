@@ -10,6 +10,7 @@ HOMEPAGE=	https://requests.readthedocs.io/
 COMMENT=	HTTP library, written in Python, for human beings
 LICENSE=	apache-2.0
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
 TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
 DEPENDS+=	${PYPKGPREFIX}-certifi>=2017.4.17:../../security/py-certifi
 DEPENDS+=	${PYPKGPREFIX}-charset-normalizer>=2:../../converters/py-charset-normalizer

@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.9 2024/08/06 13:03:42 wiz Exp $
 
-BLAKE2s (sphinxcontrib_applehelp-2.0.0.tar.gz) = 85ede3dc7e3e9aba727a9665eca170d08a96b4684ae49eb8077474ad7c6f548d
+SHA1 (sphinxcontrib_applehelp-2.0.0.tar.gz) = 049a60d7ab072f5dddbd657edc7ed47e1bc70fcc
+RMD160 (sphinxcontrib_applehelp-2.0.0.tar.gz) = 44702e7ba718c8f04f7dc8fda2e8d92b2f2f1a6a
 SHA512 (sphinxcontrib_applehelp-2.0.0.tar.gz) = 8fefd599e413f1e9e53fa62a0fbeafed8ac231e18805e56950d45fe9eda670051dea6a938aea5df58c8fc93f61d524a129495fc4c609fcba7653ba1511d6bc6b
 Size (sphinxcontrib_applehelp-2.0.0.tar.gz) = 20053 bytes

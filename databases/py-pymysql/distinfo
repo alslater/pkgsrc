@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.13 2024/05/22 07:18:56 adam Exp $
 
-BLAKE2s (pymysql-1.1.1.tar.gz) = c8cc85acda46b2014480643f4525faaf59fd84988b71b79d58b442f5b3ab0455
+SHA1 (pymysql-1.1.1.tar.gz) = 791692a3dfa64a22c621b4e99a4dd499cdb6260d
+RMD160 (pymysql-1.1.1.tar.gz) = fad2d0865ccb96b2f56858189adbd6fab9e3f9f6
 SHA512 (pymysql-1.1.1.tar.gz) = 09d533232a2e939ea4586452b97bd6f2d35cf5347027167ab16f154cc5cd63713da6b8782b9669829e1f4f161f189c79bacd2b57cf50880c27d90c832bc3683f
 Size (pymysql-1.1.1.tar.gz) = 47678 bytes

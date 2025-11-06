@@ -47,7 +47,6 @@ TGT.armv6=		armv6-unknown-netbsd-eabihf
 TGT.sparc64=		sparc64-unknown-netbsd
 TGT.powerpc=		powerpc-unknown-netbsd
 TGT.powerpc90=		powerpc-unknown-netbsd
-TGT.arm64=		aarch64-unknown-netbsd
 TGT.arm64_be=		aarch64_be-unknown-netbsd
 TGT.i386=		i586-unknown-netbsd
 TGT.mipsel=		mipsel-unknown-netbsd

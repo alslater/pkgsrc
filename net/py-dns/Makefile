@@ -10,6 +10,8 @@ HOMEPAGE=	https://www.dnspython.org/
 COMMENT=	Python DNS toolkit
 LICENSE=	isc
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 TOOL_DEPENDS+=	${PYPKGPREFIX}-hatchling>=1.21.0:../../devel/py-hatchling
 DEPENDS+=	${PYPKGPREFIX}-idna>=2.1:../../www/py-idna
 TEST_DEPENDS+=	${PYPKGPREFIX}-test-cov>=4.0.0:../../devel/py-test-cov

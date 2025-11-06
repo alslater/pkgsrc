@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.19 2023/11/26 10:04:16 adam Exp $
 
-BLAKE2s (pexpect-4.9.0.tar.gz) = daf67f19830cf42c61f2903b18c5d3ec64b7026e1c5f03934b50bb326153bf26
+SHA1 (pexpect-4.9.0.tar.gz) = 5bff9230c419eecbf701059f104e74a3f3a1b208
+RMD160 (pexpect-4.9.0.tar.gz) = 932c3e82c058294955642654d063dbfcc1785857
 SHA512 (pexpect-4.9.0.tar.gz) = 0e4b3a6978b94aee221ff23cd7bd771517e0e0f1a1a8b17f77f15bf78edd3130ad093d925b7d1e86fe6ba7eb956205d4c616b4e52b2fcfa1e944d4860dd7b3a0
 Size (pexpect-4.9.0.tar.gz) = 166450 bytes

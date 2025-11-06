@@ -1,5 +1,6 @@
 $NetBSD: distinfo,v 1.245 2025/05/27 07:28:15 adam Exp $
 
-BLAKE2s (setuptools-80.9.0.tar.gz) = 202eeb5e298d8b9dbf31baffb3922c69ab7b72b45c56ec83fa93a3941bc3fce2
+SHA1 (setuptools-80.9.0.tar.gz) = fc3caa7370e18be4c0ca4703f813df1ca4a6b7ad
+RMD160 (setuptools-80.9.0.tar.gz) = 7b52765d16e69ca7692cce186be7ae630b79782c
 SHA512 (setuptools-80.9.0.tar.gz) = 36eb1f219d29c6b9e135936bde2001ad70a971c8069cd0175d3a5325b450e6843a903d3f70043c9f534768ebeab8ab0c544b8f44456555d333f1ed72daa5c18b
 Size (setuptools-80.9.0.tar.gz) = 1319958 bytes

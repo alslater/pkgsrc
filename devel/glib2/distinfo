@@ -1,6 +1,7 @@
 $NetBSD: distinfo,v 1.337 2025/06/30 18:21:29 schmonz Exp $
 
-BLAKE2s (glib-2.84.3.tar.xz) = c1560329dc72d760cd9a5ac7c60d4d8563c3fe8d17172c091bdf7c92f880cfd7
+SHA1 (glib-2.84.3.tar.xz) = 1dd93eda8bbb0c5660b248fe30be361b0f43c4b4
+RMD160 (glib-2.84.3.tar.xz) = 966b85d62240b78a8086fa49c190e53bfc8239be
 SHA512 (glib-2.84.3.tar.xz) = 73f2d67d2ef5b4dc8cd2f6df9ce7903853ec619924e2927adbc73d706974a7d660afea55be18e12ccb0dee1145cf4149b743278d2b128fd466e3df2bbf90ef57
 Size (glib-2.84.3.tar.xz) = 5615704 bytes
 SHA1 (patch-gio_gcredentialsprivate.h) = f719ae41a9eb1d2f04d866b246fa5176543f2df9

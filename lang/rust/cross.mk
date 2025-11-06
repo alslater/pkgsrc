@@ -43,7 +43,6 @@
 #TARGET= 		armv6-unknown-netbsd-eabihf
 #TARGET=		sparc64-unknown-netbsd
 #TARGET=		powerpc-unknown-netbsd
-#TARGET=		aarch64-unknown-netbsd
 #TARGET=		aarch64_be-unknown-netbsd
 #TARGET=		i686-unknown-netbsd
 #TARGET=		i586-unknown-netbsd
