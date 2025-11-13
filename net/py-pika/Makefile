@@ -11,6 +11,8 @@ HOMEPAGE=	https://pika.readthedocs.io/
 COMMENT=	Python AMQP Client Library
 LICENSE=	modified-bsd
 
+PYTHON_VERSIONS_INCOMPATIBLE= 27
+
 TOOL_DEPENDS+=	${PYPKGPREFIX}-setuptools>=78:../../devel/py-setuptools
 
 USE_LANGUAGES=	# none
