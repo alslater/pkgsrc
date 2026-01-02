@@ -17,6 +17,8 @@ REPLACE_PYTHON+=	Cython/Debugger/Cygdb.py
 REPLACE_PYTHON+=	Cython/Debugger/libpython.py
 REPLACE_PYTHON+=	cython.py
 
+USE_LANGUAGES=		c99
+
 PYTHON_VERSIONS_INCOMPATIBLE=	39 310
 
 USE_CC_FEATURES=	c99
