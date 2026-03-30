@@ -394,6 +394,8 @@ man/man3/BIO_bind.3ossl
 man/man3/BIO_callback_ctrl.3ossl
 man/man3/BIO_callback_fn.3ossl
 man/man3/BIO_callback_fn_ex.3ossl
+man/man3/BIO_clear_flags.3ossl
+man/man3/BIO_clear_retry_flags.3ossl
 man/man3/BIO_closesocket.3ossl
 man/man3/BIO_connect.3ossl
 man/man3/BIO_ctrl.3ossl
@@ -449,6 +451,7 @@ man/man3/BIO_get_data.3ossl
 man/man3/BIO_get_ex_data.3ossl
 man/man3/BIO_get_ex_new_index.3ossl
 man/man3/BIO_get_fd.3ossl
+man/man3/BIO_get_flags.3ossl
 man/man3/BIO_get_fp.3ossl
 man/man3/BIO_get_indent.3ossl
 man/man3/BIO_get_info_callback.3ossl
@@ -466,6 +469,7 @@ man/man3/BIO_get_peer_name.3ossl
 man/man3/BIO_get_peer_port.3ossl
 man/man3/BIO_get_read_request.3ossl
 man/man3/BIO_get_retry_BIO.3ossl
+man/man3/BIO_get_retry_flags.3ossl
 man/man3/BIO_get_retry_reason.3ossl
 man/man3/BIO_get_shutdown.3ossl
 man/man3/BIO_get_ssl.3ossl
@@ -565,6 +569,7 @@ man/man3/BIO_set_conn_port.3ossl
 man/man3/BIO_set_data.3ossl
 man/man3/BIO_set_ex_data.3ossl
 man/man3/BIO_set_fd.3ossl
+man/man3/BIO_set_flags.3ossl
 man/man3/BIO_set_fp.3ossl
 man/man3/BIO_set_indent.3ossl
 man/man3/BIO_set_info_callback.3ossl
@@ -577,7 +582,10 @@ man/man3/BIO_set_nbio_accept.3ossl
 man/man3/BIO_set_next.3ossl
 man/man3/BIO_set_prefix.3ossl
 man/man3/BIO_set_read_buffer_size.3ossl
+man/man3/BIO_set_retry_read.3ossl
 man/man3/BIO_set_retry_reason.3ossl
+man/man3/BIO_set_retry_special.3ossl
+man/man3/BIO_set_retry_write.3ossl
 man/man3/BIO_set_shutdown.3ossl
 man/man3/BIO_set_ssl.3ossl
 man/man3/BIO_set_ssl_mode.3ossl
@@ -596,6 +604,7 @@ man/man3/BIO_socket_wait.3ossl
 man/man3/BIO_ssl_copy_session_id.3ossl
 man/man3/BIO_ssl_shutdown.3ossl
 man/man3/BIO_tell.3ossl
+man/man3/BIO_test_flags.3ossl
 man/man3/BIO_up_ref.3ossl
 man/man3/BIO_vfree.3ossl
 man/man3/BIO_vprintf.3ossl
@@ -767,6 +776,7 @@ man/man3/CMS_ContentInfo_print_ctx.3ossl
 man/man3/CMS_EncryptedData_decrypt.3ossl
 man/man3/CMS_EncryptedData_encrypt.3ossl
 man/man3/CMS_EncryptedData_encrypt_ex.3ossl
+man/man3/CMS_EncryptedData_set1_key.3ossl
 man/man3/CMS_EnvelopedData_create.3ossl
 man/man3/CMS_EnvelopedData_create_ex.3ossl
 man/man3/CMS_ReceiptRequest_create0.3ossl

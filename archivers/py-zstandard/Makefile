@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.35 2025/04/12 17:54:10 pgoyette Exp $
 
-DISTNAME=	zstandard-0.23.0
+DISTNAME=	zstandard-0.25.0
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 PKGREVISION=	2
 CATEGORIES=	archivers python
@@ -10,6 +10,8 @@ MAINTAINER=	pkgsrc-users@NetBSD.org
 HOMEPAGE=	https://github.com/indygreg/python-zstandard
 COMMENT=	Zstandard bindings for Python
 LICENSE=	modified-bsd
+
+USE_LANGUAGES+= c99
 
 USE_TOOLS+=	cpp
 

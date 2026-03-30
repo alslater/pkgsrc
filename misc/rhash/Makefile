@@ -11,6 +11,8 @@ HOMEPAGE=	https://github.com/rhash/RHash
 COMMENT=	Calculate/check CRC32, MD5, SHA1, GOST, TTH, BTIH or other hash sums
 LICENSE=	mit
 
+USE_LANGUAGES+=		c99
+
 WRKSRC=			${WRKDIR}/${DISTNAME:S/rh/RH/}
 HAS_CONFIGURE=		yes
 USE_GCC_RUNTIME=	yes
