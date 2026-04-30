@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.43 2025/02/23 19:38:37 wiz Exp $
 
-DISTNAME=	wheel-0.45.1
+DISTNAME=	wheel-0.46.3
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 PKGREVISION=	1
 CATEGORIES=	devel python

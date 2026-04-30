@@ -1204,6 +1204,7 @@ lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVE
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/channels-list.ejs
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/channels.ejs
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/classic-queue-arguments.ejs
+lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/classic-queue-get-message.ejs
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/classic-queue-node-details.ejs
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/classic-queue-operator-policy-arguments.ejs
 lib/erlang/lib/rabbitmq_server-${PKGVERSION}/plugins/rabbitmq_management-${PKGVERSION}/priv/www/js/tmpl/classic-queue-stats.ejs

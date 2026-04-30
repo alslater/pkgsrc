@@ -1,7 +1,7 @@
 # $NetBSD: Makefile,v 1.7 2019/04/19 17:56:52 adam Exp $
 
-DISTNAME=	brotli-1.1.0
-PKGREVISION=	1
+DISTNAME=	brotli-1.2.0
+#PKGREVISION=	1
 CATEGORIES=	archivers
 MASTER_SITES=	${MASTER_SITE_GITHUB:=google/}
 GITHUB_TAG=	v${PKGVERSION_NOREV}
@@ -12,6 +12,6 @@ COMMENT=	Generic-purpose lossless compression algorithm
 LICENSE=	mit
 
 USE_CMAKE=	yes
-USE_LANGUAGES=	c c++
+USE_LANGUAGES=	c99 c++
 
 .include "../../mk/bsd.pkg.mk"

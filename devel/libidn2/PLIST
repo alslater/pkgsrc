@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.2 2017/07/22 02:33:00 schmonz Exp $
+@comment $NetBSD$
 bin/idn2
 include/idn2.h
 info/libidn2.info
@@ -14,6 +14,7 @@ man/man3/idn2_register_ul.3
 man/man3/idn2_strerror.3
 man/man3/idn2_strerror_name.3
 man/man3/idn2_to_ascii_4i.3
+man/man3/idn2_to_ascii_4i2.3
 man/man3/idn2_to_ascii_4z.3
 man/man3/idn2_to_ascii_8z.3
 man/man3/idn2_to_ascii_lz.3
@@ -23,12 +24,16 @@ man/man3/idn2_to_unicode_8z4z.3
 man/man3/idn2_to_unicode_8z8z.3
 man/man3/idn2_to_unicode_8zlz.3
 man/man3/idn2_to_unicode_lzlz.3
+share/gtk-doc/html/libidn2/api-index-0.1.html
+share/gtk-doc/html/libidn2/api-index-2.0.0.html
+share/gtk-doc/html/libidn2/api-index-2.1.1.html
+share/gtk-doc/html/libidn2/api-index-deprecated.html
 share/gtk-doc/html/libidn2/api-index-full.html
 share/gtk-doc/html/libidn2/home.png
 share/gtk-doc/html/libidn2/index.html
 share/gtk-doc/html/libidn2/left-insensitive.png
 share/gtk-doc/html/libidn2/left.png
-share/gtk-doc/html/libidn2/libidn2-idn2.html
+share/gtk-doc/html/libidn2/libidn2-idn2.h.html
 share/gtk-doc/html/libidn2/libidn2.devhelp2
 share/gtk-doc/html/libidn2/libidn2.html
 share/gtk-doc/html/libidn2/right-insensitive.png
@@ -36,3 +41,28 @@ share/gtk-doc/html/libidn2/right.png
 share/gtk-doc/html/libidn2/style.css
 share/gtk-doc/html/libidn2/up-insensitive.png
 share/gtk-doc/html/libidn2/up.png
+share/locale/cs/LC_MESSAGES/libidn2.mo
+share/locale/da/LC_MESSAGES/libidn2.mo
+share/locale/de/LC_MESSAGES/libidn2.mo
+share/locale/eo/LC_MESSAGES/libidn2.mo
+share/locale/es/LC_MESSAGES/libidn2.mo
+share/locale/fi/LC_MESSAGES/libidn2.mo
+share/locale/fr/LC_MESSAGES/libidn2.mo
+share/locale/fur/LC_MESSAGES/libidn2.mo
+share/locale/hr/LC_MESSAGES/libidn2.mo
+share/locale/hu/LC_MESSAGES/libidn2.mo
+share/locale/id/LC_MESSAGES/libidn2.mo
+share/locale/it/LC_MESSAGES/libidn2.mo
+share/locale/ja/LC_MESSAGES/libidn2.mo
+share/locale/ka/LC_MESSAGES/libidn2.mo
+share/locale/ko/LC_MESSAGES/libidn2.mo
+share/locale/nl/LC_MESSAGES/libidn2.mo
+share/locale/pl/LC_MESSAGES/libidn2.mo
+share/locale/pt_BR/LC_MESSAGES/libidn2.mo
+share/locale/ro/LC_MESSAGES/libidn2.mo
+share/locale/ru/LC_MESSAGES/libidn2.mo
+share/locale/sr/LC_MESSAGES/libidn2.mo
+share/locale/sv/LC_MESSAGES/libidn2.mo
+share/locale/uk/LC_MESSAGES/libidn2.mo
+share/locale/vi/LC_MESSAGES/libidn2.mo
+share/locale/zh_CN/LC_MESSAGES/libidn2.mo

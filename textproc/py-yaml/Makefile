@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.37 2025/07/04 09:08:37 wiz Exp $
 
-DISTNAME=	pyyaml-6.0.2
+DISTNAME=	pyyaml-6.0.3
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME:S/py//}
 PKGREVISION=	4
 CATEGORIES=	textproc python

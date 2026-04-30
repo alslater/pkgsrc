@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.114 2024/05/27 19:07:50 riastradh Exp $
 
-SHA1 (erlang-26.2.5.14.tar.gz) = 59e229c59292eb3530d849c279340b0933331ae5
-RMD160 (erlang-26.2.5.14.tar.gz) = 6a1a6b299d620eaef59e9959a75fc8b56eeca3e8
-SHA512 (erlang-26.2.5.14.tar.gz) = 49ab187d657efd45304685b2117aa8f9adc07a41864e13c1bb5c3b3893fcda4b5d3895bfe91a3dbcd5c3372f49b3aad9f4dafa6511755e6cab595ddd87c748cb
-Size (erlang-26.2.5.14.tar.gz) = 62564783 bytes
+SHA1 (erlang-26.2.5.18.tar.gz) = d01c34e140f1b86e15935aa276ffb1ee23a67d27
+RMD160 (erlang-26.2.5.18.tar.gz) = 04dbd20739e819c051236a38dff0568ecfb2b924
+SHA512 (erlang-26.2.5.18.tar.gz) = 71e369d51a322caad27da2e66c780c68e79bc42dc78cfc90cdeca7f12407ed8daf96d50636dcc71e292cb9728fd02869ba5effd96a2d4273ba128c6a4deedc0f
+Size (erlang-26.2.5.18.tar.gz) = 62584060 bytes
 SHA1 (patch-erts_emulator_Makefile.in) = b99ccd2669652b1542b2ee99e09f886d864fd8be
 SHA1 (patch-erts_emulator_beam_erl__init.c) = ccbf4330a0774b97a3aca611fc57ba60062e1390
 SHA1 (patch-erts_emulator_beam_packet__parser.c) = 13cb7fb1d65ddac93221d85df1a44d76332b1cec
