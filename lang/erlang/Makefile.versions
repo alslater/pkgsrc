@@ -6,7 +6,7 @@
 # always will.
 DIST_VERSION_MAJOR=	26
 DIST_VERSION_MINOR=	2
-DIST_VERSION_PATCH=	5.18
+DIST_VERSION_PATCH=	5.20
 
 .include "versions.mk"
 
