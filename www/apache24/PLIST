@@ -557,6 +557,8 @@ share/httpd/manual/developer/modguide.html.en
 share/httpd/manual/developer/modules.html
 share/httpd/manual/developer/modules.html.en
 share/httpd/manual/developer/modules.html.ja.utf8
+share/httpd/manual/developer/mod_example_1.c
+share/httpd/manual/developer/mod_example_2.c
 share/httpd/manual/developer/new_api_2_4.html
 share/httpd/manual/developer/new_api_2_4.html.en
 share/httpd/manual/developer/output-filters.html
@@ -1376,10 +1378,6 @@ share/httpd/manual/platform/netware.html
 share/httpd/manual/platform/netware.html.en
 share/httpd/manual/platform/netware.html.fr.utf8
 share/httpd/manual/platform/netware.html.ko.euc-kr
-share/httpd/manual/platform/perf-hp.html
-share/httpd/manual/platform/perf-hp.html.en
-share/httpd/manual/platform/perf-hp.html.fr.utf8
-share/httpd/manual/platform/perf-hp.html.ko.euc-kr
 share/httpd/manual/platform/rpm.html
 share/httpd/manual/platform/rpm.html.en
 share/httpd/manual/platform/rpm.html.fr.utf8
