@@ -5,11 +5,11 @@ Do not install HTML documentation.
 Avoid -B $NUM argument to m4 (ignored by most m4 implementations, not
 supported by others)
 
---- Configurations/unix-Makefile.tmpl.orig	2023-10-24 13:48:41.000000000 +0000
+--- Configurations/unix-Makefile.tmpl.orig	2026-04-07 12:26:30.000000000 +0000
 +++ Configurations/unix-Makefile.tmpl
-@@ -311,9 +311,10 @@ MODULESDIR=$(libdir)/ossl-modules
- # libraries and applications
- LIBRPATH=$(libdir)
+@@ -352,9 +352,10 @@ bindir={- file_name_is_absolute($bindir)
+ PKGCONFIGDIR=$(libdir)/pkgconfig
+ CMAKECONFIGDIR=$(libdir)/cmake/OpenSSL
  
 -MANDIR=$(INSTALLTOP)/share/man
 +MANDIR=$(INSTALLTOP)/$(PKGMANDIR)
@@ -19,16 +19,16 @@ supported by others)
  
  # MANSUFFIX is for the benefit of anyone who may want to have a suffix
  # appended after the manpage file section number.  "ssl" is popular,
-@@ -611,7 +612,7 @@ install_sw: install_dev install_engines
+@@ -670,7 +671,7 @@ install_sw: install_dev install_engines
  
- uninstall_sw: uninstall_runtime uninstall_modules uninstall_engines uninstall_dev
+ uninstall_sw: uninstall_runtime uninstall_modules uninstall_engines uninstall_dev ## Uninstall the software and libraries
  
--install_docs: install_man_docs install_html_docs
-+install_docs: install_man_docs 
+-install_docs: install_man_docs install_html_docs ## Install manpages and HTML documentation
++install_docs: install_man_docs ## Install manpages and HTML documentation
  
- uninstall_docs: uninstall_man_docs uninstall_html_docs
+ uninstall_docs: uninstall_man_docs uninstall_html_docs ## Uninstall manpages and HTML documentation
  	$(RM) -r "$(DESTDIR)$(DOCDIR)"
-@@ -646,48 +647,48 @@ uninstall_fips:
+@@ -705,48 +706,48 @@ uninstall_fips:
  
  
  install_ssldirs:
@@ -105,7 +105,7 @@ supported by others)
  	fi
  
  install_dev: install_runtime_libs
-@@ -1570,7 +1571,7 @@ EOF
+@@ -1618,7 +1619,7 @@ EOF
                $generator = 'CC="$(CC)" $(PERL)'.$gen_incs.' '.$gen0.$gen_args
                    .' "$(PERLASM_SCHEME)"'.$incs.' '.$cppflags.$defs.' $(PROCESSOR)';
            } elsif ($gen0 =~ /\.m4$/) {

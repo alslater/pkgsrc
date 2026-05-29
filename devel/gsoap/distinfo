@@ -4,5 +4,6 @@ SHA1 (gsoap_2.8.63.zip) = 9f00ab96fae0ffeecb67200d9943babc903afce7
 RMD160 (gsoap_2.8.63.zip) = bb6728d57b74eb3402cfb5b7977397651a59b605
 SHA512 (gsoap_2.8.63.zip) = 1941aba9c4a7d5e57e8b8f4f2183ee3c24a9a5c3e93caedfd27a13cbc625dc06e3114f850f0dcddb87dd436a997e1157fb2c6fb20c28f1b0675e634c3d489d96
 Size (gsoap_2.8.63.zip) = 32985252 bytes
+SHA1 (patch-gsoap_stdsoap2.cpp) = 37605fd77c47d5578047d8b94da975077d82d568
 SHA1 (patch-gsoap_stdsoap2.h) = 2c358a79737d05c0d88d2f6c1824d08e00579341
 SHA1 (patch-scl-a) = d19d54df07dd8b345c20125e1deef56d6f625473
