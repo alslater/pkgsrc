@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.156 2025/04/17 21:52:50 wiz Exp $
 
-DISTNAME=	lynx2.9.2
+DISTNAME=	lynx2.9.3
 PKGNAME=	${DISTNAME:S/lynx/lynx-/:S/rel//}
 PKGREVISION=	5
 CATEGORIES=	www

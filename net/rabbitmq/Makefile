@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.95 2024/05/06 16:10:04 adam Exp $
 
-DISTNAME=	rabbitmq-server-4.2.5
+DISTNAME=	rabbitmq-server-4.3.1
 #PKGREVISION=	1
 PKGNAME=	${DISTNAME:S/-server//}
 CATEGORIES=	net

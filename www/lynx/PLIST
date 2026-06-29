@@ -1,8 +1,5 @@
-@comment $NetBSD: PLIST,v 1.16 2024/06/08 20:31:23 nikita Exp $
+@comment $NetBSD$
 bin/lynx
-man/man1/lynx.1
-share/examples/lynx/lynx.cfg
-share/examples/lynx/lynx.lss
 share/locale/ca/LC_MESSAGES/lynx.mo
 share/locale/cs/LC_MESSAGES/lynx.mo
 share/locale/da/LC_MESSAGES/lynx.mo
@@ -16,6 +13,8 @@ share/locale/hu/LC_MESSAGES/lynx.mo
 share/locale/id/LC_MESSAGES/lynx.mo
 share/locale/it/LC_MESSAGES/lynx.mo
 share/locale/ja/LC_MESSAGES/lynx.mo
+share/locale/ka/LC_MESSAGES/lynx.mo
+share/locale/kab/LC_MESSAGES/lynx.mo
 share/locale/nl/LC_MESSAGES/lynx.mo
 share/locale/pt_BR/LC_MESSAGES/lynx.mo
 share/locale/ro/LC_MESSAGES/lynx.mo
@@ -27,6 +26,9 @@ share/locale/uk/LC_MESSAGES/lynx.mo
 share/locale/vi/LC_MESSAGES/lynx.mo
 share/locale/zh_CN/LC_MESSAGES/lynx.mo
 share/locale/zh_TW/LC_MESSAGES/lynx.mo
+man/man1/lynx.1
+share/examples/lynx/lynx.cfg
+share/examples/lynx/lynx.lss
 share/lynx/lynx_doc/CHANGES
 share/lynx/lynx_doc/COPYHEADER
 share/lynx/lynx_doc/COPYHEADER.asc
@@ -98,6 +100,8 @@ share/lynx/lynx_doc/test/c1.html
 share/lynx/lynx_doc/test/circle.html
 share/lynx/lynx_doc/test/cp-1252.html
 share/lynx/lynx_doc/test/cp-1252a.html
+share/lynx/lynx_doc/test/formaction.html
+share/lynx/lynx_doc/test/formaction2.html
 share/lynx/lynx_doc/test/idna-tr46.html
 share/lynx/lynx_doc/test/image.jpg
 share/lynx/lynx_doc/test/iso-8859-1.html
@@ -105,6 +109,7 @@ share/lynx/lynx_doc/test/iso-8859-1a.html
 share/lynx/lynx_doc/test/iso-8859-2.html
 share/lynx/lynx_doc/test/iso-8859-2a.html
 share/lynx/lynx_doc/test/koi8-r.html
+share/lynx/lynx_doc/test/named-entities.html
 share/lynx/lynx_doc/test/nobody
 share/lynx/lynx_doc/test/quickbrown.html
 share/lynx/lynx_doc/test/raw8bit.html

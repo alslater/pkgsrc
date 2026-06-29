@@ -6,9 +6,6 @@ PKGREVISION= 2
 PKGNAME=	${DISTNAME:S/-/-proxy-${ZABBIX_DB_TYPE}-/}
 COMMENT=	Enterprise-class Monitoring Solution for Everyone
 
-CONFLICTS+=	zabbix-[0-9]*
-CONFLICTS+=	zabbix-proxy-[0-9]*
-
 DEPENDS+=	fping-[0-9]*:../../net/fping
 
 USE_TOOLS+=		aclocal autoconf automake pax pkg-config

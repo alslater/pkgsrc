@@ -1,6 +1,6 @@
 $NetBSD: distinfo,v 1.26 2021/10/26 11:17:43 nia Exp $
 
-SHA1 (certifi-2026.4.22.tar.gz) = 4b1f0698008fadc7b07e5e0703a21d07fef820b1
-RMD160 (certifi-2026.4.22.tar.gz) = 614337b7469fb550005b5227b6aea16fdb27e368
-SHA512 (certifi-2026.4.22.tar.gz) = 0891bce6a040a0a4ca9540046744ac3170db67f9a489212879a4392f15858af2e5672d0b9939c1ac7f31f42e7a6a2a08da970893c78f471ac3228d02f94a58e2
-Size (certifi-2026.4.22.tar.gz) = 137077 bytes
+SHA1 (certifi-2026.5.20.tar.gz) = 13f8d107dd4bfd8f19016cdda9d0927ca0adac42
+RMD160 (certifi-2026.5.20.tar.gz) = ead90c070d06209ceac310ff6e7fe6b30876e8bb
+SHA512 (certifi-2026.5.20.tar.gz) = 160bb8f2e93e9f40adaed29bed755b7844503e27096a3d9683fbebcd08aa4470db40b785faf27f47a71ea7a9b8cb1febb5c4660ba58bb8e386ffa6af8dab165b
+Size (certifi-2026.5.20.tar.gz) = 135422 bytes

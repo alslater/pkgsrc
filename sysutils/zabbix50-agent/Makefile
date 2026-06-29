@@ -6,9 +6,6 @@
 PKGNAME=	${DISTNAME:S/-/-agent-/}
 COMMENT=	Enterprise-class Monitoring Solution for Everyone
 
-CONFLICTS+=	zabbix-[0-9]*
-CONFLICTS+=	zabbix-agent-[0-9]*
-
 USE_TOOLS+=		pkg-config
 GNU_CONFIGURE=		yes
 CONFIGURE_ARGS+=	--enable-agent

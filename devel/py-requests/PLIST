@@ -12,6 +12,8 @@ ${PYSITELIB}/requests/__version__.pyo
 ${PYSITELIB}/requests/__version__.pyc
 ${PYSITELIB}/requests/_internal_utils.pyo
 ${PYSITELIB}/requests/_internal_utils.pyc
+${PYSITELIB}/requests/_types.pyo
+${PYSITELIB}/requests/_types.pyc
 ${PYSITELIB}/requests/adapters.pyo
 ${PYSITELIB}/requests/adapters.pyc
 ${PYSITELIB}/requests/api.pyo
@@ -44,6 +46,7 @@ ${PYSITELIB}/requests/utils.pyo
 ${PYSITELIB}/requests/utils.pyc
 ${PYSITELIB}/requests/__version__.py
 ${PYSITELIB}/requests/_internal_utils.py
+${PYSITELIB}/requests/_types.py
 ${PYSITELIB}/requests/adapters.py
 ${PYSITELIB}/requests/api.py
 ${PYSITELIB}/requests/auth.py
@@ -55,6 +58,7 @@ ${PYSITELIB}/requests/help.py
 ${PYSITELIB}/requests/hooks.py
 ${PYSITELIB}/requests/models.py
 ${PYSITELIB}/requests/packages.py
+${PYSITELIB}/requests/py.typed
 ${PYSITELIB}/requests/sessions.py
 ${PYSITELIB}/requests/status_codes.py
 ${PYSITELIB}/requests/structures.py
