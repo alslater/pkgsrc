@@ -1,7 +1,7 @@
 $NetBSD: distinfo,v 1.6 2021/11/13 20:41:09 otis Exp $
 
-SHA1 (zabbix-7.0.26.tar.gz) = ff8a3be62897fc8618474656b9616c9dd6356dab
-RMD160 (zabbix-7.0.26.tar.gz) = a66b7574cd6651b4a88e75d473c66f564e9552b1
-SHA512 (zabbix-7.0.26.tar.gz) = b615bc09eaeca0880579bdab8e002d8a0af7d0ef6cead056261d0326df6763fe1aea3619e8e94ea53243f9d33dc2665a0d0b55032bf2031556fff0813ccf0bb8
-Size (zabbix-7.0.26.tar.gz) = 46875037 bytes
+SHA1 (zabbix-7.0.27.tar.gz) = bc4c55cc60c7a2ed05a7bf0d20090e8224d60cef
+RMD160 (zabbix-7.0.27.tar.gz) = ed7f387a8781320cb6a91a37a0beda73927ce3fd
+SHA512 (zabbix-7.0.27.tar.gz) = 6d412788e752645c172b2eef99bb33838d05cddec29054308698c5a1aecca9f1a826178278018bf6b1f626996ddda8151a6ad631ed9bb9b76e37c7b94a566ab0
+Size (zabbix-7.0.27.tar.gz) = 46883404 bytes
 SHA1 (patch-configure) = cf647b9ee52a96882d31f8783ac19b66e3e65105

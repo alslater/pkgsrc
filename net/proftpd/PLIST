@@ -1,4 +1,4 @@
-@comment $NetBSD: PLIST,v 1.30 2023/12/20 17:05:00 wiz Exp $
+@comment $NetBSD$
 bin/ftpasswd
 bin/ftpcount
 bin/ftpdctl
@@ -74,6 +74,8 @@ include/proftpd/mod_sftp/mac.h
 include/proftpd/mod_sftp/misc.h
 include/proftpd/mod_sftp/msg.h
 include/proftpd/mod_sftp/packet.h
+include/proftpd/mod_sftp/poly1305.h
+include/proftpd/mod_sftp/provider.h
 include/proftpd/mod_sftp/rfc4716.h
 include/proftpd/mod_sftp/scp.h
 include/proftpd/mod_sftp/service.h
@@ -140,7 +142,7 @@ libexec/proftpd/mod_ratio.la
 libexec/proftpd/mod_readme.la
 libexec/proftpd/mod_rewrite.la
 libexec/proftpd/mod_sftp.la
-${PLIST.pam}libexec/proftpd/mod_sftp_pam.la
+libexec/proftpd/mod_sftp_pam.la
 libexec/proftpd/mod_sftp_sql.la
 libexec/proftpd/mod_shaper.la
 libexec/proftpd/mod_site_misc.la
@@ -169,9 +171,7 @@ sbin/ftpshut
 sbin/in.proftpd
 sbin/proftpd
 share/doc/proftpd/NEWS
-share/doc/proftpd/README.LDAP
 share/doc/proftpd/README.md
-share/doc/proftpd/README.modules
 share/examples/proftpd/anonymous.conf
 share/examples/proftpd/basic.conf
 share/examples/proftpd/blacklist.dat
@@ -187,8 +187,10 @@ share/locale/fr_FR/LC_MESSAGES/proftpd.mo
 share/locale/it_IT/LC_MESSAGES/proftpd.mo
 share/locale/ja_JP/LC_MESSAGES/proftpd.mo
 share/locale/ko_KR/LC_MESSAGES/proftpd.mo
+share/locale/pl_PL/LC_MESSAGES/proftpd.mo
 share/locale/ru_RU/LC_MESSAGES/proftpd.mo
 share/locale/zh_CN/LC_MESSAGES/proftpd.mo
 share/locale/zh_TW/LC_MESSAGES/proftpd.mo
+@pkgdir var/run
 @pkgdir lib/proftpd
 @pkgdir etc

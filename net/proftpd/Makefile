@@ -57,7 +57,7 @@ INSTALLATION_DIRS+=	share/doc/proftpd
 INSTALLATION_DIRS+=	share/examples/proftpd
 
 post-install:
-.for i in NEWS README.md README.LDAP README.modules
+.for i in NEWS README.md
 	${INSTALL_DATA} ${WRKSRC}/${i} ${DESTDIR}${PREFIX}/share/doc/proftpd
 .endfor
 	${INSTALL_DATA} ${WRKSRC}/sample-configurations/*.conf \

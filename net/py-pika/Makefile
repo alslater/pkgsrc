@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.10 2025/04/15 09:51:03 adam Exp $
 
-DISTNAME=	pika-1.3.2
+DISTNAME=	pika-1.4.1
 PKGNAME=	${PYPKGPREFIX}-${DISTNAME}
 PKGREVISION=	2
 CATEGORIES=	net python

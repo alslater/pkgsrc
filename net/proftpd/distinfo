@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.55 2021/10/26 11:06:31 nia Exp $
 
-SHA1 (proftpd-1.3.8d.tar.gz) = 31632a2ebdf306e46b9bfa77fff8325669d8738e
-RMD160 (proftpd-1.3.8d.tar.gz) = 603ae80b5317e0f0f31a5d27c4abb058c7b8c721
-SHA512 (proftpd-1.3.8d.tar.gz) = 476ab9fdff66fc577fea4931778f09a73b6dc8cd09723e582c051790629dd33759849f94f8387f066e0fb4c896293da78c074d017e28e8476076e8c8c2cde9af
-Size (proftpd-1.3.8d.tar.gz) = 19752461 bytes
+SHA1 (proftpd-1.3.9b.tar.gz) = 62ab0c91448524dc232c71f7a50d6e0b99440fb0
+RMD160 (proftpd-1.3.9b.tar.gz) = 55f6049a7c15fabb2a85a2771515184875c0d6f2
+SHA512 (proftpd-1.3.9b.tar.gz) = bfcfe013db3b93247abacd2fd8fb2d929feede4e7f804a2416ca161c5cc1a3a4a18e1cc5914ae6536ebc2f40da69c1713a65c1317a3a8cbfe63706709f2e4dec
+Size (proftpd-1.3.9b.tar.gz) = 19858317 bytes
 SHA1 (patch-Makefile.in) = 22e48d28356fdf1e4d42f33ca71922a813ecb566
 SHA1 (patch-contrib_mod__load_configure.in) = c7da7eded44674bfbc8eb1fb0c27d07b7dd50a24
 SHA1 (patch-contrib_mod__load_mod__load.c) = 43fe0cccf6c202a765083313d814f6c44ddcd75a
