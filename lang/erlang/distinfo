@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.114 2024/05/27 19:07:50 riastradh Exp $
 
-SHA1 (erlang-26.2.5.20.tar.gz) = 8fe4c8e1ab2f36191717112aacb9007de86b25c3
-RMD160 (erlang-26.2.5.20.tar.gz) = 6f11099da88aecf573f1effc369b3b0ef76220bf
-SHA512 (erlang-26.2.5.20.tar.gz) = fb98775ab27959a100acb1e462df3c9867d577bb330dc560284739d3ca0ce3e97236c154602ce2210ad78c5412d22a8e6e43c79f7511fde05fd1733ee87f70ec
-Size (erlang-26.2.5.20.tar.gz) = 62594660 bytes
+SHA1 (erlang-27.3.4.14.tar.gz) = 74bd98d206d5276b39aa5e30234836deed481add
+RMD160 (erlang-27.3.4.14.tar.gz) = c6c354dcffc8e7c3b5c94175d1a170be544d8554
+SHA512 (erlang-27.3.4.14.tar.gz) = 38a01564bfce2a7c068049182e5403dc6cbb381ce9b869a006e1940280bca03ed27abee27f88485bb22d96a422b24b02b9feb3658471f0b391a6be5fbadacb71
+Size (erlang-27.3.4.14.tar.gz) = 62339918 bytes
 SHA1 (patch-erts_emulator_Makefile.in) = b99ccd2669652b1542b2ee99e09f886d864fd8be
 SHA1 (patch-erts_emulator_beam_erl__init.c) = ccbf4330a0774b97a3aca611fc57ba60062e1390
 SHA1 (patch-erts_emulator_beam_packet__parser.c) = 13cb7fb1d65ddac93221d85df1a44d76332b1cec
@@ -22,14 +22,14 @@ SHA1 (patch-erts_lib__src_common_erl__printf.c) = e156722b0617a4a9eb1eb7ea63365c
 SHA1 (patch-erts_lib__src_common_erl__printf__format.c) = 2d5b98a5450c36b0eda4e2161ac3aefa6c08f6bc
 SHA1 (patch-erts_lib__src_pthread_ethread.c) = d4c6e55818061ac465cc022e748cd072abbc2825
 SHA1 (patch-lib_asn1_c__src_Makefile) = c5d2edd7c8d67b2ad865ca4cc46a00a40f013411
-SHA1 (patch-lib_crypto_c__src_Makefile.in) = c40ed7ae4f125c1fa5b01484432525467a614945
+SHA1 (patch-lib_crypto_c__src_Makefile.in) = 9a933d6ab9fcb10d1d19cffa49a4fddc9f1a4e76
 SHA1 (patch-lib_erl__interface_src_misc_ei__format.c) = 255ad04bd60e1aefe6668f1c6fcefc790d0564df
 SHA1 (patch-lib_erl__interface_src_misc_ei__printterm.c) = 587f17c256c62aa29fda7d36d8056875b4b4193f
 SHA1 (patch-lib_erl__interface_src_prog_erl__call.c) = 3d585d4dbb2a45e1d177b9417fba0c261e5de3fd
 SHA1 (patch-lib_inets_test_inets__socketwrap__SUITE__data_setuid__socket__wrap.c) = d2e0f9f439f641fda53f7226f787678e04ae59d6
 SHA1 (patch-lib_megaco_src_flex_Makefile.in) = 486e2f0349f95373bd58e980d3d6948503947e71
 SHA1 (patch-lib_megaco_src_flex_megaco__flex__scanner__drv.flex.src) = de57f4a94cdce3782592b4767a731b3693ba0224
-SHA1 (patch-lib_odbc_c__src_Makefile.in) = 21dc0a123ae0d6f8e86f3fb9ffaf66e26361172b
+SHA1 (patch-lib_odbc_c__src_Makefile.in) = e2b781d740fff14555ac8fb27b25d89cdb4388e8
 SHA1 (patch-lib_odbc_c__src_odbcserver.c) = 59960575f8ea8f6e65b2ad1f89632d48d40e2cfd
 SHA1 (patch-lib_public__key_c__src_Makefile) = 2a45073efe665577ec7133c23cafabec0f3e281c
 SHA1 (patch-lib_runtime__tools_c__src_Makefile.in) = deab2dd6cec119d5503932b647bc34e72255a8df

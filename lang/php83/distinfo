@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.26 2025/07/04 01:25:48 taca Exp $
 
-SHA1 (php-8.3.31.tar.xz) = 53d4f0205ff3fac220ec87b2b788ab9786e9234c
-RMD160 (php-8.3.31.tar.xz) = b8920a023603f5d0d928eb57037e28ba73a0baa0
-SHA512 (php-8.3.31.tar.xz) = 2341ce4061f5e654780c97145ea7bf92fa14f2d5c2ea83d38b8919ee5018c040a08c83c9b7cee97e4bba39267d412f5bf18c515f2001db1659a49449299cbeef
-Size (php-8.3.31.tar.xz) = 12603408 bytes
+SHA1 (php-8.3.33.tar.xz) = 6f61bb8acd0c3826c0975deba4c897918470366f
+RMD160 (php-8.3.33.tar.xz) = 3ff2dfcb5ecb844136486c2ed5c63fe3a61a6f3a
+SHA512 (php-8.3.33.tar.xz) = e2340294b11ae47ba527018d700b6d896f73e04d06a8cdf099a60380f06b3899adaca01fe654bd9ac8e2dc5f3ff73c94ab1801a006a83558b222e448edd847dc
+Size (php-8.3.33.tar.xz) = 12613000 bytes
 SHA1 (patch-TSRM_TSRM.c) = 278007810b74fa7a9cd971dac051d6a2ea0ad90d
 SHA1 (patch-TSRM_TSRM.h) = 70ebc03a611124d76d6813f619ff18b3a8fbf1e8
 SHA1 (patch-build_php.m4) = 4a99c91785e7de3095cab08ed2fad6053b4a94e0

@@ -2,19 +2,19 @@ $NetBSD: patch-lib_crypto_c__src_Makefile.in,v 1.1 2017/10/04 16:20:51 jperkin E
 
 Compile via CC wrapper to ensure correct flags.
 
---- lib/crypto/c_src/Makefile.in.orig	2025-07-16 15:33:26.000000000 +0000
+--- lib/crypto/c_src/Makefile.in.orig	2026-07-02 08:02:42.000000000 +0000
 +++ lib/crypto/c_src/Makefile.in
 @@ -31,10 +31,10 @@ VSN=$(CRYPTO_VSN)
  # Set by configure.
  # ----------------------------------------------------
  CC = @DED_CC@
 -LD = @DED_LD@
-+LD = @DED_CC@ 
++LD = @DED_CC@
  SHELL = /bin/sh
  LIBS = @DED_LIBS@
 -LDFLAGS += @DED_LDFLAGS@
 +LDFLAGS += -shared
- CFLAGS = @DED_CFLAGS@ @SSL_FLAGS@
+ CFLAGS = @DED_CFLAGS@ @SSL_FLAGS@ @DEFS@
  
  # From configure
 @@ -147,7 +147,7 @@ endif
@@ -22,7 +22,7 @@ Compile via CC wrapper to ensure correct flags.
  
  ifeq ($(DYNAMIC_OR_WIN_CRYPTO_LIB),yes)
 -SSL_DED_LD_RUNTIME_LIBRARY_PATH = @SSL_DED_LD_RUNTIME_LIBRARY_PATH@
-+SSL_DED_LD_RUNTIME_LIBRARY_PATH =
++SSL_DED_LD_RUNTIME_LIBRARY_PATH = 
  CRYPTO_LINK_LIB=$(SSL_DED_LD_RUNTIME_LIBRARY_PATH) -L$(SSL_LIBDIR) -l$(SSL_CRYPTO_LIBNAME)
  EXTRA_FLAGS = -DHAVE_DYNAMIC_CRYPTO_LIB
  else
@@ -40,15 +40,15 @@ Compile via CC wrapper to ensure correct flags.
  release_spec: opt
  	$(INSTALL_DIR) "$(RELSYSDIR)/priv/lib"
 -	$(INSTALL_PROGRAM) $(NIF_LIB) "$(RELSYSDIR)/priv/lib"
-+	${BSD_INSTALL_LIB} $(NIF_LIB) "$(RELSYSDIR)/priv/lib"
++	$(BSD_INSTALL_LIB) $(NIF_LIB) "$(RELSYSDIR)/priv/lib"
  ifeq ($(DYNAMIC_OR_WIN_CRYPTO_LIB),yes)
 -	$(INSTALL_PROGRAM) $(CALLBACK_LIB) "$(RELSYSDIR)/priv/lib"
-+	${BSD_INSTALL_LIB} $(CALLBACK_LIB) "$(RELSYSDIR)/priv/lib"
++	$(BSD_INSTALL_LIB) $(CALLBACK_LIB) "$(RELSYSDIR)/priv/lib"
  endif
  ifeq ($(DISABLE_OTP_TEST_ENGINE),yes)
  else
 -	$(INSTALL_PROGRAM) $(TEST_ENGINE_LIB) "$(RELSYSDIR)/priv/lib"
-+	${BSD_INSTALL_LIB} $(TEST_ENGINE_LIB) "$(RELSYSDIR)/priv/lib"
++	$(BSD_INSTALL_LIB) $(TEST_ENGINE_LIB) "$(RELSYSDIR)/priv/lib"
  endif
  
  release_docs_spec:

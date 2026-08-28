@@ -4,9 +4,9 @@
 # please check to see if the erlang-doc or erlang-man packages also
 # need their distinfo and PLIST files regenerated, as they almost
 # always will.
-DIST_VERSION_MAJOR=	26
-DIST_VERSION_MINOR=	2
-DIST_VERSION_PATCH=	5.20
+DIST_VERSION_MAJOR=	27
+DIST_VERSION_MINOR=	3
+DIST_VERSION_PATCH=	4.14
 
 .include "versions.mk"
 
