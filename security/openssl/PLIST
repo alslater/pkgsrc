@@ -2610,6 +2610,8 @@ man/man3/MDC2.3ossl
 man/man3/MDC2_Final.3ossl
 man/man3/MDC2_Init.3ossl
 man/man3/MDC2_Update.3ossl
+man/man3/NAME_CONSTRAINTS_check_CN.3ossl
+man/man3/NAME_CONSTRAINTS_check.3ossl
 man/man3/NAME_CONSTRAINTS_free.3ossl
 man/man3/NAME_CONSTRAINTS_new.3ossl
 man/man3/NAMING_AUTHORITY.3ossl
@@ -2778,6 +2780,7 @@ man/man3/OPENSSL_VERSION_PREREQ.3ossl
 man/man3/OPENSSL_VERSION_PRE_RELEASE.3ossl
 man/man3/OPENSSL_VERSION_TEXT.3ossl
 man/man3/OPENSSL_aligned_alloc.3ossl
+man/man3/OPENSSL_armcap.3ossl
 man/man3/OPENSSL_atexit.3ossl
 man/man3/OPENSSL_buf2hexstr.3ossl
 man/man3/OPENSSL_buf2hexstr_ex.3ossl
@@ -4653,6 +4656,7 @@ man/man3/SSL_VALUE_EVENT_HANDLING_MODE_EXPLICIT.3ossl
 man/man3/SSL_VALUE_EVENT_HANDLING_MODE_IMPLICIT.3ossl
 man/man3/SSL_VALUE_EVENT_HANDLING_MODE_INHERIT.3ossl
 man/man3/SSL_VALUE_QUIC_IDLE_TIMEOUT.3ossl
+man/man3/SSL_VALUE_QUIC_MAX_PENDING_CONNS.3ossl
 man/man3/SSL_VALUE_QUIC_STREAM_BIDI_LOCAL_AVAIL.3ossl
 man/man3/SSL_VALUE_QUIC_STREAM_BIDI_REMOTE_AVAIL.3ossl
 man/man3/SSL_VALUE_QUIC_STREAM_UNI_LOCAL_AVAIL.3ossl

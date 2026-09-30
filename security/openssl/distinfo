@@ -1,8 +1,8 @@
 $NetBSD: distinfo,v 1.148 2021/02/20 08:53:23 wiz Exp $
 
-SHA1 (openssl-3.5.7.tar.gz) = 53d331880fbde8e6fe25870d5325a61201f6264d
-RMD160 (openssl-3.5.7.tar.gz) = 4cb5809b0be48474c497257d6d92e784b3ef15fd
-SHA512 (openssl-3.5.7.tar.gz) = de5351d2d532e1a3908a738f7d8aae448d32bc60bdb24808c556a24bc37a3f53daedf12b5d432eeb8c235e16939d842f908332ede8a447ca103ad1c493c820d7
-Size (openssl-3.5.7.tar.gz) = 53153930 bytes
+SHA1 (openssl-3.5.8.tar.gz) = aff8430711a8724804c7ef39232732a1b17c5cf4
+RMD160 (openssl-3.5.8.tar.gz) = c3987225d97308564bbc3ef0158ca769c6fac18d
+SHA512 (openssl-3.5.8.tar.gz) = 62a1dbed0fad75245b332e41b85a1f7c2379189525e7628a7cf68947d115e90a47f179e3f87d27641e5b2d357c357292179fc0e64eccecdebc81c083f7a8ebe4
+Size (openssl-3.5.8.tar.gz) = 53213818 bytes
 SHA1 (patch-Configurations_unix-Makefile.tmpl) = 23442269b9f7e658005e64e30cda76ed366d5cac
 SHA1 (patch-Configure) = caad8bfb5ce8c84e90b38e207b17e2035dfb86da
