@@ -5,8 +5,8 @@ BUILDLINK_TREE+=	libxml2
 .if !defined(LIBXML2_BUILDLINK3_MK)
 LIBXML2_BUILDLINK3_MK:=
 
-BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=2.6.2
-BUILDLINK_ABI_DEPENDS.libxml2+=	libxml2>=2.8.0nb2
+BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=2.15.4
+BUILDLINK_ABI_DEPENDS.libxml2+=	libxml2>=2.15.4
 BUILDLINK_PKGSRCDIR.libxml2?=	../../textproc/libxml2
 
 BUILDLINK_FILES.libxml2+=	bin/xml2-config

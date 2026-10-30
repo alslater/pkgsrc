@@ -19,6 +19,7 @@ CONFIGURE_ARGS+=	--without-python
 PKGCONFIG_OVERRIDE=	libxml-2.0.pc.in
 
 USE_LANGUAGES+=		c99
+USE_TOOLS+=	        pkg-config
 
 .include "options.mk"
 

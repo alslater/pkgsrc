@@ -1,6 +1,6 @@
 # $NetBSD: Makefile,v 1.35 2016/02/25 09:28:36 jperkin Exp $
 
-DISTNAME=	gzip-1.6
+DISTNAME=	gzip-1.15
 CATEGORIES=	archivers
 #MASTER_SITES=	${MASTER_SITE_GNU:=gzip/}
 #EXTRACT_SUFX=	.tar.xz

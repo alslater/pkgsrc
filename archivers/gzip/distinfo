@@ -1,9 +1,9 @@
 $NetBSD: distinfo,v 1.9 2015/11/03 00:56:21 agc Exp $
 
-SHA1 (gzip-1.6.tar) = 7d546c77fd49f1dc093c0fb23512bf926ce94a40
-RMD160 (gzip-1.6.tar) = 62a506b3305c0d112410574fbe8ace537b32ae10
-SHA512 (gzip-1.6.tar) = f1a076fae64213a71faf85ec3e26135a5742777a32e613e2df9efedd46033b95dc98fb5622cff242a9e79daaf175ec6bb084ef1e169c113c0210ad9a7bde1f59
-Size (gzip-1.6.tar) = 5048320 bytes
+SHA1 (gzip-1.15.tar) = 7d6bc5bba95a251e226dce570e6dccd58e7330b0
+RMD160 (gzip-1.15.tar) = 8060f6cbd61a410e8d400b962148fdc573decbf5
+SHA512 (gzip-1.15.tar) = 5f87b39f9bb10637b373e72be94005fb8ea525896e71f24c95d2bceef5c6fc5fc233d8cf36cd1c0662eeef4f843a2ebd969c22c72f1487baa8086326347d0feb
+Size (gzip-1.15.tar) = 5396480 bytes
 SHA1 (patch-aa) = a08b277aa95df808d055f4daf95fd1462c300290
 SHA1 (patch-ab) = 738d6e5f9300c2718694cc4134b36637b323ea8a
 SHA1 (patch-lib_fflush.c) = 0cefe0da43d9d06afea104a42119c60b572def31

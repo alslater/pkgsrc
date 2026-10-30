@@ -24,7 +24,7 @@ BUILDLINK_TRANSFORM.SunOS+=	opt:-Wl,./libxslt.syms:-Wl,./libxslt_solaris.syms
 CPPFLAGS+=	-Dsocklen_t=int
 .endif
 
-BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=2.6.27
+BUILDLINK_API_DEPENDS.libxml2+=	libxml2>=2.15.4
 
 .include "../../security/libgcrypt/buildlink3.mk"
 .include "../../textproc/libxml2/buildlink3.mk"
