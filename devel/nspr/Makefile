@@ -1,7 +1,7 @@
-# $NetBSD: Makefile,v 1.102 2019/12/04 12:53:18 ryoon Exp $
+# $NetBSD: Makefile,v 1.121 2022/09/12 13:12:44 wiz Exp $
 
 DISTNAME=	nspr-${NSPR_RELEASE:S/.0$//}
-NSPR_RELEASE=	4.24.0
+NSPR_RELEASE=	4.35.0
 CATEGORIES=	devel
 MASTER_SITES=	${MASTER_SITE_MOZILLA_ALL:=nspr/releases/v${NSPR_RELEASE:S/.0$//}/src/}
 
@@ -30,6 +30,11 @@ CONFIGURE_ARGS+=	--with-pthreads
 CONFIGURE_ENV+=		LIBRUNPATH=${PREFIX:Q}/lib/nspr
 
 .include "../../mk/bsd.prefs.mk"
+
+.if !empty(USE_CROSS_COMPILE:M[yY][eE][sS])
+MAKE_FLAGS+=		HOST_CC=${NATIVE_CC:Q}
+MAKE_FLAGS+=		HOST_CXX=${NATIVE_CXX:Q}
+.endif
 
 BUILDLINK_TRANSFORM+=	rm:-Wall
 
@@ -63,18 +68,9 @@ SO_SUFFIX=		so.1.0
 .endif
 PLIST_SUBST+=		SO_SUFFIX=${SO_SUFFIX:Q}
 
-PLIST_VARS+=		sun4u_32
-# see nspr/pr/src/md/unix/Makefile.in
-# for the bit about 32-bit sun4u machines installing an extra file.
-# That is why we have this specific test and modify the PLIST
 .if ${OPSYS} == "SunOS"
 .  if defined(ABI) && ${ABI} == "64"
 CONFIGURE_ARGS+=	--enable-64bit
-.  else
-HW_CLASS!=		${UNAME} -m
-.    if ${HW_CLASS} == "sun4u"
-PLIST.sun4u_32=		yes
-.    endif
 .  endif
 .endif
 
@@ -85,15 +81,12 @@ CONFIGURE_ARGS+=	--enable-64bit
 .endif
 
 .if ${OPSYS} == "Darwin"
-# Avoid using invalid deployment targets.
-CONFIGURE_ARGS+=	--with-macos-sdk=/nonexistent
 .  if defined(ABI) && ${ABI} == "64"
-CONFIGURE_ARGS+=	--enable-64bit
+CONFIGURE_ARGS+=		--enable-64bit
 .  endif
-.endif
-
-.if ${OPSYS} == "Darwin" && exists(/Developer/Headers/FlatCarbon)
+.  if exists(/Developer/Headers/FlatCarbon)
 BUILDLINK_PASSTHRU_DIRS+=	Developer/Headers/FlatCarbon
+.  endif
 .endif
 
 pre-configure:
