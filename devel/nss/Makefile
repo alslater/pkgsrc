@@ -1,8 +1,11 @@
-# $NetBSD: Makefile,v 1.174 2019/12/03 14:29:21 ryoon Exp $
+# $NetBSD: Makefile,v 1.236 2022/09/15 19:55:51 wiz Exp $
+#
+# release notes
+# https://firefox-source-docs.mozilla.org/security/nss/releases/index.html
 
 DISTNAME=		nss-${NSS_RELEASE:S/.0$//}
-NSS_RELEASE=		3.47.1
-CATEGORIES=		security
+NSS_RELEASE=		3.83.0
+CATEGORIES=		devel security
 MASTER_SITES=		${MASTER_SITE_MOZILLA_ALL:=security/nss/releases/NSS_${NSS_DIST_DIR_VERSION:S/_0$//}_RTM/src/}
 
 MAINTAINER=		pkgsrc-users@NetBSD.org
@@ -10,8 +13,7 @@ HOMEPAGE=		https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS
 COMMENT=		Libraries to support development of security-enabled applications
 LICENSE=		mpl-2.0
 
-CHECK_PORTABILITY_SKIP+=	nss/tests/libpkix/libpkix.sh
-CHECK_PORTABILITY_SKIP+=	nss/tests/multinit/multinit.sh
+CHECK_PORTABILITY_SKIP+=	nss/tests/*/*.sh
 CHECK_PORTABILITY_SKIP+=	js/src/configure
 CHECK_PORTABILITY_SKIP+=	configure
 
@@ -20,11 +22,58 @@ CTF_SUPPORTED=		no # https://smartos.org/bugview/OS-6510
 USE_GCC_RUNTIME=	yes
 USE_LANGUAGES=		c99
 USE_TOOLS+=		gmake perl pax pkg-config
+# Fails to detect jobserver on systems where /bin/make and /bin/gmake both
+# exist. This is because nss uses "gmake" explicitly rather than $MAKE to
+# launch subprocesses.
 MAKE_JOBS_SAFE=		no
 
 BUILD_DIRS=		nss
 
 .include "../../mk/bsd.prefs.mk"
+
+.if !empty(USE_CROSS_COMPILE:M[yY][eE][sS])
+
+# nss doesn't really depend on nspr as a tool, but the
+# EXTRA_SHARED_LIBS we set there get passed through to the build of a
+# tool `nsinstall' and getting them to not be passed through is more
+# trouble than it is worth to nix this dependency.  (But if you feel
+# like going to the trouble to patch around it -- go for it!)
+TOOL_DEPENDS+=		nspr>=0:../../devel/nspr
+
+MAKE_FLAGS+=		CROSS_COMPILE=1
+MAKE_FLAGS+=		NATIVE_CC=${NATIVE_CC:Q}
+
+NSS_CPU_ARCH.aarch64eb=		aarch64
+NSS_CPU_ARCH.amd64=		x86_64
+NSS_CPU_ARCH.arm26?=		arm
+NSS_CPU_ARCH.arm32?=		arm
+NSS_CPU_ARCH.earm?=		arm
+NSS_CPU_ARCH.earmeb?=		arm
+NSS_CPU_ARCH.earmhf?=		arm
+NSS_CPU_ARCH.earmhfeb?=		arm
+NSS_CPU_ARCH.earmv4?=		arm
+NSS_CPU_ARCH.earmv4eb?=		arm
+NSS_CPU_ARCH.earmv5?=		arm
+NSS_CPU_ARCH.earmv5eb?=		arm
+NSS_CPU_ARCH.earmv6?=		arm
+NSS_CPU_ARCH.earmv6eb?=		arm
+NSS_CPU_ARCH.earmv6hf?=		arm
+NSS_CPU_ARCH.earmv6hfeb?=	arm
+NSS_CPU_ARCH.earmv7?=		arm
+NSS_CPU_ARCH.earmv7eb?=		arm
+NSS_CPU_ARCH.earmv7hf?=		arm
+NSS_CPU_ARCH.earmv7hfeb?=	arm
+NSS_CPU_ARCH.i386=		x86
+NSS_CPU_ARCH.i486=		x86
+NSS_CPU_ARCH.i586=		x86
+NSS_CPU_ARCH.i686=		x86
+NSS_CPU_ARCH.powerpc64=		ppc64
+NSS_CPU_ARCH.powerpc=		ppc
+
+NSS_CPU_ARCH=		${NSS_CPU_ARCH.${MACHINE_ARCH}:U${MACHINE_ARCH}}
+MAKE_FLAGS+=		CPU_ARCH=${NSS_CPU_ARCH:Q}
+
+.endif
 
 SUBST_CLASSES.Darwin+=		exec_path
 SUBST_STAGE.exec_path=		pre-configure
@@ -40,18 +89,9 @@ SUBST_SED.zlib=			-e 's,^ZLIB_LIBS,\#ZLIB_LIBS,g'
 
 BUILDLINK_TRANSFORM+=	rm:-Werror
 BUILDLINK_TRANSFORM+=	rm:-ansi
+LDFLAGS.NetBSD+=	-lrt # sem_wait(3)
 
 MAKE_ENV.Linux+=	FREEBL_NO_DEPEND=0
-
-CHECK_SSP_SKIP+= lib/nss/libfreebl3.so
-CHECK_SSP_SKIP+= lib/nss/libnss3.so
-CHECK_SSP_SKIP+= lib/nss/libnssckbi-testlib.so
-CHECK_SSP_SKIP+= lib/nss/libnssckbi.so
-CHECK_SSP_SKIP+= lib/nss/libnssdbm3.so
-CHECK_SSP_SKIP+= lib/nss/libnssutil3.so
-CHECK_SSP_SKIP+= lib/nss/libsmime3.so
-CHECK_SSP_SKIP+= lib/nss/libsoftokn3.so
-CHECK_SSP_SKIP+= lib/nss/libssl3.so
 
 .if ${OBJECT_FMT} == "ELF"
 SO_SUFFIX=		so
@@ -63,11 +103,11 @@ SO_SUFFIX=		so.1.0
 PLIST_SUBST+=		SO_SUFFIX=${SO_SUFFIX:Q}
 
 .if !empty(PKGSRC_COMPILER:Mclang) || !empty(PKGSRC_COMPILER:Mgcc)
-MAKE_ENV.SunOS+=	NS_USE_GCC=YES
+MAKE_ENV+=		NS_USE_GCC=YES
 .endif
 
 .if !empty(PKGSRC_COMPILER:Mclang)
-MAKE_ENV.SunOS+=	CC_IS_CLANG=YES
+MAKE_ENV+=		CC_IS_CLANG=YES
 .endif
 
 SUBST_CLASSES+=		64bit
@@ -98,25 +138,34 @@ MAKE_ENV+=	NSS_ENABLE_TLS_1_3=1
 CFLAGS+=	-DNSS_NO_GCC48
 .endif
 
-NSS_MAJOR_VERSION=	${NSS_RELEASE:C/\.[0-9.]*//}
-NSS_MINOR_VERSION=	${NSS_RELEASE:S/3.//:C/\.[0-9]*//}
-NSS_PATCH_VERSION=	${NSS_RELEASE:C/[0-9.]*\.//}
-NSS_DIST_DIR_VERSION=	${NSS_MAJOR_VERSION}_${NSS_MINOR_VERSION}_${NSS_PATCH_VERSION}
+MOD_MAJOR_VERSION=	${NSS_RELEASE:C/\.[0-9.]*//}
+MOD_MINOR_VERSION=	${NSS_RELEASE:S/3.//:C/\.[0-9]*//}
+MOD_PATCH_VERSION=	${NSS_RELEASE:C/[0-9.]*\.//}
+NSS_DIST_DIR_VERSION=	${MOD_MAJOR_VERSION}_${MOD_MINOR_VERSION}_${MOD_PATCH_VERSION}
 
+NSPR_MINIMUM_VERSION=	4.34.1
+
+PKGCONFIG_OVERRIDE=	nss.pc
 
 SUBST_CLASSES+=		config
-SUBST_VARS.config=	PREFIX
-SUBST_VARS.config+=	NSS_MAJOR_VERSION
-SUBST_VARS.config+=	NSS_MINOR_VERSION
-SUBST_VARS.config+=	NSS_PATCH_VERSION
-SUBST_VARS.config+=	COMPILER_RPATH_FLAG
+# nss.pc
 SUBST_SED.config+=	-e "s,@PTHREAD@,${BUILDLINK_LIBS.pthread:Q},"
+SUBST_SED.config+=	-e "s,%prefix%,${PREFIX},"
+SUBST_SED.config+=	-e "s,%exec_prefix%,${PREFIX},"
+SUBST_SED.config+=	-e "s,%libdir%,${PREFIX}/lib/nss,"
+SUBST_SED.config+=	-e "s,%includedir%,${PREFIX}/include/nss,"
+SUBST_SED.config+=	-e "s,%NSS_VERSION%,${PKGVERSION_NOREV},"
+SUBST_SED.config+=	-e "s,%NSPR_VERSION%,${NSPR_MINIMUM_VERSION},"
+# nss-config
+SUBST_SED.config+=	-e "s,@prefix@,${PREFIX},"
+SUBST_VARS.config+=	MOD_MAJOR_VERSION
+SUBST_VARS.config+=	MOD_MINOR_VERSION
+SUBST_VARS.config+=	MOD_PATCH_VERSION
 SUBST_STAGE.config=	pre-build
 SUBST_MESSAGE.config=	Preparing *-config files.
 SUBST_FILES.config+=	nss.pc nss-config
 
 INSTALLATION_DIRS=	bin include/nss lib/nss lib/pkgconfig
-DIST=	${WRKSRC}/dist
 
 INSTALL_CMDS+=		certutil cmsutil crlutil derdump makepqg \
 			mangle modutil ocspclnt oidcalc p7content p7env p7sign \
@@ -126,25 +175,25 @@ INSTALL_CMDS+=		certutil cmsutil crlutil derdump makepqg \
 post-extract:
 	find ${WRKSRC} -type f | xargs ${CHMOD} 644
 	find ${WRKSRC} -type d | xargs ${CHMOD} 755
-	${CP} ${FILESDIR}/nss.pc.in ${WRKSRC}/nss.pc
-	${CP} ${FILESDIR}/nss-config.in ${WRKSRC}/nss-config
+	${CP} ${WRKSRC}/nss/pkg/pkg-config/nss.pc.in ${WRKSRC}/nss.pc
+	${CP} ${WRKSRC}/nss/pkg/pkg-config/nss-config.in ${WRKSRC}/nss-config
 
 do-install:
-	(cd ${DIST}/public && pax -Lrw . ${DESTDIR}${PREFIX}/include/nss/ )
-	(cd ${DIST}/*_OPT.OBJ/lib && \
+	(cd ${WRKSRC}/dist/public/nss && pax -Lrw . ${DESTDIR}${PREFIX}/include/nss )
+	(cd ${WRKSRC}/dist/*_OPT.OBJ/lib && \
 		pax -Lrw *.${SO_SUFFIX} ${DESTDIR}${PREFIX}/lib/nss/ )
-	${INSTALL_LIB} ${DIST}/*_OPT.OBJ/lib/libcrmf.a \
+	${INSTALL_DATA} ${WRKSRC}/dist/*_OPT.OBJ/lib/libcrmf.a \
 		${DESTDIR}${PREFIX}/lib/nss/
 	${INSTALL_DATA} ${WRKSRC}/nss.pc ${DESTDIR}${PREFIX}/lib/pkgconfig/nss.pc
 	${INSTALL_SCRIPT} ${WRKSRC}/nss-config ${DESTDIR}${PREFIX}/bin/nss-config
 .for cmd in ${INSTALL_CMDS}
-	${INSTALL_PROGRAM} ${DIST}/*_OPT.OBJ/bin/${cmd} ${DESTDIR}${PREFIX}/bin
+	${INSTALL_PROGRAM} ${WRKSRC}/dist/*_OPT.OBJ/bin/${cmd} ${DESTDIR}${PREFIX}/bin
 .endfor
 
 # For consistency of libxul.so link in www/firefox.
 BUILDLINK_API_DEPENDS.sqlite3+=	sqlite3>=3.8.4.2
 .include "../../databases/sqlite3/buildlink3.mk"
-BUILDLINK_API_DEPENDS.nspr+=	nspr>=4.23
+BUILDLINK_API_DEPENDS.nspr+=	nspr>=${NSPR_MINIMUM_VERSION}
 .include "../../devel/nspr/buildlink3.mk"
 .include "../../devel/zlib/buildlink3.mk"
 .include "../../mk/pthread.buildlink3.mk"
